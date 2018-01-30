@@ -1,0 +1,100 @@
+/* =============================================
+------------------- 15.Checkout.html --------------
+==============================================*/
+
+
+#checkout.custom-accordion .panel-body {
+	padding:40px 0;
+}
+
+.checkout-title {
+	font:400 25px/30px 'Oswald', Arial, sans-serif;
+	color:#444645;
+	text-transform:uppercase;
+	margin-bottom:20px;
+}
+
+.help-block {
+  display: block;
+  margin-top: 0;
+  margin-bottom: 0;
+  color: #c72928;
+  font-size:13px;
+}
+
+.help-block a {
+	color:#c72928;
+}
+
+.help-block a:hover {
+	text-decoration:underline;
+}
+
+.checkout-table .checkout-table-title,
+.checkout-table .checkout-table-price,
+.checkout-table .checkout-total-title,
+.checkout-table .checkout-total-price  {
+	font:700 18px/20px "PT Sans", sans-serif;
+	color:#777777;
+	text-transform:uppercase;
+	padding:15px;
+}
+
+.checkout-table .checkout-table-title{
+	font-size:16px;
+	text-align:right;
+	padding-right:60px;
+}
+
+.checkout-table > tbody > tr:last-child > td {
+	padding:15px;
+}
+
+.checkout-table > tbody > tr:last-child > .checkout-table-title {
+	padding-right:60px;
+}
+
+.checkout-table .checkout-total-title,
+.checkout-table .checkout-total-price {
+	padding-top:20px;
+	padding-bottom:20px;
+}
+
+.checkout-table .checkout-total-title {
+	text-align:right;
+	padding-right:60px;
+}
+
+.checkout-table .checkout-total-title {
+	font-size:22px;
+	line-height:24px;
+	color:#666;
+}
+
+.checkout-table .checkout-total-price {
+	font-size:20px;
+	color:#e82c0c;
+	line-height:24px;
+}
+.checkout-table .item-name-col  {
+	width:410px;
+}
+
+.checkout-table .item-name-col figure {
+	width:180px;
+	float:left;
+	margin-right:20px;
+}
+
+.checkout-table .item-name-col ul {
+	text-align:left;
+}
+
+.checkout-table .item-name-col ul li{
+	display:block;
+}
+
+.checkout-table tfoot tr {
+	background:#f8f8f8;
+}
+

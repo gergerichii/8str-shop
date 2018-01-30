@@ -1,0 +1,36 @@
+{
+  "name": "promo",
+  "version": "1.0.0",
+  "description": "",
+  "main": "gulpfile.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "gulp": "./node_modules/.bin/gulp"
+  },
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "del": "latest",
+    "graceful-fs": "latest",
+    "gulp": "^3.9.1",
+    "gulp-autoprefixer": "latest",
+    "gulp-clean-css": "latest",
+    "gulp-concat": "latest",
+    "gulp-debug": "latest",
+    "gulp-plumber": "latest",
+    "gulp-rename": "latest",
+    "gulp-rigger": "latest",
+    "gulp-sass": "latest",
+    "gulp-shell": "latest",
+    "gulp-sourcemaps": "latest",
+    "gulp-uglify": "latest",
+    "minimatch": "latest",
+    "minimatch-all": "latest",
+    "pump": "latest",
+    "sass-convert": "latest",
+    "uglify-js": "latest"
+  },
+  "dependencies": {
+    "popper.js": "latest"
+  }
+}

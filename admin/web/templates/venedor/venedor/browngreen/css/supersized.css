@@ -1,0 +1,241 @@
+/*
+
+	Supersized - Fullscreen Slideshow jQuery Plugin
+	Version : 3.2.7
+	Site	: www.buildinternet.com/project/supersized
+	
+	Author	: Sam Dunn
+	Company : One Mighty Roar (www.onemightyroar.com)
+	License : MIT License / GPL License
+	
+*/
+
+#supersized-loader { 
+	position:absolute;
+	top:50%;
+	left:50%; 
+	z-index:0; 
+	width:60px; 
+	height:60px; 
+	margin:-30px 0 0 -30px; 
+	text-indent:-999em; 
+	background:url(../images/progress.gif) no-repeat center center;
+}
+
+#supersized {  
+	display:block; 
+	position:fixed; 
+	left:0; 
+	top:0; 
+	overflow:hidden; 
+	z-index:-999; 
+	height:100%; 
+	width:100%; 
+}
+
+#supersized img { 
+	width:auto; 
+	height:auto; 
+	position:relative; 
+	display:none; 
+	outline:none; 
+	border:none; 
+}
+
+#supersized.speed img { 
+	-ms-interpolation-mode:nearest-neighbor; 
+	image-rendering: -moz-crisp-edges; 
+}
+
+#supersized.quality img { 
+	-ms-interpolation-mode:bicubic; 
+	image-rendering: optimizeQuality; 
+}
+
+#supersized li { 
+	display:block; 
+	list-style:none; 
+	z-index:-30; 
+	position:fixed; 
+	overflow:hidden; 
+	top:0; left:0; 
+	width:100%; 
+	height:100%; 
+	background:#111; 
+}
+
+#supersized a { 
+	width:100%; 
+	height:100%; 
+	display:block; 
+}
+
+#supersized li.prevslide { 
+	z-index:-20; 
+}
+
+#supersized li.activeslide { 
+	z-index:-10; 
+}
+
+#supersized li.image-loading { 
+	background:#111 url(../images/progress.gif) no-repeat center center; 
+	width:100%; 
+	height:100%; 
+}
+
+#supersized li.image-loading img{ 
+	visibility:hidden; 
+}
+
+#supersized li.prevslide img, 
+#supersized li.activeslide img{ 
+	display:inline; 
+}
+
+/* Progress Bar
+----------------------------*/					
+#progress-back{ 
+	z-index:5; 
+	position:fixed; 
+	top:0; 
+	left:0; 
+	height:3px; 
+	width:100%; 
+	background:rgba(0,0,0, 0.15); 
+}
+
+#progress-bar{ 
+	position:relative; 
+	height:3px; 
+	width:100%;
+	background:rgba(0,0,0, 0.5); 
+}
+
+/* Thumbnail Tray
+----------------------------*/
+#thumb-container {
+	position:fixed; 
+	z-index:3; 
+	bottom:17px; 
+	left:0; 
+	height:101px; 
+	width:100%;
+	padding-left:220px;
+	background: rgba(0,0,0, 0.3);
+}
+
+.ie8 #thumb-container {
+	background: url('../images/ie/darkbg.png') repeat;
+}
+
+#thumb-tray{ 
+	background:transparent;
+	overflow:hidden;
+	position:relative; 
+}
+
+#thumb-back, 
+#thumb-forward{ 
+	position:absolute; 
+	z-index:5; 
+	bottom:0; 
+	height:101px; 
+	width:40px;
+	transition:all 0.25s ease-in-out;
+	-webkit-transition:all 0.25s ease-in-out;
+	moz-transition:all 0.25s ease-in-out;
+	-ms-transition:all 0.25s ease-in-out;
+	-o-transition:all 0.25s ease-in-out;
+	background-image:url('../images/homesliders/photography7/nav.png');
+	background-repeat: no-repeat;
+	background-position: 0 0;
+	background-color:rgba(0,0,0, 0.1); 
+}
+
+#thumb-back {
+	border-right:1px solid rgba(0,0,0, 0.14);
+	background-position: 0 0
+	left:0;
+}
+
+#thumb-forward{ 
+	right:0;
+	border-left:1px solid rgba(0,0,0, 0.14);
+	background-position: -39px -101px;
+}
+
+
+#thumb-back:hover, 
+#thumb-forward:hover{
+	cursor:pointer; 
+	background-color:rgba(0,0,0, 0.34); 
+}
+
+#thumb-back:hover{ 
+	border-right-color:rgba(0,0,0, 0.38);
+	background-position: -39px 0;
+}
+
+#thumb-forward:hover{ 
+	border-left-color:rgba(0,0,0, 0.38);
+	background-position:0 -101px;
+}
+
+ul#thumb-list{ 
+	display:inline-block; 
+	list-style:none; 
+	position:relative; 
+	left:0px;
+	bottom:0;
+	padding:0;
+	float:left;
+}
+
+ul#thumb-list li{ 
+	list-style:none; 
+	display:inline; 
+	width:133px; 
+	height:101px; 
+	overflow:hidden; 
+	float:left; 
+	padding:13px 0 13px 13px;
+}
+
+ul#thumb-list li img { 
+	width:120px; 
+	height:auto; 
+	-webkit-transition: all 250ms ease-in-out; 
+	-moz-transition: all 250ms ease-in-out; 
+	-o-transition: all 250ms ease-in-out; 
+	-ms-transition: all 250ms ease-in-out; 
+	transition: all 250ms ease-in-out; 
+}
+
+ul#thumb-list li.current-thumb img, 
+ul#thumb-list li:hover img{ 
+	 
+}
+
+ul#thumb-list li:hover{ 
+	cursor:pointer; 
+}
+
+
+@media (min-width: 768px) and (max-width: 979px) {
+
+	#thumb-container {
+		bottom:66px; 
+		padding-left:0;
+	}
+	
+}
+
+@media (max-width:768px) {
+
+	#thumb-container {
+		bottom:70px; 
+		padding-left:0;
+	}
+
+}

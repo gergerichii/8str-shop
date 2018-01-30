@@ -1,0 +1,436 @@
+/* =============================================
+-------------------  1.General ---------------
+==============================================*/
+
+body {
+	font: 15px/1.5 Arial, sans-serif;
+	color: #7c807e;
+	-webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    background-color: #dcdcdc;
+}
+
+/* Pattern backgrounds for boxed version */
+.pattern1 {
+	background: url('/images/patterns/pattern1.png') repeat;
+}
+
+.pattern2 {
+	background: url('/images/patterns/pattern2.png') repeat;
+}
+
+.pattern3 {
+	background: url('/images/patterns/pattern3.png') repeat;
+}
+
+.pattern4 {
+	background: url('/images/patterns/pattern4.png') repeat;
+}
+
+.pattern5 {
+	background: url('/images/patterns/pattern5.png') repeat;
+}
+
+.pattern6 {
+	background: url('/images/patterns/pattern6.png') repeat;
+}
+
+.pattern7 {
+	background: url('/images/patterns/pattern7.png') repeat;
+}
+
+.pattern8 {
+	background: url('/images/patterns/pattern8.png') repeat;
+}
+
+.pattern9 {
+	background: url('/images/patterns/pattern9.png') repeat;
+}
+
+.pattern10 {
+	background: url('/images/patterns/pattern10.png') repeat;
+}
+
+.pattern11 {
+	background: url('/images/patterns/pattern11.png') repeat;
+}
+
+.pattern12 {
+	background: url('/images/patterns/pattern12.png') repeat;
+}
+
+.pattern13 {
+	background: url('/images/patterns/pattern13.png') repeat;
+}
+
+.pattern14 {
+	background: url('/images/patterns/pattern14.png') repeat;
+}
+
+.pattern15 {
+	background: url('/images/patterns/pattern15.png') repeat;
+}
+
+.pattern16 {
+	background: url('/images/patterns/pattern16.png') repeat;
+}
+
+.pattern17 {
+	background: url('/images/patterns/pattern17.png') repeat;
+}
+
+.pattern18 {
+	background: url('/images/patterns/pattern18.png') repeat;
+}
+
+.pattern19 {
+	background: url('/images/patterns/pattern19.png') repeat;
+}
+
+.pattern20 {
+	background: url('/images/patterns/pattern20.png') repeat;
+}
+
+.pattern21 {
+	background: url('/images/patterns/pattern21.png') repeat;
+}
+
+.pattern22 {
+	background: url('/images/patterns/pattern22.png') repeat;
+}
+
+.pattern23 {
+	background: url('/images/patterns/pattern23.png') repeat;
+}
+
+.pattern24 {
+	background: url('/images/patterns/pattern24.png') repeat;
+}
+
+.pattern25 {
+	background: url('/images/patterns/pattern25.png') repeat;
+}
+
+.pattern26 {
+	background: url('/images/patterns/pattern26.png') repeat;
+}
+
+.pattern27 {
+	background: url('/images/patterns/pattern27.png') repeat;
+}
+
+.pattern28 {
+	background: url('/images/patterns/pattern28.png') repeat;
+}
+
+.pattern29 {
+	background: url('/images/patterns/pattern29.png') repeat;
+}
+
+.pattern30 {
+	background: url('/images/patterns/pattern30.png') repeat;
+}
+
+#wrapper {
+	width:100%;
+	background-color: #fff;
+}
+
+#wrapper.boxed {
+	width:970px;
+	margin:30px auto;
+	box-shadow: 0 0 15px rgba(0,0,0, 0.4);
+	-webkit-box-shadow: 0 0 15px rgba(0,0,0, 0.4);
+}
+
+#wrapper.boxed-long {
+	width:970px;
+	margin:0 auto;
+	box-shadow: 3px 0 10px rgba(0,0,0, 0.35), -3px 0 10px rgba(0,0,0, 0.35);
+	-webkit-box-shadow: 3px 0 10px rgba(0,0,0, 0.35), -3px 0 10px rgba(0,0,0, 0.35);
+}
+
+::selection {
+    background-color: #6dbcdb;
+    color: #fff;
+}
+
+::-moz-selection {
+	background-color: #6dbcdb;
+    color: #fff;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+.h1,
+.h2,
+.h3,
+.h4,
+.h5,
+.h6  {
+	font-family:'Oswald', Arial, sans-serif;
+	line-height:1;
+	color:#444645;
+	margin-top:0;
+}
+
+h1,
+.h1 {
+	font-size:40px;
+	margin-bottom:20px;
+}
+
+h2,
+.h2{
+	font-size:32px;
+	margin-bottom:20px;
+}
+
+h3,
+.h3 {
+	font-size:26px;
+	margin-bottom:20px;
+}
+
+h4,
+.h4 {
+	font-size:22px;
+	margin-bottom:15px;
+}
+
+h5,
+.h5 {
+	font-size:18px;
+	margin-bottom:15px;
+}
+
+h6,
+.h6 {
+	font-size:16px;
+	margin-bottom:15px;
+}
+
+h1 small,
+h2 small,
+h3 small,
+h4 small,
+h5 small,
+h6 small,
+.h1 small,
+.h2 small,
+.h3 small,
+.h4 small,
+.h5 small,
+.h6 small,
+h1 .small,
+h2 .small,
+h3 .small,
+h4 .small,
+h5 .small,
+h6 .small,
+.h1 .small,
+.h2 .small,
+.h3 .small,
+.h4 .small,
+.h5 .small,
+.h6 .small {
+	color:inherit;
+}
+
+ul,ol {
+	list-style-type:none;
+	padding:0;
+	margin:0;
+}
+
+a {
+	-webkit-transition:color .24s ease-in-out;
+	-moz-transition:color .24s ease-in-out;
+	-o-transition:color .24s ease-in-out;
+	-ms-transition:color .24s ease-in-out;
+	transition:color .24s ease-in-out;
+	color:#6dbcdb;
+}
+
+a:active,
+a:hover,
+a:focus {
+	text-decoration:none;
+	color:#fd5c48;
+}
+
+a:active,
+a:focus,
+input,
+select,
+textarea {
+	outline:none;
+}
+
+iframe {
+	border:none;
+}
+
+img.pull-right {
+	margin-left:15px;
+	margin-bottom:15px;
+}
+
+img.pull-left {
+	margin-right:15px;
+	margin-bottom:15px;
+}
+
+hr {
+  margin-top: 20px;
+  margin-bottom: 20px;
+  border: 0;
+  border-top: 1px solid #ebebeb;
+}
+
+blockquote {
+	padding:35px 20px 10px 65px;
+	margin: 0 0 20px;
+	border-left: none;
+	position: relative;
+	color:#8f9290;
+}
+
+blockquote.blockquote-reverse {
+	padding:35px 65px 10px 20px;
+	border-right:none;
+}
+
+blockquote p {
+	font-size: 15px;
+	font-weight: 400;
+	line-height:21px;
+	font-style:italic;
+}
+
+
+blockquote:before {
+	content:'';
+	display:block;
+	position: absolute;
+	left:25px;
+	top:11px;
+	width:32px;
+	height:26px;
+	background-image:url('/images/sprites/sprite.png');
+	background-repeat: no-repeat;
+	background-position: 0 -150px;
+}
+
+blockquote.blockquote-reverse:before {
+	left:auto;
+	right:25px;
+	background-position: -368px -383px;
+}
+
+.highlight {
+	padding:0 0.3em;
+	background: #dcdcdc;
+}
+
+.highlight.reverse {
+	color:#fff;
+	background: #7c807e;
+}
+
+.highlight.first-color {
+	color:#fff;
+	background: #6dbcdb;
+}
+
+.highlight.second-color {
+	color:#fff;
+	background: #fd5c48;
+}
+
+.highlight.third-color {
+	color:#fff;
+	background: #d51a03;
+}
+
+.highlight.fourth-color {
+	color:#fff;
+	background: #fd5c48;
+}
+
+.first-color {
+	color: #6dbcdb;
+}
+
+.second-color {
+	color: #fd5c48;
+}
+
+.third-color {
+	color: #d51a03;
+}
+
+.fourth-color {
+	color: #fd5c48;
+}
+
+.dropcap,
+.dropcap-bg {
+	font-size:3.8em;
+	line-height:1;
+	padding-right:0.1em;
+	float:left;
+	text-transform: uppercase;
+}
+
+.dropcap.first-color {
+	color:#6dbcdb;
+}
+
+.dropcap.second-color {
+	color:#fd5c48;
+}
+
+.dropcap.third-color {
+	color:#d51a03;
+}
+
+.dropcap.fourth-color {
+	color:#fd5c48;
+}
+
+.dropcap-bg {
+	padding:0.03em 0.06em;
+	color:#7c807e;
+	margin-right:0.15em;
+	background: #f1f1f1;
+}
+
+.dropcap-bg.reverse {
+	background: #7c807e;
+	color:#fff;
+}
+
+.dropcap-bg.first-color {
+	background:#6dbcdb;
+	color:#fff;
+}
+
+.dropcap-bg.second-color {
+	background:#fd5c48;
+	color:#fff;
+}
+
+.dropcap-bg.third-color {
+	background:#d51a03;
+	color:#fff;
+}
+
+.dropcap-bg.fourth-color {
+	background:#fd5c48;
+	color:#fff;
+}

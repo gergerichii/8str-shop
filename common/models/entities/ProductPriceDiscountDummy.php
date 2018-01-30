@@ -1,0 +1,28 @@
+<?php
+/**
+ * Created by PhpStorm.
+ * User: USER
+ * Date: 16.01.2018
+ * Time: 10:42
+ */
+
+namespace common\models\entities;
+use yii\base\Model;
+
+/**
+ *
+ * @property void $activeTo
+ */
+class ProductPriceDiscountDummy extends Model implements ProductPriceDiscountInterface{
+    public function __toString(){
+        return '';
+    }
+
+    public function getValue(){
+        return 0;
+    }
+
+    public function getActiveTo(){
+        // TODO: Implement getActiveTo() method.
+    }
+}

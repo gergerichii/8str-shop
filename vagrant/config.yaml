@@ -1,0 +1,56 @@
+github_token: 9fef3ec87e5a6310544307ff013edfc4b2c96376
+timezone: Europe/Moscow
+box: laravel/homestead
+box_check_update: true
+
+ip: 192.168.10.11
+memory: 2000
+cpus: 1
+provider: virtualbox
+authorize: vagrant/.ssh/id_rsa.pub
+keys:
+    - vagrant/.ssh/id_rsa
+folders:
+    -
+        map: '.'
+        to: /home/vagrant/sites
+        # Костыль !!! В скриптах always-as-vagrant.sh и once-as-vagrant.sh жестко прописаны пути к этой папке
+sites:
+    -
+        map: admin.8str.ln
+        to: /home/vagrant/sites/admin/web
+        schedule: true
+        params:
+            - {key: SERVER_ENV, value: DEV}
+    -
+        map: test.8str.ln
+        to: /home/vagrant/sites/frontend/web
+        params:
+            - {key: SERVER_ENV, value: DEV}
+    -
+        map: 8str.ln
+        to: /home/vagrant/sites/shop_8str/web
+        params:
+            - {key: SERVER_ENV, value: DEV}
+#commonFolder: /home/vagrant/web/common
+ssmtp:
+    root: 'vagrant_mailer <t9067836006@gmail.com>'
+    mailhub: 'smtp.gmail.com:587'
+    AuthUser: 't9067836006@gmail.com'
+    AuthPass: 'geradmin11'
+        
+databases:
+    - tima_shop
+    - tima_shop_test
+
+name: tima-shop
+hostname: tima-shop
+mongodb: false
+elasticsearch: true
+
+variables:
+    - {key: ENV_TYPE, value: VAGRANT_BOX}
+
+#ports:
+#    - send: 9000
+#      to: 9000

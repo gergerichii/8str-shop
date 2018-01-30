@@ -1,0 +1,44 @@
+/* =============================================
+------------ 20.404 Page   ----------
+==============================================*/
+
+
+#content.no-content {
+	background-image: url('/images/404.jpg');
+	background-repeat: no-repeat;
+	background-size:cover;
+	-webkit-background-size:cover;
+	background-position: 50% 50%;
+	min-height:900px;
+	position: relative;
+}
+
+.no-content .no-content-comment {
+	width:480px;
+	height:350px;
+	position: absolute;
+	left:50%;
+	margin-left:-360px;
+	top:40px;
+	background-image: url('/images/404-comment.png');
+	background-repeat: no-repeat;
+	text-align:center;
+	padding-top:50px;
+}
+
+.no-content-comment h2 {
+	font:700 110px/0.8 "Gudea", Arial, sans-serif;
+	color:#6dbcdb;
+	text-shadow: 8px 4px 0 rgba(0,0,0, 0.1);
+	margin-bottom: 15px;
+}
+
+.no-content-comment h3 {
+	font:700 25px/35px "PT Sans", Arial, sans-serif;
+	color:#515251;
+}
+
+.no-content-comment h2 span,
+.no-content-comment h3 span {
+	opacity:0;
+}

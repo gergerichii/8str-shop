@@ -1,0 +1,78 @@
+/* =============================================
+-------- 14.Compare-Products.html ------------
+==============================================*/
+
+
+.compare-item-table  > thead > tr:first-child > td,
+.compare-item-table  > tbody > tr:first-child > td {
+	border-top-color:#e0e0e0 !important;
+}
+
+.compare-item-table  > thead > tr > td:last-child,
+.compare-item-table  > tbody > tr > td:last-child,
+.compare-item-table > tfoot > tr > td:last-child {
+	border-right-color:#e0e0e0 !important;
+}
+.compare-item-table  > thead > tr > td,
+.compare-item-table  > tbody > tr > td,
+.compare-item-table > tfoot > tr > td {
+	border-top-color:transparent !important;
+	border-right-color:transparent !important;
+}
+.compare-item-table .table-title {
+	background:#ececec;
+	width:200px;
+	text-align:right;
+	padding-right:30px !important;
+	border-right:1px solid #e0e0e0 !important;
+	background:#ececec !important;
+}
+
+.compare-item-table  figure {
+	width:170px;
+	margin:0 auto;
+
+}
+
+.table-striped > tbody > tr:nth-child(odd) > td,
+.table-striped > tbody > tr:nth-child(odd) > th {
+	background-color: transparent;
+}
+
+.table-striped > tbody > tr:nth-child(even) > td,
+.table-striped > tbody > tr:nth-child(even) > th {
+	background-color: #f7f7f7;
+}
+
+.table-striped > tbody > tr:nth-child(even) > td.table-title ,
+.table-striped > tbody > tr:nth-child(even) > th.table-title  {
+	background-color: #e5e5e5 !important;
+}
+
+.compare-item-table .item-name {
+	text-align:center;
+	margin-top:20px;
+}
+
+
+.table .item-brand-col {
+	color:#777;
+	font-weight:700;
+}
+
+
+.compare-item-table  .ratings-amount {
+	display:block;
+	text-align:center;
+}
+
+.compare-item-table .btn {
+	padding:7px 17px;
+}
+.compare-item-table .btn-custom-2 {
+	font-size:13px;
+	line-height:1.5;
+	color:#e8e8e8 !important;
+}
+
+

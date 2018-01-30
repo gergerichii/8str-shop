@@ -1,0 +1,309 @@
+/* =============================================
+------------ 19. About Us  ----------
+==============================================*/
+
+#page-header {
+	background-size: cover;
+	-webkit-background-size: cover;
+	background-image: url('/images/aboutus-hedaerbg.jpg');
+	background-repeat: no-repeat;
+	background-position:top center;
+	text-align:center;
+	padding:180px 0;
+}
+
+.parallax {
+	background-size: cover;
+	-webkit-background-size: cover;
+	background-attachment: fixed;
+	background-position: top center;
+	background-repeat: repeat-y;
+}
+
+#page-header h1 {
+	font-size:42px;
+	line-height:1;
+	color:#fff;
+	position: relative;
+	text-transform: uppercase;
+	margin-bottom: 0;
+}
+
+.small-bottom-border {
+	display:block;
+	width:30px;
+	height:3px;
+	background-color: #6dbcdb;
+	position:absolute;
+	left:50%;
+	top:100%;
+	margin-top:10px;
+	margin-left:-15px;
+}
+
+.small-bottom-border.big {
+	width:38px;
+	height:4px;
+	margin-top:20px;
+	margin-left:-19px;
+}
+
+#page-header .small-bottom-border {
+	background-color:#fff;
+	margin-top: 30px;
+}
+
+#page-header .page-header-desc {
+	font:400 24px/33px "Gudea", Arial, sans-serif;
+	color:#fff;
+	margin-top:30px;
+}
+
+.hero-unit {
+	text-align:center;
+	position: relative;
+	color:#333333;
+}
+
+.hero-unit h2 {
+	font-size:38px;
+	line-height:1;
+	margin-bottom: 20px;
+}
+
+.hero-unit p {
+	font:400 21px/1 "Gudea", Arial, sans-serif;
+}
+
+.services-box {
+	text-align:center;
+	background-color: transparent;
+	border:1px solid transparent;
+	padding:20px 10px;
+	transition:all 0.4s ease-in;
+	-webkit-transition:all 0.3s ease-in;
+	-moz-transition:all 0.3s ease-in;
+	-ms-transition:all 0.3s ease-in;
+	-o-transition:all 0.3s ease-in;
+}
+
+.services-box h3 {
+	font:700 18px/1 "Pt Sans", sans-serif;
+	color:#474646;
+	position: relative;
+	margin-bottom:30px;
+}
+.services-box h3 a {
+	color:#474646;
+}
+
+.services-box h3 a:hover {
+	color: #6dbcdb;
+}
+
+.services-box p {
+	font-size:14px;
+	color:#6f6f6f;
+	line-height:17px;
+}
+
+.services-box:hover {
+	text-align:center;
+	background-color: #fafafa;
+	border:1px solid #e0e0e0;
+	box-shadow:inset 0 1px 1px #fff;
+}
+
+.service-icon {
+	display:block;
+	width:124px;
+	height:124px;
+	background-image: url('/images/sprites/aboutus-icons.png');
+	background-repeat: no-repeat;
+	margin:0 auto;
+	margin-bottom: 20px;
+}
+
+.service-icon.service-icon-responsive {
+	background-position: 0 0;
+}
+
+.service-icon.service-icon-panel {
+	background-position: -124px 0;
+}
+
+.service-icon.service-icon-sliders {
+	background-position: -248px 0;
+}
+
+.service-icon.service-icon-support {
+	background-position: -372px 0;
+}
+
+.services-box:hover .service-icon.service-icon-responsive {
+	background-position: 0 -124px;
+}
+
+.services-box:hover .service-icon.service-icon-panel {
+	background-position: -124px -124px;
+}
+
+.services-box:hover .service-icon.service-icon-sliders {
+	background-position: -248px -124px;
+}
+
+.services-box:hover .service-icon.service-icon-support {
+	background-position: -372px -124px;
+}
+
+.progress-container h4{
+	font:700 11px/15px "PT Sans", sans-serif;
+	margin-bottom: 0;
+	text-transform: uppercase;
+}
+
+#testimonials-section {
+	background-size: cover;
+	-webkit-background-size: cover;
+	background-image: url('/images/testimonialsbg.jpg');
+	background-repeat: no-repeat;
+	background-position:top center;
+	text-align:center;
+	color:#fff;
+	padding:60px 0;
+	overflow: hidden;
+}
+
+#testimonials-section h3 {
+	position: relative;
+	font-size:28px;
+	line-height:1;
+	color:#fff;
+	text-transform: uppercase;
+	margin-bottom: 90px;
+}
+
+#testimonials-section .small-bottom-border {
+	background-color:#fff;
+	margin-top: 30px;
+}
+
+.about-us-testimonials .testimonial-title {
+	display:block;
+	font:700 21px/1 "PT Sans", sans-serif;
+	margin-bottom:20px;
+}
+
+.about-us-testimonials {
+	padding-bottom: 50px;
+}
+
+.about-us-testimonials p {
+	font-size:18px;
+	line-height:25px;
+	margin-bottom:20px;
+}
+
+.about-us-testimonials .testimonial-owner {
+	font:italic 700 16px/21px "PT Sans", sans-serif;
+}
+
+.about-us-testimonials .testimonial-date {
+	font:italic 400 14px/21px "PT Sans", sans-serif;
+}
+
+.about-us-testimonials .flex-control-paging li a {
+	background: #fff;
+}
+
+.about-us-testimonials .flex-control-paging li a:hover {
+	background: #fff;
+	transform:scale(1.4);
+	-webkit-transform:scale(1.4);
+	-moz-transform:scale(1.4);
+	-ms-transform:scale(1.4);
+	-o-transform:scale(1.4);
+}
+
+.about-us-testimonials .flex-control-paging li a.flex-active {
+	background:#fff;
+	cursor: default;
+	transform:scale(1.4);
+	-webkit-transform:scale(1.4);
+	-moz-transform:scale(1.4);
+	-ms-transform:scale(1.4);
+	-o-transform:scale(1.4);
+}
+
+#team-members-slider-container img {
+	border:1px solid #e0e0e0;
+}
+
+.team-member-header {
+	margin-bottom:60px;
+}
+
+.team-member-header figure {
+	max-width:360px;
+	display:block;
+}
+
+.team-member-header blockquote {
+	padding:35px 20px 10px 35px;
+}
+
+
+.team-member-header blockquote:before{
+	left:0;
+}
+
+.team-member-header .team-member-name {
+	font-size:25px;
+	margin-bottom:20px;
+}
+
+.team-member-header .team-member-title {
+	font-size:16px;
+	margin-bottom: 10px;
+}
+
+.team-member-header .team-member-extra {
+	margin-top:20px;
+}
+
+.team-member-header .team-member-extra .social-links li.smaller-social-icons {
+	margin-top:4px;
+}
+
+.team-member-header .team-member-contact {
+	font:italic 400 13px/1.5 Verdana, Arial, sans-serif;
+	color:#888;
+}
+
+.team-member-name {
+	font:700 16px/17px "PT Sans", sans-serif;
+	color:#666666;
+}
+
+.team-member-title {
+	color:#888888;
+	font-size:13px;
+	line-height:17px;
+}
+
+.team-member {
+	margin-bottom: 35px;
+}
+
+.team-member  img {
+	width:100%;
+}
+
+.team-member .team-member-name {
+	margin-bottom:8px;
+}
+
+.team-member figure {
+	margin-bottom: 20px;
+}
+

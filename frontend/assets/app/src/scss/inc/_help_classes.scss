@@ -1,0 +1,139 @@
+/* =============================================
+----------------- 2.Helper Classes -------------
+==============================================*/
+
+.sm-separator {
+	margin-right:5px;
+}
+
+.separator {
+	margin-right:10px;
+}
+
+.lg-separator {
+	margin-right:20px;
+}
+
+.top-10px {
+	margin-top:-10px;
+}
+
+
+.xss-margin,
+.xs-margin,
+.sm-margin,
+.md-margin,
+.lg-margin,
+.xlg-margin,
+.md-margin2x,
+.lg-margin2x,
+.xlg-margin2x,
+.md-margin3x,
+.lg-margin3x,
+.xlg-margin3x {
+	width: 100%;
+	min-height:1px;
+}
+
+.xss-margin {
+	margin-bottom:5px;
+}
+
+.xs-margin {
+	margin-bottom:10px;
+}
+
+.sm-margin {
+	margin-bottom:20px;
+}
+
+.md-margin {
+	margin-bottom:30px;
+}
+
+.lg-margin {
+	margin-bottom:40px;
+}
+
+.xlg-margin {
+	margin-bottom:50px;
+}
+
+.md-margin2x {
+	margin-bottom:60px;
+}
+
+.lg-margin2x {
+	margin-bottom:80px;
+}
+
+.xlg-margin2x {
+	margin-bottom:100px;
+}
+
+.md-margin3x {
+	margin-bottom:90px;
+}
+
+.lg-margin3x {
+	margin-bottom:120px;
+}
+
+.xlg-margin3x {
+	margin-bottom:150px;
+}
+
+.clear-margin {
+	margin-bottom:0 !important;
+}
+
+.link-underline {
+	text-decoration:underline !important;
+}
+
+.col-2 {
+	width:50%;
+	padding-right:20px;
+	float:left;
+}
+
+.col-3 {
+	width:33.333333%;
+	padding-right:20px;
+	float:left;
+}
+
+.col-4 {
+	width:25%;
+	padding-right:20px;
+	float:left;
+}
+
+.col-5 {
+	width:20%;
+	padding-right:20px;
+	float:left;
+}
+
+.col-2.last
+.col-3.last,
+.col-4.last,
+.col-5.last {
+	padding-right:0;
+}
+
+/* addition for bootstrap img-responsive class */
+.img-responsive {
+	width:100%;
+}
+
+/* for small devices show/hide classes */
+.show-for-lg {
+	display:inline;
+}
+
+.hide-for-lg {
+	display:none;
+}
+
+

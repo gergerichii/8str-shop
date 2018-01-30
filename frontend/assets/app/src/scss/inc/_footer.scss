@@ -1,0 +1,511 @@
+/* =============================================
+--------------------- 17.Footer -----------------
+==============================================*/
+
+#footer {
+	background:#444645;
+	font:15px/2em 'Gudea', Arial, sans-serif !important;
+	color:#ccc;
+}
+
+#footer a {
+	color:#ccc;
+}
+
+#footer a:hover {
+	color:#6dbcdb;
+}
+
+/* Footer 3 Sliders*/
+#footer-top {
+	padding:53px 0 45px;
+	background:#f2f2f2;
+}
+
+#footer-top .widget {
+	padding-right:35px;
+}
+
+#footer-top .title-bg {
+	margin:0 0 30px;
+}
+
+#footer-top .title-bg h3 {
+	padding-right:20px;
+	font-size:27px;
+	color:#444645;
+	text-transform:capitalize;
+	background:#f2f2f2;
+	margin:0;
+}
+
+#footer-top .title-bg:after {
+	background: #e8e6e2;
+}
+
+.footerslider .slide-item {
+	width:100%;
+	margin-bottom:25px;
+}
+
+.footerslider  .item-image-container {
+	width:115px;
+	float:left;
+	margin-right:20px;
+}
+
+.footerslider .item-name {
+	font-size:18px;
+	line-height:20px;
+	margin-bottom:11px;
+}
+
+.footerslider .item-name a {
+	color:#646464 !important;
+}
+
+.footerslider .item-name a:hover {
+	color:#fd5c48 !important;
+}
+
+.footerslider .ratings-container {
+	padding:0;
+	height:16px;
+	line-height:16px;
+	margin-bottom:10px;
+}
+
+.footerslider .ratings {
+	width:86px;
+	background: url(/images/sprites/ratings-small.png) no-repeat;
+	background-position: 0 0;
+}
+
+.footerslider .ratings .ratings-result {
+	background: url(/images/sprites/ratings-small.png) no-repeat;
+	background-position: 0 -16px;
+}
+
+.footerslider .item-price-special {
+	color:#b93524;
+	font-size:18px;
+}
+
+.footerslider .flex-direction-nav {
+	top:-62px;
+	width:81px;
+	background:#f2f2f2;
+}
+
+.footerslider .flex-direction-nav .flex-prev {
+	left:15px;
+}
+
+/* Used at footer  1 Twitter Feed*/
+#footer #twitterfeed-container {
+	background: #f2f2f2;
+}
+
+#footer #twitterfeed-container .twitterfeed {
+	position: relative;
+	color:#444645;
+	font-size:16px;
+	line-height:32px;
+	padding:40px 0 35px;
+	overflow:hidden;
+}
+
+/* twitter feed plugin styles */
+.twitter_feed .tweet_list li {
+	width:100%;
+	margin-bottom:20px;
+}
+
+.twitter_feed .tweet_list li:last-child{
+	margin-bottom:0;
+}
+
+.twitter_feed .tweet_list .tweet_avatar {
+	display:none;
+}
+
+.twitter_feed .tweet_list li a,
+#footer #twitterfeed-container .twitterfeed  a {
+	color:#444645;
+}
+
+#footer #twitterfeed-container .twitterfeed  a:hover {
+	color:#6dbcdb;
+}
+
+.twitter_feed .tweet_list .tweet_time {
+	display:block;
+	font-size:14px;
+	font-style:italic;
+}
+
+.twitter_feed .tweet_list .tweet_time a {
+	color:#6dbcdb !important;
+}
+
+#footer #twitterfeed-container .twitterfeed .twitter-icon {
+	position:absolute;
+	bottom:-21px;
+	left:15px;
+	font-size:48px;
+	line-height:48px;
+	color:#444645;
+}
+
+/* Twitter Feed Slider Direction Nav ( Next/Prev Arrows )*/
+.twitter_feed .flex-direction-nav {
+	position:absolute;
+	top:50%;
+	left:100%;
+	width:74px;
+}
+
+.twitter_feed .flex-direction-nav li {
+	display:block;
+	float:left;
+}
+
+.twitter_feed .flex-direction-nav a  {
+	display:block;
+	background-color:transparent;
+	width:35px;
+	height:25px;
+	margin-top:-12.5px;
+	background-image: url('/images/sprites/twitterfeednav.png');
+	margin-left:2px;
+	border-radius:3px;
+	padding:0;
+	opacity:0.75;
+	-webkit-box-shadow:none;
+	box-shadow:none;
+	border:none;
+}
+
+.twitter_feed .flex-direction-nav a.flex-prev  {
+	background-position: 0 0;
+}
+
+.twitter_feed .flex-direction-nav a.flex-next  {
+	background-position: -35px 0;
+}
+
+.twitter_feed .flex-direction-nav a.flex-prev:hover {
+	background-position: 0 -25px;
+	background-color:#444645;
+	opacity: 1;
+}
+
+.twitter_feed .flex-direction-nav a.flex-next:hover {
+	background-position: -35px -25px;
+	background-color:#444645;
+	opacity: 1;
+}
+
+#footer #newsletter-container {
+	background: #d6d6d6;
+	padding:27px 0;
+}
+
+/* Used for footer 2 newsletter */
+#footer #newsletter-container  h3 {
+	font-size:25px;
+	line-height:46px;
+	color:#444b4c;
+	text-transform:uppercase;
+	margin:0;
+	float:left;
+}
+
+#footer #newsletter-container form {
+	float:right;
+}
+
+#footer #newsletter-container input[type="text"] {
+	height:46px;
+	width:300px;
+	vertical-align:top;
+	margin-right:5px;
+	border-radius:4px;
+	border:3px solid #6dbcdb;
+	background:#d6d6d6;
+	line-height:20px;
+	padding:5px 10px 5px 20px;
+	color:#727b7c;
+}
+
+#footer #newsletter-container .btn {
+	padding:12px 20px;
+	font-size:17px;
+	line-height:20px;
+}
+
+#footer #newsletter-container :-moz-placeholder {
+	color:#727b7c;
+}
+
+#footer #newsletter-container ::-moz-placeholder {
+	color:#727b7c;
+}
+
+#footer #newsletter-container :-ms-input-placeholder {
+	color:#727b7c;
+}
+
+#footer #newsletter-container ::-webkit-input-placeholder {
+	color:#727b7c;
+}
+
+#inner-footer {
+	padding:20px 0 50px;
+}
+
+#footer h3 {
+	font:19px/38px 'Oswald', Arial, sans-serif;
+	margin:30px 0 20px;
+	color:#e3e3e3;
+	text-transform:uppercase;
+}
+
+#footer .links {
+	display:block;
+}
+
+#footer .links li {
+	padding-left:16px;
+	background-image:url(/images/sprites/footer-menu-list-type.png);
+	background-repeat:no-repeat;
+	background-position:left center;
+	line-height:35px;
+}
+
+#footer .contact-list  li {
+	line-height:31px;
+}
+
+/* Twitter feed widget */
+#footer .twitter_feed_widget  {
+	color:#ccc;
+	font-size:15px;
+	padding-top:10px;
+}
+
+#footer .twitter_feed_widget .tweet_list li {
+	width:100%;
+	margin-bottom:20px;
+	line-height:20px;
+}
+
+
+#footer .twitter_feed_widget .tweet_list .tweet_avatar {
+	display:none;
+}
+
+#footer  .twitter_feed_widget .tweet_list .tweet_time {
+	display:block;
+	font-size:12px;
+	margin-top:10px;
+}
+
+#footer .twitter_feed_widget .tweet_list li  a{
+	color:#6dbcdb ;
+}
+
+#footer .twitter_feed_widget .tweet_list li a:hover {
+	color:#8f8f8f;
+}
+
+#footer  .twitter_feed_widget .tweet_list .tweet_time a {
+	color:#8f8f8f;
+}
+
+#footer .contact-list strong {
+	text-transform:uppercase;
+}
+
+#footer .facebook-likebox iframe{
+	width:100%;
+	height:320px;
+}
+
+#footer-bottom {
+	padding:22.5px 0;
+	border-top:1px solid #383938;
+	-webkit-box-shadow:inset 0 1px 0 rgba(255, 255, 255, 0.1);
+	box-shadow:inset 0 1px 0 rgba(255, 255, 255, 0.1);
+	font:13px/18px Arial, sans-serif;
+}
+
+#footer-bottom p {
+	margin:14px 0;
+	color:#b3b3b3;
+}
+
+#footer-bottom .social-links li {
+	margin-top:5px;
+	margin-bottom: 5px;
+}
+
+/* fix for incline block margin */
+.social-links {
+	font-size:0;
+	line-height:0;
+}
+
+.social-links li {
+	display:inline-block;
+	width:36px;
+	height:36px;
+	margin:0 5px;
+
+}
+.social-links li:first-child {
+	margin-left:0;
+}
+
+.social-links li.smaller-social-icons {
+	width:30px;
+	height:30px;
+	margin-top:1px;
+}
+
+.social-icon {
+	display:block;
+	width:36px;
+	height:36px;
+	background-image: url(/images/sprites/sprite.png);
+	background-color: #626664;
+	background-repeat: no-repeat;
+	-webkit-box-shadow:0 1px 1px rgba(0, 0, 0, 0.15), inset 0 1px 1px rgba(255, 255, 255, 0.2);
+	box-shadow:0 1px 1px rgba(0, 0, 0, 0.15), inset 0 1px 1px rgba(255, 255, 255, 0.2);
+	border-radius:2px;
+	-webkit-transition:background 0.3s ease-in-out;
+	-moz-transition:background 0.3s ease-in-out;
+	-o-transition:background 0.3s ease-in-out;
+	-ms-transition:background 0.3s ease-in-out;
+	transition:background 0.3s ease-in-out;
+}
+
+.social-links li.smaller-social-icons .social-icon{
+	width:30px;
+	height:30px;
+	background-color: #626664;
+}
+
+.icon-facebook {
+	background-position:0 0;
+}
+
+.icon-twitter {
+	background-position:-36px 0;
+}
+
+.icon-rss {
+	background-position:-72px 0;
+}
+
+.icon-delicious {
+	background-position:-108px 0;
+}
+
+.icon-linkedin {
+	background-position:-144px 0;
+}
+
+.icon-flickr {
+	background-position:-180px 0;
+}
+
+.icon-skype {
+	background-position:-216px 0;
+}
+
+.icon-email {
+	background-position:-252px 0;
+}
+
+.icon-facebook:hover {
+	background-color:#3B5998;
+	background-position:0 -36px;
+}
+
+.icon-twitter:hover {
+	background-color:#4099ff;
+	background-position:-36px -36px;
+}
+
+.icon-rss:hover {
+	background-color:#ff8201;
+	background-position:-72px -36px;
+}
+
+.icon-delicious:hover {
+	background-color:#3070c8;
+	background-position:-108px -36px;
+}
+
+.icon-linkedin:hover {
+	background-color:#0080b1;
+	background-position:-144px -36px;
+}
+
+.icon-flickr:hover {
+	background-color:#ee2283;
+	background-position:-180px -36px;
+}
+
+.icon-skype:hover {
+	background-color:#00aff0;
+	background-position:-216px -36px;
+}
+
+.icon-email:hover {
+	background-color:#c7392c;
+	background-position:-252px -36px;
+}
+
+.icon-facebook-sm {
+	background-position: -120px -72px;
+}
+
+.icon-twitter-sm {
+	background-position: -150px -72px;
+}
+
+.icon-dribbble-sm {
+	background-position: -180px -72px;
+}
+
+.icon-email-sm {
+	background-position: -210px -72px;
+}
+
+.icon-facebook-sm:hover {
+	background-position: -120px -102px;
+	background-color:#3B5998 !important;
+}
+
+.icon-twitter-sm:hover {
+	background-color:#4099ff !important;
+	background-position: -150px -102px;
+}
+
+.icon-dribbble-sm:hover {
+	background-color: #ea4c89 !important;
+	background-position: -180px -102px;
+}
+
+.icon-email-sm:hover {
+	background-color:#c7392c !important;
+	background-position: -210px -102px;
+}
+
+.footer-text-container {
+	text-align:right;
+}
+
+

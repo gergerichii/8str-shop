@@ -9,7 +9,7 @@
 /** @var \common\models\entities\Product $product */
 
 /** @var \common\modules\catalog\Module $catalog */
-$catalog = \Yii::$app->get('catalog');
+$catalog = \Yii::$app->getModule('catalog');
 ?>
 
 <div class="col-md-6 col-sm-12 col-xs-12 product-viewer clearfix">

@@ -3,7 +3,7 @@
 return [
     'components' => [
         'urlManager' => [
-            'hostInfo' => '8str.ru'
+            'hostInfo' => '8str.8str.ru'
         ],
     ]
 ];

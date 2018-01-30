@@ -1,4 +1,4 @@
-#!/usr/bin/env php
+#!/usr/bin/env php7.1
 <?php
 /**
  * Yii Application Initialization Tool
@@ -224,6 +224,7 @@ function createSymlink($root, $links)
         $link = $root . "/" . $link;
         if (! $target = realpath($root . "/" . $target)) {
             printError("Target not exists: $target.");
+            continue;
         }
         if (getenv('ENV_TYPE') == 'VAGRANT_BOX') {
             if (is_dir($link)) {

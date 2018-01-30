@@ -63,7 +63,7 @@ class DefaultController extends BaseFrontendController
     public function actionProduct($catalogPath = '', $productId = null) {
         $product = Product::find()->forFrontEnd()->where(['id' => $productId])->one();
         /** @var Module $catalog */
-        $catalog = \Yii::$app->get('catalog');
+        $catalog = $this->module;
 
         if (!$catalog->productHasRubric($product, $catalogPath)) {
             throw new NotFoundHttpException('Продукт не найден');

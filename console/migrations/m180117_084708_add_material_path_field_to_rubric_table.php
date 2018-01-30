@@ -16,7 +16,7 @@ class m180117_084708_add_material_path_field_to_rubric_table extends Migration
         $this->addColumn('product_rubric', 'material_path', $this->string(500)->null());
         foreach(ProductRubric::find()->each() as $rubric) {
             /** @var ProductRubric $rubric */
-            $rubric->material_path = \Yii::$app->get('catalog')->getRubricPath($rubric, false);
+            $rubric->material_path = \Yii::$app->getModule('catalog')->getRubricPath($rubric, false);
             echo "Update {$rubric->name}, path: {$rubric->material_path} \n";
             $rubric->save();
         }

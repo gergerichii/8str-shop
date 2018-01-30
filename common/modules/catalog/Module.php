@@ -41,7 +41,33 @@ class Module extends \yii\base\Module implements BootstrapInterface
      */
     public function bootstrap ($app)
     {
-        // TODO: Implement bootstrap() method.
+        $urlManagers = [];
+        foreach (array_keys($app->components) as $componentName) {
+            if (strPos($componentName, 'UrlManager') > 0)
+                $urlManagers[] = $componentName;
+        }
+
+        $rules = [
+            [
+                'pattern' => 'catalog/<_a:product|index|.{0}>/<catalogPath:[\w\-\.,/_]*?>/<productId:\d*>',
+                'route' => '/catalog/default/<_a>',
+                'encodeParams' => false,
+                'defaults' => [
+                    '_a' => 'index',
+                    'catalogPath' => '',
+                    'productId' => '',
+                ]
+            ],
+        ];
+        if (count($urlManagers)) {
+            foreach ($urlManagers as $urlManager) {
+                /** @var \yii\web\UrlManager $urlManager */
+                $urlManager = $app->get($urlManager);
+                $urlManager->addRules($rules);
+            }
+        } else {
+            $app->urlManager->addRules($rules);
+        }
     }
     /**
      * @param ProductRubric|string|null $rubric
@@ -51,7 +77,7 @@ class Module extends \yii\base\Module implements BootstrapInterface
      * @throws \yii\base\ErrorException
      */
     public function getCatalogUri($rubric=null, $product=null) {
-        $uriParams = ['/' . $this->id];
+        $uriParams = ["/$this->id/$this->defaultRoute"];
 
         if (is_int($product)) {
             if (isset($this->_products[$product])) {

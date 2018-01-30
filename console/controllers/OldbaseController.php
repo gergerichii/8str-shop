@@ -67,7 +67,7 @@ class OldbaseController extends Controller
 
     private $imagesPath = '@common/protected/webFiles/catalog/images/';
     
-    private $oldDbName = 'oldBase';
+    private $oldDbName = 'fbkru_0_8str';
     
     private $currentPID;
     
@@ -181,13 +181,17 @@ class OldbaseController extends Controller
      */
     public function actionImport()
     {
-        $remoteDb = clone yii::$app->db;
-        $remoteDb->dsn = preg_replace(
-            '#dbname=[^;]+#',
-            "dbname={$this->oldDbName}",
-            yii::$app->db->dsn
-        );
-        $remoteDb->tablePrefix = 'pdx';
+        if (isset(yii::$app->old_db)) {
+            $remoteDb = yii::$app->old_db;
+        } else {
+            $remoteDb = clone yii::$app->db;
+            $remoteDb->dsn = preg_replace(
+                '#dbname=[^;]+#',
+                "dbname={$this->oldDbName}",
+                yii::$app->db->dsn
+            );
+            $remoteDb->tablePrefix = 'pdx';
+        }
         
         try {
             $remoteDb->open();

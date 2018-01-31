@@ -39,3 +39,4 @@ phpunit.phar
 .idea
 config.cache
 nul*
+node_modules

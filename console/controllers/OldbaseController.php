@@ -96,8 +96,7 @@ class OldbaseController extends Controller
     {
         return array_merge(parent::options($actionID), [
             'autoCreateAuxFields', // Автоматически создавать вспомогательные поля в базе если их нет
-            'autoDeleteAuxFields', // Автоматически удалять вспомогательные поля. Если удалить, то при следующем
-            // копировании содержимое базы удалится
+            'autoDeleteAuxFields', // Автоматически удалять вспомогательные поля. Если удалить, то при следующем копировании содержимое базы удалится
         ]);
     }
     

@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="WebServers">
+    <option name="servers">
+      <webServer id="1f589e91-f629-4680-b8d3-227eda51bb14" name="beget" url="http://8str.ru">
+        <fileTransfer host="8str.ru" port="22" rootFolder="/home/f/fbkru/sites" accessType="SFTP">
+          <advancedOptions>
+            <advancedOptions controlEncoding="utf8" dataProtectionLevel="Private" />
+          </advancedOptions>
+          <option name="port" value="22" />
+        </fileTransfer>
+      </webServer>
+      <webServer id="1004cbd5-6e0b-4717-969a-2fb566fab463" name="admin.8str.ln" url="http://admin.8str.ln">
+        <fileTransfer port="0" accessType="LOCAL" />
+      </webServer>
+      <webServer id="a926fa4a-9afa-43a7-a900-4f091f4cf053" name="test.8str.ln" url="http://test.8str.ln">
+        <fileTransfer port="0" accessType="LOCAL" />
+      </webServer>
+      <webServer id="de255626-986c-47c1-9637-bd8e4f2bf27e" name="8str.ln" url="http://8str.ln">
+        <fileTransfer port="0" accessType="LOCAL" />
+      </webServer>
+    </option>
+  </component>
+</project>

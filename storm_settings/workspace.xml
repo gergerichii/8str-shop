@@ -1,0 +1,1244 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ChangeListManager">
+    <list default="true" id="886fdee6-1d5d-4a16-89c9-433a5bb4b8c7" name="Default" comment="">
+      <change beforePath="$PROJECT_DIR$/.gitignore" afterPath="$PROJECT_DIR$/.gitignore" />
+      <change beforePath="$PROJECT_DIR$/composer.lock" afterPath="" />
+    </list>
+    <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
+    <option name="TRACKING_ENABLED" value="true" />
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="ComposerSettings" doNotAsk="true" synchronizationState="SYNCHRONIZE">
+    <pharConfigPath>$PROJECT_DIR$/composer.json</pharConfigPath>
+    <executablePath>D:\BIN\COMPOSER\composer.bat</executablePath>
+  </component>
+  <component name="DatabaseView">
+    <option name="SHOW_INTERMEDIATE" value="true" />
+    <option name="GROUP_DATA_SOURCES" value="true" />
+    <option name="GROUP_SCHEMA" value="true" />
+    <option name="GROUP_CONTENTS" value="false" />
+    <option name="SORT_POSITIONED" value="false" />
+    <option name="SHOW_TABLE_DETAILS" value="true" />
+    <option name="SHOW_EMPTY_GROUPS" value="false" />
+    <option name="AUTO_SCROLL_FROM_SOURCE" value="false" />
+    <expand>
+      <path>
+        <item name="Database" type="3277223f:DatabaseStructure$DbRootGroup" />
+        <item name="@localhost" type="feb32156:DbDataSourceImpl" />
+      </path>
+      <path>
+        <item name="Database" type="3277223f:DatabaseStructure$DbRootGroup" />
+        <item name="@localhost" type="feb32156:DbDataSourceImpl" />
+        <item name="schemas" type="d4e8921:DatabaseStructure$FamilyGroup" />
+      </path>
+    </expand>
+    <select />
+  </component>
+  <component name="FileEditorManager">
+    <leaf />
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="HTML File" />
+      </list>
+    </option>
+  </component>
+  <component name="FindInProjectRecents">
+    <findStrings>
+      <find>'user'</find>
+      <find>debug</find>
+      <find>'debug'</find>
+      <find>_ident</find>
+      <find>'APP_BASE_DIR</find>
+      <find>'8str</find>
+      <find>cookieValidationKey</find>
+      <find>backend</find>
+      <find>site/error</find>
+      <find>'errorHandler'</find>
+      <find>strpos</find>
+      <find>\data\</find>
+      <find>\baseClasses\</find>
+      <find>manages</find>
+      <find>Manages application migrations</find>
+      <find>Creates a new migration</find>
+      <find>_batch</find>
+      <find>_value</find>
+      <find>globalFixtures</find>
+      <find>namespace</find>
+      <find>([^\. ]+)\.([\S]+)</find>
+      <find>createSymlink</find>
+      <find>folder</find>
+      <find>if</find>
+      <find>sites</find>
+      <find>privi</find>
+      <find>init</find>
+      <find>web/common</find>
+      <find>web/</find>
+      <find>getColu</find>
+    </findStrings>
+    <replaceStrings>
+      <replace>settings</replace>
+      <replace>$2 =&gt; $1</replace>
+      <replace>\$app, self::APP_SOURCE_FILES[$1]['source']</replace>
+      <replace>console</replace>
+      <replace>admin</replace>
+      <replace>\models\</replace>
+      <replace>\base\</replace>
+      <replace>$configName</replace>
+      <replace>{{$1}}.[[$2]]</replace>
+    </replaceStrings>
+    <dirStrings>
+      <dir>D:\WWW_DATA\TIMA_SHOP\vagrant</dir>
+      <dir>D:\WWW_DATA\TIMA_SHOP\vendor</dir>
+      <dir>D:\WWW_DATA\TIMA_SHOP\environments</dir>
+      <dir>D:\WWW_DATA\TIMA_SHOP</dir>
+      <dir>D:\WWW_DATA\TIMA_SHOP\vendor\yiisoft\yii2\console</dir>
+      <dir>D:\WWW_DATA\TIMA_SHOP\vendor\yiisoft\yii2</dir>
+      <dir>D:\WWW_DATA\TIMA_SHOP\vagrant\scripts</dir>
+    </dirStrings>
+  </component>
+  <component name="FrameworkRootSettings" id="Yii">
+    <option name="bundleRoots">
+      <list>
+        <option value="$PROJECT_DIR$/common/modules/cart" />
+        <option value="$PROJECT_DIR$/common/modules/catalog" />
+        <option value="$PROJECT_DIR$/common/modules/files" />
+      </list>
+    </option>
+    <option name="typedPaths">
+      <list>
+        <element elementPath="$PROJECT_DIR$/admin" typeId="protected_directory" />
+        <element elementPath="$PROJECT_DIR$/admin/assets" typeId="assets_directory" />
+        <element elementPath="$PROJECT_DIR$/admin/controllers" typeId="protected_controllers_directory" />
+        <element elementPath="$PROJECT_DIR$/admin/models" typeId="protected_models_directory" />
+        <element elementPath="$PROJECT_DIR$/admin/runtime" typeId="protected_runtime_directory" />
+        <element elementPath="$PROJECT_DIR$/admin/views" typeId="protected_views_system_directory" />
+        <element elementPath="$PROJECT_DIR$/admin/views/layouts" typeId="protected_views_layouts_directory" />
+        <element elementPath="$PROJECT_DIR$/admin/views/site" typeId="protected_views_directory" />
+        <element elementPath="$PROJECT_DIR$/admin/views/themes" typeId="themes_directory" />
+        <element elementPath="$PROJECT_DIR$/admin/views/themes/adminLte/layouts" typeId="protected_views_layouts_directory" />
+        <element elementPath="$PROJECT_DIR$/admin/views/themes/adminLte/old-base-migrate" typeId="protected_views_directory" />
+        <element elementPath="$PROJECT_DIR$/admin/views/themes/adminLte/shop" typeId="protected_views_directory" />
+        <element elementPath="$PROJECT_DIR$/admin/views/themes/adminLte/site" typeId="protected_views_directory" />
+        <element elementPath="$PROJECT_DIR$/admin/views/themes/adminLte/test" typeId="protected_views_directory" />
+        <element elementPath="$PROJECT_DIR$/common/assets" typeId="assets_directory" />
+        <element elementPath="$PROJECT_DIR$/common/models" typeId="protected_models_directory" />
+        <element elementPath="$PROJECT_DIR$/common/modules/catalog/controllers" typeId="bundle_controllers_directory" />
+        <element elementPath="$PROJECT_DIR$/common/modules/catalog/views" typeId="bundle_views_directory" />
+        <element elementPath="$PROJECT_DIR$/common/modules/files/controllers" typeId="bundle_controllers_directory" />
+        <element elementPath="$PROJECT_DIR$/common/modules/files/views" typeId="bundle_views_directory" />
+        <element elementPath="$PROJECT_DIR$/console" typeId="protected_directory" />
+        <element elementPath="$PROJECT_DIR$/console/models" typeId="protected_models_directory" />
+        <element elementPath="$PROJECT_DIR$/console/runtime" typeId="protected_runtime_directory" />
+        <element elementPath="$PROJECT_DIR$/frontend" typeId="protected_directory" />
+        <element elementPath="$PROJECT_DIR$/frontend/assets" typeId="assets_directory" />
+        <element elementPath="$PROJECT_DIR$/frontend/controllers" typeId="protected_controllers_directory" />
+        <element elementPath="$PROJECT_DIR$/frontend/models" typeId="protected_models_directory" />
+        <element elementPath="$PROJECT_DIR$/frontend/runtime" typeId="protected_runtime_directory" />
+        <element elementPath="$PROJECT_DIR$/frontend/views" typeId="protected_views_system_directory" />
+        <element elementPath="$PROJECT_DIR$/frontend/views/cart" typeId="protected_views_directory" />
+        <element elementPath="$PROJECT_DIR$/frontend/views/layouts" typeId="protected_views_layouts_directory" />
+        <element elementPath="$PROJECT_DIR$/frontend/views/pieces" typeId="protected_views_directory" />
+        <element elementPath="$PROJECT_DIR$/frontend/views/site" typeId="protected_views_directory" />
+        <element elementPath="$PROJECT_DIR$/frontend/views/themes" typeId="themes_directory" />
+        <element elementPath="$PROJECT_DIR$/shop_8str" typeId="protected_directory" />
+        <element elementPath="$PROJECT_DIR$/shop_8str/runtime" typeId="protected_runtime_directory" />
+        <element elementPath="$PROJECT_DIR$/shop_8str/themes" typeId="themes_directory" />
+        <element elementPath="$PROJECT_DIR$/shop_8str/views" typeId="protected_views_system_directory" />
+        <element elementPath="$PROJECT_DIR$/shop_8str/views/layouts" typeId="protected_views_layouts_directory" />
+        <element elementPath="$PROJECT_DIR$/shop_8str/views/themes" typeId="themes_directory" />
+      </list>
+    </option>
+    <option name="myTypedPaths">
+      <list>
+        <element elementPath="$PROJECT_DIR$/admin" typeId="protected_directory" />
+        <element elementPath="$PROJECT_DIR$/admin/assets" typeId="assets_directory" />
+        <element elementPath="$PROJECT_DIR$/admin/controllers" typeId="protected_controllers_directory" />
+        <element elementPath="$PROJECT_DIR$/admin/models" typeId="protected_models_directory" />
+        <element elementPath="$PROJECT_DIR$/admin/runtime" typeId="protected_runtime_directory" />
+        <element elementPath="$PROJECT_DIR$/admin/views" typeId="protected_views_system_directory" />
+        <element elementPath="$PROJECT_DIR$/admin/views/layouts" typeId="protected_views_layouts_directory" />
+        <element elementPath="$PROJECT_DIR$/admin/views/site" typeId="protected_views_directory" />
+        <element elementPath="$PROJECT_DIR$/admin/views/themes" typeId="themes_directory" />
+        <element elementPath="$PROJECT_DIR$/admin/views/themes/adminLte/layouts" typeId="protected_views_layouts_directory" />
+        <element elementPath="$PROJECT_DIR$/admin/views/themes/adminLte/old-base-migrate" typeId="protected_views_directory" />
+        <element elementPath="$PROJECT_DIR$/admin/views/themes/adminLte/shop" typeId="protected_views_directory" />
+        <element elementPath="$PROJECT_DIR$/admin/views/themes/adminLte/site" typeId="protected_views_directory" />
+        <element elementPath="$PROJECT_DIR$/admin/views/themes/adminLte/test" typeId="protected_views_directory" />
+        <element elementPath="$PROJECT_DIR$/common/assets" typeId="assets_directory" />
+        <element elementPath="$PROJECT_DIR$/common/models" typeId="protected_models_directory" />
+        <element elementPath="$PROJECT_DIR$/common/modules/catalog/controllers" typeId="bundle_controllers_directory" />
+        <element elementPath="$PROJECT_DIR$/common/modules/catalog/views" typeId="bundle_views_directory" />
+        <element elementPath="$PROJECT_DIR$/common/modules/files/controllers" typeId="bundle_controllers_directory" />
+        <element elementPath="$PROJECT_DIR$/common/modules/files/views" typeId="bundle_views_directory" />
+        <element elementPath="$PROJECT_DIR$/console" typeId="protected_directory" />
+        <element elementPath="$PROJECT_DIR$/console/models" typeId="protected_models_directory" />
+        <element elementPath="$PROJECT_DIR$/console/runtime" typeId="protected_runtime_directory" />
+        <element elementPath="$PROJECT_DIR$/frontend" typeId="protected_directory" />
+        <element elementPath="$PROJECT_DIR$/frontend/assets" typeId="assets_directory" />
+        <element elementPath="$PROJECT_DIR$/frontend/controllers" typeId="protected_controllers_directory" />
+        <element elementPath="$PROJECT_DIR$/frontend/models" typeId="protected_models_directory" />
+        <element elementPath="$PROJECT_DIR$/frontend/runtime" typeId="protected_runtime_directory" />
+        <element elementPath="$PROJECT_DIR$/frontend/views" typeId="protected_views_system_directory" />
+        <element elementPath="$PROJECT_DIR$/frontend/views/cart" typeId="protected_views_directory" />
+        <element elementPath="$PROJECT_DIR$/frontend/views/layouts" typeId="protected_views_layouts_directory" />
+        <element elementPath="$PROJECT_DIR$/frontend/views/pieces" typeId="protected_views_directory" />
+        <element elementPath="$PROJECT_DIR$/frontend/views/site" typeId="protected_views_directory" />
+        <element elementPath="$PROJECT_DIR$/frontend/views/themes" typeId="themes_directory" />
+        <element elementPath="$PROJECT_DIR$/shop_8str" typeId="protected_directory" />
+        <element elementPath="$PROJECT_DIR$/shop_8str/runtime" typeId="protected_runtime_directory" />
+        <element elementPath="$PROJECT_DIR$/shop_8str/themes" typeId="themes_directory" />
+        <element elementPath="$PROJECT_DIR$/shop_8str/views" typeId="protected_views_system_directory" />
+        <element elementPath="$PROJECT_DIR$/shop_8str/views/layouts" typeId="protected_views_layouts_directory" />
+        <element elementPath="$PROJECT_DIR$/shop_8str/views/themes" typeId="themes_directory" />
+      </list>
+    </option>
+    <option name="myBundleRoots">
+      <list>
+        <option value="$PROJECT_DIR$/common/modules/cart" />
+        <option value="$PROJECT_DIR$/common/modules/catalog" />
+        <option value="$PROJECT_DIR$/common/modules/files" />
+      </list>
+    </option>
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+    <option name="RECENT_BRANCH_BY_REPOSITORY">
+      <map>
+        <entry key="$PROJECT_DIR$" value="dev" />
+      </map>
+    </option>
+  </component>
+  <component name="IdeDocumentHistory">
+    <option name="CHANGED_PATHS">
+      <list>
+        <option value="$PROJECT_DIR$/console/migrations/1_8str_base_import.php" />
+        <option value="$PROJECT_DIR$/console/migrations/files/_8str_base_import.php" />
+        <option value="$PROJECT_DIR$/console/migrations/m180105_132512_8str_base_import.php" />
+        <option value="$PROJECT_DIR$/console/migrations/m180105_145904_create_product_table.php" />
+        <option value="$PROJECT_DIR$/console/migrations/m180107_105307_create_tags_table.php" />
+        <option value="$PROJECT_DIR$/console/migrations/m180107_135342_create_product_discount_table.php" />
+        <option value="$PROJECT_DIR$/console/migrations/m180117_070802_add_main_rubric_field_in_product_table.php" />
+        <option value="$PROJECT_DIR$/composer.json" />
+        <option value="$PROJECT_DIR$/console/migrations/m180126_081715_8str_base_import.php" />
+        <option value="$PROJECT_DIR$/console/migrations/files/8str_base_import.php" />
+        <option value="$PROJECT_DIR$/console/controllers/oldbaseController.php" />
+        <option value="$PROJECT_DIR$/shop_8str/web/assets/.gitignore" />
+        <option value="$PROJECT_DIR$/admin/controllers/SiteController.php" />
+        <option value="$PROJECT_DIR$/admin/controllers/TestController.php" />
+        <option value="$PROJECT_DIR$/common/modules/files/controllers/DefaultController.php" />
+        <option value="$PROJECT_DIR$/environments/htaccess" />
+        <option value="$PROJECT_DIR$/vagrant/scripts/chrck-folder.sh" />
+        <option value="$PROJECT_DIR$/vagrant/scripts/check-folder.sh" />
+        <option value="$PROJECT_DIR$/vagrant/aliases" />
+        <option value="$PROJECT_DIR$/admin/web/.gitignore" />
+        <option value="$PROJECT_DIR$/frontend/web/.gitignore" />
+        <option value="$PROJECT_DIR$/shop_8str/web/.gitignore" />
+        <option value="$PROJECT_DIR$/shop_8str/web/index.php" />
+        <option value="$PROJECT_DIR$/init" />
+        <option value="$PROJECT_DIR$/Vagrantfile" />
+        <option value="$PROJECT_DIR$/vagrant/scripts/configure.rb" />
+        <option value="$PROJECT_DIR$/vagrant/scripts/always-as-vagrant.sh" />
+        <option value="$PROJECT_DIR$/vagrant/config.yaml" />
+        <option value="$PROJECT_DIR$/environments/index.php" />
+        <option value="$PROJECT_DIR$/console/controllers/.gitignore" />
+        <option value="$PROJECT_DIR$/console/controllers/db2.php" />
+        <option value="$PROJECT_DIR$/vagrant/scripts/once-as-vagrant.sh" />
+        <option value="$PROJECT_DIR$/vagrant/scripts/once-as-root.sh" />
+        <option value="$PROJECT_DIR$/environments/prod/common/config/local/main.php" />
+        <option value="$PROJECT_DIR$/environments/prod/yii" />
+        <option value="$PROJECT_DIR$/console/controllers/OldbaseController.php" />
+        <option value="$PROJECT_DIR$/admin/web/files/.gitignore" />
+        <option value="$PROJECT_DIR$/common/webFiles/.gitignore" />
+        <option value="$PROJECT_DIR$/admin/config/local/.gitignore" />
+        <option value="$PROJECT_DIR$/console/config/local/.gitignore" />
+        <option value="$PROJECT_DIR$/frontend/config/local/.gitignore" />
+        <option value="$PROJECT_DIR$/runtime/.gitignore" />
+        <option value="$PROJECT_DIR$/shop_8str/config/local/.gitignore" />
+        <option value="$PROJECT_DIR$/temp/.gitignore" />
+        <option value="$PROJECT_DIR$/common/webFiles/system/images/.gitignore" />
+        <option value="$PROJECT_DIR$/common/webFiles/system/files/.gitignore" />
+        <option value="$PROJECT_DIR$/common/webFiles/products/images/.gitignore" />
+        <option value="$PROJECT_DIR$/common/webFiles/products/files/.gitignore" />
+        <option value="$PROJECT_DIR$/common/webFiles/brands/files/.gitignore" />
+        <option value="$PROJECT_DIR$/common/webFiles/brands/images/.gitignore" />
+        <option value="$PROJECT_DIR$/.gitignore" />
+      </list>
+    </option>
+  </component>
+  <component name="JsBuildToolGruntFileManager" detection-done="true" sorting="DEFINITION_ORDER" />
+  <component name="JsBuildToolPackageJson" detection-done="true" sorting="DEFINITION_ORDER" />
+  <component name="JsFlowSettings">
+    <service-enabled>true</service-enabled>
+    <exe-path />
+    <other-services-enabled>true</other-services-enabled>
+    <auto-save>true</auto-save>
+  </component>
+  <component name="JsGulpfileManager">
+    <detection-done>true</detection-done>
+    <sorting>DEFINITION_ORDER</sorting>
+  </component>
+  <component name="NamedScopeManager">
+    <scope name="configs" pattern="file[TIMA_SHOP]:admin/config/*||file[TIMA_SHOP]:common/config/*||file[TIMA_SHOP]:console/config/*||file[TIMA_SHOP]:frontend/config/*||file[TIMA_SHOP]:shop_8str/config/*" />
+  </component>
+  <component name="NodeModulesDirectoryManager">
+    <handled-path value="$PROJECT_DIR$/node_modules" />
+  </component>
+  <component name="PhpServers">
+    <servers>
+      <server host="frontend.ln" id="959b9fc5-de06-413e-8a73-ba57216b202e" name="frontend.ln" use_path_mappings="true">
+        <path_mappings>
+          <mapping local-root="$PROJECT_DIR$" remote-root="/home/vagrant/web" />
+        </path_mappings>
+      </server>
+      <server host="8str.ln" id="6421ed13-10c9-4788-8d82-caea9344763e" name="8str.ln" use_path_mappings="true">
+        <path_mappings>
+          <mapping local-root="$PROJECT_DIR$" remote-root="/home/vagrant/sites" />
+        </path_mappings>
+      </server>
+      <server host="admin.8str.ln" id="22cd57b0-83b8-43f9-be09-a9910ef3a9a7" name="admin.8str.ln" use_path_mappings="true">
+        <path_mappings>
+          <mapping local-root="$PROJECT_DIR$" remote-root="/home/vagrant/web" />
+        </path_mappings>
+      </server>
+      <server host="10.0.2.15" id="5ff1f3fb-aa5b-4e55-b9ca-12001fc495e3" name="10.0.2.15" port="22" use_path_mappings="true">
+        <path_mappings>
+          <mapping local-root="$PROJECT_DIR$" remote-root="/home/vagrant/sites" />
+        </path_mappings>
+      </server>
+    </servers>
+  </component>
+  <component name="PhpWorkspaceProjectConfiguration" backward_compatibility_performed="true" interpreter_name="vagrant PHP 7.2">
+    <include_path>
+      <path value="$PROJECT_DIR$/vendor/bower-asset/inputmask" />
+      <path value="$PROJECT_DIR$/vendor/bower-asset/bootstrap" />
+      <path value="$PROJECT_DIR$/vendor/phpdocumentor/type-resolver" />
+      <path value="$PROJECT_DIR$/vendor/bower-asset/jquery" />
+      <path value="$PROJECT_DIR$/vendor/phpdocumentor/reflection-common" />
+      <path value="$PROJECT_DIR$/vendor/phpunit/php-code-coverage" />
+      <path value="$PROJECT_DIR$/vendor/bower-asset/punycode" />
+      <path value="$PROJECT_DIR$/vendor/swiftmailer/swiftmailer" />
+      <path value="$PROJECT_DIR$/vendor/phpunit/phpunit" />
+      <path value="$PROJECT_DIR$/vendor/bower-asset/yii2-pjax" />
+      <path value="$PROJECT_DIR$/vendor/phpdocumentor/reflection-docblock" />
+      <path value="$PROJECT_DIR$/vendor/phpunit/php-token-stream" />
+      <path value="$PROJECT_DIR$/vendor/codeception/verify" />
+      <path value="$PROJECT_DIR$/vendor/phpunit/phpunit-mock-objects" />
+      <path value="$PROJECT_DIR$/vendor/bower-asset/typeahead.js" />
+      <path value="$PROJECT_DIR$/vendor/codeception/base" />
+      <path value="$PROJECT_DIR$/vendor/phpunit/php-timer" />
+      <path value="$PROJECT_DIR$/vendor/phpunit/php-text-template" />
+      <path value="$PROJECT_DIR$/vendor/phpunit/php-file-iterator" />
+      <path value="$PROJECT_DIR$/vendor/phpspec/php-diff" />
+      <path value="$PROJECT_DIR$/vendor/phpspec/prophecy" />
+      <path value="$PROJECT_DIR$/vendor/behat/gherkin" />
+      <path value="$PROJECT_DIR$/vendor/yiisoft/yii2-swiftmailer" />
+      <path value="$PROJECT_DIR$/vendor/yiisoft/yii2-debug" />
+      <path value="$PROJECT_DIR$/vendor/yiisoft/yii2-gii" />
+      <path value="$PROJECT_DIR$/vendor/yiisoft/yii2-faker" />
+      <path value="$PROJECT_DIR$/vendor/yiisoft/yii2-composer" />
+      <path value="$PROJECT_DIR$/vendor/yiisoft/yii2" />
+      <path value="$PROJECT_DIR$/vendor/yiisoft/yii2-bootstrap" />
+      <path value="$PROJECT_DIR$/vendor/guzzlehttp/psr7" />
+      <path value="$PROJECT_DIR$/vendor/phar-io/manifest" />
+      <path value="$PROJECT_DIR$/vendor/phar-io/version" />
+      <path value="$PROJECT_DIR$/vendor/egulias/email-validator" />
+      <path value="$PROJECT_DIR$/vendor/sebastian/diff" />
+      <path value="$PROJECT_DIR$/vendor/sebastian/version" />
+      <path value="$PROJECT_DIR$/vendor/theseer/tokenizer" />
+      <path value="$PROJECT_DIR$/vendor/sebastian/resource-operations" />
+      <path value="$PROJECT_DIR$/vendor/sebastian/code-unit-reverse-lookup" />
+      <path value="$PROJECT_DIR$/vendor/cebe/markdown" />
+      <path value="$PROJECT_DIR$/vendor/sebastian/object-enumerator" />
+      <path value="$PROJECT_DIR$/vendor/sebastian/object-reflector" />
+      <path value="$PROJECT_DIR$/vendor/sebastian/exporter" />
+      <path value="$PROJECT_DIR$/vendor/sebastian/recursion-context" />
+      <path value="$PROJECT_DIR$/vendor/sebastian/comparator" />
+      <path value="$PROJECT_DIR$/vendor/sebastian/environment" />
+      <path value="$PROJECT_DIR$/vendor/sebastian/global-state" />
+      <path value="$PROJECT_DIR$/vendor/fzaninotto/faker" />
+      <path value="$PROJECT_DIR$/vendor/psr/http-message" />
+      <path value="$PROJECT_DIR$/vendor/ezyang/htmlpurifier" />
+      <path value="$PROJECT_DIR$/vendor/webmozart/assert" />
+      <path value="$PROJECT_DIR$/vendor/doctrine/instantiator" />
+      <path value="$PROJECT_DIR$/vendor/doctrine/lexer" />
+      <path value="$PROJECT_DIR$/vendor/symfony/finder" />
+      <path value="$PROJECT_DIR$/vendor/symfony/yaml" />
+      <path value="$PROJECT_DIR$/vendor/symfony/browser-kit" />
+      <path value="$PROJECT_DIR$/vendor/symfony/dom-crawler" />
+      <path value="$PROJECT_DIR$/vendor/composer" />
+      <path value="$PROJECT_DIR$/vendor/symfony/event-dispatcher" />
+      <path value="$PROJECT_DIR$/vendor/symfony/polyfill-mbstring" />
+      <path value="$PROJECT_DIR$/vendor/symfony/console" />
+      <path value="$PROJECT_DIR$/vendor/symfony/css-selector" />
+      <path value="$PROJECT_DIR$/vendor/myclabs/deep-copy" />
+      <path value="D:\WWW_DATA\TIMA_SHOP\vendor" />
+      <path value="$PROJECT_DIR$/vendor/leafo/scssphp" />
+      <path value="$PROJECT_DIR$/vendor/rmrevin/yii2-fontawesome" />
+      <path value="$PROJECT_DIR$/vendor/dmstr/yii2-adminlte-asset" />
+      <path value="$PROJECT_DIR$/vendor/yourilima/scssphp-compass" />
+      <path value="$PROJECT_DIR$/vendor/nizsheanez/yii2-asset-converter" />
+      <path value="$PROJECT_DIR$/vendor/oyejorge/less.php" />
+      <path value="$PROJECT_DIR$/vendor/simialbi/yii2-schema-org" />
+      <path value="$PROJECT_DIR$/vendor/almasaeed2010/adminlte" />
+      <path value="$PROJECT_DIR$/vendor/factorenergia/yii2-adminlte" />
+      <path value="$PROJECT_DIR$/vendor/fortawesome/font-awesome" />
+      <path value="$PROJECT_DIR$/vendor/richthegeek/phpsass" />
+      <path value="$PROJECT_DIR$/vendor/cebe/yii2-gravatar" />
+      <path value="$PROJECT_DIR$/vendor/psr/log" />
+      <path value="$PROJECT_DIR$/vendor/bower-asset/jquery-ui" />
+      <path value="$PROJECT_DIR$/vendor/yiisoft/yii2-jui" />
+      <path value="$PROJECT_DIR$/vendor/mpdf/mpdf" />
+      <path value="$PROJECT_DIR$/vendor/kartik-v/yii2-editable" />
+      <path value="$PROJECT_DIR$/vendor/kartik-v/yii2-popover-x" />
+      <path value="$PROJECT_DIR$/vendor/2amigos/yii2-arrayquery-component" />
+      <path value="$PROJECT_DIR$/vendor/yii2mod/yii2-rbac" />
+      <path value="$PROJECT_DIR$/vendor/setasign/fpdi" />
+      <path value="$PROJECT_DIR$/vendor/paragonie/random_compat" />
+      <path value="$PROJECT_DIR$/vendor/kartik-v/yii2-krajee-base" />
+      <path value="$PROJECT_DIR$/vendor/kartik-v/bootstrap-popover-x" />
+      <path value="$PROJECT_DIR$/vendor/2amigos/yii2-translateable-behavior" />
+      <path value="$PROJECT_DIR$/vendor/2amigos/transliterator-helper" />
+      <path value="$PROJECT_DIR$/vendor/2amigos/yii2-transliterator-helper" />
+      <path value="$PROJECT_DIR$/vendor/yii2mod/yii2-cart" />
+      <path value="$PROJECT_DIR$/vendor/mirocow/yii2-eav" />
+      <path value="$PROJECT_DIR$/vendor/johnitvn/yii2-rbac-plus" />
+      <path value="$PROJECT_DIR$/vendor/twbs/bootstrap" />
+      <path value="$PROJECT_DIR$/vendor/dvizh/yii2-cart" />
+      <path value="$PROJECT_DIR$/vendor/omnilight/yii2-shopping-cart" />
+      <path value="$PROJECT_DIR$/vendor/johnitvn/yii2-ajaxcrud" />
+      <path value="$PROJECT_DIR$/vendor/creocoder/yii2-nested-sets" />
+      <path value="$PROJECT_DIR$/vendor/kartik-v/yii2-widget-fileinput" />
+      <path value="$PROJECT_DIR$/vendor/kartik-v/bootstrap-star-rating" />
+      <path value="$PROJECT_DIR$/vendor/kartik-v/yii2-widget-affix" />
+      <path value="$PROJECT_DIR$/vendor/kartik-v/yii2-widget-timepicker" />
+      <path value="$PROJECT_DIR$/vendor/kartik-v/yii2-widget-datepicker" />
+      <path value="$PROJECT_DIR$/vendor/kartik-v/yii2-widget-alert" />
+      <path value="$PROJECT_DIR$/vendor/kartik-v/yii2-widget-depdrop" />
+      <path value="$PROJECT_DIR$/vendor/kartik-v/yii2-widget-typeahead" />
+      <path value="$PROJECT_DIR$/vendor/kartik-v/yii2-grid" />
+      <path value="$PROJECT_DIR$/vendor/kartik-v/yii2-widget-sidenav" />
+      <path value="$PROJECT_DIR$/vendor/kartik-v/yii2-widget-growl" />
+      <path value="$PROJECT_DIR$/vendor/kartik-v/yii2-widget-switchinput" />
+      <path value="$PROJECT_DIR$/vendor/kartik-v/yii2-widget-spinner" />
+      <path value="$PROJECT_DIR$/vendor/kartik-v/yii2-widgets" />
+      <path value="$PROJECT_DIR$/vendor/kartik-v/yii2-mpdf" />
+      <path value="$PROJECT_DIR$/vendor/kartik-v/yii2-widget-rating" />
+      <path value="$PROJECT_DIR$/vendor/kartik-v/yii2-widget-datetimepicker" />
+      <path value="$PROJECT_DIR$/vendor/kartik-v/yii2-tree-manager" />
+      <path value="$PROJECT_DIR$/vendor/kartik-v/yii2-widget-colorinput" />
+      <path value="$PROJECT_DIR$/vendor/kartik-v/yii2-widget-activeform" />
+      <path value="$PROJECT_DIR$/vendor/kartik-v/yii2-widget-touchspin" />
+      <path value="$PROJECT_DIR$/vendor/kartik-v/yii2-widget-select2" />
+      <path value="$PROJECT_DIR$/vendor/kartik-v/yii2-dialog" />
+      <path value="$PROJECT_DIR$/vendor/kartik-v/yii2-widget-rangeinput" />
+      <path value="$PROJECT_DIR$/vendor/kartik-v/bootstrap-fileinput" />
+      <path value="$PROJECT_DIR$/vendor/bower-asset/bootstrap3-dialog" />
+      <path value="$PROJECT_DIR$/vendor/yiisoft/yii2-sphinx" />
+      <path value="$PROJECT_DIR$/vendor/kartik-v/dependent-dropdown" />
+      <path value="$PROJECT_DIR$/vendor/kartik-v/yii2-field-range" />
+    </include_path>
+  </component>
+  <component name="ProjectFrameBounds" extendedState="6">
+    <option name="x" value="371" />
+    <option name="y" value="-10" />
+    <option name="width" value="1036" />
+    <option name="height" value="733" />
+  </component>
+  <component name="ProjectInspectionProfilesVisibleTreeState">
+    <entry key="Project Default">
+      <profile-state>
+        <expanded-state>
+          <State>
+            <id />
+          </State>
+        </expanded-state>
+        <selected-state>
+          <State>
+            <id>AngularJS</id>
+          </State>
+        </selected-state>
+      </profile-state>
+    </entry>
+  </component>
+  <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
+  <component name="ProjectView">
+    <navigator currentView="ProjectPane" proportions="" version="1">
+      <flattenPackages />
+      <showMembers />
+      <showModules />
+      <showLibraryContents />
+      <hideEmptyPackages />
+      <abbreviatePackageNames />
+      <autoscrollToSource />
+      <autoscrollFromSource ProjectPane="false" />
+      <sortByType />
+      <manualOrder />
+      <foldersAlwaysOnTop value="true" />
+    </navigator>
+    <panes>
+      <pane id="Scratches" />
+      <pane id="ProjectPane">
+        <subPane>
+          <expand>
+            <path>
+              <item name="TIMA_SHOP" type="b2602c69:ProjectViewProjectNode" />
+              <item name="TIMA_SHOP" type="2a2b976b:PhpTreeStructureProvider$1" />
+            </path>
+          </expand>
+          <select />
+        </subPane>
+      </pane>
+      <pane id="Scope" />
+    </panes>
+  </component>
+  <component name="PropertiesComponent">
+    <property name="nodejs_interpreter_path.stuck_in_default_project" value="undefined stuck path" />
+    <property name="WebServerToolWindowFactoryState" value="false" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
+    <property name="settings.editor.selected.configurable" value="sshConsole" />
+    <property name="JavaScriptWeakerCompletionTypeGuess" value="true" />
+    <property name="javascript.nodejs.core.library.configured.version" value="6.11.5" />
+    <property name="node.js.path.for.package.stylelint" value="project" />
+    <property name="node.js.detected.package.stylelint" value="true" />
+    <property name="node.js.selected.package.stylelint" value="" />
+    <property name="enableYiiStorm" value="true" />
+    <property name="themeName" value="_8str" />
+    <property name="langName" value="ru" />
+    <property name="yiicFile" value="" />
+    <property name="useYiiMigrations" value="true" />
+    <property name="Constants" value="false" />
+    <property name="DefaultHtmlFileTemplate" value="HTML File" />
+    <property name="com.intellij.database.dataSource.DataSourceTemplate" value="MySQL" />
+    <property name="node.js.path.for.package.eslint" value="project" />
+    <property name="node.js.detected.package.eslint" value="true" />
+    <property name="node.js.selected.package.eslint" value="" />
+    <property name="node.js.path.for.package.jscs" value="project" />
+    <property name="node.js.detected.package.jscs" value="true" />
+    <property name="node.js.selected.package.jscs" value="" />
+    <property name="node.js.path.for.package.standard" value="project" />
+    <property name="node.js.detected.package.standard" value="true" />
+    <property name="node.js.selected.package.standard" value="" />
+    <property name="NewWatcherDialog.advanced.open" value="true" />
+  </component>
+  <component name="RecentsManager">
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="D:\WWW_DATA\TIMA_SHOP\shop_8str\web\assets" />
+      <recent name="D:\WWW_DATA\TIMA_SHOP\environments\prod\shop_8str" />
+      <recent name="D:\WWW_DATA\TIMA_SHOP\environments\dev\shop_8str" />
+      <recent name="D:\WWW_DATA\TIMA_SHOP\common" />
+      <recent name="D:\WWW_DATA\TIMA_SHOP\environments\prod\shop_8str\config\local" />
+    </key>
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="D:\WWW_DATA\TIMA_SHOP\common\webFiles\wiki" />
+      <recent name="D:\WWW_DATA\TIMA_SHOP\shop_8str\config\local" />
+      <recent name="D:\WWW_DATA\TIMA_SHOP\frontend\config\local" />
+      <recent name="D:\WWW_DATA\TIMA_SHOP\console\config\local" />
+      <recent name="D:\WWW_DATA\TIMA_SHOP\admin\config\local" />
+    </key>
+  </component>
+  <component name="RunDashboard">
+    <option name="ruleStates">
+      <list>
+        <RuleState>
+          <option name="name" value="ConfigurationTypeDashboardGroupingRule" />
+        </RuleState>
+        <RuleState>
+          <option name="name" value="StatusDashboardGroupingRule" />
+        </RuleState>
+      </list>
+    </option>
+  </component>
+  <component name="ShelveChangesManager" show_recycled="false">
+    <option name="remove_strategy" value="false" />
+  </component>
+  <component name="SshConsoleOptionsProvider">
+    <option name="myEncoding" value="UTF-8" />
+    <option name="myConnectionType" value="NONE" />
+  </component>
+  <component name="SvnConfiguration">
+    <configuration>C:\Users\USER\AppData\Roaming\Subversion</configuration>
+  </component>
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="886fdee6-1d5d-4a16-89c9-433a5bb4b8c7" name="Default" comment="" />
+      <created>1516605340228</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1516605340228</updated>
+      <workItem from="1516605341849" duration="1337000" />
+      <workItem from="1516606840184" duration="30797000" />
+      <workItem from="1516694264442" duration="30263000" />
+      <workItem from="1516775555650" duration="41771000" />
+      <workItem from="1516870417547" duration="61159000" />
+      <workItem from="1517214867623" duration="47764000" />
+      <workItem from="1517403636160" duration="47000" />
+      <workItem from="1517410541216" duration="1257000" />
+      <workItem from="1517413490241" duration="1078000" />
+    </task>
+    <task id="LOCAL-00001" summary="Практически девственная Yii (пароль только подправлен к базе локальной)">
+      <created>1516639123373</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1516639123374</updated>
+    </task>
+    <task id="LOCAL-00002" summary="Настроено окружение Vagrant на VirtualBox">
+      <created>1516639265948</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1516639265948</updated>
+    </task>
+    <task id="LOCAL-00003" summary="Настройки phpstorm">
+      <created>1516701638438</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1516701638439</updated>
+    </task>
+    <task id="LOCAL-00004" summary="Создан конфин менеджер.">
+      <created>1516887341123</created>
+      <option name="number" value="00004" />
+      <option name="presentableId" value="LOCAL-00004" />
+      <option name="project" value="LOCAL" />
+      <updated>1516887341125</updated>
+    </task>
+    <task id="LOCAL-00005" summary="Донастроил конфиги. Скопировал некоторые классы. Переименовал бэкэнд в админ.">
+      <created>1516896417807</created>
+      <option name="number" value="00005" />
+      <option name="presentableId" value="LOCAL-00005" />
+      <option name="project" value="LOCAL" />
+      <updated>1516896417807</updated>
+    </task>
+    <task id="LOCAL-00006" summary="Багфикс конфигМенеджера.">
+      <created>1516952877715</created>
+      <option name="number" value="00006" />
+      <option name="presentableId" value="LOCAL-00006" />
+      <option name="project" value="LOCAL" />
+      <updated>1516952877715</updated>
+    </task>
+    <task id="LOCAL-00007" summary="Промежуточный коммит. Добавлено много всего из паралельного проекта">
+      <created>1516984163092</created>
+      <option name="number" value="00007" />
+      <option name="presentableId" value="LOCAL-00007" />
+      <option name="project" value="LOCAL" />
+      <updated>1516984163092</updated>
+    </task>
+    <task id="LOCAL-00008" summary="Правки для хостера (не до конца еще)">
+      <created>1517244919742</created>
+      <option name="number" value="00008" />
+      <option name="presentableId" value="LOCAL-00008" />
+      <option name="project" value="LOCAL" />
+      <updated>1517244919743</updated>
+    </task>
+    <task id="LOCAL-00009" summary="Исправил логику работы виртуальной машины, чтобы немного было похоже на хостинг =))))">
+      <created>1517311911406</created>
+      <option name="number" value="00009" />
+      <option name="presentableId" value="LOCAL-00009" />
+      <option name="project" value="LOCAL" />
+      <updated>1517311911407</updated>
+    </task>
+    <task id="LOCAL-00010" summary="Полностью готова среда разработки.">
+      <created>1517323399707</created>
+      <option name="number" value="00010" />
+      <option name="presentableId" value="LOCAL-00010" />
+      <option name="project" value="LOCAL" />
+      <updated>1517323399707</updated>
+    </task>
+    <task id="LOCAL-00011" summary="Срез для начала совместной работы">
+      <created>1517325421517</created>
+      <option name="number" value="00011" />
+      <option name="presentableId" value="LOCAL-00011" />
+      <option name="project" value="LOCAL" />
+      <updated>1517325421517</updated>
+    </task>
+    <task id="LOCAL-00012" summary="Багфикс деплойных скриптов">
+      <created>1517326473498</created>
+      <option name="number" value="00012" />
+      <option name="presentableId" value="LOCAL-00012" />
+      <option name="project" value="LOCAL" />
+      <updated>1517326473498</updated>
+    </task>
+    <task id="LOCAL-00013" summary="Небольшие правочки">
+      <created>1517397422501</created>
+      <option name="number" value="00013" />
+      <option name="presentableId" value="LOCAL-00013" />
+      <option name="project" value="LOCAL" />
+      <updated>1517397422501</updated>
+    </task>
+    <task id="LOCAL-00014" summary="Добавлены нужнфе гитигноры">
+      <created>1517411849708</created>
+      <option name="number" value="00014" />
+      <option name="presentableId" value="LOCAL-00014" />
+      <option name="project" value="LOCAL" />
+      <updated>1517411849709</updated>
+    </task>
+    <option name="localTasksCounter" value="15" />
+    <servers />
+  </component>
+  <component name="TimeTrackingManager">
+    <option name="totallyTimeSpent" value="215473000" />
+  </component>
+  <component name="TodoView">
+    <todo-panel id="selected-file">
+      <is-autoscroll-to-source value="true" />
+    </todo-panel>
+    <todo-panel id="all">
+      <are-packages-shown value="true" />
+      <is-autoscroll-to-source value="true" />
+    </todo-panel>
+  </component>
+  <component name="ToolWindowManager">
+    <frame x="54" y="-8" width="1554" height="916" extended-state="6" />
+    <layout>
+      <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32893" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
+      <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.2985469" sideWeight="0.5026774" order="8" side_tool="true" content_ui="tabs" />
+      <window_info id="File Transfer" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32893" sideWeight="0.5" order="9" side_tool="false" content_ui="tabs" />
+      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.30911493" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32893" sideWeight="0.5" order="10" side_tool="false" content_ui="tabs" />
+      <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.38837516" sideWeight="0.49732262" order="11" side_tool="false" content_ui="tabs" />
+      <window_info id="Project" active="true" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.27576974" sideWeight="0.5" order="1" side_tool="false" content_ui="combo" />
+      <window_info id="Docker" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="false" weight="0.33" sideWeight="0.5" order="12" side_tool="false" content_ui="tabs" />
+      <window_info id="Database" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32931727" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
+      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.6406869" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
+      <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.24966533" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.331572" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
+      <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="true" content_ui="tabs" />
+      <window_info id="Framework" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3299866" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
+      <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
+      <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
+      <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
+      <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
+      <window_info id="Command Line Tools Console" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32893" sideWeight="0.5" order="9" side_tool="false" content_ui="tabs" />
+      <window_info id="Database Console" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32893" sideWeight="0.5" order="13" side_tool="false" content_ui="tabs" />
+      <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="combo" />
+      <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
+    </layout>
+    <layout-to-restore>
+      <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32893" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
+      <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="8" side_tool="false" content_ui="tabs" />
+      <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
+      <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
+      <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="9" side_tool="true" content_ui="tabs" />
+      <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
+      <window_info id="Command Line Tools Console" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32893" sideWeight="0.5" order="10" side_tool="false" content_ui="tabs" />
+      <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32893" sideWeight="0.5" order="11" side_tool="false" content_ui="tabs" />
+      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3976222" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
+      <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3989432" sideWeight="0.5" order="12" side_tool="false" content_ui="tabs" />
+      <window_info id="Database Console" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32893" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.26238286" sideWeight="0.5" order="1" side_tool="false" content_ui="combo" />
+      <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="combo" />
+      <window_info id="Docker" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="false" weight="0.33" sideWeight="0.5" order="13" side_tool="false" content_ui="tabs" />
+      <window_info id="Database" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32931727" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
+      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.6406869" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
+      <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="true" content_ui="tabs" />
+      <window_info id="Framework" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
+      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4676354" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
+    </layout-to-restore>
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="1" />
+  </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State>
+              <option name="BEK_SORT_TYPE" value="1" />
+              <option name="RECENTLY_FILTERED_USER_GROUPS">
+                <collection />
+              </option>
+              <option name="RECENTLY_FILTERED_BRANCH_GROUPS">
+                <collection />
+              </option>
+              <option name="COLUMN_ORDER">
+                <list>
+                  <option value="0" />
+                  <option value="1" />
+                  <option value="2" />
+                  <option value="3" />
+                </list>
+              </option>
+            </State>
+          </value>
+        </entry>
+      </map>
+    </option>
+  </component>
+  <component name="VcsContentAnnotationSettings">
+    <option name="myLimit" value="2678400000" />
+  </component>
+  <component name="VcsManagerConfiguration">
+    <option name="CHECK_CODE_SMELLS_BEFORE_PROJECT_COMMIT" value="false" />
+    <option name="CHECK_NEW_TODO" value="false" />
+    <MESSAGE value="Практически девственная Yii (пароль только подправлен к базе локальной)" />
+    <MESSAGE value="Настроено окружение Vagrant на VirtualBox" />
+    <MESSAGE value="Настройки phpstorm" />
+    <MESSAGE value="Создан конфин менеджер." />
+    <MESSAGE value="Донастроил конфиги. Скопировал некоторые классы. Переименовал бэкэнд в админ." />
+    <MESSAGE value="Багфикс конфигМенеджера." />
+    <MESSAGE value="Промежуточный коммит. Добавлено много всего из паралельного проекта" />
+    <MESSAGE value="Правки для хостера (не до конца еще)" />
+    <MESSAGE value="Исправил логику работы виртуальной машины, чтобы немного было похоже на хостинг =))))" />
+    <MESSAGE value="Полностью готова среда разработки." />
+    <MESSAGE value="Срез для начала совместной работы" />
+    <MESSAGE value="Багфикс деплойных скриптов" />
+    <MESSAGE value="Небольшие правочки" />
+    <MESSAGE value="Добавлены нужнфе гитигноры" />
+    <option name="LAST_COMMIT_MESSAGE" value="Добавлены нужнфе гитигноры" />
+  </component>
+  <component name="XDebuggerManager">
+    <breakpoint-manager>
+      <breakpoints-dialog>
+        <breakpoints-dialog />
+      </breakpoints-dialog>
+      <option name="time" value="175" />
+    </breakpoint-manager>
+    <watches-manager>
+      <configuration name="index.php">
+        <watch expression="$ret" />
+      </configuration>
+    </watches-manager>
+  </component>
+  <component name="debuggerHistoryManager">
+    <expressions id="evaluateExpression">
+      <expression>
+        <expression-string>shell_exec(&quot;mount&quot;)</expression-string>
+        <language-id>PHP</language-id>
+        <evaluation-mode>EXPRESSION</evaluation-mode>
+      </expression>
+      <expression>
+        <expression-string>shell_exec(&quot;mount | grep \&quot;$link\&quot;&quot;)</expression-string>
+        <language-id>PHP</language-id>
+        <evaluation-mode>EXPRESSION</evaluation-mode>
+      </expression>
+      <expression>
+        <expression-string>getenv('ENV_TYPE')</expression-string>
+        <language-id>PHP</language-id>
+        <evaluation-mode>EXPRESSION</evaluation-mode>
+      </expression>
+      <expression>
+        <expression-string>getenv()</expression-string>
+        <language-id>PHP</language-id>
+        <evaluation-mode>EXPRESSION</evaluation-mode>
+      </expression>
+      <expression>
+        <expression-string>$_ENV</expression-string>
+        <language-id>PHP</language-id>
+        <evaluation-mode>EXPRESSION</evaluation-mode>
+      </expression>
+      <expression>
+        <expression-string>$query-&gt;each('1', $remoteDb)-&gt;next()</expression-string>
+        <language-id>PHP</language-id>
+        <evaluation-mode>EXPRESSION</evaluation-mode>
+      </expression>
+      <expression>
+        <expression-string>$query-&gt;each('1', $remoteDb)-&gt;each()</expression-string>
+        <language-id>PHP</language-id>
+        <evaluation-mode>EXPRESSION</evaluation-mode>
+      </expression>
+      <expression>
+        <expression-string>$query-&gt;each('1', $remoteDb)</expression-string>
+        <language-id>PHP</language-id>
+        <evaluation-mode>EXPRESSION</evaluation-mode>
+      </expression>
+      <expression>
+        <expression-string>$query-&gt;</expression-string>
+        <language-id>PHP</language-id>
+        <evaluation-mode>EXPRESSION</evaluation-mode>
+      </expression>
+    </expressions>
+  </component>
+  <component name="editorHistoryManager">
+    <entry file="file://$PROJECT_DIR$/common/config/local/main.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/environments/index.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="356">
+          <caret line="47" column="97" lean-forward="false" selection-start-line="47" selection-start-column="97" selection-end-line="47" selection-end-column="97" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/vendor/yiisoft/yii2/db/Command.php" />
+    <entry file="file://$PROJECT_DIR$/vendor/yiisoft/yii2/base/Controller.php" />
+    <entry file="file://$PROJECT_DIR$/console/migrations/files/oldDb.sql">
+      <provider selected="true" editor-type-id="LargeFileEditor">
+        <state relative-caret-position="0">
+          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/console/controllers/db2.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="340">
+          <caret line="25" column="8" lean-forward="false" selection-start-line="25" selection-start-column="8" selection-end-line="25" selection-end-column="8" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/vagrant/scripts/once-as-root.sh">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="213">
+          <caret line="21" column="10" lean-forward="false" selection-start-line="21" selection-start-column="10" selection-end-line="21" selection-end-column="10" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/vagrant/scripts/once-as-vagrant.sh">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="538">
+          <caret line="38" column="0" lean-forward="false" selection-start-line="38" selection-start-column="0" selection-end-line="38" selection-end-column="0" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar://$APPLICATION_HOME_DIR$/plugins/php/lib/php.jar!/stubs/apc/apc.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-432">
+          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/environments/dev/yii">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/init">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="81">
+          <caret line="228" column="0" lean-forward="false" selection-start-line="228" selection-start-column="0" selection-end-line="228" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/environments/prod/yii">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="21" lean-forward="true" selection-start-line="0" selection-start-column="21" selection-end-line="0" selection-end-column="21" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$APPLICATION_CONFIG_DIR$/consoles/db/841f4b76-b104-449a-ab13-59f503188046/console.sql">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/admin/web/files/.gitignore" />
+    <entry file="file://$PROJECT_DIR$/common/config/.gitignore">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/console/controllers/.gitignore">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="7" lean-forward="false" selection-start-line="0" selection-start-column="7" selection-end-line="0" selection-end-column="7" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/common/config/web/.gitignore">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/common/tests/_output/.gitignore">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="17">
+          <caret line="1" column="0" lean-forward="false" selection-start-line="1" selection-start-column="0" selection-end-line="1" selection-end-column="11" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/admin/config/local/.gitignore">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="17">
+          <caret line="1" column="11" lean-forward="false" selection-start-line="1" selection-start-column="11" selection-end-line="1" selection-end-column="11" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/admin/models/.gitkeep">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/admin/runtime/.gitignore">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/admin/web/assets/.gitignore">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/admin/web/.gitignore">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="51">
+          <caret line="3" column="5" lean-forward="true" selection-start-line="3" selection-start-column="5" selection-end-line="3" selection-end-column="5" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/common/runtime/.gitignore">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/console/config/local/.gitignore">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="17">
+          <caret line="1" column="11" lean-forward="false" selection-start-line="1" selection-start-column="11" selection-end-line="1" selection-end-column="11" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/console/runtime/.gitignore">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/frontend/config/local/.gitignore">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="17">
+          <caret line="1" column="11" lean-forward="false" selection-start-line="1" selection-start-column="11" selection-end-line="1" selection-end-column="11" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/frontend/runtime/.gitignore">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/frontend/web/assets/.gitignore">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/frontend/web/.gitignore">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="68">
+          <caret line="4" column="0" lean-forward="true" selection-start-line="4" selection-start-column="0" selection-end-line="4" selection-end-column="0" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/runtime/.gitignore" />
+    <entry file="file://$PROJECT_DIR$/shop_8str/config/local/.gitignore">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="17">
+          <caret line="1" column="11" lean-forward="false" selection-start-line="1" selection-start-column="11" selection-end-line="1" selection-end-column="11" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/shop_8str/web/assets/.gitignore">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/shop_8str/web/.gitignore">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="85">
+          <caret line="5" column="0" lean-forward="true" selection-start-line="5" selection-start-column="0" selection-end-line="5" selection-end-column="0" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/temp/.gitignore">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="17">
+          <caret line="1" column="11" lean-forward="false" selection-start-line="1" selection-start-column="11" selection-end-line="1" selection-end-column="11" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/console/controllers/OldbaseController.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="274">
+          <caret line="98" column="112" lean-forward="false" selection-start-line="98" selection-start-column="112" selection-end-line="98" selection-end-column="112" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/environments/prod/common/config/local/main.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="272">
+          <caret line="16" column="35" lean-forward="false" selection-start-line="16" selection-start-column="35" selection-end-line="16" selection-end-column="35" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/common/webFiles/wiki/.gitignore">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="17">
+          <caret line="1" column="11" lean-forward="true" selection-start-line="0" selection-start-column="1" selection-end-line="1" selection-end-column="11" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/common/webFiles/products/images/.gitignore">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="17">
+          <caret line="1" column="11" lean-forward="false" selection-start-line="1" selection-start-column="11" selection-end-line="1" selection-end-column="11" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/common/webFiles/system/files/.gitignore">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="17">
+          <caret line="1" column="11" lean-forward="false" selection-start-line="1" selection-start-column="11" selection-end-line="1" selection-end-column="11" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/common/webFiles/system/images/.gitignore">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="17">
+          <caret line="1" column="11" lean-forward="false" selection-start-line="1" selection-start-column="11" selection-end-line="1" selection-end-column="11" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/common/webFiles/products/files/.gitignore">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="17">
+          <caret line="1" column="11" lean-forward="false" selection-start-line="1" selection-start-column="11" selection-end-line="1" selection-end-column="11" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/common/webFiles/brands/files/.gitignore">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="17">
+          <caret line="1" column="11" lean-forward="false" selection-start-line="1" selection-start-column="11" selection-end-line="1" selection-end-column="11" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/common/webFiles/brands/images/.gitignore">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="17">
+          <caret line="1" column="11" lean-forward="true" selection-start-line="1" selection-start-column="11" selection-end-line="1" selection-end-column="11" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/package.json">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/README.md">
+      <provider selected="true" editor-type-id="split-provider[text-editor;markdown-preview-editor]">
+        <state split_layout="SPLIT">
+          <first_editor relative-caret-position="0">
+            <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+            <folding />
+          </first_editor>
+          <second_editor />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/common/assets/CommonAsset.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/common/fixtures/UserFixture.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/console/migrations/m130524_201442_init.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/.gitignore">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="266">
+          <caret line="22" column="25" lean-forward="true" selection-start-line="22" selection-start-column="25" selection-end-line="22" selection-end-column="25" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/composer.json">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+  </component>
+  <component name="masterDetails">
+    <states>
+      <state key="Copyright.UI">
+        <settings>
+          <splitter-proportions>
+            <option name="proportions">
+              <list>
+                <option value="0.36862245" />
+              </list>
+            </option>
+          </splitter-proportions>
+        </settings>
+      </state>
+      <state key="ScopeChooserConfigurable.UI">
+        <settings>
+          <last-edited>configs</last-edited>
+          <splitter-proportions>
+            <option name="proportions">
+              <list>
+                <option value="0.21642764" />
+              </list>
+            </option>
+          </splitter-proportions>
+          <order>
+            <scope name="configs" />
+          </order>
+        </settings>
+      </state>
+    </states>
+  </component>
+</project>

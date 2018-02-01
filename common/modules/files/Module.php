@@ -109,6 +109,7 @@ class Module extends \yii\base\Module implements BootstrapInterface
     public static function getImageUri (string $imageName) {
         $filePath = self::PRODUCTS_RELATIVE_PATH . DIRECTORY_SEPARATOR
             . self::IMAGES_RELATIVE_PATH . DIRECTORY_SEPARATOR ;
-        return \Yii::$app->urlManager->createUrl(['/files/default/download', 'filePath' => $filePath . $imageName]);
+        $ret = \Yii::$app->urlManager->createUrl(['/files/default/download', 'filePath' => $filePath . $imageName]);
+        return str_replace('%2F', urldecode('%2F'), $ret);
     }
 }

@@ -108,8 +108,7 @@ class Module extends \yii\base\Module implements BootstrapInterface
         } else {
             throw new ErrorException('$rubric must be string or instance of common\models\entities\ProductRubric');
         }
-
-        return Url::to($uriParams);
+        return str_replace('%2F', urldecode('%2F'), Url::to($uriParams));
     }
 
     /** ---------------------------------Продукты------------------------------------*/

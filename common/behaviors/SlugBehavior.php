@@ -20,6 +20,7 @@ class SlugBehavior extends Behavior {
     public $slugField = 'name';
 
     public function getSlug() {
-        return preg_replace('#[\s,]#', '_', TransliteratorHelper::process($this->owner->{$this->slugField}));
+        $ret = preg_replace('#[\s,]#', '_', TransliteratorHelper::process($this->owner->{$this->slugField}));
+        return str_replace("'", 'i', $ret);
     }
 }

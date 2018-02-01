@@ -55,7 +55,6 @@ class OldbaseController extends Controller
             'type' => 'int',
         ],
     ];
-
     private const CHANGE_PRODUCT_FIELDS = [
         1505 => [
             'field' => 'name',
@@ -64,18 +63,17 @@ class OldbaseController extends Controller
     ];
     
     private $oldSqlDump = '../migrations/files/oldDb.sql';
-
     private $imagesPath = '@common/protected/webFiles/catalog/images/';
-    
     private $oldDbName = 'fbkru_0_8str';
-    
+    private $badProductsFile = __DIR__ . 'bad_products.csv';
     private $currentPID;
     
     public $defaultAction = 'import';
-
     public $autoCreateAuxFields = true;
     public $autoDeleteAuxFields = false;
+    public $importCreateBadProductsFile = false;
     
+
     public function init(){
         parent::init();
         $this->imagesPath = Yii::getAlias($this->imagesPath);
@@ -97,6 +95,7 @@ class OldbaseController extends Controller
         return array_merge(parent::options($actionID), [
             'autoCreateAuxFields', // Автоматически создавать вспомогательные поля в базе если их нет
             'autoDeleteAuxFields', // Автоматически удалять вспомогательные поля. Если удалить, то при следующем копировании содержимое базы удалится
+            'importCreateBadProductsFile', // При импортировании создать файл с плохими и задвоенными продуктами
         ]);
     }
     
@@ -109,6 +108,7 @@ class OldbaseController extends Controller
         return array_merge(parent::optionAliases(), [
             'a' => 'autoCreateAuxFields',
             'd' => 'autoDeleteAuxFields',
+            'f' => 'importCreateBadProductsFile',
         ]);
     }
 
@@ -241,6 +241,20 @@ class OldbaseController extends Controller
     protected function exportProducts($remoteDb) {
         
         $this->trace('Экспорт Продутов');
+        
+        if ($this->importCreateBadProductsFile) {
+            $badProducts = [
+                'Тип ошибки' => '',
+                'Номер товара' => '',
+                'Название продукта' => '',
+                'Номер дубля' => '',
+                'Название дубля' => '',
+            ];
+            
+            $badProdFile = fopen($this->badProductsFile, 'w');
+            fputcsv($badProdFile, array_keys($badProducts), ';');
+            $badProducts = [];
+        }
 
         $stActive = Product::STATUS['ACTIVE'];
         $stHidden = Product::STATUS['HIDDEN'];
@@ -285,9 +299,6 @@ class OldbaseController extends Controller
             ->orderBy(['`n`.`changed`' => SORT_DESC]);
 
         foreach ($query->each(100, $remoteDb) as $src) {
-//            if (!$src['old_rubric_id']) {
-//                $this->notice("Продукт {$src['old_id']}:{$src['name']} пропущен. Нет рубрики.");
-//            }
             /* Попытка исправить найденные товары с ошибками */
             if (isset(self::CHANGE_PRODUCT_FIELDS[$src['old_id']])) {
                 $ch = self::CHANGE_PRODUCT_FIELDS[$src['old_id']];
@@ -300,6 +311,15 @@ class OldbaseController extends Controller
             if ($product) {
                 if ($product->old_id != $src['old_id']) {
                     $this->notice("Продукт {$src['old_id']}:{$src['name']} пропущен. Такой уже есть.");
+                    if ($this->importCreateBadProductsFile) {
+                        $badProducts = [
+                            'Тип ошибки' => 'Дубль товара',
+                            'Номер товара' => $src['old_id'],
+                            'Название продукта' => $src['name'],
+                            'Номер дубля' => $product->old_id,
+                            'Название дубля' => $product->name,
+                        ];
+                    }
                 }
             } else {
                 $transaction = Yii::$app->db->beginTransaction();
@@ -359,8 +379,15 @@ class OldbaseController extends Controller
                     $this->error(
                         "Не импортирована рубрика {$src['rubric_name']} для товара {$src['old_id']}:{$src['name']}. Продукт без рубрики"
                     );
-//                    $transaction->rollBack();
-//                    continue;
+                    if ($this->importCreateBadProductsFile) {
+                        $badProducts = [
+                            'Тип ошибки' => 'Продукт без рубрики',
+                            'Номер товара' => $src['old_id'],
+                            'Название продукта' => $src['name'],
+                            'Номер дубля' => '',
+                            'Название дубля' => '',
+                        ];
+                    }
                 }
 
                 /** Назначаем цены, если они не были назначины */
@@ -423,11 +450,20 @@ class OldbaseController extends Controller
                     "Картинка {$src['filename']} для продукта {$src['old_id']}:{$src['name']} не добавлена",
                     $product->errors
                 );
-                xdebug_break();
             }
 
             $msg = $this->ansiFormat('.', Console::FG_GREEN);
             $this->stdout($msg);
+            
+            if ($this->importCreateBadProductsFile && !empty($badProducts)) {
+                /** @noinspection PhpUndefinedVariableInspection */
+                fputcsv($badProdFile, $badProducts, ';');
+                $badProducts = [];
+            }
+        }
+        if ($this->importCreateBadProductsFile) {
+            /** @noinspection PhpUndefinedVariableInspection */
+            fclose($badProdFile);
         }
         return 0;
     }
@@ -555,7 +591,7 @@ class OldbaseController extends Controller
     }
     
     protected function deleteAuxFields() {
-        $this->trace('Удаляем вспомогательные поля в базу');
+        $this->trace('Удаляем вспомогательные поля из базы');
         $error = false;
         foreach (self::TABLES_AUX_FIELDS as $tableData) {
             if (Yii::$app->db->schema

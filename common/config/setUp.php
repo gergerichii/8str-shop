@@ -6,7 +6,7 @@
  * Time: 21:57
  */
 
-namespace common\bootstrap;
+namespace common\config;
 
 use common\modules\catalog\Module;
 use yii\base\BootstrapInterface;

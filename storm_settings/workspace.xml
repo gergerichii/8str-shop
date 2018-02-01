@@ -93,13 +93,13 @@
       <replace>{{$1}}.[[$2]]</replace>
     </replaceStrings>
     <dirStrings>
-      <dir>D:\WWW_DATA\TIMA_SHOP\vagrant</dir>
-      <dir>D:\WWW_DATA\TIMA_SHOP\vendor</dir>
-      <dir>D:\WWW_DATA\TIMA_SHOP\environments</dir>
-      <dir>D:\WWW_DATA\TIMA_SHOP</dir>
-      <dir>D:\WWW_DATA\TIMA_SHOP\vendor\yiisoft\yii2\console</dir>
-      <dir>D:\WWW_DATA\TIMA_SHOP\vendor\yiisoft\yii2</dir>
-      <dir>D:\WWW_DATA\TIMA_SHOP\vagrant\scripts</dir>
+      <dir>$PROJECT_DIR$\vagrant</dir>
+      <dir>$PROJECT_DIR$\vendor</dir>
+      <dir>$PROJECT_DIR$\environments</dir>
+      <dir>$PROJECT_DIR$</dir>
+      <dir>$PROJECT_DIR$\vendor\yiisoft\yii2\console</dir>
+      <dir>$PROJECT_DIR$\vendor\yiisoft\yii2</dir>
+      <dir>$PROJECT_DIR$\vagrant\scripts</dir>
     </dirStrings>
   </component>
   <component name="FrameworkRootSettings" id="Yii">
@@ -284,7 +284,7 @@
     <sorting>DEFINITION_ORDER</sorting>
   </component>
   <component name="NamedScopeManager">
-    <scope name="configs" pattern="file[TIMA_SHOP]:admin/config/*||file[TIMA_SHOP]:common/config/*||file[TIMA_SHOP]:console/config/*||file[TIMA_SHOP]:frontend/config/*||file[TIMA_SHOP]:shop_8str/config/*" />
+    <scope name="configs" pattern="file[{PROJECT_NAME}]:admin/config/*||file[{PROJECT_NAME}]:common/config/*||file[{PROJECT_NAME}]:console/config/*||file[{PROJECT_NAME}]:frontend/config/*||file[{PROJECT_NAME}]:shop_8str/config/*" />
   </component>
   <component name="NodeModulesDirectoryManager">
     <handled-path value="$PROJECT_DIR$/node_modules" />
@@ -377,7 +377,7 @@
       <path value="$PROJECT_DIR$/vendor/symfony/console" />
       <path value="$PROJECT_DIR$/vendor/symfony/css-selector" />
       <path value="$PROJECT_DIR$/vendor/myclabs/deep-copy" />
-      <path value="D:\WWW_DATA\TIMA_SHOP\vendor" />
+      <path value="$PROJECT_DIR$\vendor" />
       <path value="$PROJECT_DIR$/vendor/leafo/scssphp" />
       <path value="$PROJECT_DIR$/vendor/rmrevin/yii2-fontawesome" />
       <path value="$PROJECT_DIR$/vendor/dmstr/yii2-adminlte-asset" />
@@ -487,8 +487,8 @@
         <subPane>
           <expand>
             <path>
-              <item name="TIMA_SHOP" type="b2602c69:ProjectViewProjectNode" />
-              <item name="TIMA_SHOP" type="2a2b976b:PhpTreeStructureProvider$1" />
+              <item name="{PROJECT_NAME}" type="b2602c69:ProjectViewProjectNode" />
+              <item name="{PROJECT_NAME}" type="2a2b976b:PhpTreeStructureProvider$1" />
             </path>
           </expand>
           <select />
@@ -528,18 +528,18 @@
   </component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
-      <recent name="D:\WWW_DATA\TIMA_SHOP\shop_8str\web\assets" />
-      <recent name="D:\WWW_DATA\TIMA_SHOP\environments\prod\shop_8str" />
-      <recent name="D:\WWW_DATA\TIMA_SHOP\environments\dev\shop_8str" />
-      <recent name="D:\WWW_DATA\TIMA_SHOP\common" />
-      <recent name="D:\WWW_DATA\TIMA_SHOP\environments\prod\shop_8str\config\local" />
+      <recent name="$PROJECT_DIR$\shop_8str\web\assets" />
+      <recent name="$PROJECT_DIR$\environments\prod\shop_8str" />
+      <recent name="$PROJECT_DIR$\environments\dev\shop_8str" />
+      <recent name="$PROJECT_DIR$\common" />
+      <recent name="$PROJECT_DIR$\environments\prod\shop_8str\config\local" />
     </key>
     <key name="MoveFile.RECENT_KEYS">
-      <recent name="D:\WWW_DATA\TIMA_SHOP\common\webFiles\wiki" />
-      <recent name="D:\WWW_DATA\TIMA_SHOP\shop_8str\config\local" />
-      <recent name="D:\WWW_DATA\TIMA_SHOP\frontend\config\local" />
-      <recent name="D:\WWW_DATA\TIMA_SHOP\console\config\local" />
-      <recent name="D:\WWW_DATA\TIMA_SHOP\admin\config\local" />
+      <recent name="$PROJECT_DIR$\common\webFiles\wiki" />
+      <recent name="$PROJECT_DIR$\shop_8str\config\local" />
+      <recent name="$PROJECT_DIR$\frontend\config\local" />
+      <recent name="$PROJECT_DIR$\console\config\local" />
+      <recent name="$PROJECT_DIR$\admin\config\local" />
     </key>
   </component>
   <component name="RunDashboard">

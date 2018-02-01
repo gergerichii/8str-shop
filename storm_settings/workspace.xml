@@ -1,10 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="886fdee6-1d5d-4a16-89c9-433a5bb4b8c7" name="Default" comment="">
-      <change beforePath="$PROJECT_DIR$/.gitignore" afterPath="$PROJECT_DIR$/.gitignore" />
-      <change beforePath="$PROJECT_DIR$/composer.lock" afterPath="" />
-    </list>
+    <list default="true" id="886fdee6-1d5d-4a16-89c9-433a5bb4b8c7" name="Default" comment="" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="TRACKING_ENABLED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -49,63 +46,10 @@
     </option>
   </component>
   <component name="FindInProjectRecents">
-    <findStrings>
-      <find>'user'</find>
-      <find>debug</find>
-      <find>'debug'</find>
-      <find>_ident</find>
-      <find>'APP_BASE_DIR</find>
-      <find>'8str</find>
-      <find>cookieValidationKey</find>
-      <find>backend</find>
-      <find>site/error</find>
-      <find>'errorHandler'</find>
-      <find>strpos</find>
-      <find>\data\</find>
-      <find>\baseClasses\</find>
-      <find>manages</find>
-      <find>Manages application migrations</find>
-      <find>Creates a new migration</find>
-      <find>_batch</find>
-      <find>_value</find>
-      <find>globalFixtures</find>
-      <find>namespace</find>
-      <find>([^\. ]+)\.([\S]+)</find>
-      <find>createSymlink</find>
-      <find>folder</find>
-      <find>if</find>
-      <find>sites</find>
-      <find>privi</find>
-      <find>init</find>
-      <find>web/common</find>
-      <find>web/</find>
-      <find>getColu</find>
-    </findStrings>
-    <replaceStrings>
-      <replace>settings</replace>
-      <replace>$2 =&gt; $1</replace>
-      <replace>\$app, self::APP_SOURCE_FILES[$1]['source']</replace>
-      <replace>console</replace>
-      <replace>admin</replace>
-      <replace>\models\</replace>
-      <replace>\base\</replace>
-      <replace>$configName</replace>
-      <replace>{{$1}}.[[$2]]</replace>
-    </replaceStrings>
-    <dirStrings>
-      <dir>D:\WWW_DATA\TIMA_SHOP\vagrant</dir>
-      <dir>D:\WWW_DATA\TIMA_SHOP\vendor</dir>
-      <dir>D:\WWW_DATA\TIMA_SHOP\environments</dir>
-      <dir>D:\WWW_DATA\TIMA_SHOP</dir>
-      <dir>D:\WWW_DATA\TIMA_SHOP\vendor\yiisoft\yii2\console</dir>
-      <dir>D:\WWW_DATA\TIMA_SHOP\vendor\yiisoft\yii2</dir>
-      <dir>D:\WWW_DATA\TIMA_SHOP\vagrant\scripts</dir>
-    </dirStrings>
   </component>
   <component name="FrameworkRootSettings" id="Yii">
     <option name="bundleRoots">
       <list>
-        <option value="$PROJECT_DIR$/common/modules/cart" />
         <option value="$PROJECT_DIR$/common/modules/catalog" />
         <option value="$PROJECT_DIR$/common/modules/files" />
       </list>
@@ -123,7 +67,6 @@
         <element elementPath="$PROJECT_DIR$/admin/views/themes" typeId="themes_directory" />
         <element elementPath="$PROJECT_DIR$/admin/views/themes/adminLte/layouts" typeId="protected_views_layouts_directory" />
         <element elementPath="$PROJECT_DIR$/admin/views/themes/adminLte/old-base-migrate" typeId="protected_views_directory" />
-        <element elementPath="$PROJECT_DIR$/admin/views/themes/adminLte/shop" typeId="protected_views_directory" />
         <element elementPath="$PROJECT_DIR$/admin/views/themes/adminLte/site" typeId="protected_views_directory" />
         <element elementPath="$PROJECT_DIR$/admin/views/themes/adminLte/test" typeId="protected_views_directory" />
         <element elementPath="$PROJECT_DIR$/common/assets" typeId="assets_directory" />
@@ -145,13 +88,10 @@
         <element elementPath="$PROJECT_DIR$/frontend/views/layouts" typeId="protected_views_layouts_directory" />
         <element elementPath="$PROJECT_DIR$/frontend/views/pieces" typeId="protected_views_directory" />
         <element elementPath="$PROJECT_DIR$/frontend/views/site" typeId="protected_views_directory" />
-        <element elementPath="$PROJECT_DIR$/frontend/views/themes" typeId="themes_directory" />
         <element elementPath="$PROJECT_DIR$/shop_8str" typeId="protected_directory" />
         <element elementPath="$PROJECT_DIR$/shop_8str/runtime" typeId="protected_runtime_directory" />
-        <element elementPath="$PROJECT_DIR$/shop_8str/themes" typeId="themes_directory" />
         <element elementPath="$PROJECT_DIR$/shop_8str/views" typeId="protected_views_system_directory" />
         <element elementPath="$PROJECT_DIR$/shop_8str/views/layouts" typeId="protected_views_layouts_directory" />
-        <element elementPath="$PROJECT_DIR$/shop_8str/views/themes" typeId="themes_directory" />
       </list>
     </option>
     <option name="myTypedPaths">
@@ -167,7 +107,6 @@
         <element elementPath="$PROJECT_DIR$/admin/views/themes" typeId="themes_directory" />
         <element elementPath="$PROJECT_DIR$/admin/views/themes/adminLte/layouts" typeId="protected_views_layouts_directory" />
         <element elementPath="$PROJECT_DIR$/admin/views/themes/adminLte/old-base-migrate" typeId="protected_views_directory" />
-        <element elementPath="$PROJECT_DIR$/admin/views/themes/adminLte/shop" typeId="protected_views_directory" />
         <element elementPath="$PROJECT_DIR$/admin/views/themes/adminLte/site" typeId="protected_views_directory" />
         <element elementPath="$PROJECT_DIR$/admin/views/themes/adminLte/test" typeId="protected_views_directory" />
         <element elementPath="$PROJECT_DIR$/common/assets" typeId="assets_directory" />
@@ -189,18 +128,14 @@
         <element elementPath="$PROJECT_DIR$/frontend/views/layouts" typeId="protected_views_layouts_directory" />
         <element elementPath="$PROJECT_DIR$/frontend/views/pieces" typeId="protected_views_directory" />
         <element elementPath="$PROJECT_DIR$/frontend/views/site" typeId="protected_views_directory" />
-        <element elementPath="$PROJECT_DIR$/frontend/views/themes" typeId="themes_directory" />
         <element elementPath="$PROJECT_DIR$/shop_8str" typeId="protected_directory" />
         <element elementPath="$PROJECT_DIR$/shop_8str/runtime" typeId="protected_runtime_directory" />
-        <element elementPath="$PROJECT_DIR$/shop_8str/themes" typeId="themes_directory" />
         <element elementPath="$PROJECT_DIR$/shop_8str/views" typeId="protected_views_system_directory" />
         <element elementPath="$PROJECT_DIR$/shop_8str/views/layouts" typeId="protected_views_layouts_directory" />
-        <element elementPath="$PROJECT_DIR$/shop_8str/views/themes" typeId="themes_directory" />
       </list>
     </option>
     <option name="myBundleRoots">
       <list>
-        <option value="$PROJECT_DIR$/common/modules/cart" />
         <option value="$PROJECT_DIR$/common/modules/catalog" />
         <option value="$PROJECT_DIR$/common/modules/files" />
       </list>
@@ -215,61 +150,6 @@
     </option>
   </component>
   <component name="IdeDocumentHistory">
-    <option name="CHANGED_PATHS">
-      <list>
-        <option value="$PROJECT_DIR$/console/migrations/1_8str_base_import.php" />
-        <option value="$PROJECT_DIR$/console/migrations/files/_8str_base_import.php" />
-        <option value="$PROJECT_DIR$/console/migrations/m180105_132512_8str_base_import.php" />
-        <option value="$PROJECT_DIR$/console/migrations/m180105_145904_create_product_table.php" />
-        <option value="$PROJECT_DIR$/console/migrations/m180107_105307_create_tags_table.php" />
-        <option value="$PROJECT_DIR$/console/migrations/m180107_135342_create_product_discount_table.php" />
-        <option value="$PROJECT_DIR$/console/migrations/m180117_070802_add_main_rubric_field_in_product_table.php" />
-        <option value="$PROJECT_DIR$/composer.json" />
-        <option value="$PROJECT_DIR$/console/migrations/m180126_081715_8str_base_import.php" />
-        <option value="$PROJECT_DIR$/console/migrations/files/8str_base_import.php" />
-        <option value="$PROJECT_DIR$/console/controllers/oldbaseController.php" />
-        <option value="$PROJECT_DIR$/shop_8str/web/assets/.gitignore" />
-        <option value="$PROJECT_DIR$/admin/controllers/SiteController.php" />
-        <option value="$PROJECT_DIR$/admin/controllers/TestController.php" />
-        <option value="$PROJECT_DIR$/common/modules/files/controllers/DefaultController.php" />
-        <option value="$PROJECT_DIR$/environments/htaccess" />
-        <option value="$PROJECT_DIR$/vagrant/scripts/chrck-folder.sh" />
-        <option value="$PROJECT_DIR$/vagrant/scripts/check-folder.sh" />
-        <option value="$PROJECT_DIR$/vagrant/aliases" />
-        <option value="$PROJECT_DIR$/admin/web/.gitignore" />
-        <option value="$PROJECT_DIR$/frontend/web/.gitignore" />
-        <option value="$PROJECT_DIR$/shop_8str/web/.gitignore" />
-        <option value="$PROJECT_DIR$/shop_8str/web/index.php" />
-        <option value="$PROJECT_DIR$/init" />
-        <option value="$PROJECT_DIR$/Vagrantfile" />
-        <option value="$PROJECT_DIR$/vagrant/scripts/configure.rb" />
-        <option value="$PROJECT_DIR$/vagrant/scripts/always-as-vagrant.sh" />
-        <option value="$PROJECT_DIR$/vagrant/config.yaml" />
-        <option value="$PROJECT_DIR$/environments/index.php" />
-        <option value="$PROJECT_DIR$/console/controllers/.gitignore" />
-        <option value="$PROJECT_DIR$/console/controllers/db2.php" />
-        <option value="$PROJECT_DIR$/vagrant/scripts/once-as-vagrant.sh" />
-        <option value="$PROJECT_DIR$/vagrant/scripts/once-as-root.sh" />
-        <option value="$PROJECT_DIR$/environments/prod/common/config/local/main.php" />
-        <option value="$PROJECT_DIR$/environments/prod/yii" />
-        <option value="$PROJECT_DIR$/console/controllers/OldbaseController.php" />
-        <option value="$PROJECT_DIR$/admin/web/files/.gitignore" />
-        <option value="$PROJECT_DIR$/common/webFiles/.gitignore" />
-        <option value="$PROJECT_DIR$/admin/config/local/.gitignore" />
-        <option value="$PROJECT_DIR$/console/config/local/.gitignore" />
-        <option value="$PROJECT_DIR$/frontend/config/local/.gitignore" />
-        <option value="$PROJECT_DIR$/runtime/.gitignore" />
-        <option value="$PROJECT_DIR$/shop_8str/config/local/.gitignore" />
-        <option value="$PROJECT_DIR$/temp/.gitignore" />
-        <option value="$PROJECT_DIR$/common/webFiles/system/images/.gitignore" />
-        <option value="$PROJECT_DIR$/common/webFiles/system/files/.gitignore" />
-        <option value="$PROJECT_DIR$/common/webFiles/products/images/.gitignore" />
-        <option value="$PROJECT_DIR$/common/webFiles/products/files/.gitignore" />
-        <option value="$PROJECT_DIR$/common/webFiles/brands/files/.gitignore" />
-        <option value="$PROJECT_DIR$/common/webFiles/brands/images/.gitignore" />
-        <option value="$PROJECT_DIR$/.gitignore" />
-      </list>
-    </option>
   </component>
   <component name="JsBuildToolGruntFileManager" detection-done="true" sorting="DEFINITION_ORDER" />
   <component name="JsBuildToolPackageJson" detection-done="true" sorting="DEFINITION_ORDER" />
@@ -284,7 +164,7 @@
     <sorting>DEFINITION_ORDER</sorting>
   </component>
   <component name="NamedScopeManager">
-    <scope name="configs" pattern="file[TIMA_SHOP]:admin/config/*||file[TIMA_SHOP]:common/config/*||file[TIMA_SHOP]:console/config/*||file[TIMA_SHOP]:frontend/config/*||file[TIMA_SHOP]:shop_8str/config/*" />
+    <scope name="configs" pattern="file[project]:admin/config/*||file[project]:common/config/*||file[project]:console/config/*||file[project]:frontend/config/*||file[project]:shop_8str/config/*" />
   </component>
   <component name="NodeModulesDirectoryManager">
     <handled-path value="$PROJECT_DIR$/node_modules" />
@@ -377,7 +257,7 @@
       <path value="$PROJECT_DIR$/vendor/symfony/console" />
       <path value="$PROJECT_DIR$/vendor/symfony/css-selector" />
       <path value="$PROJECT_DIR$/vendor/myclabs/deep-copy" />
-      <path value="D:\WWW_DATA\TIMA_SHOP\vendor" />
+      <path value="$PROJECT_DIR$/vendor" />
       <path value="$PROJECT_DIR$/vendor/leafo/scssphp" />
       <path value="$PROJECT_DIR$/vendor/rmrevin/yii2-fontawesome" />
       <path value="$PROJECT_DIR$/vendor/dmstr/yii2-adminlte-asset" />
@@ -442,6 +322,7 @@
       <path value="$PROJECT_DIR$/vendor/yiisoft/yii2-sphinx" />
       <path value="$PROJECT_DIR$/vendor/kartik-v/dependent-dropdown" />
       <path value="$PROJECT_DIR$/vendor/kartik-v/yii2-field-range" />
+      <path value="$PROJECT_DIR$/vendor/codeception/stub" />
     </include_path>
   </component>
   <component name="ProjectFrameBounds" extendedState="6">
@@ -482,26 +363,13 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
-      <pane id="Scratches" />
-      <pane id="ProjectPane">
-        <subPane>
-          <expand>
-            <path>
-              <item name="TIMA_SHOP" type="b2602c69:ProjectViewProjectNode" />
-              <item name="TIMA_SHOP" type="2a2b976b:PhpTreeStructureProvider$1" />
-            </path>
-          </expand>
-          <select />
-        </subPane>
-      </pane>
-      <pane id="Scope" />
     </panes>
   </component>
   <component name="PropertiesComponent">
     <property name="nodejs_interpreter_path.stuck_in_default_project" value="undefined stuck path" />
     <property name="WebServerToolWindowFactoryState" value="false" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
-    <property name="settings.editor.selected.configurable" value="sshConsole" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/common/webFiles" />
+    <property name="settings.editor.selected.configurable" value="web.server" />
     <property name="JavaScriptWeakerCompletionTypeGuess" value="true" />
     <property name="javascript.nodejs.core.library.configured.version" value="6.11.5" />
     <property name="node.js.path.for.package.stylelint" value="project" />
@@ -527,20 +395,6 @@
     <property name="NewWatcherDialog.advanced.open" value="true" />
   </component>
   <component name="RecentsManager">
-    <key name="CopyFile.RECENT_KEYS">
-      <recent name="D:\WWW_DATA\TIMA_SHOP\shop_8str\web\assets" />
-      <recent name="D:\WWW_DATA\TIMA_SHOP\environments\prod\shop_8str" />
-      <recent name="D:\WWW_DATA\TIMA_SHOP\environments\dev\shop_8str" />
-      <recent name="D:\WWW_DATA\TIMA_SHOP\common" />
-      <recent name="D:\WWW_DATA\TIMA_SHOP\environments\prod\shop_8str\config\local" />
-    </key>
-    <key name="MoveFile.RECENT_KEYS">
-      <recent name="D:\WWW_DATA\TIMA_SHOP\common\webFiles\wiki" />
-      <recent name="D:\WWW_DATA\TIMA_SHOP\shop_8str\config\local" />
-      <recent name="D:\WWW_DATA\TIMA_SHOP\frontend\config\local" />
-      <recent name="D:\WWW_DATA\TIMA_SHOP\console\config\local" />
-      <recent name="D:\WWW_DATA\TIMA_SHOP\admin\config\local" />
-    </key>
   </component>
   <component name="RunDashboard">
     <option name="ruleStates">
@@ -579,7 +433,8 @@
       <workItem from="1517214867623" duration="47764000" />
       <workItem from="1517403636160" duration="47000" />
       <workItem from="1517410541216" duration="1257000" />
-      <workItem from="1517413490241" duration="1078000" />
+      <workItem from="1517413490241" duration="1527000" />
+      <workItem from="1517469373016" duration="906000" />
     </task>
     <task id="LOCAL-00001" summary="Практически девственная Yii (пароль только подправлен к базе локальной)">
       <created>1516639123373</created>
@@ -683,7 +538,7 @@
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="215473000" />
+    <option name="totallyTimeSpent" value="216828000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -699,18 +554,18 @@
     <layout>
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32893" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.2985469" sideWeight="0.5026774" order="8" side_tool="true" content_ui="tabs" />
-      <window_info id="File Transfer" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32893" sideWeight="0.5" order="9" side_tool="false" content_ui="tabs" />
-      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.30911493" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="File Transfer" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.32893" sideWeight="0.5" order="9" side_tool="false" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32893" sideWeight="0.5" order="10" side_tool="false" content_ui="tabs" />
+      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.30911493" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.38837516" sideWeight="0.49732262" order="11" side_tool="false" content_ui="tabs" />
-      <window_info id="Project" active="true" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.27576974" sideWeight="0.5" order="1" side_tool="false" content_ui="combo" />
+      <window_info id="Project" active="true" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.2797858" sideWeight="0.5" order="1" side_tool="false" content_ui="combo" />
       <window_info id="Docker" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="false" weight="0.33" sideWeight="0.5" order="12" side_tool="false" content_ui="tabs" />
       <window_info id="Database" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32931727" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.6406869" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.24966533" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
-      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.331572" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="true" content_ui="tabs" />
       <window_info id="Framework" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3299866" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
+      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.331572" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
@@ -861,355 +716,6 @@
     </expressions>
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/common/config/local/main.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/environments/index.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="356">
-          <caret line="47" column="97" lean-forward="false" selection-start-line="47" selection-start-column="97" selection-end-line="47" selection-end-column="97" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/vendor/yiisoft/yii2/db/Command.php" />
-    <entry file="file://$PROJECT_DIR$/vendor/yiisoft/yii2/base/Controller.php" />
-    <entry file="file://$PROJECT_DIR$/console/migrations/files/oldDb.sql">
-      <provider selected="true" editor-type-id="LargeFileEditor">
-        <state relative-caret-position="0">
-          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/console/controllers/db2.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="340">
-          <caret line="25" column="8" lean-forward="false" selection-start-line="25" selection-start-column="8" selection-end-line="25" selection-end-column="8" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/vagrant/scripts/once-as-root.sh">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="213">
-          <caret line="21" column="10" lean-forward="false" selection-start-line="21" selection-start-column="10" selection-end-line="21" selection-end-column="10" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/vagrant/scripts/once-as-vagrant.sh">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="538">
-          <caret line="38" column="0" lean-forward="false" selection-start-line="38" selection-start-column="0" selection-end-line="38" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="jar://$APPLICATION_HOME_DIR$/plugins/php/lib/php.jar!/stubs/apc/apc.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-432">
-          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/environments/dev/yii">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/init">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="81">
-          <caret line="228" column="0" lean-forward="false" selection-start-line="228" selection-start-column="0" selection-end-line="228" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/environments/prod/yii">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="0" column="21" lean-forward="true" selection-start-line="0" selection-start-column="21" selection-end-line="0" selection-end-column="21" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$APPLICATION_CONFIG_DIR$/consoles/db/841f4b76-b104-449a-ab13-59f503188046/console.sql">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/admin/web/files/.gitignore" />
-    <entry file="file://$PROJECT_DIR$/common/config/.gitignore">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/console/controllers/.gitignore">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="0" column="7" lean-forward="false" selection-start-line="0" selection-start-column="7" selection-end-line="0" selection-end-column="7" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/common/config/web/.gitignore">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/common/tests/_output/.gitignore">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="17">
-          <caret line="1" column="0" lean-forward="false" selection-start-line="1" selection-start-column="0" selection-end-line="1" selection-end-column="11" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/admin/config/local/.gitignore">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="17">
-          <caret line="1" column="11" lean-forward="false" selection-start-line="1" selection-start-column="11" selection-end-line="1" selection-end-column="11" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/admin/models/.gitkeep">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/admin/runtime/.gitignore">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/admin/web/assets/.gitignore">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/admin/web/.gitignore">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="51">
-          <caret line="3" column="5" lean-forward="true" selection-start-line="3" selection-start-column="5" selection-end-line="3" selection-end-column="5" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/common/runtime/.gitignore">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/console/config/local/.gitignore">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="17">
-          <caret line="1" column="11" lean-forward="false" selection-start-line="1" selection-start-column="11" selection-end-line="1" selection-end-column="11" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/console/runtime/.gitignore">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/frontend/config/local/.gitignore">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="17">
-          <caret line="1" column="11" lean-forward="false" selection-start-line="1" selection-start-column="11" selection-end-line="1" selection-end-column="11" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/frontend/runtime/.gitignore">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/frontend/web/assets/.gitignore">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/frontend/web/.gitignore">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="68">
-          <caret line="4" column="0" lean-forward="true" selection-start-line="4" selection-start-column="0" selection-end-line="4" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/runtime/.gitignore" />
-    <entry file="file://$PROJECT_DIR$/shop_8str/config/local/.gitignore">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="17">
-          <caret line="1" column="11" lean-forward="false" selection-start-line="1" selection-start-column="11" selection-end-line="1" selection-end-column="11" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/shop_8str/web/assets/.gitignore">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/shop_8str/web/.gitignore">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="85">
-          <caret line="5" column="0" lean-forward="true" selection-start-line="5" selection-start-column="0" selection-end-line="5" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/temp/.gitignore">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="17">
-          <caret line="1" column="11" lean-forward="false" selection-start-line="1" selection-start-column="11" selection-end-line="1" selection-end-column="11" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/console/controllers/OldbaseController.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="274">
-          <caret line="98" column="112" lean-forward="false" selection-start-line="98" selection-start-column="112" selection-end-line="98" selection-end-column="112" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/environments/prod/common/config/local/main.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="272">
-          <caret line="16" column="35" lean-forward="false" selection-start-line="16" selection-start-column="35" selection-end-line="16" selection-end-column="35" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/common/webFiles/wiki/.gitignore">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="17">
-          <caret line="1" column="11" lean-forward="true" selection-start-line="0" selection-start-column="1" selection-end-line="1" selection-end-column="11" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/common/webFiles/products/images/.gitignore">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="17">
-          <caret line="1" column="11" lean-forward="false" selection-start-line="1" selection-start-column="11" selection-end-line="1" selection-end-column="11" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/common/webFiles/system/files/.gitignore">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="17">
-          <caret line="1" column="11" lean-forward="false" selection-start-line="1" selection-start-column="11" selection-end-line="1" selection-end-column="11" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/common/webFiles/system/images/.gitignore">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="17">
-          <caret line="1" column="11" lean-forward="false" selection-start-line="1" selection-start-column="11" selection-end-line="1" selection-end-column="11" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/common/webFiles/products/files/.gitignore">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="17">
-          <caret line="1" column="11" lean-forward="false" selection-start-line="1" selection-start-column="11" selection-end-line="1" selection-end-column="11" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/common/webFiles/brands/files/.gitignore">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="17">
-          <caret line="1" column="11" lean-forward="false" selection-start-line="1" selection-start-column="11" selection-end-line="1" selection-end-column="11" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/common/webFiles/brands/images/.gitignore">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="17">
-          <caret line="1" column="11" lean-forward="true" selection-start-line="1" selection-start-column="11" selection-end-line="1" selection-end-column="11" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/package.json">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/README.md">
-      <provider selected="true" editor-type-id="split-provider[text-editor;markdown-preview-editor]">
-        <state split_layout="SPLIT">
-          <first_editor relative-caret-position="0">
-            <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-            <folding />
-          </first_editor>
-          <second_editor />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/common/assets/CommonAsset.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/common/fixtures/UserFixture.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/console/migrations/m130524_201442_init.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/.gitignore">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="266">
-          <caret line="22" column="25" lean-forward="true" selection-start-line="22" selection-start-column="25" selection-end-line="22" selection-end-column="25" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/composer.json">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
   </component>
   <component name="masterDetails">
     <states>

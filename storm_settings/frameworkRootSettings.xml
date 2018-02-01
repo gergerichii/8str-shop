@@ -3,7 +3,6 @@
   <component name="FrameworkRootSettings" id="Yii">
     <option name="bundleRoots">
       <list>
-        <option value="$PROJECT_DIR$/common/modules/cart" />
         <option value="$PROJECT_DIR$/common/modules/catalog" />
         <option value="$PROJECT_DIR$/common/modules/files" />
       </list>
@@ -21,7 +20,6 @@
         <element elementPath="$PROJECT_DIR$/admin/views/themes" typeId="themes_directory" />
         <element elementPath="$PROJECT_DIR$/admin/views/themes/adminLte/layouts" typeId="protected_views_layouts_directory" />
         <element elementPath="$PROJECT_DIR$/admin/views/themes/adminLte/old-base-migrate" typeId="protected_views_directory" />
-        <element elementPath="$PROJECT_DIR$/admin/views/themes/adminLte/shop" typeId="protected_views_directory" />
         <element elementPath="$PROJECT_DIR$/admin/views/themes/adminLte/site" typeId="protected_views_directory" />
         <element elementPath="$PROJECT_DIR$/admin/views/themes/adminLte/test" typeId="protected_views_directory" />
         <element elementPath="$PROJECT_DIR$/common/assets" typeId="assets_directory" />
@@ -43,13 +41,10 @@
         <element elementPath="$PROJECT_DIR$/frontend/views/layouts" typeId="protected_views_layouts_directory" />
         <element elementPath="$PROJECT_DIR$/frontend/views/pieces" typeId="protected_views_directory" />
         <element elementPath="$PROJECT_DIR$/frontend/views/site" typeId="protected_views_directory" />
-        <element elementPath="$PROJECT_DIR$/frontend/views/themes" typeId="themes_directory" />
         <element elementPath="$PROJECT_DIR$/shop_8str" typeId="protected_directory" />
         <element elementPath="$PROJECT_DIR$/shop_8str/runtime" typeId="protected_runtime_directory" />
-        <element elementPath="$PROJECT_DIR$/shop_8str/themes" typeId="themes_directory" />
         <element elementPath="$PROJECT_DIR$/shop_8str/views" typeId="protected_views_system_directory" />
         <element elementPath="$PROJECT_DIR$/shop_8str/views/layouts" typeId="protected_views_layouts_directory" />
-        <element elementPath="$PROJECT_DIR$/shop_8str/views/themes" typeId="themes_directory" />
       </list>
     </option>
     <option name="myTypedPaths">
@@ -65,7 +60,6 @@
         <element elementPath="$PROJECT_DIR$/admin/views/themes" typeId="themes_directory" />
         <element elementPath="$PROJECT_DIR$/admin/views/themes/adminLte/layouts" typeId="protected_views_layouts_directory" />
         <element elementPath="$PROJECT_DIR$/admin/views/themes/adminLte/old-base-migrate" typeId="protected_views_directory" />
-        <element elementPath="$PROJECT_DIR$/admin/views/themes/adminLte/shop" typeId="protected_views_directory" />
         <element elementPath="$PROJECT_DIR$/admin/views/themes/adminLte/site" typeId="protected_views_directory" />
         <element elementPath="$PROJECT_DIR$/admin/views/themes/adminLte/test" typeId="protected_views_directory" />
         <element elementPath="$PROJECT_DIR$/common/assets" typeId="assets_directory" />
@@ -87,18 +81,14 @@
         <element elementPath="$PROJECT_DIR$/frontend/views/layouts" typeId="protected_views_layouts_directory" />
         <element elementPath="$PROJECT_DIR$/frontend/views/pieces" typeId="protected_views_directory" />
         <element elementPath="$PROJECT_DIR$/frontend/views/site" typeId="protected_views_directory" />
-        <element elementPath="$PROJECT_DIR$/frontend/views/themes" typeId="themes_directory" />
         <element elementPath="$PROJECT_DIR$/shop_8str" typeId="protected_directory" />
         <element elementPath="$PROJECT_DIR$/shop_8str/runtime" typeId="protected_runtime_directory" />
-        <element elementPath="$PROJECT_DIR$/shop_8str/themes" typeId="themes_directory" />
         <element elementPath="$PROJECT_DIR$/shop_8str/views" typeId="protected_views_system_directory" />
         <element elementPath="$PROJECT_DIR$/shop_8str/views/layouts" typeId="protected_views_layouts_directory" />
-        <element elementPath="$PROJECT_DIR$/shop_8str/views/themes" typeId="themes_directory" />
       </list>
     </option>
     <option name="myBundleRoots">
       <list>
-        <option value="$PROJECT_DIR$/common/modules/cart" />
         <option value="$PROJECT_DIR$/common/modules/catalog" />
         <option value="$PROJECT_DIR$/common/modules/files" />
       </list>

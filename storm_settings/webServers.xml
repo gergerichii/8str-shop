@@ -19,6 +19,14 @@
       <webServer id="de255626-986c-47c1-9637-bd8e4f2bf27e" name="8str.ln" url="http://8str.ln">
         <fileTransfer port="0" accessType="LOCAL" />
       </webServer>
+      <webServer id="6c75b6cd-b5fc-4f72-9f41-f7d86c52a2b6" name="images" url="http://8str.ru">
+        <fileTransfer host="8str.ru" port="21">
+          <advancedOptions>
+            <advancedOptions dataProtectionLevel="Private" />
+          </advancedOptions>
+          <option name="port" value="21" />
+        </fileTransfer>
+      </webServer>
     </option>
   </component>
 </project>

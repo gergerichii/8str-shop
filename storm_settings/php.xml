@@ -64,7 +64,7 @@
       <path value="$PROJECT_DIR$/vendor/symfony/console" />
       <path value="$PROJECT_DIR$/vendor/symfony/css-selector" />
       <path value="$PROJECT_DIR$/vendor/myclabs/deep-copy" />
-      <path value="D:\WWW_DATA\TIMA_SHOP\vendor" />
+      <path value="$PROJECT_DIR$/vendor" />
       <path value="$PROJECT_DIR$/vendor/leafo/scssphp" />
       <path value="$PROJECT_DIR$/vendor/rmrevin/yii2-fontawesome" />
       <path value="$PROJECT_DIR$/vendor/dmstr/yii2-adminlte-asset" />
@@ -129,12 +129,13 @@
       <path value="$PROJECT_DIR$/vendor/yiisoft/yii2-sphinx" />
       <path value="$PROJECT_DIR$/vendor/kartik-v/dependent-dropdown" />
       <path value="$PROJECT_DIR$/vendor/kartik-v/yii2-field-range" />
+      <path value="$PROJECT_DIR$/vendor/codeception/stub" />
     </include_path>
   </component>
   <component name="PhpInterpreters">
     <interpreters>
-      <interpreter home="vagrant://D:\WWW_DATA\TIMA_SHOP/usr/bin/php" id="d8e7de3e-8c22-4540-a897-65079edee34b" name="vagrant PHP 7.2" debugger_id="php.debugger.XDebug">
-        <remote_data VAGRANT_FOLDER="D:\WWW_DATA\TIMA_SHOP" INTERPRETER_PATH="/usr/bin/php" HELPERS_PATH="/home/vagrant/.phpstorm_helpers" INITIALIZED="false" VALID="true" />
+      <interpreter home="vagrant://$PROJECT_DIR$/usr/bin/php" id="d8e7de3e-8c22-4540-a897-65079edee34b" name="vagrant PHP 7.2" debugger_id="php.debugger.XDebug">
+        <remote_data VAGRANT_FOLDER="$PROJECT_DIR$" INTERPRETER_PATH="/usr/bin/php" HELPERS_PATH="/home/vagrant/.phpstorm_helpers" INITIALIZED="false" VALID="true" />
       </interpreter>
       <interpreter home="sftp://fbkru@8str.ru:22/usr/bin/php" id="46acf9a9-e33d-4635-9e91-bcb0b864c76a" name="beget PHP" debugger_id="php.debugger.XDebug">
         <remote_data WEB_SERVER_CONFIG_ID="1f589e91-f629-4680-b8d3-227eda51bb14" WEB_SERVER_CONFIG_NAME="beget" WEB_SERVER_CREDENTIALS_ID="sftp://fbkru@8str.ru:22" INTERPRETER_PATH="/usr/bin/php" HELPERS_PATH="/home/f/fbkru/.phpstorm_helpers" INITIALIZED="false" VALID="true" />

@@ -40,6 +40,13 @@
           </excludedPaths>
         </serverdata>
       </paths>
+      <paths name="images">
+        <serverdata>
+          <mappings>
+            <mapping deploy="/" local="$PROJECT_DIR$/common/webFiles" web="/files" />
+          </mappings>
+        </serverdata>
+      </paths>
       <paths name="test.8str.ln">
         <serverdata>
           <mappings>

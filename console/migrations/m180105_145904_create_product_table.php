@@ -6,7 +6,7 @@ use yii\db\Migration;
  * Handles the creation of table `product`.
  *
  * Основная таблица товаров. Расширенные атрибуты, цены, файлы и служебные данные 1С находятся в формате JSON
- * Для уточнения структуры данных JSON смотри common\models\entities\Product и соответствующие хелперы.
+ * Для уточнения структуры данных JSON смотри common\modules\catalog\models\Product и соответствующие хелперы.
  *
  * Зависит от таблиц: product_type, product_brand и user
  * Зависящие таблицы: tag, related_products, product_rubric, product_price

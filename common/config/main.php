@@ -3,7 +3,7 @@ $config = [
     'timeZone' => 'Europe/Moscow',
     'language' => 'ru-RU',
     'bootstrap' => [
-        'catalog', 'files'
+        'common\config\setUp', 'catalog', 'files'
     ],
     'aliases' => [
         '@bower' => '@vendor/bower-asset',

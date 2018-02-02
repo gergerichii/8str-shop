@@ -1,8 +1,8 @@
 <?php
 namespace frontend\widgets;
 
-use dvizh\cart\assets\WidgetAsset;
-use dvizh\cart\interfaces\CartElement;
+use common\modules\cart\assets\WidgetAsset;
+use common\modules\cart\interfaces\CartElement;
 use yii\base\Widget;
 use yii\helpers\Html;
 use yii\helpers\Url;

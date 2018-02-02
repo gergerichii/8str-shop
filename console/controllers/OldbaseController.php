@@ -2,13 +2,13 @@
 
 namespace console\controllers;
 
-use common\models\entities\Product;
-use common\models\entities\Product2ProductRubric;
-use common\models\entities\ProductBrand;
-use common\models\entities\ProductPrice;
-use common\models\entities\ProductRubric;
-use common\models\entities\ProductTag;
-use common\models\entities\ProductTag2product;
+use common\modules\catalog\models\Product;
+use common\modules\catalog\models\Product2ProductRubric;
+use common\modules\catalog\models\ProductBrand;
+use common\modules\catalog\models\ProductPrice;
+use common\modules\catalog\models\ProductRubric;
+use common\modules\catalog\models\ProductTag;
+use common\modules\catalog\models\ProductTag2product;
 use Yii;
 use yii\console\Controller;
 use yii\db\Connection;

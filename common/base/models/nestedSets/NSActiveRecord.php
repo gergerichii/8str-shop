@@ -233,7 +233,6 @@ class NSActiveRecord extends ActiveRecord {
      * @param bool $orderDesc
      * @return \yii\db\ActiveQuery
      *
-     * TODO: Вынести в ActiveQuery
      */
     public function parents($depth = null, $orderDesc = false)
     {

@@ -6,7 +6,7 @@
  * Time: 22:54
  */
 /** @var \yii\web\View $this */
-/** @var \common\models\entities\Product $product */
+/** @var \common\modules\catalog\models\Product $product */
 
 /** @var \common\modules\catalog\Module $catalog */
 $catalog = \Yii::$app->getModule('catalog');

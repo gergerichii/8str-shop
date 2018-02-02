@@ -13,7 +13,9 @@ use yii\base\BootstrapInterface;
 use Yii;
 use yii\mail\MailerInterface;
 
-class setUp implements BootstrapInterface {
+class setUp implements BootstrapInterface
+{
+    
     public function bootstrap($app)
     {
         $container = Yii::$container;
@@ -21,9 +23,5 @@ class setUp implements BootstrapInterface {
         $container->setSingleton(MailerInterface::class, function () use ($app) {
             return $app->mailer;
         });
-
-//        $container->setSingleton(CatalogService::className(), [], [
-//            'id' => 'catalogService',
-//        ]);
     }
 }

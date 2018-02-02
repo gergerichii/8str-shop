@@ -3,7 +3,7 @@
 namespace common\modules\catalog\controllers;
 
 use common\base\BaseFrontendController;
-use common\models\entities\Product;
+use common\modules\catalog\models\Product;
 use common\modules\catalog\Module;
 use yii\data\ActiveDataProvider;
 use yii\web\NotFoundHttpException;

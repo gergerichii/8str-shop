@@ -1,7 +1,7 @@
 <?php
 
 $config = [
-    'bootstrap' => ['log'],
+    'bootstrap' => ['log', 'cart'],
     'controllerMap' => [
     ],
     'components' => [
@@ -39,6 +39,11 @@ $config = [
         'errorHandler' => [
             'errorAction' => 'site/error',
         ],
+    ],
+    'modules' => [
+        'cart' => [
+            'class' => common\modules\cart\Module::className(),
+        ]
     ],
 ];
 

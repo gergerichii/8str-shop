@@ -1,6 +1,6 @@
 <?php
 
-use common\models\entities\ProductTag;
+use common\modules\catalog\models\ProductTag;
 use yii\db\Migration;
 
 /**

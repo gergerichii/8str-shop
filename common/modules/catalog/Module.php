@@ -2,8 +2,8 @@
 
 namespace common\modules\catalog;
 
-use common\models\entities\Product;
-use common\models\entities\ProductRubric;
+use common\modules\catalog\models\Product;
+use common\modules\catalog\models\ProductRubric;
 use yii\base\Application;
 use yii\base\BootstrapInterface;
 use yii\base\ErrorException;
@@ -49,15 +49,16 @@ class Module extends \yii\base\Module implements BootstrapInterface
 
         $rules = [
             [
-                'pattern' => 'catalog/<_a:product|index|.{0}>/<catalogPath:[\w\-\.,/_]*?>/<productId:\d*>',
-                'route' => '/catalog/default/<_a>',
+                'pattern' => 'catalog/<catalogPath:[\w\-\.,/_]+?>/<productId:\d+>',
+                'route' => '/catalog/default/product',
                 'encodeParams' => false,
-                'defaults' => [
-                    '_a' => 'index',
-                    'catalogPath' => '',
-                    'productId' => '',
-                ]
             ],
+            [
+                'pattern' => 'catalog/<catalogPath:[\w\-\.,/_]*?>',
+                'route' => '/catalog/default/index',
+                'encodeParams' => false,
+            ],
+            'catalog' => 'catalog/default/index/',
         ];
         if (count($urlManagers)) {
             foreach ($urlManagers as $urlManager) {
@@ -91,7 +92,7 @@ class Module extends \yii\base\Module implements BootstrapInterface
             $uriParams['productId'] = $product->id;
             $uriParams[0] .= '/' . $this->productActionId;
         } elseif (!is_null($product)) {
-            throw new ErrorException('$product must be integer or instance of common\models\entities\Product');
+            throw new ErrorException('$product must be integer or instance of common\modules\catalog\models\Product');
         } else {
             $uriParams[0] .= '/index';
         }
@@ -106,7 +107,7 @@ class Module extends \yii\base\Module implements BootstrapInterface
             }
             $uriParams['catalogPath'] = $rubricPath;
         } else {
-            throw new ErrorException('$rubric must be string or instance of common\models\entities\ProductRubric');
+            throw new ErrorException('$rubric must be string or instance of common\modules\catalog\models\ProductRubric');
         }
         return str_replace('%2F', urldecode('%2F'), Url::to($uriParams));
     }
@@ -125,7 +126,7 @@ class Module extends \yii\base\Module implements BootstrapInterface
     }
 
     /**
-     * @param \common\models\entities\Product $product
+     * @param \common\modules\catalog\models\Product $product
      * @param string                        $rubricPath
      *
      * @return bool
@@ -141,7 +142,7 @@ class Module extends \yii\base\Module implements BootstrapInterface
 
     /**
      *
-     * @param \common\models\entities\Product $product
+     * @param \common\modules\catalog\models\Product $product
      * @param bool                          $format
      *
      * @return integer|string
@@ -155,16 +156,16 @@ class Module extends \yii\base\Module implements BootstrapInterface
     }
 
     /**
-     * @param \common\models\entities\Product $product
+     * @param \common\modules\catalog\models\Product $product
      *
-     * @return \common\models\entities\ProductPrice|null
+     * @return \common\modules\catalog\models\ProductPrice|null
      */
     public function priceObjectOf(Product $product) {
         return isset($product->prices[0]) ? $product->prices[0] : null;
     }
 
     /**
-     * @param \common\models\entities\Product $product
+     * @param \common\modules\catalog\models\Product $product
      * @param bool                          $format
      *
      * @return integer|string
@@ -178,17 +179,17 @@ class Module extends \yii\base\Module implements BootstrapInterface
     }
 
     /**
-     * @param \common\models\entities\Product $product
+     * @param \common\modules\catalog\models\Product $product
      * @param bool                          $format
      *
-     * @return \common\models\entities\ProductPrice|null
+     * @return \common\modules\catalog\models\ProductPrice|null
      */
     public function oldPriceObjectOf(Product $product, $format = true) {
         return isset($product->prices[1]) ? $product->prices[1] : null;
     }
 
     /**
-     * @param \common\models\entities\Product $product
+     * @param \common\modules\catalog\models\Product $product
      * @param bool                          $format
      *
      * @return integer|string
@@ -202,17 +203,17 @@ class Module extends \yii\base\Module implements BootstrapInterface
     }
 
     /**
-     * @param \common\models\entities\Product $product
+     * @param \common\modules\catalog\models\Product $product
      * @param bool                          $format
      *
-     * @return \common\models\entities\ProductPriceDiscount[]
+     * @return \common\modules\catalog\models\ProductPriceDiscount[]
      */
     public function activeDiscountsOf(Product $product, $format = true) {
         return $this->_applyDiscounts($product)['activeDiscounts'];
     }
 
     /**
-     * @param \common\models\entities\Product $product
+     * @param \common\modules\catalog\models\Product $product
      *
      * @return array
      */
@@ -378,7 +379,7 @@ class Module extends \yii\base\Module implements BootstrapInterface
     }
 
     /**
-     * @param \common\models\entities\Product $product
+     * @param \common\modules\catalog\models\Product $product
      * @param string                        $tagName
      *
      * @return bool

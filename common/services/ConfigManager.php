@@ -110,6 +110,7 @@ class ConfigManager {
         $this->_apps['common_console'] = self::APP_STRUCTURE;
         $this->_apps['common_console']['appName'] = 'common_console';
 
+        $apps = [];
         /* Обходим все каталоги где есть конфиги - это наши приложения */
         while($appDirName = readdir($iRootDir)) {
             $appPath = "{$rootDirPath}/{$appDirName}";
@@ -120,13 +121,18 @@ class ConfigManager {
                 in_array($appDirName, self::SKIP_DIRS) || !is_dir($appPath)
                 || !file_exists($appConfPath)
             ) continue;
-            /* Начинаем перебирать все конфиги приложения и собирем их в единый массив */
-            $this->aggregateConfigs($appConfPath, $appDirName);
+            $apps[] = ['appConfPath' => $appConfPath, 'appDirName' => $appDirName];
+            yii::setAlias('@' . $appDirName, $appPath);
         }
+        
+        foreach ($apps as $appParams) {
+            /* Начинаем перебирать все конфиги приложения и собирем их в единый массив */
+            call_user_func_array([$this, 'aggregateConfigs'], $appParams);
+        }
+        
         /* Вычисляем все конфиги подцепляя все зависимости */
         $this->calculateConfigs();
         /* Создаем необходимые алиасы для общей папки и всех приложений (для автолоада) */
-        $this->init();
         unset($this->_confInfos);
     }
     
@@ -287,26 +293,35 @@ class ConfigManager {
                     }
                 }
 
-                $extConfig = $apps[$extApp]['config'];
-                $setValue(
-                    $app,
-                    $ASF['main']['source'],
-                    $merge($extConfig, $getValue($app, $ASF['main']['source']))
-                );
+                $tmpInfo = $getValue($app, $ASF['main']['info']);
+                if (empty($tmpInfo['extApp'])) {
+                    $extConfig = $apps[$extApp]['config'];
+                    $setValue(
+                        $app,
+                        $ASF['main']['source'],
+                        $merge($extConfig, $getValue($app, $ASF['main']['source']))
+                    );
+                }
 
-                $extTestConfig = $apps[$extApp]['test_config'];
-                $setValue(
-                    $app,
-                    $ASF['test']['source'],
-                    $merge($extTestConfig, $getValue($app, $ASF['test']['source']))
-                );
+                $tmpInfo = $getValue($app, $ASF['test']['info']);
+                if (empty($tmpInfo['extApp'])) {
+                    $extTestConfig = $apps[$extApp]['test_config'];
+                    $setValue(
+                        $app,
+                        $ASF['test']['source'],
+                        $merge($extTestConfig, $getValue($app, $ASF['test']['source']))
+                    );
+                }
 
-                $extBootstrap = $apps[$extApp]['bootstrap'];
-                $setValue(
-                    $app,
-                    $ASF['bootstrap']['source'],
-                    $merge($extBootstrap, $getValue($app, $ASF['bootstrap']['source']))
-                );
+                $tmpInfo = $getValue($app, $ASF['bootstrap']['info']);
+                if (empty($tmpInfo['extApp'])) {
+                    $extBootstrap = $apps[$extApp]['bootstrap'];
+                    $setValue(
+                        $app,
+                        $ASF['bootstrap']['source'],
+                        $merge($extBootstrap, $getValue($app, $ASF['bootstrap']['source']))
+                    );
+                }
             }
 
             /* Помещяем собранные конфиги на их места */
@@ -366,16 +381,9 @@ class ConfigManager {
      *
      */
     public function __wakeup(){
-        $this->init();
-    }
-
-    /**
-     *
-     */
-    protected function init() {
         Yii::setAlias('@common', $this->_commonDir);
         /* Перебераем все конфиги */
-        foreach ($this->_apps as $appName => $config) {
+        foreach (array_keys($this->_apps) as $appName) {
             /* Создаем алиасы для каждого приложения */
             if (strpos($appName,  'common') === false)
                 Yii::setAlias('@' . $appName, $this->_rootDir . '/' . $appName);

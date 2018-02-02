@@ -2,10 +2,10 @@
 
 namespace admin\controllers;
 
-use common\models\entities\Product;
-use common\models\entities\ProductQuery;
-use common\models\entities\ProductTag;
-use common\models\entities\ProductTagQuery;
+use common\modules\catalog\models\Product;
+use common\modules\catalog\models\ProductQuery;
+use common\modules\catalog\models\ProductTag;
+use common\modules\catalog\models\ProductTagQuery;
 use common\helpers\PriceHelper;
 use common\helpers\ProductHelper;
 use yii\db\ActiveQuery;

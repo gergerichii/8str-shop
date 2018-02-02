@@ -1,6 +1,6 @@
 <?php
 
-use common\models\entities\Product;
+use common\modules\catalog\models\Product;
 use yii\db\Migration;
 
 /**

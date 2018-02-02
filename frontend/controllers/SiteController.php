@@ -1,8 +1,8 @@
 <?php
 namespace frontend\controllers;
 
-use common\models\entities\ProductQuery;
-use common\models\entities\ProductTag;
+use common\modules\catalog\models\ProductQuery;
+use common\modules\catalog\models\ProductTag;
 use Yii;
 use yii\base\InvalidParamException;
 use yii\helpers\ArrayHelper;

@@ -1,6 +1,8 @@
 <?php
 /* @var $this yii\web\View */
 
+use common\modules\catalog\widgets\ProductViewWidget;
+
 /* @var string $catalogPath */
 /* @var \yii\data\ActiveDataProvider $productsDataProvider */
 
@@ -69,7 +71,9 @@ $pager = new \yii\widgets\LinkPager([
                     <div class="category-item-container">
                         <?= \yii\widgets\ListView::widget([
                             'dataProvider' => $productsDataProvider,
-                            'itemView' => 'productSmall',
+                            'itemView' => function ($model){
+                                return ProductViewWidget::widget(['model' => $model]);
+                            },
                             'layout' => '{items}',
                             'viewParams' => [
                                 'coverItem' => true,

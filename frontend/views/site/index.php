@@ -6,9 +6,12 @@
  * Time: 7:55
  */
 
+use common\modules\catalog\Module;
+use common\modules\catalog\widgets\ProductViewWidget;
+
 /** @var \yii\web\View $this */
 
-/** @var \common\models\entities\Product[][] $topModels*/
+/** @var \common\modules\catalog\models\Product[][] $topModels*/
 
 /**
  * TODO: Переделать. Не везде на сайте меню с такими настройками
@@ -74,7 +77,10 @@ $activeTab = 'new';
                                         $content = '';
                                         $count = count($products);
                                         foreach($products as $index => $product) {
-                                            $content .= $this->render('@app/views/pieces/productSmall', ['model' => $product], $this);
+                                            $content .= ProductViewWidget::widget([
+                                                'model' => $product
+                                            ]);
+//                                            $content .= $this->render('/pieces/productSmall', ['model' => $product], $this);
                                             $i ++;
                                             if ($i == 2 || $index + 1 === $count) {
                                                 echo \yii\helpers\Html::tag('div', $content, ['class' => 'owl-single-col']);

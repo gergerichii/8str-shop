@@ -1,6 +1,6 @@
 <?php
 
-use common\models\entities\ProductRubric;
+use common\modules\catalog\models\ProductRubric;
 use yii\db\Migration;
 
 /**

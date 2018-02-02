@@ -8,7 +8,19 @@ return [
         'fixture' => [
             'class' => 'yii\console\controllers\FixtureController',
             'namespace' => 'common\fixtures',
-          ],
+        ],
+        'migrate' => [
+            'class' => 'yii\console\controllers\MigrateController',
+            'migrationPath' => [
+                '@app/migrations',
+                '@common/modules/cart/migrations',
+                '@yii/web/migrations',
+//                '@yii/rbac/migrations',
+//                '@yii/log/migrations',
+//                '@yii/i18n/migrations',
+//                '@yii/caching/migrations',
+            ],
+        ],
     ],
     'components' => [
         'log' => [

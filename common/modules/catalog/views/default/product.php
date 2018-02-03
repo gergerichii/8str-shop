@@ -7,9 +7,8 @@
  */
 
 /** @var \yii\web\View $this */
-/** @var \common\data\entities\Product $productModel */
+/** @var \common\modules\catalog\models\Product $productModel */
 ?>
-<?=$this->renderFile('@app/views/pieces/breadcrumbs.php')?>
 <div class="container">
     <div class="row">
         <div class="col-md-12">

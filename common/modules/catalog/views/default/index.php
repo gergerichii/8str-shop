@@ -14,8 +14,6 @@ $pager = new \yii\widgets\LinkPager([
     'maxButtonCount' => 5,
 ]);
 ?>
-<?=$this->renderFile('@app/views/pieces/breadcrumbs.php')?>
-
 <div class="container">
     <div class="row">
         <div class="col-md-12">
@@ -71,8 +69,11 @@ $pager = new \yii\widgets\LinkPager([
                     <div class="category-item-container">
                         <?= \yii\widgets\ListView::widget([
                             'dataProvider' => $productsDataProvider,
-                            'itemView' => function ($model){
-                                return ProductViewWidget::widget(['model' => $model]);
+                            'itemView' => function ($model, $key, $index, $widget){
+                                return ProductViewWidget::widget([
+                                    'model' => $model,
+                                    'viewParams' => $widget->viewParams
+                                ]);
                             },
                             'layout' => '{items}',
                             'viewParams' => [

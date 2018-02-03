@@ -19,9 +19,11 @@ use yii\widgets\DetailView;
 class ProductViewWidget extends DetailView {
     public $view = 'productMedium';
     
+    public $viewParams = [];
+    
     public $model;
     
     public function run() {
-        return $this->render('productMedium', ['model' => $this->model]);
+        return $this->render('productMedium', array_merge((array)$this->viewParams, ['model' => $this->model]));
     }
 }

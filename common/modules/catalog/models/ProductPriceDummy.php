@@ -32,7 +32,7 @@ class ProductPriceDummy extends Model implements ProductPriceInterface {
      * @return string
      */
     public function __toString(){
-        return (new Formatter())->asDecimal($this->value, 0) . ' руб.';
+        return (new Formatter())->asDecimal($this->value, 0) . ' р.';
     }
 
     public

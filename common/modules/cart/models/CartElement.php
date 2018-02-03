@@ -74,7 +74,7 @@ class CartElement extends ActiveRecord implements Element
             if ($productModel = $productModel::findOne($this->item_id)) {
                 $model = $productModel;
             } else {
-                yii::$app->cart->truncate();
+                yii::$app->get('cartService')->truncate();
                 throw new Exception('Element model not found');
             }
         } else {
@@ -113,12 +113,12 @@ class CartElement extends ActiveRecord implements Element
         if($andSave) {
             if ($this->save()) {
                 $elementEvent = new CartEvent([
-                    'cart' => yii::$app->cart->getElements(),
-                    'cost' => yii::$app->cart->getCost(),
-                    'count' => yii::$app->cart->getCount(),
+                    'cart' => yii::$app->get('cartService')->getElements(),
+                    'cost' => yii::$app->get('cartService')->getCost(),
+                    'count' => yii::$app->get('cartService')->getCount(),
                 ]);
 
-                $cartComponent = yii::$app->cart;
+                $cartComponent = yii::$app->get('cartService');
                 $cartComponent->trigger($cartComponent::EVENT_CART_UPDATE, $elementEvent);
             }
         }
@@ -135,7 +135,7 @@ class CartElement extends ActiveRecord implements Element
     {
         $price = $this->price;
 
-        $cart = yii::$app->cart;
+        $cart = yii::$app->get('cartService');
 
         if($withTriggers) {
             $elementEvent = new CartElementEvent(['element' => $this, 'cost' => $price]);
@@ -191,7 +191,7 @@ class CartElement extends ActiveRecord implements Element
     {
         $cost = 0;
         $costProduct = $this->getPrice($withTriggers);
-        $cart = \Yii::$app->cart;
+        $cart = \Yii::$app->get('cartService');
 
         for($i = 0; $i < $this->count; $i++) {
             $currentCostProduct = $costProduct;
@@ -258,7 +258,7 @@ class CartElement extends ActiveRecord implements Element
 
     public function beforeSave($insert)
     {
-        $cart = yii::$app->cart;
+        $cart = yii::$app->get('cartService');
 
         $cart->cart->updated_time = time();
         $cart->cart->save();

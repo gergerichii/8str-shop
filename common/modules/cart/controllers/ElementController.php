@@ -27,7 +27,7 @@ class ElementController extends Controller
         $json = ['result' => 'undefined', 'error' => false];
         $elementId = yii::$app->request->post('elementId');
 
-        $cart = yii::$app->cart;
+        $cart = yii::$app->get('cartService');
 
         $elementModel = $cart->getElementById($elementId);
 
@@ -45,8 +45,8 @@ class ElementController extends Controller
     {
         $json = ['result' => 'undefined', 'error' => false];
 
-        /** @var \common\modules\cart\Cart $cart */
-        $cart = yii::$app->cart;
+        /** @var \common\modules\cart\CartService $cartService */
+        $cartService = yii::$app->get('cartService');
 
         $postData = yii::$app->request->post();
 
@@ -61,9 +61,9 @@ class ElementController extends Controller
             }
 
             if($postData['CartElement']['price'] && $postData['CartElement']['price'] != 'false') {
-                $elementModel = $cart->putWithPrice($productModel, $postData['CartElement']['price'], $postData['CartElement']['count'], $options);
+                $elementModel = $cartService->putWithPrice($productModel, $postData['CartElement']['price'], $postData['CartElement']['count'], $options);
             } else {
-                $elementModel = $cart->put($productModel, $postData['CartElement']['count'], $options);
+                $elementModel = $cartService->put($productModel, $postData['CartElement']['count'], $options);
             }
 
             $json['elementId'] = $elementModel->getId();
@@ -80,7 +80,7 @@ class ElementController extends Controller
     {
         $json = ['result' => 'undefined', 'error' => false];
 
-        $cart = yii::$app->cart;
+        $cart = yii::$app->get('cartService');
         
         $postData = yii::$app->request->post();
 
@@ -102,7 +102,7 @@ class ElementController extends Controller
 
     private function _cartJson($json)
     {
-        if ($cartModel = yii::$app->cart) {
+        if ($cartModel = yii::$app->get('cartService')) {
             if(!$elementsListWidgetParams = yii::$app->request->post('elementsListWidgetParams')) {
                 $elementsListWidgetParams = [];
             }

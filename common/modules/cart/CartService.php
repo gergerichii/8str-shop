@@ -16,7 +16,7 @@ use yii;
  * @property string $costFormatted
  * @property mixed  $hash
  */
-class Cart extends Component
+class CartService extends Component
 {
     const EVENT_CART_INIT = 'cart_init';
     const EVENT_CART_TRUNCATE = 'cart_truncate';
@@ -39,8 +39,6 @@ class Cart extends Component
 
     public $currency = NULL;
     public $elementBehaviors = [];
-    public $currencyPosition = 'after';
-    public $priceFormat = [2, '.', ''];
     
     /**
      * Cart constructor.
@@ -203,13 +201,13 @@ class Cart extends Component
 
     public function getCostFormatted()
     {
-        $price = number_format($this->getCost(), $this->priceFormat[0], $this->priceFormat[1], $this->priceFormat[2]);
-
-        if ($this->currencyPosition == 'after') {
-            return "<span>$price</span>{$this->currency}";
-        } else {
-            return "<span>{$this->currency}</span>$price";
+        try {
+            $price = yii::$app->formatter->asCurrency($this->getCost());
+        } catch(yii\base\InvalidConfigException $e) {
+            yii::error($e->getMessage());
+            $price = $this->getCost();
         }
+        return $price;
     }
 
     public function getElementsByModel(interfaces\CartElement $model)

@@ -2,7 +2,7 @@
 namespace common\modules\cart\behaviors;
 
 use yii\base\Behavior;
-use common\modules\cart\Cart;
+use common\modules\cart\CartService;
 
 class Discount extends Behavior
 {
@@ -11,7 +11,7 @@ class Discount extends Behavior
     public function events()
     {
         return [
-            Cart::EVENT_CART_COST => 'doDiscount'
+            CartService::EVENT_CART_COST => 'doDiscount'
         ];
     }
 

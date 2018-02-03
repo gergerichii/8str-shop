@@ -4,9 +4,11 @@ namespace common\modules\catalog;
 
 use common\modules\catalog\models\Product;
 use common\modules\catalog\models\ProductRubric;
+use Yii;
 use yii\base\Application;
 use yii\base\BootstrapInterface;
 use yii\base\ErrorException;
+use yii\base\InvalidConfigException;
 use yii\helpers\ArrayHelper;
 use yii\helpers\Url;
 
@@ -250,14 +252,19 @@ class Module extends \yii\base\Module implements BootstrapInterface
         $activeDiscounts = [];
         return $this->_products[$product->id] = compact('price', 'oldPrice', 'discount', 'activeDiscounts');
     }
-
+    
     /**
      * @param float $value
      *
      * @return string
      */
     protected function _formatCurrency($value) {
-        return \Yii::$app->formatter->asDecimal($value, 0) . ' руб.';
+        try {
+            return Yii::$app->formatter->asCurrency($value);
+        } catch(InvalidConfigException $e) {
+            Yii::error($e->getMessage());
+            return $value;
+        }
     }
 
     /**
@@ -266,7 +273,7 @@ class Module extends \yii\base\Module implements BootstrapInterface
      * @return string
      */
     protected function _formatPercent($value) {
-        return \Yii::$app->formatter->asPercent($value, 0);
+        return Yii::$app->formatter->asPercent($value, 0);
     }
 
 

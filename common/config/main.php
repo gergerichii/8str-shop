@@ -16,6 +16,11 @@ $config = [
         'cache' => [
             'class' => 'yii\caching\FileCache',
         ],
+        'formatter' => [
+            'class' => common\components\Formatter::className(),
+            'currencyShowDecimals' => false,
+            'currencySymbol' => '₽',
+        ],
     ],
     'modules' => [
         'catalog' => [
@@ -23,6 +28,11 @@ $config = [
         ],
         'files' => [
             'class' => 'common\modules\files\Module',
+        ],
+    ],
+    'container' => [
+        'definitions' => [
+            'yii\i18n\Formatter' => 'common\components\Formatter'
         ],
     ],
 ];

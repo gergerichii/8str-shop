@@ -83,7 +83,7 @@ class ProductPrice extends ActiveRecord implements ProductPriceInterface
      *
      */
     public function __toString () {
-        return Yii::$app->formatter->asDecimal($this->value) . ' руб.';
+        return Yii::$app->formatter->asDecimal($this->value) . ' р.';
     }
 
     public function getValue(){

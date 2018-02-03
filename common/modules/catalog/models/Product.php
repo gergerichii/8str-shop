@@ -426,7 +426,7 @@ class Product extends ActiveRecord implements CartElement
     function getCartPrice() {
         /** @var \common\modules\catalog\Module $catalog */
         $catalog = yii::$app->getModule('catalog');
-        return $catalog->priceOf($this);
+        return $catalog->priceOf($this, false);
     }
     
     public

@@ -235,7 +235,7 @@ dvizh.cart = {
     },
     renderCart: function (json) {
         if (!json) {
-            var json = {};
+            json = {};
             jQuery.post('/cart/default/info', {},
                 function (answer) {
                     json = answer;

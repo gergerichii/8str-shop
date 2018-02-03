@@ -1,10 +1,7 @@
 <?php
 namespace common\modules\cart\widgets;
 
-use common\modules\cart\widgets\DeleteButton;
-use common\modules\cart\widgets\TruncateButton;
-use common\modules\cart\widgets\ChangeCount;
-use common\modules\cart\widgets\CartInformer;
+use common\modules\cart\assets\WidgetAsset;
 use yii\helpers\Html;
 use yii\helpers\Url;
 use yii;
@@ -25,11 +22,11 @@ class ElementsList extends \yii\base\Widget
     public $showTruncate = false;
     public $currency = null;
     public $otherFields = [];
-    public $currencyPosition = null;
     public $showCountArrows = true;
     public $columns = 4;
     public $elementView = 'elementListRow';
     public $controllerActions = ['update' => '/cart/element/update','delete' => '/cart/element/delete'];
+    public $listOnly = false;
 
     public function init()
     {
@@ -45,7 +42,6 @@ class ElementsList extends \yii\base\Widget
             'showTruncate' => $this->showTruncate,
             'currency' => $this->currency,
             'otherFields' => $this->otherFields,
-            'currencyPosition' => $this->currencyPosition,
             'showCountArrows' => $this->showCountArrows,
             'elementView' => $this->elementView,
             'controllerActions' => $this->controllerActions,
@@ -68,7 +64,7 @@ class ElementsList extends \yii\base\Widget
         }
 
         if ($this->cart == NULL) {
-            $this->cart = yii::$app->cart;
+            $this->cart = yii::$app->get('cartService');
         }
 
         if ($this->textButton == NULL) {
@@ -76,57 +72,57 @@ class ElementsList extends \yii\base\Widget
         }
 
         if ($this->currency == NULL) {
-            $this->currency = yii::$app->cart->currency;
+            $this->currency = yii::$app->get('cartService')->currency;
         }
 
-        if ($this->currencyPosition == NULL) {
-            $this->currencyPosition = yii::$app->cart->currencyPosition;
-        }
-
-        \common\modules\cart\assets\WidgetAsset::register($this->getView());
+        WidgetAsset::register($this->getView());
 
         return parent::init();
     }
 
-    public function run()
-    {
+    public function run() {
         $elements = $this->cart->elements;
 
         if (empty($elements)) {
             $cart = Html::tag('div', yii::t('cart', 'Your cart empty'), ['class' => 'dvizh-cart dvizh-empty-cart']);
         } else {
-        	$cart = Html::ul($elements, ['item' => function($item, $index) {
+            $cart = Html::ul($elements, ['item' => function($item, $index) {
                 return $this->_row($item);
             }, 'class' => 'dvizh-cart-list']);
-		}
 
-        if (!empty($elements)) {
-            $bottomPanel = '';
-
-            if ($this->showTotal) {
-                $bottomPanel .= Html::tag('div', Yii::t('cart', 'Total') . ': ' . yii::$app->cart->cost . ' '.yii::$app->cart->currency, ['class' => 'dvizh-cart-total-row']);
+            if (!$this->listOnly) {
+                $bottomPanel = '';
+    
+                if ($this->showTotal) {
+                    $bottomPanel .= Html::tag('div', Yii::t('cart', 'Total') . ': ' . yii::$app->get('cartService')->cost . ' '.yii::$app->get('cartService')->currency, ['class' => 'dvizh-cart-total-row']);
+                }
+    
+                if($this->offerUrl && $this->showOffer) {
+                    $bottomPanel .= Html::a(yii::t('cart', 'Offer'), $this->offerUrl, ['class' => 'dvizh-cart-offer-button btn btn-success']);
+                }
+    
+                if($this->showTruncate) {
+                    $bottomPanel .= TruncateButton::widget();
+                }
+    
+                $cart .= Html::tag('div', $bottomPanel, ['class' => 'dvizh-cart-bottom-panel']);
             }
-
-            if($this->offerUrl && $this->showOffer) {
-                $bottomPanel .= Html::a(yii::t('cart', 'Offer'), $this->offerUrl, ['class' => 'dvizh-cart-offer-button btn btn-success']);
-            }
-
-            if($this->showTruncate) {
-                $bottomPanel .= TruncateButton::widget();
-            }
-
-            $cart .= Html::tag('div', $bottomPanel, ['class' => 'dvizh-cart-bottom-panel']);
         }
-
-        $cart = Html::tag('div', $cart, ['class' => 'dvizh-cart']);
-
-        if ($this->type == self::TYPE_DROPDOWN) {
-            $button = Html::button($this->textButton.Html::tag('span', '', ["class" => "caret"]), ['class' => 'btn dropdown-toggle', 'id' => 'dvizh-cart-drop', 'type' => "button", 'data-toggle' => "dropdown", 'aria-haspopup' => 'true', 'aria-expanded' => "false"]);
-            $list = Html::tag('div', $cart, ['class' => 'dropdown-menu', 'aria-labelledby' => 'dvizh-cart-drop']);
-            $cart = Html::tag('div', $button.$list, ['class' => 'dvizh-cart-dropdown dropdown']);
+        
+        if (!$this->listOnly) {
+            $cart = Html::tag('div', $cart, ['class' => 'dvizh-cart']);
+    
+            if ($this->type == self::TYPE_DROPDOWN) {
+                $button = Html::button($this->textButton.Html::tag('span', '', ["class" => "caret"]), ['class' => 'btn dropdown-toggle', 'id' => 'dvizh-cart-drop', 'type' => "button", 'data-toggle' => "dropdown", 'aria-haspopup' => 'true', 'aria-expanded' => "false"]);
+                $list = Html::tag('div', $cart, ['class' => 'dropdown-menu', 'aria-labelledby' => 'dvizh-cart-drop']);
+                $cart = Html::tag('div', $button.$list, ['class' => 'dvizh-cart-dropdown dropdown']);
+            }
+    
+            return Html::tag('div', $cart, ['class' => 'dvizh-cart-block']);
+        } else {
+            return $cart;
         }
-
-        return Html::tag('div', $cart, ['class' => 'dvizh-cart-block']);
+    
     }
 
     private function _row($item)
@@ -149,19 +145,11 @@ class ElementsList extends \yii\base\Widget
             'model' => $item,
             'name' => $cartElName,
             'showCountArrows' => $this->showCountArrows,
-            'cost' => $this->_getCostFormatted($item->getCost(false)),
+            'cost' => $item->getCost(false),
             'options' => $options,
             'otherFields' => $this->otherFields,
             'controllerActions' => $this->controllerActions,
+            'product' => $product,
         ]);
-    }
-
-    private function _getCostFormatted($cost)
-    {
-        if ($this->currencyPosition == 'after') {
-            return "$cost{$this->currency}";
-        } else {
-            return "{$this->currency}$cost";
-        }
     }
 }

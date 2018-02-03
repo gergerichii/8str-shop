@@ -1,24 +1,52 @@
 <?php
 namespace common\modules\cart\widgets;
 
+use common\modules\cart\assets\WidgetAsset;
+use yii\base\Widget;
 use yii\helpers\Html;
 use yii\helpers\Url;
 use yii;
 
-class CartInformer extends \yii\base\Widget
+class CartInformer extends Widget
 {
 
-    public $text = NULL;
-    public $offerUrl = NULL;
-    public $cssClass = NULL;
-    public $htmlTag = 'span';
+    public $text = null;
+    public $offerUrl = null;
+    public $cssClass = null;
+    public $htmlTag = null;
     public $showOldPrice = true;
-
+    
+    /**
+     * @param array $config
+     *
+     * @return \common\modules\cart\widgets\CartInformer|\yii\base\Widget
+     */
+    public static function begin($config = []) {
+        $widget = parent::begin($config);
+        
+        ob_start();
+        
+        return $widget;
+    }
+    
+    /**
+     * @return \common\modules\cart\widgets\CartInformer|\yii\base\Widget
+     */
+    public static function end() {
+        $widget = array_pop(static::$stack);
+        $widget->text = ob_get_clean();
+        array_push(static::$stack, $widget);
+        return parent::end();
+    }
+    
+    /**
+     * @return void
+     */
     public function init()
     {
         parent::init();
 
-        \common\modules\cart\assets\WidgetAsset::register($this->getView());
+        WidgetAsset::register($this->getView());
 
         if ($this->offerUrl == NULL) {
             $this->offerUrl = Url::toRoute(["/cart/default/index"]);
@@ -27,29 +55,39 @@ class CartInformer extends \yii\base\Widget
         if ($this->text === NULL) {
             $this->text = '{c} '. Yii::t('cart', 'on').' {p}';
         }
-        
-        return true;
     }
-
+    
+    /**
+     * @return string
+     */
     public function run()
     {
-        $cart = yii::$app->cart;
+        /** @var \common\modules\cart\CartService $cartService */
+        $cartService = yii::$app->get('cartService');
 
-        if($this->showOldPrice == false | $cart->cost == $cart->getCost(false)) {
+        if($this->showOldPrice == false | $cartService->cost == $cartService->getCost(false)) {
             $this->text = str_replace(['{c}', '{p}'],
-                ['<span class="dvizh-cart-count">'.$cart->getCount().'</span>', '<strong class="dvizh-cart-price">'.$cart->getCostFormatted().'</strong>'],
+                ['<span class="dvizh-cart-count">'.$cartService->getCount().'</span>', '<strong class="dvizh-cart-price">'.$cartService->getCostFormatted().'</strong>'],
                 $this->text
             );
         } else {
             $this->text = str_replace(['{c}', '{p}'],
-                ['<span class="dvizh-cart-count">'.$cart->getCount().'</span>', '<strong class="dvizh-cart-price"><s>'.round($cart->getCost(false)).'</s>'.$cart->getCostFormatted().'</strong>'],
+                ['<span class="dvizh-cart-count">'.$cartService->getCount().'</span>', '<strong class="dvizh-cart-price"><s>'.round($cartService->getCost(false)).'</s>'.$cartService->getCostFormatted().'</strong>'],
                 $this->text
             );
         }
         
-        return Html::tag($this->htmlTag, $this->text, [
+        $ret = $this->text;
+        
+        if ($this->htmlTag) {
+            $ret = Html::tag($this->htmlTag, $this->text, [
                 'href' => $this->offerUrl,
                 'class' => "dvizh-cart-informer {$this->cssClass}",
-        ]);
+            ]);
+        } else {
+            $ret = str_replace('{link}', $this->offerUrl, $ret);
+        }
+        
+        return $ret;
     }
 }

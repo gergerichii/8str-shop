@@ -5,6 +5,11 @@
  * Date: 25.12.2017
  * Time: 19:11
  */
+
+use common\modules\cart\widgets\CartInformer;
+use common\modules\cart\widgets\ElementsList;
+use yii\helpers\Url;
+
 /* @var $this \yii\web\View */
 /* @var $content string */
 
@@ -48,63 +53,41 @@
                 <!-- TODO: Перенести стиль в css-->
                 <div class="col-md-9 col-sm-9 col-xs-12 header-inner-right" style="margin-top: 35px">
                     <div class="header-inner-right-wrapper clearfix">
-
-                        <div class="dropdown-cart-menu-container pull-right">
+                        <?php if(yii::$app->getModule('cart', false)): ?>
+                            <div class="dropdown-cart-menu-container pull-right">
                             <div class="btn-group dropdown-cart">
-                            <button type="button" class="btn btn-custom dropdown-toggle" data-toggle="dropdown">
-                                <span class="cart-menu-icon"></span>
-                                0 item(s) <span class="drop-price">- $0.00</span>
-                            </button>
+                                <?php CartInformer::begin(); ?>
+                                    <a href="{link}" type="button" class="btn dropdown-toggle">
+                                        <span class="cart-menu-icon"></span>
+                                        {c} шт. <span class="drop-price">- {p}</span>
+                                    </a>
+                                <?php CartInformer::end(); ?>
 
                                 <div class="dropdown-menu dropdown-cart-menu pull-right clearfix" role="menu">
-                                    <p class="dropdown-cart-description">Recently added item(s).</p>
+                                    <p class="dropdown-cart-description">Добавленные товары</p>
+                                    
                                     <ul class="dropdown-cart-product-list">
-                                        <li class="item clearfix">
-                                        <a href="#" title="Delete item" class="delete-item"><i class="fa fa-times"></i></a>
-                                        <a href="#" title="Edit item" class="edit-item"><i class="fa fa-pencil"></i></a>
-                                            <figure>
-                                                <a href="product.html"><img src="/images/products/thumbnails/item12.jpg" alt="phone 4"></a>
-                                            </figure>
-                                            <div class="dropdown-cart-details">
-                                                <p class="item-name">
-                                                <a href="product.html">Cam Optia AF Webcam </a>
-                                                </p>
-                                                <p>
-                                                    1x
-                                                    <span class="item-price">$499</span>
-                                                </p>
-                                            </div><!-- End .dropdown-cart-details -->
-                                        </li>
-                                        <li class="item clearfix">
-                                        <a href="#" title="Delete item" class="delete-item"><i class="fa fa-times"></i></a>
-                                        <a href="#" title="Edit item" class="edit-item"><i class="fa fa-pencil"></i></a>
-                                            <figure>
-                                                <a href="product.html"><img src="/images/products/thumbnails/item13.jpg" alt="phone 2"></a>
-                                            </figure>
-                                            <div class="dropdown-cart-details">
-                                                <p class="item-name">
-                                                    <a href="product.html">Iphone Case Cover Original</a>
-                                                </p>
-                                                <p>
-                                                    1x
-                                                    <span class="item-price">$499<span class="sub-price">.99</span></span>
-                                                </p>
-                                            </div><!-- End .dropdown-cart-details -->
-                                        </li>
+                                        <?= ElementsList::widget([
+                                            'elementView' => '//layouts/pieces/headerCartElement',
+                                            'listOnly' => true,
+                                        ]) ?>
                                     </ul>
 
                                     <ul class="dropdown-cart-total">
-                                        <li><span class="dropdown-cart-total-title">Shipping:</span>$7</li>
-                                        <li><span class="dropdown-cart-total-title">Total:</span>$1005<span class="sub-price">.99</span></li>
+                                        <?php CartInformer::begin(); ?>
+                                            <li>
+                                                <span class="dropdown-cart-total-title">Всего:</span>{p}
+                                            </li>
+                                        <?php CartInformer::end(); ?>
                                     </ul><!-- .dropdown-cart-total -->
                                     <div class="dropdown-cart-action">
-                                        <p><a href="cart.html" class="btn btn-custom-2 btn-block">Cart</a></p>
-                                        <p><a href="checkout.html" class="btn btn-custom btn-block">Checkout</a></p>
+                                        <p><a href="<?= Url::toRoute('cart/default/index') ?>" class="btn btn-custom-2 btn-block">Корзина</a></p>
+                                        <p><a href="<?= Url::toRoute('order/default/checkout') ?>" class="btn btn-custom btn-block">Оформить</a></p>
                                     </div><!-- End .dropdown-cart-action -->
-
                                 </div><!-- End .dropdown-cart -->
                             </div><!-- End .btn-group -->
                         </div><!-- End .dropdown-cart-menu-container -->
+                        <?php endif; ?>
 
                         <div id="quick-access">
                             <form class="form-inline quick-search-form" role="form" action="#">

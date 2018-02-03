@@ -1,6 +1,7 @@
 <?php
 namespace common\modules\cart\models\tools;
 
+use common\modules\cart\models\Cart;
 use yii\web\Session;
 use yii;
 
@@ -21,7 +22,7 @@ class CartQuery extends \yii\db\ActiveQuery
         }
 
         if (!$one) {
-            $one = new \common\modules\cart\models\Cart();
+            $one = new Cart();
             $one->created_time = time();
             if(yii::$app->user->id) {
                 $one->user_id = $userId;

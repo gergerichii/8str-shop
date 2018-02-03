@@ -1,7 +1,7 @@
 <?php
 namespace common\modules\cart\controllers;
 
-use common\modules\cart\Cart;
+use common\modules\cart\CartService;
 use common\modules\cart\widgets\ElementsList;
 use yii\base\Module;
 use yii\filters\VerbFilter;
@@ -11,11 +11,11 @@ use yii\web\Controller;
 
 class DefaultController extends Controller
 {
-    /** @var \common\modules\cart\Cart */
+    /** @var \common\modules\cart\CartService */
     protected $cart;
     
     public function __construct(string $id, Module $module, array $config = []) {
-        $this->cart = yii::$app->get('cart');
+        $this->cart = yii::$app->get('cartService');
         parent::__construct($id, $module, $config);
     }
     
@@ -80,8 +80,8 @@ class DefaultController extends Controller
      */
     private function _cartJson($json = [])
     {
-        /** @var \common\modules\cart\Cart $cartModel */
-        if ($cartModel = yii::$app->get('cart')) {
+        /** @var \common\modules\cart\CartService $cartModel */
+        if ($cartModel = yii::$app->get('cartService')) {
             $json['elementsHTML'] = ElementsList::widget();
             $json['count'] = $cartModel->getCount();
             $json['price'] = $cartModel->getCostFormatted();

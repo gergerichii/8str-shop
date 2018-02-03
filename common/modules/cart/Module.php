@@ -30,12 +30,10 @@ class Module extends \yii\base\Module implements BootstrapInterface
             ];
         }
 
-        if (!$app->getComponents('cart')) {
+        if (!$app->get('cartService', false)) {
             $app->setComponents([
-                'cart' => [
-                    'class' => Cart::className(),
-                    'currency' => 'p.',
-                    'currencyPosition' => 'after',
+                'cartService' => [
+                    'class' => CartService::className(),
                 ],
             ]);
         }
@@ -47,13 +45,8 @@ class Module extends \yii\base\Module implements BootstrapInterface
         }
 
         $rules = [
-            [
-                'pattern' => 'cart/<_a:truncate|info|.{0}>',
-                'route' => 'cart/default/<_a>',
-                'defaults' => [
-                    '_a' => 'index',
-                ],
-            ],
+            'cart' => 'cart/default/index',
+            'cart/<_a:truncate|info>' => 'cart/default/<_a>',
             'cart/<_a:delete|create|update>' => 'cart/element/<_a>',
         ];
         if (count($urlManagers)) {

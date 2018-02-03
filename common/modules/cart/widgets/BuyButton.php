@@ -19,7 +19,10 @@ class BuyButton extends Widget
     public $htmlTag = 'a';
     public $options = null;
     public $addElementUrl = '/cart/element/create';
-
+    
+    /**
+     * @return bool|void
+     */
     public function init()
     {
         parent::init();
@@ -37,10 +40,13 @@ class BuyButton extends Widget
         if ($this->cssClass === NULL) {
             $this->cssClass = 'btn btn-success';
         }
-        
-        return true;
     }
     
+    /**
+     * @param array $config
+     *
+     * @return \common\modules\cart\widgets\BuyButton|\yii\base\Widget
+     */
     public static function begin($config = []) {
         $widget = parent::begin($config);
         
@@ -49,6 +55,9 @@ class BuyButton extends Widget
         return $widget;
     }
     
+    /**
+     * @return \common\modules\cart\widgets\BuyButton|\yii\base\Widget
+     */
     public static function end() {
         $widget = array_pop(static::$stack);
         $widget->text = ob_get_clean();
@@ -56,6 +65,9 @@ class BuyButton extends Widget
         return parent::end();
     }
     
+    /**
+     * @return bool|string
+     */
     public function run()
     {
         if (!is_object($this->model) | !$this->model instanceof CartElement) {

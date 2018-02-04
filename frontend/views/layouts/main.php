@@ -30,10 +30,7 @@ AppAsset::register($this);
         <?=$this->renderFile('@app/views/layouts/pieces/header.php')?>
         <section id="content">
             <?= Alert::widget() ?>
-            <?= !empty($this->params['breadcrumbs'])
-                ? $this->renderFile('@app/views/layouts/pieces/breadcrumbs.php') :
-                null
-            ?>
+            <?= $this->renderFile('@app/views/layouts/pieces/breadcrumbs.php') ?>
             <?= $content ?>
         </section><!-- End #content -->
         <?=$this->renderFile('@app/views/layouts/pieces/footer.php')?>

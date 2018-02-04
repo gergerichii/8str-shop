@@ -51,13 +51,20 @@ class Module extends \yii\base\Module implements BootstrapInterface
 
         $rules = [
             [
-                'pattern' => 'catalog/<catalogPath:[\w\-\.,/_]+?>/<productId:\d+>',
-                'route' => '/catalog/default/product',
+                'pattern' => 'catalog/<catalogPath:[\w\-\.,/_]*?/[^\d]*$|[\w\-\.,_]+>',
+                'route' => '/catalog/default/index',
+                'defaults' => [
+                    'catalogPath' => ''
+                ],
                 'encodeParams' => false,
             ],
             [
-                'pattern' => 'catalog/<catalogPath:[\w\-\.,/_]*?>',
-                'route' => '/catalog/default/index',
+                'pattern' => 'catalog/<catalogPath:[\w\-\.,/_]+?>/<productId:\d+>',
+                'route' => '/catalog/default/product',
+                'defaults' => [
+                    'catalogPath' => '',
+                    'productId' => '',
+                ],
                 'encodeParams' => false,
             ],
             'catalog' => 'catalog/default/index/',

@@ -45,9 +45,9 @@ class Module extends \yii\base\Module implements BootstrapInterface
         }
 
         $rules = [
-            'cart' => 'cart/default/index',
-            'cart/<_a:truncate|info>' => 'cart/default/<_a>',
-            'cart/<_a:delete|create|update>' => 'cart/element/<_a>',
+            'cart' => '/cart/default/index',
+            'cart/<_a:truncate|info>' => '/cart/default/<_a>',
+            'cart/<_a:delete|create|update>' => '/cart/element/<_a>',
         ];
         if (count($urlManagers)) {
             foreach ($urlManagers as $urlManager) {

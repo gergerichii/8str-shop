@@ -3,6 +3,7 @@
 namespace common\modules\catalog\models;
 
 use common\helpers\CatalogHelper;
+use common\models\entities\User;
 use Yii;
 use yii\base\ErrorException;
 use yii\base\InvalidConfigException;

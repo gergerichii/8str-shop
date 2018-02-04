@@ -1,6 +1,8 @@
 <?php
 namespace common\modules\cart\widgets; 
 
+use common\modules\cart\assets\WidgetAsset;
+use common\modules\cart\interfaces\CartElement;
 use yii\helpers\Url;
 use yii\helpers\Html;
 
@@ -8,19 +10,20 @@ class ChangeCount extends \yii\base\Widget
 {
     public $model = NULL;
     public $lineSelector = 'li'; //Селектор материнского элемента, где выводится элемент
-    public $downArr = '⟨';
-    public $upArr = '⟩';
+    public $downArr = '⟨ ';
+    public $upArr = ' ⟩';
     public $cssClass = 'dvizh-change-count';
     public $defaultValue = 1;
     public $showArrows = true;
     public $actionUpdateUrl = '/cart/element/update';
     public $customView = false; // for example '@frontend/views/custom/changeCountLayout'
+    public $tag = 'span';
 
     public function init()
     {
         parent::init();
 
-        \common\modules\cart\assets\WidgetAsset::register($this->getView());
+        WidgetAsset::register($this->getView());
         
         return true;
     }
@@ -34,7 +37,7 @@ class ChangeCount extends \yii\base\Widget
             $downArr = $upArr = '';
         }
         
-        if(!$this->model instanceof \common\modules\cart\interfaces\CartElement) {
+        if(!$this->model instanceof CartElement) {
             $input = Html::activeTextInput($this->model, 'count', [
                 'type' => 'number',
                 'class' => 'dvizh-cart-element-count',
@@ -57,7 +60,7 @@ class ChangeCount extends \yii\base\Widget
                 'defaultValue' => $this->defaultValue,
             ]);
         } else {
-            return Html::tag('div', $downArr.$input.$upArr, ['class' => $this->cssClass]);
+            return Html::tag($this->tag, $downArr.$input.$upArr, ['class' => $this->cssClass]);
         }
     }
 }

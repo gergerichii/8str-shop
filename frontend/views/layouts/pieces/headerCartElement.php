@@ -21,14 +21,20 @@ try{
 
 ?>
 <li class="item clearfix">
-    <a href="#" title="Delete item" class="delete-item"><i class="fa fa-times"></i></a>
-    <a href="#" title="Edit item" class="edit-item"><i class="fa fa-pencil"></i></a>
+    <?php DeleteButton::begin([
+        'model' => $model,
+        'deleteElementUrl' => $controllerActions['delete'],
+        'lineSelector' => 'li.item.clearfix',
+        'cssClass' => 'delete delete-item'
+    ])?>
+        <i class="fa fa-times"></i>
+    <?php DeleteButton::end(); ?>
     <figure>
         <a href="<?= $productUrl ?>"><img src="<?= $image ?>" alt="<?= (string) $product ?>"></a>
     </figure>
     <div class="dropdown-cart-details">
         <p class="item-name">
-        <a href="<?= $productUrl ?>"><?= $name ?></a>
+            <a href="<?= $productUrl ?>"><?= $name ?></a>
         </p>
         <p>
             <?= ChangeCount::widget([
@@ -36,10 +42,23 @@ try{
                             'showArrows' => $showCountArrows,
                             'actionUpdateUrl' => $controllerActions['update'],
                         ]); ?>
-            <span class="item-price"><?= ElementPrice::widget(['model' => $model]); ?></span>
+            X<span class="item-price"><?= ElementPrice::widget(['model' => $model]); ?></span>
         </p>
     </div><!-- End .dropdown-cart-details -->
 </li>
+
+
+
+
+
+
+
+
+
+
+
+
+
 <?php return; ?>
 <li class="dvizh-cart-row ">
     <div class=" row">

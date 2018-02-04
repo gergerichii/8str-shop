@@ -1,6 +1,7 @@
 <?php
 namespace common\modules\cart\widgets;
 
+use common\modules\cart\assets\WidgetAsset;
 use yii\helpers\Html;
 use yii\helpers\Url;
 
@@ -12,11 +13,37 @@ class DeleteButton extends \yii\base\Widget
     public $lineSelector = 'li';  //Селектор материнского элемента, где выводится элемент
     public $deleteElementUrl = '/cart/element/delete';
 
+    /**
+     * @param array $config
+     *
+     * @return \common\modules\cart\widgets\BuyButton|\yii\base\Widget
+     */
+    public static function begin($config = []) {
+        $widget = parent::begin($config);
+        
+        ob_start();
+        
+        return $widget;
+    }
+    
+    /**
+     * @return \common\modules\cart\widgets\BuyButton|\yii\base\Widget
+     */
+    public static function end() {
+        $widget = array_pop(static::$stack);
+        $widget->text = ob_get_clean();
+        array_push(static::$stack, $widget);
+        return parent::end();
+    }
+    
+    /**
+     * @return bool|void
+     */
     public function init()
     {
         parent::init();
 
-        \common\modules\cart\assets\WidgetAsset::register($this->getView());
+        WidgetAsset::register($this->getView());
 
         if ($this->text == NULL) {
             $this->text = '╳';

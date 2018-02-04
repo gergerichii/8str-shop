@@ -45,6 +45,7 @@ class ElementsList extends \yii\base\Widget
             'showCountArrows' => $this->showCountArrows,
             'elementView' => $this->elementView,
             'controllerActions' => $this->controllerActions,
+            'listOnly' => $this->listOnly,
         ];
 
         foreach($paramsArr as $key => $value) {
@@ -117,12 +118,8 @@ class ElementsList extends \yii\base\Widget
                 $list = Html::tag('div', $cart, ['class' => 'dropdown-menu', 'aria-labelledby' => 'dvizh-cart-drop']);
                 $cart = Html::tag('div', $button.$list, ['class' => 'dvizh-cart-dropdown dropdown']);
             }
-    
-            return Html::tag('div', $cart, ['class' => 'dvizh-cart-block']);
-        } else {
-            return $cart;
         }
-    
+        return Html::tag('div', $cart, ['class' => 'dvizh-cart-block']);
     }
 
     private function _row($item)

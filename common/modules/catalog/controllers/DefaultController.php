@@ -65,7 +65,7 @@ class DefaultController extends BaseFrontendController
         /** @var Module $catalog */
         $catalog = $this->module;
 
-        if (!$catalog->productHasRubric($product, $catalogPath)) {
+        if (!$product || !$catalog->productHasRubric($product, $catalogPath)) {
             throw new NotFoundHttpException('Продукт не найден');
         }
 

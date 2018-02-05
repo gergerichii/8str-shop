@@ -51,7 +51,7 @@ class BuyButton extends Widget
         $model = $this->model;
         return Html::tag($this->htmlTag, $this->text, [
             'href' => Url::toRoute($this->addElementUrl),
-            'class' => "dvizh-cart-buy-button dvizh-cart-buy-button{$this->model->getCartId()} {$this->cssClass}",
+            'class' => "shop-cart-buy-button shop-cart-buy-button{$this->model->getCartId()} {$this->cssClass}",
             'data-id' => $model->getCartId(),
             'data-url' => Url::toRoute($this->addElementUrl),
             'data-role' => 'cart-buy-button',

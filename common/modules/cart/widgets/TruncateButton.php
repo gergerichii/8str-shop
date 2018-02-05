@@ -28,7 +28,7 @@ class TruncateButton extends \yii\base\Widget
     {
         return Html::a(Html::encode($this->text), [$this->truncateCartUrl],
             [
-                'class' => 'dvizh-cart-truncate-button ' . $this->cssClass,
+                'class' => 'shop-cart-truncate-button ' . $this->cssClass,
                 'data-role' => 'truncate-cart-button',
                 'data-url' => Url::toRoute($this->truncateCartUrl),
             ]);

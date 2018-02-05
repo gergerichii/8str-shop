@@ -13,6 +13,14 @@ $config = [
     ],
     'vendorPath' => dirname(dirname(__DIR__)) . '/vendor',
     'components' => [
+        'i18n' => [
+            'translations' => [
+                'app.common' => [
+                    'class' => 'yii\i18n\PhpMessageSource',
+                    'basePath' => '@common/messages',
+                ]
+            ],
+        ],
         'cache' => [
             'class' => 'yii\caching\FileCache',
         ],

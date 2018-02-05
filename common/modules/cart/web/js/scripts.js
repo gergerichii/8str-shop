@@ -1,8 +1,8 @@
-if (typeof dvizh == "undefined" || !dvizh) {
-    var dvizh = {};
+if (typeof shop == "undefined" || !shop) {
+    var shop = {};
 }
 
-dvizh.cart = {
+shop.cart = {
     init: function () {
 
         cartElementsCount = '[data-role=cart-element-count]';
@@ -10,8 +10,8 @@ dvizh.cart = {
         deleteElementButton = '[data-role=cart-delete-button]';
         truncateCartButton = '[data-role=truncate-cart-button]';
 
-        dvizh.cart.csrf = jQuery('meta[name=csrf-token]').attr("content");
-        dvizh.cart.csrf_param = jQuery('meta[name=csrf-param]').attr("content");
+        shop.cart.csrf = jQuery('meta[name=csrf-token]').attr("content");
+        shop.cart.csrf_param = jQuery('meta[name=csrf-param]').attr("content");
 
         jQuery(document).on('change', cartElementsCount, function () {
 
@@ -26,8 +26,13 @@ dvizh.cart = {
             cartElementId = jQuery(self).data('id');
             cartElementCount = jQuery(self).val();
 
-            dvizh.cart.changeElementCount(cartElementId, cartElementCount, url);
-            dvizh.cart.changeElementCost(cartElementId, cartElementCount, url);
+            jQuery('.shop-cart-element-cost' + cartElementId).css({'opacity': '0.3'});
+            $(document).one('shopCartChanged', function(event, data){
+                jQuery('.shop-cart-element-cost' + data.elementId).css({'opacity': '1'});
+                jQuery('.shop-cart-element-cost' + data.elementId).html(data.element_cost);
+            });
+            shop.cart.changeElementCount(cartElementId, cartElementCount, url);
+            // shop.cart.changeElementCost(cartElementId, cartElementCount, url);
         });
 
         jQuery(document).on('click', buyElementButton, function () {
@@ -40,7 +45,7 @@ dvizh.cart = {
                 itemPrice = jQuery(self).data('price'),
                 itemOptions = jQuery(self).data('options');
 
-            dvizh.cart.addElement(itemModelName, itemId, itemCount, itemPrice, itemOptions, url);
+            shop.cart.addElement(itemModelName, itemId, itemCount, itemPrice, itemOptions, url);
 
             return false;
         });
@@ -50,7 +55,7 @@ dvizh.cart = {
             var self = this,
                 url = jQuery(self).data('url');
 
-            dvizh.cart.truncate(url);
+            shop.cart.truncate(url);
             
             return false;
         });
@@ -63,19 +68,22 @@ dvizh.cart = {
                 url = jQuery(self).data('url'),
                 elementId = jQuery(self).data('id');
 
-            dvizh.cart.deleteElement(elementId, url);
-
-            if (lineSelector = jQuery(self).data('line-selector')) {
-                jQuery(self).parents(lineSelector).last().hide('slow');
-            }
+            shop.cart.deleteElement(elementId, url);
+            
+            $('[data-role=cart-delete-button][data-id=' + elementId + ']').each(function(){
+                self = this;
+                if (lineSelector = jQuery(self).data('line-selector')) {
+                    jQuery(self).parents(lineSelector).last().hide('slow');
+                }
+            });
 
             return false;
         });
         
-        jQuery(document).on('click', '.dvizh-arr', this.changeInputValue);
-        jQuery(document).on('change', '.dvizh-cart-element-before-count', this.changeBeforeElementCount);
-        jQuery(document).on('change', '.dvizh-option-values-before', this.changeBeforeElementOptions);
-        jQuery(document).on('change', '.dvizh-option-values', this.changeElementOptions);
+        jQuery(document).on('click', '.shop-arr', this.changeInputValue);
+        jQuery(document).on('change', '.shop-cart-element-before-count', this.changeBeforeElementCount);
+        jQuery(document).on('change', '.shop-option-values-before', this.changeBeforeElementOptions);
+        jQuery(document).on('change', '.shop-option-values', this.changeElementOptions);
 
         return true;
     },
@@ -91,10 +99,10 @@ dvizh.cart = {
         var options = {};
 
         if (jQuery(this).is('select')) {
-            var els = jQuery('.dvizh-cart-option' + id);
+            var els = jQuery('.shop-cart-option' + id);
         }
         else {
-            var els = jQuery('.dvizh-cart-option' + id + ':checked');
+            var els = jQuery('.shop-cart-option' + id + ':checked');
             console.log('radio');
         }
 
@@ -109,14 +117,14 @@ dvizh.cart = {
         data.CartElement.id = id;
         data.CartElement.options = JSON.stringify(options);
 
-        dvizh.cart.sendData(data, jQuery(this).data('href'));
+        shop.cart.sendData(data, jQuery(this).data('href'));
 
         return false;
     },
     changeBeforeElementOptions: function () {
         var id = jQuery(this).data('id');
         var filter_id = jQuery(this).data('filter-id');
-        var buyButton = jQuery('.dvizh-cart-buy-button' + id);
+        var buyButton = jQuery('.shop-cart-buy-button' + id);
 
         var options = jQuery(buyButton).data('options');
         if (!options) {
@@ -134,7 +142,7 @@ dvizh.cart = {
     },
     deleteElement: function (elementId, url) {
 
-        dvizh.cart.sendData({elementId: elementId}, url);
+        shop.cart.sendData({elementId: elementId}, url);
 
         return false;
     },
@@ -142,7 +150,7 @@ dvizh.cart = {
         var val = parseInt(jQuery(this).siblings('input').val());
         var input = jQuery(this).siblings('input');
 
-        if (jQuery(this).hasClass('dvizh-downArr')) {
+        if (jQuery(this).hasClass('shop-downArr')) {
             if (val <= 0) {
                 return false;
             }
@@ -162,15 +170,15 @@ dvizh.cart = {
         }
 
         var id = jQuery(this).data('id');
-        var buyButton = jQuery('.dvizh-cart-buy-button' + id);
+        var buyButton = jQuery('.shop-cart-buy-button' + id);
         jQuery(buyButton).data('count', jQuery(this).val());
         jQuery(buyButton).attr('data-count', jQuery(this).val());
 
         return true;
     },
     changeElementCost: function(cartElementId, cartElementCount) {
-        var newCost = jQuery('.dvizh-cart-element-price'+cartElementId).html() * cartElementCount;
-        jQuery('.dvizh-cart-element-cost'+cartElementId).html(newCost);
+        var newCost = jQuery('.shop-cart-element-price'+cartElementId).html() * cartElementCount;
+        jQuery('.shop-cart-element-cost'+cartElementId).html(newCost);
     },
     changeElementCount: function (cartElementId, cartElementCount, url) {
 
@@ -179,7 +187,7 @@ dvizh.cart = {
         data.CartElement.id = cartElementId;
         data.CartElement.count = cartElementCount;
 
-        dvizh.cart.sendData(data, url);
+        shop.cart.sendData(data, url);
 
         return false;
     },
@@ -193,12 +201,12 @@ dvizh.cart = {
         data.CartElement.price = itemPrice;
         data.CartElement.options = itemOptions;
 
-        dvizh.cart.sendData(data, url);
+        shop.cart.sendData(data, url);
 
         return false;
     },
     truncate: function (url) {
-        dvizh.cart.sendData({}, url);
+        shop.cart.sendData({}, url);
         return false;
     },
     sendData: function (data, link) {
@@ -208,25 +216,25 @@ dvizh.cart = {
 
         jQuery(document).trigger("sendDataToCart", data);
 
-        data.elementsListWidgetParams = dvizh.cart.elementsListWidgetParams;
-        data[dvizh.cart.csrf_param] = dvizh.cart.csrf;
+        data.elementsListWidgetParams = shop.cart.elementsListWidgetParams;
+        data[shop.cart.csrf_param] = shop.cart.csrf;
 
-        jQuery('.dvizh-cart-block').css({'opacity': '0.3'});
-        jQuery('.dvizh-cart-count').css({'opacity': '0.3'});
-        jQuery('.dvizh-cart-price').css({'opacity': '0.3'});
+        jQuery('.shop-cart-block').css({'opacity': '0.3'});
+        jQuery('.shop-cart-count').css({'opacity': '0.3'});
+        jQuery('.shop-cart-price').css({'opacity': '0.3'});
 
         jQuery.post(link, data,
             function (json) {
-                jQuery('.dvizh-cart-block').css({'opacity': '1'});
-                jQuery('.dvizh-cart-count').css({'opacity': '1'});
-                jQuery('.dvizh-cart-price').css({'opacity': '1'});
+                jQuery('.shop-cart-block').css({'opacity': '1'});
+                jQuery('.shop-cart-count').css({'opacity': '1'});
+                jQuery('.shop-cart-price').css({'opacity': '1'});
 
                 if (json.result == 'fail') {
                     console.log(json.error);
                 }
                 else {
-                    dvizh.cart.renderCart(json);
-                    $(document).trigger('dvizhCartChanged');
+                    shop.cart.renderCart(json);
+                    $(document).trigger('shopCartChanged', json);
                 }
 
             }, "json");
@@ -242,9 +250,9 @@ dvizh.cart = {
                 }, "json");
         }
 
-        jQuery('.dvizh-cart-block').replaceWith(json.elementsHTML);
-        jQuery('.dvizh-cart-count').html(json.count);
-        jQuery('.dvizh-cart-price').html(json.price);
+        jQuery('.shop-cart-block').replaceWith(json.elementsHTML);
+        jQuery('.shop-cart-count').html(json.count);
+        jQuery('.shop-cart-price').html(json.price);
 
         jQuery(document).trigger("renderCart", json);
 
@@ -253,6 +261,6 @@ dvizh.cart = {
 };
 
 $(function() {
-    dvizh.cart.init();
+    shop.cart.init();
 });
 

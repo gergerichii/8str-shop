@@ -12,7 +12,9 @@ class ChangeCount extends \yii\base\Widget
     public $lineSelector = 'li'; //Селектор материнского элемента, где выводится элемент
     public $downArr = '⟨ ';
     public $upArr = ' ⟩';
-    public $cssClass = 'dvizh-change-count';
+    public $downArrCssClass = '';
+    public $upArrCssClass = '';
+    public $cssClass = 'shop-change-count';
     public $defaultValue = 1;
     public $showArrows = true;
     public $actionUpdateUrl = '/cart/element/update';
@@ -31,8 +33,8 @@ class ChangeCount extends \yii\base\Widget
     public function run()
     {
         if($this->showArrows) {
-            $downArr = Html::a($this->downArr, '#', ['class' => 'dvizh-arr dvizh-downArr']);
-            $upArr = Html::a($this->upArr, '#', ['class' => 'dvizh-arr dvizh-upArr']);
+            $downArr = Html::a($this->downArr, '#', ['class' => 'shop-arr shop-downArr ' . $this->downArrCssClass]);
+            $upArr = Html::a($this->upArr, '#', ['class' => 'shop-arr shop-upArr ' . $this->upArrCssClass]);
         } else {
             $downArr = $upArr = '';
         }
@@ -40,7 +42,7 @@ class ChangeCount extends \yii\base\Widget
         if(!$this->model instanceof CartElement) {
             $input = Html::activeTextInput($this->model, 'count', [
                 'type' => 'number',
-                'class' => 'dvizh-cart-element-count',
+                'class' => 'shop-cart-element-count',
                 'data-role' => 'cart-element-count',
                 'data-line-selector' => $this->lineSelector,
                 'data-id' => $this->model->getId(),
@@ -48,7 +50,7 @@ class ChangeCount extends \yii\base\Widget
             ]);
         } else {
             $input = Html::input('number', 'count', $this->defaultValue, [
-                'class' => 'dvizh-cart-element-before-count',
+                'class' => 'shop-cart-element-before-count',
                 'data-line-selector' => $this->lineSelector,
                 'data-id' => $this->model->getCartId(),
             ]);

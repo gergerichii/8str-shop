@@ -23,13 +23,13 @@ $addBc = !empty($this->params['breadcrumbs']) ? $this->params['breadcrumbs'] : [
 /** @var \yii\web\View $this */
 $beginingBc = [];
 if ($module !== $app) {
-    $bc['label'] = \Yii::t('app', $module->id);
+    $bc['label'] = \Yii::t('app.common', $module->id);
     $bc['url'] = [Url::toRoute('/' . $module->id)];
     $beginingBc[] = $bc;
 }
 
 if($controller->id !== 'default') {
-    $bc['label'] = \Yii::t('app', $controller->id);
+    $bc['label'] = \Yii::t('app.common', $controller->id);
     $bc['url'] = [Url::toRoute("/{$module->id}/{$controller->id}")];
     $beginingBc[] = $bc;
 }
@@ -37,7 +37,7 @@ if($controller->id !== 'default') {
 if($action->id !== $controller->defaultAction) {
     $url = Url::toRoute("/{$module->id}/{$controller->id}/{$action->id}");
     if ($beginingBc[count($beginingBc) - 1]['url'][0] !== $url) {
-        $bc['label'] = \Yii::t('app', $action->id);
+        $bc['label'] = \Yii::t('app.common', $action->id);
         $bc['url'] = [$url];
         $beginingBc[] = $bc;
     }

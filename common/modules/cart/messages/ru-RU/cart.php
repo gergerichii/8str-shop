@@ -20,7 +20,7 @@ return [
     'Empty' => 'Пусто',
     'Delete' => 'Удалить',
     'Total' => 'Итого',
-    'Cart (<span class="dvizh-cart-price">{p}</span>)' => 'Корзина (<span class="dvizh-cart-price">{p}</span>)',
+    'Cart (<span class="shop-cart-price">{p}</span>)' => 'Корзина (<span class="shop-cart-price">{p}</span>)',
     'Your cart empty' => 'Ваша корзина пуста',
     'Offer' => 'Оформить',
     'Cart' => 'Корзина',

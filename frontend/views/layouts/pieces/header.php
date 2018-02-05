@@ -83,7 +83,8 @@ use yii\helpers\Url;
                                     </ul><!-- .dropdown-cart-total -->
                                     <div class="dropdown-cart-action">
                                         <p><a href="<?= Url::toRoute('/cart/default/index') ?>" class="btn btn-custom-2 btn-block">Корзина</a></p>
-                                        <p><a href="<?= Url::toRoute('order/default/checkout') ?>" class="btn btn-custom btn-block">Оформить</a></p>
+                                        <p><a href="<?= Url::toRoute('/order/default/index') ?>" class="btn
+                                        btn-custom btn-block">Оформить</a></p>
                                     </div><!-- End .dropdown-cart-action -->
                                 </div><!-- End .dropdown-cart -->
                             </div><!-- End .btn-group -->

@@ -54,7 +54,7 @@ class ElementsList extends \yii\base\Widget
             }
         }
 
-        $this->getView()->registerJs("dvizh.cart.elementsListWidgetParams = ".json_encode($paramsArr));
+        $this->getView()->registerJs("shop.cart.elementsListWidgetParams = ".json_encode($paramsArr));
 
         if ($this->type == NULL) {
             $this->type = self::TYPE_FULL;
@@ -69,7 +69,7 @@ class ElementsList extends \yii\base\Widget
         }
 
         if ($this->textButton == NULL) {
-            $this->textButton = yii::t('cart', 'Cart (<span class="dvizh-cart-price">{p}</span>)', ['c' => $this->cart->getCount(), 'p' => $this->cart->getCostFormatted()]);
+            $this->textButton = yii::t('cart', 'Cart (<span class="shop-cart-price">{p}</span>)', ['c' => $this->cart->getCount(), 'p' => $this->cart->getCostFormatted()]);
         }
 
         if ($this->currency == NULL) {
@@ -85,41 +85,41 @@ class ElementsList extends \yii\base\Widget
         $elements = $this->cart->elements;
 
         if (empty($elements)) {
-            $cart = Html::tag('div', yii::t('cart', 'Your cart empty'), ['class' => 'dvizh-cart dvizh-empty-cart']);
+            $cart = Html::tag('div', yii::t('cart', 'Your cart empty'), ['class' => 'shop-cart shop-empty-cart']);
         } else {
             $cart = Html::ul($elements, ['item' => function($item, $index) {
                 return $this->_row($item);
-            }, 'class' => 'dvizh-cart-list']);
+            }, 'class' => 'shop-cart-list']);
 
             if (!$this->listOnly) {
                 $bottomPanel = '';
     
                 if ($this->showTotal) {
-                    $bottomPanel .= Html::tag('div', Yii::t('cart', 'Total') . ': ' . yii::$app->get('cartService')->cost . ' '.yii::$app->get('cartService')->currency, ['class' => 'dvizh-cart-total-row']);
+                    $bottomPanel .= Html::tag('div', Yii::t('cart', 'Total') . ': ' . yii::$app->get('cartService')->cost . ' '.yii::$app->get('cartService')->currency, ['class' => 'shop-cart-total-row']);
                 }
     
                 if($this->offerUrl && $this->showOffer) {
-                    $bottomPanel .= Html::a(yii::t('cart', 'Offer'), $this->offerUrl, ['class' => 'dvizh-cart-offer-button btn btn-success']);
+                    $bottomPanel .= Html::a(yii::t('cart', 'Offer'), $this->offerUrl, ['class' => 'shop-cart-offer-button btn btn-success']);
                 }
     
                 if($this->showTruncate) {
                     $bottomPanel .= TruncateButton::widget();
                 }
     
-                $cart .= Html::tag('div', $bottomPanel, ['class' => 'dvizh-cart-bottom-panel']);
+                $cart .= Html::tag('div', $bottomPanel, ['class' => 'shop-cart-bottom-panel']);
             }
         }
         
         if (!$this->listOnly) {
-            $cart = Html::tag('div', $cart, ['class' => 'dvizh-cart']);
+            $cart = Html::tag('div', $cart, ['class' => 'shop-cart']);
     
             if ($this->type == self::TYPE_DROPDOWN) {
-                $button = Html::button($this->textButton.Html::tag('span', '', ["class" => "caret"]), ['class' => 'btn dropdown-toggle', 'id' => 'dvizh-cart-drop', 'type' => "button", 'data-toggle' => "dropdown", 'aria-haspopup' => 'true', 'aria-expanded' => "false"]);
-                $list = Html::tag('div', $cart, ['class' => 'dropdown-menu', 'aria-labelledby' => 'dvizh-cart-drop']);
-                $cart = Html::tag('div', $button.$list, ['class' => 'dvizh-cart-dropdown dropdown']);
+                $button = Html::button($this->textButton.Html::tag('span', '', ["class" => "caret"]), ['class' => 'btn dropdown-toggle', 'id' => 'shop-cart-drop', 'type' => "button", 'data-toggle' => "dropdown", 'aria-haspopup' => 'true', 'aria-expanded' => "false"]);
+                $list = Html::tag('div', $cart, ['class' => 'dropdown-menu', 'aria-labelledby' => 'shop-cart-drop']);
+                $cart = Html::tag('div', $button.$list, ['class' => 'shop-cart-dropdown dropdown']);
             }
         }
-        return Html::tag('div', $cart, ['class' => 'dvizh-cart-block']);
+        return Html::tag('div', $cart, ['class' => 'shop-cart-block']);
     }
 
     private function _row($item)

@@ -32,13 +32,13 @@ class ChangeOptions extends \yii\base\Widget
     {
         if ($this->model instanceof \common\modules\cart\interfaces\CartElement) {
             $optionsList = $this->model->getCartOptions();
-            $changerCssClass = 'dvizh-option-values-before';
+            $changerCssClass = 'shop-option-values-before';
             $id = $this->model->getCartId();
         } else {
             $optionsList = $this->model->getModel()->getCartOptions();
             $this->defaultValues = $this->model->getOptions();
             $id = $this->model->getId();
-            $changerCssClass = 'dvizh-option-values';
+            $changerCssClass = 'shop-option-values';
         }
 
         if (!empty($optionsList)) {
@@ -48,7 +48,7 @@ class ChangeOptions extends \yii\base\Widget
                     $optionData = [];
                 }
                 
-                $cssClass = "{$changerCssClass} dvizh-cart-option{$id} ";
+                $cssClass = "{$changerCssClass} shop-cart-option{$id} ";
 
                 $optionsArray = ['' => $optionData['name']];
                 if (isset($optionData['variants'])) {
@@ -65,7 +65,7 @@ class ChangeOptions extends \yii\base\Widget
                         ['data-href' => Url::toRoute(["/cart/element/update"]), 'data-filter-id' => $optionId, 'data-name' => Html::encode($optionData['name']), 'data-id' => $id, 'class' => "form-control $cssClass"]
                     );
                 } else {
-                    $list = Html::tag('div', Html::tag('strong', $optionData['name']), ['class' => 'dvizh-option-heading']);
+                    $list = Html::tag('div', Html::tag('strong', $optionData['name']), ['class' => 'shop-option-heading']);
                     $list .= Html::radioList('cart_options' . $id . '-' . $i,
                         $this->_defaultValue($optionId),
                         $optionsArray,
@@ -73,14 +73,14 @@ class ChangeOptions extends \yii\base\Widget
                     );
                 }
 
-                $options[] = Html::tag('div', $list, ['class' => "dvizh-option"]);
+                $options[] = Html::tag('div', $list, ['class' => "shop-option"]);
                 $i++;
             }
         } else {
             return null;
         }
 
-        return Html::tag('div', implode('', $options), ['class' => 'dvizh-change-options ' . $this->cssClass]);
+        return Html::tag('div', implode('', $options), ['class' => 'shop-change-options ' . $this->cssClass]);
     }
 
     private function _defaultValue($option)

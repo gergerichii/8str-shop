@@ -80,11 +80,12 @@ class ElementController extends Controller
     {
         $json = ['result' => 'undefined', 'error' => false];
 
-        $cart = yii::$app->get('cartService');
+        $cartService = yii::$app->get('cartService');
         
         $postData = yii::$app->request->post();
 
-        $elementModel = $cart->getElementById($postData['CartElement']['id']);
+        /** @var \common\modules\cart\models\CartElement $elementModel */
+        $elementModel = $cartService->getElementById($postData['CartElement']['id']);
         
         if(isset($postData['CartElement']['count'])) {
             $elementModel->setCount($postData['CartElement']['count'], true);
@@ -94,6 +95,7 @@ class ElementController extends Controller
             $elementModel->setOptions($postData['CartElement']['options'], true);
         }
         
+        $json['element_cost'] = yii::$app->formatter->asCurrency($elementModel->getCost(false));
         $json['elementId'] = $elementModel->getId();
         $json['result'] = 'success';
 
@@ -102,6 +104,7 @@ class ElementController extends Controller
 
     private function _cartJson($json)
     {
+        /** @var \common\modules\cart\CartService $cartModel */
         if ($cartModel = yii::$app->get('cartService')) {
             if(!$elementsListWidgetParams = yii::$app->request->post('elementsListWidgetParams')) {
                 $elementsListWidgetParams = [];

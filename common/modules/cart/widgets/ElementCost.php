@@ -17,8 +17,9 @@ class ElementCost extends \yii\base\Widget
 
     public function run()
     {
-        return Html::tag($this->htmlTag, $this->model->getCost(), [
-            'class' => "dvizh-cart-element-cost{$this->model->getId()} {$this->cssClass}",
+        $cost = \Yii::$app->formatter->asCurrency($this->model->getCost());
+        return Html::tag($this->htmlTag, $cost, [
+            'class' => "shop-cart-element-cost{$this->model->getId()} {$this->cssClass}",
         ]);
     }
 }

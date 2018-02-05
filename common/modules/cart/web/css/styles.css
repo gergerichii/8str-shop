@@ -1,33 +1,33 @@
-.dvizh-cart-block .dropdown-menu {
+.shop-cart-block .dropdown-menu {
     min-width: 280px;
     padding: 10px;
 }
 
-.dvizh-cart-block .dropdown-menu {
+.shop-cart-block .dropdown-menu {
     padding: 5px;
 }
 
-.dvizh-cart .dvizh-cart-delete-button {
+.shop-cart .shop-cart-delete-button {
     padding: 4px;
     margin: 1px;
 }
 
-.dvizh-cart ul {
+.shop-cart ul {
     list-style: none;
     padding: 1px;
     margin: 1px;
 }
 
-.dvizh-change-count input {
+.shop-change-count input {
     text-align: center;
     width: 40px;
 }
 
-.dvizh-cart-show-options {
+.shop-cart-show-options {
     font-size: 80%;
 }
 
-.dvizh-cart-row {
+.shop-cart-row {
     margin-top: 3px;
     padding-bottom: 3px;
     border-bottom: 1px solid #ccc;

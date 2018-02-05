@@ -6,7 +6,7 @@ use common\modules\cart\widgets\ElementPrice;
 use common\modules\cart\widgets\ElementCost;
 
 ?>
-<li class="dvizh-cart-row ">
+<li class="shop-cart-row ">
     <div class=" row">
         <div class="col-xs-8">
             <?= $name ?>
@@ -20,7 +20,7 @@ use common\modules\cart\widgets\ElementCost;
                         $productOptions .= Html::tag('div', Html::tag('strong', $option) . ':' . $value);
                     }
                 }
-                echo Html::tag('div', $productOptions, ['class' => 'dvizh-cart-show-options']);
+                echo Html::tag('div', $productOptions, ['class' => 'shop-cart-show-options']);
             } ?>
 
             <?php if(!empty($otherFields)) {
@@ -43,7 +43,7 @@ use common\modules\cart\widgets\ElementCost;
         <?= Html::tag('div', DeleteButton::widget([
             'model' => $model,
             'deleteElementUrl' => $controllerActions['delete'],
-            'lineSelector' => 'dvizh-cart-row ',
+            'lineSelector' => 'shop-cart-row ',
             'cssClass' => 'delete']),
             ['class' => 'shop-cart-delete col-xs-1']);
         ?>

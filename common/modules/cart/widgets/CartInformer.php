@@ -67,12 +67,12 @@ class CartInformer extends Widget
 
         if($this->showOldPrice == false | $cartService->cost == $cartService->getCost(false)) {
             $this->text = str_replace(['{c}', '{p}'],
-                ['<span class="dvizh-cart-count">'.$cartService->getCount().'</span>', '<strong class="dvizh-cart-price">'.$cartService->getCostFormatted().'</strong>'],
+                ['<span class="shop-cart-count">'.$cartService->getCount().'</span>', '<strong class="shop-cart-price">'.$cartService->getCostFormatted().'</strong>'],
                 $this->text
             );
         } else {
             $this->text = str_replace(['{c}', '{p}'],
-                ['<span class="dvizh-cart-count">'.$cartService->getCount().'</span>', '<strong class="dvizh-cart-price"><s>'.round($cartService->getCost(false)).'</s>'.$cartService->getCostFormatted().'</strong>'],
+                ['<span class="shop-cart-count">'.$cartService->getCount().'</span>', '<strong class="shop-cart-price"><s>'.round($cartService->getCost(false)).'</s>'.$cartService->getCostFormatted().'</strong>'],
                 $this->text
             );
         }
@@ -82,7 +82,7 @@ class CartInformer extends Widget
         if ($this->htmlTag) {
             $ret = Html::tag($this->htmlTag, $this->text, [
                 'href' => $this->offerUrl,
-                'class' => "dvizh-cart-informer {$this->cssClass}",
+                'class' => "shop-cart-informer {$this->cssClass}",
             ]);
         } else {
             $ret = str_replace('{link}', $this->offerUrl, $ret);

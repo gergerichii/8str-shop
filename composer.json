@@ -7,7 +7,7 @@
     "license": "",
     "support": {
     },
-    "minimum-stability": "stable",
+    "minimum-stability": "dev",
     "require": {
         "php": ">=5.4.0",
         "yiisoft/yii2": "~2.0.6",
@@ -24,7 +24,8 @@
         "2amigos/yii2-translateable-behavior": "dev-master",
         "2amigos/yii2-transliterator-helper": "1.0.0",
         "2amigos/transliterator-helper": "dev-master",
-        "yii2mod/yii2-bootstrap-notify": "1.2"
+        "yii2mod/yii2-bootstrap-notify": "1.2",
+        "dvizh/yii2-order": "dev-master"
     },
     "require-dev": {
         "yiisoft/yii2-debug": "~2.0.0",

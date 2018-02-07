@@ -14,6 +14,7 @@ return [
             'migrationPath' => [
                 '@app/migrations',
                 '@common/modules/cart/migrations',
+                '@common/modules/order/migrations',
                 '@yii/web/migrations',
 //                '@yii/rbac/migrations',
 //                '@yii/log/migrations',

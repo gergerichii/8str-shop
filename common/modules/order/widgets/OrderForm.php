@@ -1,6 +1,7 @@
 <?php
 namespace common\modules\order\widgets;
 
+use common\modules\order\assets\OrderFormAsset;
 use yii\helpers\Url;
 use common\modules\order\models\Order;
 use common\modules\order\models\PaymentType;
@@ -17,7 +18,7 @@ class OrderForm extends \yii\base\Widget
     
     public function init()
     {
-        \common\modules\order\assets\OrderFormAsset::register($this->getView());
+        OrderFormAsset::register($this->getView());
         
         return parent::init();
     }

@@ -1,7 +1,13 @@
 <?php
 
 $config = [
-    'bootstrap' => ['log', 'cart', 'common\modules\order\Bootstrap'],
+    'bootstrap' => [
+        'log',
+        'files',
+        'catalog',
+        'cart',
+        'common\modules\order\Bootstrap',
+    ],
     'controllerMap' => [
     ],
     'components' => [
@@ -41,6 +47,12 @@ $config = [
         ],
     ],
     'modules' => [
+        'files' => [
+            'class' => 'common\modules\files\Module',
+        ],
+        'catalog' => [
+            'class' => 'common\modules\catalog\Module',
+        ],
         'cart' => [
             'class' => common\modules\cart\Module::className(),
         ],

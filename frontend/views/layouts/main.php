@@ -30,7 +30,15 @@ AppAsset::register($this);
         <?=$this->renderFile('@app/views/layouts/pieces/header.php')?>
         <section id="content">
             <?= Alert::widget() ?>
-            <?= $this->renderFile('@app/views/layouts/pieces/breadcrumbs.php') ?>
+            <?php if (\yii::$app->request->url !== \yii::$app->homeUrl): ?>
+            <div id="breadcrumb-container">
+                <div class="container">
+                    <?= \common\widgets\Breadcrumbs::widget([
+                        'links' => !empty($this->params['breadcrumbs']) ? $this->params['breadcrumbs'] : [],
+                    ]); ?>
+                </div>
+            </div>
+            <?php endif; ?>
             <?= $content ?>
         </section><!-- End #content -->
         <?=$this->renderFile('@app/views/layouts/pieces/footer.php')?>

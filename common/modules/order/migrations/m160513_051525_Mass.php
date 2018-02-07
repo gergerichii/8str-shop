@@ -3,7 +3,7 @@
 use yii\db\Schema;
 use yii\db\Migration;
 
-class m160513_051524_Mass extends Migration
+class m160513_051525_Mass extends Migration
 {
     public function safeUp()
     {
@@ -169,22 +169,29 @@ class m160513_051524_Mass extends Migration
             $this->insert('{{%order_shipping_type}}', [
                 'id' => '1',
                 'name' => 'Самовывоз',
-                'description' => '',
+                'description' => 'Самовывоз из офиса по адресу: г. Москва, Комсомольская пл. д.6. офис. 526',
                 'cost' => '0.00',
                 'order' => NULL,
             ]);
             $this->insert('{{%order_shipping_type}}', [
                 'id' => '2',
-                'name' => 'Доставка по России',
-                'description' => '',
-                'cost' => '0.00',
+                'name' => 'Доставка по Москве в пределах МКАД',
+                'description' => 'Доставка курьером в пределах МКАД',
+                'cost' => '350.00',
                 'order' => NULL,
             ]);
             $this->insert('{{%order_shipping_type}}', [
                 'id' => '3',
-                'name' => 'Доставка курьером по городу',
-                'description' => '',
-                'cost' => '0.00',
+                'name' => 'Доставка по Москве за пределы МКАД',
+                'description' => 'Доставка курьером за пределы МКАД',
+                'cost' => '600.00',
+                'order' => NULL,
+            ]);
+            $this->insert('{{%order_shipping_type}}', [
+                'id' => '4',
+                'name' => 'Доставка по России',
+                'description' => 'Доставка осуществляется до пункта приема груза транспортной компании',
+                'cost' => '350.00',
                 'order' => NULL,
             ]);
 
@@ -192,21 +199,28 @@ class m160513_051524_Mass extends Migration
             $this->insert('{{%order_payment_type}}', [
                 'id' => '1',
                 'name' => 'Наличный расчет',
-                'slug' => '',
+                'slug' => 'nal',
                 'widget' => '',
                 'order' => NULL,
             ]);
             $this->insert('{{%order_payment_type}}', [
                 'id' => '2',
-                'name' => 'Безналичный расчет',
-                'slug' => '',
+                'name' => 'Перевод на карту сбербанка',
+                'slug' => 'card2card',
                 'widget' => '',
                 'order' => NULL,
             ]);
             $this->insert('{{%order_payment_type}}', [
                 'id' => '3',
                 'name' => 'Онлайн',
-                'slug' => '',
+                'slug' => 'beznal',
+                'widget' => '',
+                'order' => NULL,
+            ]);
+            $this->insert('{{%order_payment_type}}', [
+                'id' => '4',
+                'name' => 'Безналичный расчет',
+                'slug' => 'beznal',
                 'widget' => '',
                 'order' => NULL,
             ]);

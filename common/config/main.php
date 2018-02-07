@@ -3,7 +3,7 @@ $config = [
     'timeZone' => 'Europe/Moscow',
     'language' => 'ru-RU',
     'bootstrap' => [
-        'common\config\setUp', 'catalog', 'files'
+        'common\config\setUp'
     ],
     'aliases' => [
         '@bower' => '@vendor/bower-asset',
@@ -31,12 +31,6 @@ $config = [
         ],
     ],
     'modules' => [
-        'catalog' => [
-            'class' => 'common\modules\catalog\Module',
-        ],
-        'files' => [
-            'class' => 'common\modules\files\Module',
-        ],
     ],
     'container' => [
         'definitions' => [

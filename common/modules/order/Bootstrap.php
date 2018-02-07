@@ -25,5 +25,30 @@ class Bootstrap implements BootstrapInterface
                 'forceTranslation' => true
             ];
         }
+        
+        $urlManagers = [];
+        foreach (array_keys($app->components) as $componentName) {
+            if (strPos($componentName, 'UrlManager') > 0)
+                $urlManagers[] = $componentName;
+        }
+
+        if (count($urlManagers)) {
+            foreach ($urlManagers as $urlManager) {
+                if (preg_match('#admin|backend#', $urlManager)) {
+                    $rules = [
+                        'order' => '/order/default/index',
+//                        'cart/<_a:truncate|info>' => '/cart/default/<_a>',
+//                        'cart/<_a:delete|create|update>' => '/cart/element/<_a>',
+                    ];
+                } else {
+                    $rules = [];
+                }
+                /** @var \yii\web\UrlManager $urlManager */
+                $urlManager = $app->get($urlManager);
+                $urlManager->addRules($rules);
+            }
+        } else {
+            $app->urlManager->addRules($rules);
+        }
     }
 }

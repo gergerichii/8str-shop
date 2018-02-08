@@ -1,5 +1,5 @@
 <?php
-namespace common\modules\order\controllers;
+namespace common\modules\order\controllers\admin;
 
 use yii;
 use common\modules\order\models\Element;
@@ -14,15 +14,15 @@ class ElementController extends Controller
     public function behaviors()
     {
         return [
-            'access' => [
-                'class' => AccessControl::className(),
-                'rules' => [
-                    [
-                        'allow' => true,
-                        'roles' => $this->module->adminRoles,
-                    ]
-                ]
-            ],
+//            'access' => [
+//                'class' => AccessControl::className(),
+//                'rules' => [
+//                    [
+//                        'allow' => true,
+//                        'roles' => $this->module->adminRoles,
+//                    ]
+//                ]
+//            ],
             'verbs' => [
                 'class' => VerbFilter::className(),
                 'actions' => [

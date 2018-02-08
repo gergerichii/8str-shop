@@ -1,15 +1,17 @@
 <?php
-namespace common\modules\order\controllers;
+namespace common\modules\order\controllers\admin;
 
 use yii;
-use common\modules\order\models\ShippingType;
-use common\modules\order\models\tools\ShippingTypeSearch;
+use common\modules\order\models\Field;
+use common\modules\order\models\tools\FieldSearch;
+use common\modules\order\models\FieldType;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 use yii\filters\AccessControl;
+use yii\helpers\ArrayHelper;
 
-class ShippingTypeController  extends Controller
+class FieldController  extends Controller
 {
     public function behaviors()
     {
@@ -19,7 +21,7 @@ class ShippingTypeController  extends Controller
 //                'rules' => [
 //                    [
 //                        'allow' => true,
-//                        'roles' => yii::$app->getModule('order')->adminRoles,
+//                        'roles' => $this->module->adminRoles,
 //                    ]
 //                ]
 //            ],
@@ -34,21 +36,24 @@ class ShippingTypeController  extends Controller
 
     public function actionIndex()
     {
-        $searchModel = new ShippingTypeSearch();
+        $searchModel = new FieldSearch();
         $dataProvider = $searchModel->search(yii::$app->request->queryParams);
 
+        $fieldTypes = ArrayHelper::map(FieldType::find()->all(), 'id', 'name');
+        
         return $this->render('index', [
             'searchModel' => $searchModel,
+            'fieldTypes' => $fieldTypes,
             'dataProvider' => $dataProvider,
         ]);
     }
 
     public function actionCreate()
     {
-        $model = new ShippingType();
+        $model = new Field();
 
         if ($model->load(yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['update', 'id' => $model->id]);
+				return $this->redirect(['update', 'id' => $model->id]);
 		}
 		else {
             return $this->render('create', [
@@ -60,7 +65,7 @@ class ShippingTypeController  extends Controller
     public function actionUpdate($id)
     {
         $model = $this->findModel($id);
-
+        
         if ($model->load(yii::$app->request->post()) && $model->save()) {
             return $this->redirect(['update', 'id' => $model->id]);
         } else {
@@ -79,7 +84,7 @@ class ShippingTypeController  extends Controller
 
     protected function findModel($id)
     {
-        if (($model = ShippingType::findOne($id)) !== null) {
+        if (($model = Field::findOne($id)) !== null) {
             return $model;
         } else {
             throw new NotFoundHttpException('The requested page does not exist.');

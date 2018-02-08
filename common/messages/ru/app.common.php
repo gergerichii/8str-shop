@@ -15,5 +15,8 @@ return [
     'shipping-type' => 'Типы доставки',
     'payment-type' => 'Типы оплаты',
     
+    
+    'order' => 'Заказы',
+    
     'update' => 'Редактировать',
 ];

@@ -21,6 +21,7 @@ class AppAsset extends AssetBundle
         'css/owl.carousel.css',
         'css/prettyPhoto.css',
         'css/revslider.css',
+        'css/colpick.css',
     ];
     public $depends = [
         'yii\web\YiiAsset',
@@ -46,9 +47,11 @@ class AppAsset extends AssetBundle
         'js/jquery.themepunch.revolution.js',
         'js/jquery.elevateZoom.min.js',
         'js/jquery.fitvids.js',
-        'js/main.js',
         'js/jquery.elastislide.js',
-
+        'js/jquery.selectbox.min.js',
+        'js/jquery.debouncedresize.js',
+        'js/colpick.js',
+        'js/main.js',
     ];
 
     //    public $jsOptions = ['position' => \yii\web\View::POS_HEAD];

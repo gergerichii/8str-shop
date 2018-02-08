@@ -1,5 +1,5 @@
 <?php
-namespace common\modules\order\controllers;
+namespace common\modules\order\controllers\admin;
 
 use yii;
 use yii\web\Controller;
@@ -12,16 +12,16 @@ class ToolsController  extends Controller
     public function behaviors()
     {
         return [
-            'access' => [
-                'class' => AccessControl::className(),
-                'only' => ['ajax-elements-list'],
-                'rules' => [
-                    [
-                        'allow' => true,
-                        'roles' => $this->module->adminRoles,
-                    ]
-                ]
-            ],
+//            'access' => [
+//                'class' => AccessControl::className(),
+//                'only' => ['ajax-elements-list'],
+//                'rules' => [
+//                    [
+//                        'allow' => true,
+//                        'roles' => $this->module->adminRoles,
+//                    ]
+//                ]
+//            ],
         ];
     }
 

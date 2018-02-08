@@ -1,15 +1,15 @@
 <?php
-namespace common\modules\order\controllers;
+namespace common\modules\order\controllers\admin;
 
 use yii;
-use common\modules\order\models\PaymentType;
-use common\modules\order\models\tools\PaymentTypeSearch;
+use common\modules\order\models\ShippingType;
+use common\modules\order\models\tools\ShippingTypeSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 use yii\filters\AccessControl;
 
-class PaymentTypeController  extends Controller
+class ShippingTypeController  extends Controller
 {
     public function behaviors()
     {
@@ -34,7 +34,7 @@ class PaymentTypeController  extends Controller
 
     public function actionIndex()
     {
-        $searchModel = new PaymentTypeSearch();
+        $searchModel = new ShippingTypeSearch();
         $dataProvider = $searchModel->search(yii::$app->request->queryParams);
 
         return $this->render('index', [
@@ -45,10 +45,10 @@ class PaymentTypeController  extends Controller
 
     public function actionCreate()
     {
-        $model = new PaymentType();
+        $model = new ShippingType();
 
         if ($model->load(yii::$app->request->post()) && $model->save()) {
-				return $this->redirect(['update', 'id' => $model->id]);
+            return $this->redirect(['update', 'id' => $model->id]);
 		}
 		else {
             return $this->render('create', [
@@ -79,7 +79,7 @@ class PaymentTypeController  extends Controller
 
     protected function findModel($id)
     {
-        if (($model = PaymentType::findOne($id)) !== null) {
+        if (($model = ShippingType::findOne($id)) !== null) {
             return $model;
         } else {
             throw new NotFoundHttpException('The requested page does not exist.');

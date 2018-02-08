@@ -1,30 +1,28 @@
 <?php
-namespace common\modules\order\controllers;
+namespace common\modules\order\controllers\admin;
 
 use yii;
-use common\modules\order\models\Field;
-use common\modules\order\models\tools\FieldSearch;
-use common\modules\order\models\FieldType;
+use common\modules\order\models\PaymentType;
+use common\modules\order\models\tools\PaymentTypeSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 use yii\filters\AccessControl;
-use yii\helpers\ArrayHelper;
 
-class FieldController  extends Controller
+class PaymentTypeController  extends Controller
 {
     public function behaviors()
     {
         return [
-            'access' => [
-                'class' => AccessControl::className(),
-                'rules' => [
-                    [
-                        'allow' => true,
-                        'roles' => $this->module->adminRoles,
-                    ]
-                ]
-            ],
+//            'access' => [
+//                'class' => AccessControl::className(),
+//                'rules' => [
+//                    [
+//                        'allow' => true,
+//                        'roles' => yii::$app->getModule('order')->adminRoles,
+//                    ]
+//                ]
+//            ],
             'verbs' => [
                 'class' => VerbFilter::className(),
                 'actions' => [
@@ -36,21 +34,18 @@ class FieldController  extends Controller
 
     public function actionIndex()
     {
-        $searchModel = new FieldSearch();
+        $searchModel = new PaymentTypeSearch();
         $dataProvider = $searchModel->search(yii::$app->request->queryParams);
 
-        $fieldTypes = ArrayHelper::map(FieldType::find()->all(), 'id', 'name');
-        
         return $this->render('index', [
             'searchModel' => $searchModel,
-            'fieldTypes' => $fieldTypes,
             'dataProvider' => $dataProvider,
         ]);
     }
 
     public function actionCreate()
     {
-        $model = new Field();
+        $model = new PaymentType();
 
         if ($model->load(yii::$app->request->post()) && $model->save()) {
 				return $this->redirect(['update', 'id' => $model->id]);
@@ -65,7 +60,7 @@ class FieldController  extends Controller
     public function actionUpdate($id)
     {
         $model = $this->findModel($id);
-        
+
         if ($model->load(yii::$app->request->post()) && $model->save()) {
             return $this->redirect(['update', 'id' => $model->id]);
         } else {
@@ -84,7 +79,7 @@ class FieldController  extends Controller
 
     protected function findModel($id)
     {
-        if (($model = Field::findOne($id)) !== null) {
+        if (($model = PaymentType::findOne($id)) !== null) {
             return $model;
         } else {
             throw new NotFoundHttpException('The requested page does not exist.');

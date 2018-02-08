@@ -4,9 +4,6 @@ $config = [
     'bootstrap' => [
         'log',
         'files',
-        'catalog',
-        'cart',
-        'common\modules\order\Bootstrap',
     ],
     'controllerMap' => [
     ],
@@ -50,15 +47,6 @@ $config = [
         'files' => [
             'class' => 'common\modules\files\Module',
         ],
-        'catalog' => [
-            'class' => 'common\modules\catalog\Module',
-        ],
-        'cart' => [
-            'class' => common\modules\cart\Module::className(),
-        ],
-        'order' => [
-            'class' => common\modules\order\Module::className(),
-        ]
     ],
 ];
 

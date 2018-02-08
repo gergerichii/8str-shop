@@ -32,23 +32,26 @@ class Bootstrap implements BootstrapInterface
                 $urlManagers[] = $componentName;
         }
 
+        $feRules = [
+            'order' => '/order/default/index',
+        ];
+        $beRules = [
+            'order' => '/order/default/index',
+            'order/<_c:[\w]+>' => '/order/<_c>/index',
+            'order/<_c:[\w]+>/<_a:[\w]+>' => '/order/<_c>/<_a>',
+        ];
         if (count($urlManagers)) {
-            foreach ($urlManagers as $urlManager) {
-                if (preg_match('#admin|backend#', $urlManager)) {
-                    $rules = [
-                        'order' => '/order/default/index',
-//                        'cart/<_a:truncate|info>' => '/cart/default/<_a>',
-//                        'cart/<_a:delete|create|update>' => '/cart/element/<_a>',
-                    ];
+            foreach ($urlManagers as $urlManagerId) {
+                /** @var \yii\web\UrlManager $urlManagerObj */
+                $urlManagerObj = $app->get($urlManagerId);
+                if (preg_match('#admin|backend#', $urlManagerId)) {
+                    $urlManagerObj->addRules($beRules);
                 } else {
-                    $rules = [];
+                    $urlManagerObj->addRules($feRules);
                 }
-                /** @var \yii\web\UrlManager $urlManager */
-                $urlManager = $app->get($urlManager);
-                $urlManager->addRules($rules);
             }
         } else {
-            $app->urlManager->addRules($rules);
+            $app->urlManager->addRules($feRules);
         }
     }
 }

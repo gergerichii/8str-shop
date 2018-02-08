@@ -82,7 +82,7 @@ class Breadcrumbs extends \yii\widgets\Breadcrumbs
         }
         
         $bc = ArrayHelper::merge($beginingBc, $addBc);
-        if (count($bc) > 1 && is_array($bc[count($bc) - 1]))
+        if (count($bc) >= 1 && is_array($bc[count($bc) - 1]))
             unset($bc[count($bc) - 1]['url']);
         elseif (!yii::$app->response->getIsOk())
             $bc[] = ['label' => yii::$app->response->getStatusCode() . ' ' . yii::$app->response->statusText];

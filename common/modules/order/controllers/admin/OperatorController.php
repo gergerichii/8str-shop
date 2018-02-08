@@ -1,5 +1,5 @@
 <?php
-namespace common\modules\order\controllers;
+namespace common\modules\order\controllers\admin;
 
 use yii;
 use common\modules\order\models\tools\OrderSearch;
@@ -19,16 +19,16 @@ class OperatorController  extends Controller
     public function behaviors()
     {
         return [
-            'access' => [
-                'class' => AccessControl::className(),
-				'only' => ['index'],
-                'rules' => [
-                    [
-                        'allow' => true,
-                        'roles' => $this->module->operatorRoles,
-                    ]
-                ]
-            ],
+//            'access' => [
+//                'class' => AccessControl::className(),
+//				'only' => ['index'],
+//                'rules' => [
+//                    [
+//                        'allow' => true,
+//                        'roles' => $this->module->operatorRoles,
+//                    ]
+//                ]
+//            ],
         ];
     }
 

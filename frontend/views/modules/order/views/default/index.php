@@ -6,14 +6,14 @@
         <div class="col-md-12">
             <header class="content-title">
                 <h1 class="title">Оформление заказа</h1>
-                <p class="title-desc">Quisque elementum nibh at dolor pellentesque, a eleifend libero pharetra.</p>
+                <p class="title-desc">Этот волнующим момент...</p>
             </header>
             <div class="xs-margin"></div><!-- space -->
             <form action="#" id="checkout-form">
                 <div class="panel-group custom-accordion" id="checkout">
                     <div class="panel">
                         <div class="accordion-header">
-                            <div class="accordion-title">1 Step: <span>Checkout Option</span></div>
+                            <div class="accordion-title">1 Шаг: <span>Способ авторизации</span></div>
                             <!-- End .accordion-title -->
                             <a class="accordion-btn opened" data-toggle="collapse" data-parent="#checkout" data-target="#checkout-option"></a>
                         </div><!-- End .accordion-header -->
@@ -23,57 +23,56 @@
                                 <div class="row">
 
                                     <div class="col-md-6 col-sm-6 col-xs-12">
-                                        <h2 class="checkout-title">New Customer</h2>
-                                        <p>Register with us for future convenience:</p>
+                                        <h2 class="checkout-title">Новый покупатель</h2>
+                                        <p>Как вы предпочитаете продолжить формление заказа?</p>
                                         <div class="xs-margin"></div>
                                         <div class="input-group custom-checkbox sm-margin">
-                                            <input type="checkbox">
-                                            <span class="checbox-container">
-                                                <i class="fa fa-check"></i>
-                                            </span>
-                                            Checkout as Guest
-
+                                            <label>
+                                                <input name="checkoutOptions" value="guest" type="radio">
+                                                Продолжить как гость
+                                            </label>
                                         </div><!-- End .input-group -->
                                         <div class="input-group custom-checkbox sm-margin">
-                                            <input type="checkbox">
-                                            <span class="checbox-container">
-                                                <i class="fa fa-check"></i>
-                                            </span>
-                                            Register
+                                            <label>
+                                                <input name="checkoutOptions" value="register" type="radio" checked>
+                                                Зарегистрироваться
+                                            </label>
 
                                         </div><!-- End .input-group -->
-                                        <p>By creating an account with our store, you will be able to move through the
-                                            checkout process faster, store multiple shipping addresses, view and track
-                                            your orders in your account and more.</p>
+                                        <p>Зарегистрировавшись, Вы сможете делать покупки гораздо быстрее. Избранные
+                                            товары будут оставаться в разделе "Избранное". Также, Вы сможете
+                                            воспользоваться персональными скидками и другими программами нашего
+                                            магазина.
+                                        </p>
                                         <div class="md-margin"></div>
 
                                     </div><!-- End .col-md-6 -->
 
                                     <div class="col-md-6 col-sm-6 col-xs-12">
-                                        <h2 class="checkout-title">Registered Customers</h2>
-                                        <p>If you have an account with us, please log in.</p>
+                                        <h2 class="checkout-title">Уже зарегистрированы?</h2>
+                                        <p>Войдите под своим аккаунтом, и... Добро пожаловать к нам вновь!</p>
                                         <div class="xs-margin"></div>
 
                                         <div class="input-group">
                                             <span class="input-group-addon"><span
                                                     class="input-icon input-icon-email"></span><span class="input-text">Email&#42;</span></span>
                                             <input type="text" required class="form-control input-lg"
-                                                   placeholder="Your Email">
+                                                   placeholder="Ваш Email">
                                         </div><!-- End .input-group -->
                                         <div class="input-group xs-margin">
                                             <span class="input-group-addon"><span
                                                     class="input-icon input-icon-password"></span><span
-                                                    class="input-text">Password&#42;</span></span>
+                                                    class="input-text">Пароль&#42;</span></span>
                                             <input type="text" required class="form-control input-lg"
-                                                   placeholder="Your Password">
+                                                   placeholder="Ваш пароль">
                                         </div><!-- End .input-group -->
-                                        <span class="help-block text-right"><a href="#">Forgot your password?</a></span>
+                                        <span class="help-block text-right"><a href="#">Забыли пароль?</a></span>
                                         <div class="input-group custom-checkbox sm-margin top-10px">
                                             <input type="checkbox">
                                             <span class="checbox-container">
                                                 <i class="fa fa-check"></i>
                                             </span>
-                                            Remember my password
+                                            Запомнить пароль
 
                                         </div><!-- End .input-group -->
                                     </div><!-- End .col-md-6 -->

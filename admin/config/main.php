@@ -18,6 +18,9 @@ return [
             'controllerNamespace' => 'common\modules\catalog\controllers\admin',
             'viewPath' => '@common/modules/catalog/views/admin'
         ],
+        'rbac' => [
+            'class' => common\modules\rbac\Module::className(),
+        ]
     ],
     'components' => [
     ],

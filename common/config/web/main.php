@@ -27,6 +27,9 @@ $config = [
             'rules' => [
             ],
         ],
+        'authManager' => [
+            'class' => 'yii\rbac\DbManager',
+        ],
         'log' => [
             'traceLevel' => YII_DEBUG ? 3 : 0,
             'targets' => [
@@ -46,6 +49,9 @@ $config = [
         ],
         'order' => [
             'class' => common\modules\order\Module::className(),
+        ],
+        'rbac' => [
+            'class' => common\modules\rbac\Module::className(),
         ]
     ],
 ];

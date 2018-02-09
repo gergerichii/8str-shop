@@ -41,3 +41,5 @@ phpunit.phar
 config.cache
 nul*
 node_modules
+
+/common/webFiles/.bash_history

@@ -1,4 +1,5 @@
 <?php
+
 $config = [
     'timeZone' => 'Europe/Moscow',
     'language' => 'ru-RU',

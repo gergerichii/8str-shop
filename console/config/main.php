@@ -16,7 +16,7 @@ return [
                 '@common/modules/cart/migrations',
                 '@common/modules/order/migrations',
                 '@yii/web/migrations',
-//                '@yii/rbac/migrations',
+                '@yii/rbac/migrations',
 //                '@yii/log/migrations',
 //                '@yii/i18n/migrations',
 //                '@yii/caching/migrations',
@@ -35,7 +35,10 @@ return [
         'user' => [
             'class' => 'common\models\entities\User',
             'id' => 1,
-        ]
+        ],
+        'authManager' => [
+            'class' => 'yii\rbac\DbManager',
+        ],
     ],
     'params' => [],
 ];

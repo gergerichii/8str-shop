@@ -4,8 +4,11 @@ return [
     'id' => '', /* Если не указан, то генерится КонфигМенеджером из имени папки приложения */
     'basePath' => dirname(__DIR__),
     'controllerNamespace' => 'admin\controllers',
-    'bootstrap' => [\common\modules\rbac\RbacPlusBootstrap::class],
+    'bootstrap' => ['\common\modules\treeManager\TreeManagerBootstrap', '\common\modules\rbac\RbacPlusBootstrap::class'],
     'modules' => [
+        'treemanager' => [
+            'class' => '\common\modules\treeManager\Module',
+        ],
         'gridview' => [
             'class' => '\kartik\grid\Module'
         ]

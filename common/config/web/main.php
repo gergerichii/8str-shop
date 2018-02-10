@@ -19,6 +19,7 @@ $config = [
         'urlManager' => [
             'enablePrettyUrl' => true,
             'showScriptName' => false,
+            'enableStrictParsing' => true,
             'normalizer' => [
                 'class' => 'yii\web\UrlNormalizer',
                 'collapseSlashes' => true,

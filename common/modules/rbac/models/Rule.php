@@ -13,7 +13,7 @@ class Rule extends Model {
 
     /**
      *
-     * @var string 
+     * @var string
      */
     public $name;
 
@@ -28,7 +28,7 @@ class Rule extends Model {
     private $item;
 
     /**
-     * @var boolean 
+     * @var boolean
      */
     public $isNewRecord = true;
 
@@ -53,9 +53,9 @@ class Rule extends Model {
     public function rules() {
         return [
             [['name', 'className'], 'required'],
-            [['name'], 'unique', 'when' => function() {
-            return $this->isNewRecord || ($this->item->name != $this->name);
-        }],
+            [['name'], 'validateName', 'when' => function() {
+                    return $this->isNewRecord || ($this->item->name != $this->name);
+                }],
             [['className'], 'string'],
             [['className'], 'classExists']
         ];
@@ -64,7 +64,7 @@ class Rule extends Model {
     /**
      * Check rule name is unique if not add error
      */
-    public function unique() {
+    public function validateName() {
         $authManager = Yii::$app->authManager;
         $value = $this->name;
         if ($authManager->getRule($value) !== null) {
@@ -84,7 +84,7 @@ class Rule extends Model {
         $message = null;
         if (!class_exists($this->className)) {
             $message = 'Class "{className}" not exist';
-        } else if (!is_subclass_of($this->className, yii\rbac\Rule::className())) {
+        } else if (!is_subclass_of($this->className, \yii\rbac\Rule::className())) {
             $message = 'Class "{className}" must extends yii\rbac\Rule';
         } else if ((new $this->className())->name === null) {
             $message = 'The "{className}::\$name" is not set';

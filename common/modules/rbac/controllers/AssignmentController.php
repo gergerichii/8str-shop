@@ -6,6 +6,7 @@ use Yii;
 use yii\web\Controller;
 use yii\web\Response;
 use yii\helpers\Html;
+use yii\filters\AccessControl;
 use common\modules\rbac\Module;
 use common\modules\rbac\models\AssignmentSearch;
 use common\modules\rbac\models\AssignmentForm;
@@ -30,6 +31,23 @@ class AssignmentController extends Controller {
     public function init() {
         parent::init();
         $this->rbacModule = Yii::$app->getModule('rbac');
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function behaviors() {
+        return [
+            'access' => [
+                'class' => AccessControl::className(),
+                'rules' => [
+                    [
+                        'allow' => true,
+                        'roles' => ['admin'],
+                    ],
+                ],
+            ],
+        ];
     }
 
     /**

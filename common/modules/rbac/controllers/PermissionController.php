@@ -8,6 +8,7 @@ use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 use yii\web\Response;
 use yii\helpers\Html;
+use yii\filters\AccessControl;
 use common\modules\rbac\models\Permission;
 use common\modules\rbac\models\PermissionSearch;
 
@@ -28,6 +29,15 @@ class PermissionController extends Controller {
                 'actions' => [
                     'delete' => ['post'],
                     'bulk-delete' => ['post'],
+                ],
+            ],
+            'access' => [
+                'class' => AccessControl::className(),
+                'rules' => [
+                    [
+                        'allow' => true,
+                        'roles' => ['admin'],
+                    ],
                 ],
             ],
         ];

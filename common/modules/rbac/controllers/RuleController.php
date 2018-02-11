@@ -2,14 +2,15 @@
 
 namespace common\modules\rbac\controllers;
 
-use Yii;
-use yii\web\Controller;
-use yii\web\NotFoundHttpException;
-use yii\filters\VerbFilter;
-use yii\web\Response;
-use yii\helpers\Html;
 use common\modules\rbac\models\Rule;
 use common\modules\rbac\models\RuleSearch;
+use Yii;
+use yii\filters\AccessControl;
+use yii\filters\VerbFilter;
+use yii\helpers\Html;
+use yii\web\Controller;
+use yii\web\NotFoundHttpException;
+use yii\web\Response;
 
 /**
  * RuleController is controller for manager rule
@@ -29,6 +30,15 @@ class RuleController extends Controller {
                 'actions' => [
                     'delete' => ['post'],
                     'bulk-delete' => ['post'],
+                ],
+            ],
+            'access' => [
+                'class' => AccessControl::className(),
+                'rules' => [
+                    [
+                        'allow' => true,
+                        'roles' => ['admin'],
+                    ],
                 ],
             ],
         ];

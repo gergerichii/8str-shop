@@ -36,7 +36,7 @@ abstract class AuthItem extends Model {
         parent::__construct($config);
     }
 
-    public function unique() {
+    public function validateUnique() {
         $authManager = Yii::$app->authManager;
         $value = $this->name;
         if ($authManager->getRole($value) !== null || $authManager->getPermission($value) !== null) {
@@ -58,9 +58,9 @@ abstract class AuthItem extends Model {
                 'range' => array_keys(Yii::$app->authManager->getRules()),
                 'message' => Yii::t('rbac', 'Rule not exists')],
             [['name'], 'required'],
-            [['name'], 'unique', 'when' => function() {
-            return $this->isNewRecord || ($this->item->name != $this->name);
-        }],
+            [['name'], 'validateUnique', 'when' => function() {
+                return $this->isNewRecord || ($this->item->name != $this->name);
+            }],
             [['description', 'data', 'ruleName'], 'default'],
             [['name'], 'string', 'max' => 64]
         ];
@@ -98,7 +98,7 @@ abstract class AuthItem extends Model {
         //$this->beforeSave();
         $authManager = Yii::$app->authManager;
 
-        // Create new item    
+        // Create new item
         if ($this->getType() == Item::TYPE_ROLE) {
             $item = $authManager->createRole($this->name);
         } else {
@@ -121,8 +121,8 @@ abstract class AuthItem extends Model {
         $this->isNewRecord = !$isNewRecord;
         $this->item = $item;
         //$this->afterSave($isNewRecord,$this->attributes);
-        
-        
+
+
         if ($this->getType() == Item::TYPE_ROLE) {
 	        $role = $authManager->getRole($this->item->name);
 	        if (!$isNewRecord) {
@@ -135,12 +135,12 @@ abstract class AuthItem extends Model {
 	            }
 	        }
         }
-        
+
 
         return true;
     }
-    
-   
+
+
     /**
      * Delete AuthItem
      * @return  boolean whether the role or permission is successfully removed
@@ -154,7 +154,7 @@ abstract class AuthItem extends Model {
 
         $authManager = Yii::$app->authManager;
 
-        // Create new item    
+        // Create new item
         if ($this->getType() == Item::TYPE_ROLE) {
             $item = $authManager->getRole($this->name);
         } else {
@@ -166,7 +166,7 @@ abstract class AuthItem extends Model {
 
     /**
      * Get the type of item
-     * @return integer 
+     * @return integer
      */
     protected abstract function getType();
 }

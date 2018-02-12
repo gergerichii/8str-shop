@@ -4,12 +4,12 @@ return [
     'id' => '', /* Если не указан, то генерится КонфигМенеджером из имени папки приложения */
     'basePath' => dirname(__DIR__),
     'controllerNamespace' => 'admin\controllers',
-    'bootstrap' => ['\common\modules\treeManager\TreeManagerBootstrap', '\common\modules\rbac\RbacPlusBootstrap',
-                    'common\modules\order\Bootstrap',
-            'catalog',
-            \common\modules\rbac\RbacPlusBootstrap::className(),
-        
-        ],
+    'bootstrap' => [
+        'catalog',
+        '\common\modules\rbac\RbacPlusBootstrap',
+        '\common\modules\order\Bootstrap',
+        '\common\modules\treeManager\TreeManagerBootstrap',
+    ],
     'modules' => [
         'treemanager' => [
             'class' => '\common\modules\treeManager\Module',
@@ -34,10 +34,6 @@ return [
     'components' => [
         'urlManager' => [
             'rules' => [
-                '/' => '/site/index',
-                '/login' => '/site/login',
-                '/logout' => '/site/logout',
-                '/error' => '/site/error',
                 // kartik\grid for export in rbac
                 '/gridview/export/download' => '/gridview/export/download',
             ],

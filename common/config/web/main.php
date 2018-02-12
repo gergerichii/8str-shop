@@ -1,7 +1,12 @@
 <?php
 
 $config = [
-    'bootstrap' => ['log', 'cart', 'common\modules\order\Bootstrap'],
+    'bootstrap' => [
+        'log',
+        'cart',
+        'common\modules\order\Bootstrap',
+        'files',
+    ],
     'controllerMap' => [
     ],
     'components' => [
@@ -26,6 +31,10 @@ $config = [
                 'normalizeTrailingSlash' => true,
             ],
             'rules' => [
+                '/' => 'site/index',
+                '/login' => '/site/login',
+                '/logout' => '/site/logout',
+                '/error' => '/site/error',
             ],
         ],
         'authManager' => [

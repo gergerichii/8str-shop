@@ -59,14 +59,23 @@ $config = [
             'class' => 'common\modules\files\Module',
         ],
         'cart' => [
-            'class' => common\modules\cart\Module::className(),
+            'class' => 'common\modules\cart\Module',
         ],
         'order' => [
-            'class' => common\modules\order\Module::className(),
+            'class' => 'common\modules\order\Module',
         ],
         'rbac' => [
             'class' => common\modules\rbac\Module::className(),
-        ]
+        ],
+        'treemanager' => [
+            'class' => '\common\modules\treeManager\Module',
+            'treeStructure' => [
+                'treeAttribute' => 'root',
+                'leftAttribute' => 'left_key',
+                'rightAttribute' => 'right_key',
+                'depthAttribute' => 'level',
+            ]
+        ],
     ],
 ];
 

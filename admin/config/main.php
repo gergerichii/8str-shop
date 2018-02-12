@@ -11,9 +11,6 @@ return [
         '\common\modules\treeManager\TreeManagerBootstrap',
     ],
     'modules' => [
-        'treemanager' => [
-            'class' => '\common\modules\treeManager\Module',
-        ],
         'gridview' => [
             'class' => '\kartik\grid\Module'
         ],

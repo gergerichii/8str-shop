@@ -26,6 +26,46 @@ use Yii;
  */
 class ProductRubric extends NSActiveRecord
 {
+    use \common\modules\treeManager\models\TreeTrait {
+        isDisabled as parentIsDisabled;
+    }
+
+    /**
+     * @var string the classname for the TreeQuery that implements the NestedSetQueryBehavior.
+     * If not set this will default to `kartik	ree\models\TreeQuery`.
+     */
+    public static $treeQueryClass; // change if you need to set your own TreeQuery
+
+    /**
+     * @var bool whether to HTML encode the tree node names. Defaults to `true`.
+     */
+    public $encodeNodeNames = true;
+
+    /**
+     * @var bool whether to HTML purify the tree node icon content before saving.
+     * Defaults to `true`.
+     */
+    public $purifyNodeIcons = true;
+
+    /**
+     * @var array activation errors for the node
+     */
+    public $nodeActivationErrors = [];
+
+    /**
+     * @var array node removal errors
+     */
+    public $nodeRemovalErrors = [];
+
+    /**
+     * @var bool attribute to cache the `active` state before a model update. Defaults to `true`.
+     */
+    public $activeOrig = true;
+
+    /**
+     * @var string
+     */
+    public $treeBehaviorName = [];
 
     /**
      * @inheritdoc
@@ -46,7 +86,7 @@ class ProductRubric extends NSActiveRecord
             [['desc'], 'string'],
             [['name'], 'string', 'max' => 150],
             [['title'], 'string', 'max' => 255],
-            [[ 'material_path'], 'string', 'max' => 500],
+            [['material_path'], 'string', 'max' => 500],
             [['tree', 'left_key', 'right_key', 'level'], 'unique', 'targetAttribute' => ['tree', 'left_key', 'right_key', 'level']],
             [['old_id', 'old_parent_id'], 'integer'] //TODO: Закоментировать когда не нужно
         ];
@@ -55,10 +95,17 @@ class ProductRubric extends NSActiveRecord
     /**
      * @inheritdoc
      */
+    public function behaviors() {
+        return parent::behaviors();
+    }
+
+    /**
+     * @inheritdoc
+     */
     public function attributeLabels()
     {
         return [
-            'id' => Yii::t('ar.rubric', 'ID'),
+            /*'id' => Yii::t('ar.rubric', 'ID'),
             'tree' => Yii::t('ar.rubric', 'Tree'),
             'level' => Yii::t('ar.rubric', 'Level'),
             'left_key' => Yii::t('ar.rubric', 'Left Key'),
@@ -66,7 +113,16 @@ class ProductRubric extends NSActiveRecord
             'name' => Yii::t('ar.rubric', 'Name'),
             'title' => Yii::t('ar.rubric', 'Title'),
             'desc' => Yii::t('ar.rubric', 'Desc'),
-            'material_path' => Yii::t('ar.rubric', 'Material path'),
+            'material_path' => Yii::t('ar.rubric', 'Material path'),*/
+            'id' => 'ID',
+            'tree' => 'Tree',
+            'level' => 'Level',
+            'left_key' => 'Left Key',
+            'right_key' => 'Right Key',
+            'name' => 'Name',
+            'title' => 'Title',
+            'desc' => 'Desc',
+            'material_path' => 'Material path',
         ];
     }
 
@@ -92,6 +148,20 @@ class ProductRubric extends NSActiveRecord
     public function getProductPriceDiscounts()
     {
         return $this->hasMany(ProductPriceDiscount::className(), ['product_rubric_id' => 'id'])->inverseOf('productRubric');
+    }
+
+    /**
+     * Note overriding isDisabled method is slightly different when
+     * using the trait. It uses the alias.
+     */
+    public function isDisabled()
+    {
+        // TODO AccessControl or checking Role?
+        /*if (Yii::$app->user->username !== 'admin') {
+            return true;
+        }*/
+
+        return $this->parentIsDisabled();
     }
 
     public function __toString () {

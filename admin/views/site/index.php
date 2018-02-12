@@ -6,8 +6,19 @@ $this->title = 'My Yii Application';
 ?>
 
 <div class="site-index">
-    <?=
-    \common\modules\treeManager\TreeView::widget([
+    <?php
+    $mainTemplate = <<< HTML
+<div class="row">
+    <div class="col-sm-5">
+        {wrapper}
+    </div>
+    <div class="col-sm-7">
+        {detail}
+    </div>
+</div>
+HTML;
+
+    echo \common\modules\treeManager\TreeView::widget([
         'query' => \common\modules\catalog\models\ProductRubric::find()->addOrderBy('root, left_key'),
         'headingOptions' => ['label' => 'Categories'],
         'fontAwesome' => false,
@@ -16,7 +27,8 @@ $this->title = 'My Yii Application';
         'softDelete' => true,
         'cacheSettings' => [
             'enableCache' => true
-        ]
+        ],
+        'mainTemplate' => $mainTemplate
     ]);
     ?>
 </div>

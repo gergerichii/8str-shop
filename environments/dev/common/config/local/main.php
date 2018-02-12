@@ -19,7 +19,7 @@ $config = [
     ],
 ];
 
-if (YII_ENV_DEV) {
+if (YII_ENV_DEV && !YII_ENV_TEST) {
     $allowedIPs = ['127.0.0.1', '::1', '192.168.10.1'];
     $config['bootstrap'][] = 'gii';
     $config['modules']['gii'] = [

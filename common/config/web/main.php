@@ -46,14 +46,11 @@ $config = [
     ],
     'modules' => [
         'cart' => [
-            'class' => common\modules\cart\Module::className(),
+            'class' => 'common\modules\cart\Module',
         ],
         'order' => [
-            'class' => common\modules\order\Module::className(),
+            'class' => 'common\modules\order\Module',
         ],
-        'rbac' => [
-            'class' => common\modules\rbac\Module::className(),
-        ]
     ],
 ];
 

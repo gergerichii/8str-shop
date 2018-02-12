@@ -33,7 +33,7 @@ CrudAsset::register($this);
                    'icon' => 'resize-small',
                    'class' => 'btn btn-default',
                    'label' => Yii::t('rbac', 'Page'),
-                   'title' => Yii::t('rbac','Show first page data')                   
+                   'title' => Yii::t('rbac','Show first page data')
                ],
             ],
             'toolbar'=> [
@@ -45,12 +45,12 @@ CrudAsset::register($this);
                     '{toggleData}'.
                     '{export}'
                 ],
-            ],          
+            ],
             'striped' => true,
             'condensed' => true,
-            'responsive' => true,          
+            'responsive' => true,
             'panel' => [
-                'type' => 'primary', 
+                'type' => 'primary',
                 'heading' => '<i class="glyphicon glyphicon-list"></i> '. $this->title,
                 'before'=>'<em>'.Yii::t('rbac','* Resize table columns just like a spreadsheet by dragging the column edges.').'</em>',
                 'after'=>false,

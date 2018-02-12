@@ -37,7 +37,7 @@
                         'icon' => 'unlock-alt',
                         'url' => '#',
                         'items' => [
-                            ['label' => 'Role', 'icon' => 'user', 'url' => ['/rbac/rle']],
+                            ['label' => 'Role', 'icon' => 'user', 'url' => ['/rbac/role']],
                             ['label' => 'Permission', 'icon' => 'shield', 'url' => ['/rbac/permission']],
                             ['label' => 'Assignment', 'icon' => 'share-alt', 'url' => ['/rbac/assignment']],
                             ['label' => 'Rule', 'icon' => 'share', 'url' => ['/rbac/rule']],

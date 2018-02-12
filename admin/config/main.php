@@ -4,20 +4,20 @@ return [
     'id' => '', /* Если не указан, то генерится КонфигМенеджером из имени папки приложения */
     'basePath' => dirname(__DIR__),
     'controllerNamespace' => 'admin\controllers',
-    'bootstrap' => ['\common\modules\treeManager\TreeManagerBootstrap', '\common\modules\rbac\RbacPlusBootstrap::class'],
+    'bootstrap' => ['\common\modules\treeManager\TreeManagerBootstrap', '\common\modules\rbac\RbacPlusBootstrap'],
     'modules' => [
         'treemanager' => [
             'class' => '\common\modules\treeManager\Module',
         ],
         'gridview' => [
             'class' => '\kartik\grid\Module'
+        ],
+        'rbac' => [
+            'class' => 'common\modules\rbac\Module'
         ]
     ],
     'components' => [
         'urlManager' => [
-            'class' => 'yii\web\UrlManager',
-            'enablePrettyUrl' => true,
-            'showScriptName' => false,
             'rules' => [
                 '/' => '/site/index',
                 '/login' => '/site/login',

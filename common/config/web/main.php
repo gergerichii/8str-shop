@@ -51,6 +51,15 @@ $config = [
         'order' => [
             'class' => 'common\modules\order\Module',
         ],
+        'treemanager' => [
+            'class' => '\common\modules\treeManager\Module',
+            'treeStructure' => [
+                'treeAttribute' => 'root',
+                'leftAttribute' => 'left_key',
+                'rightAttribute' => 'right_key',
+                'depthAttribute' => 'level',
+            ]
+        ],
     ],
 ];
 

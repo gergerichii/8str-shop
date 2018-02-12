@@ -17,10 +17,7 @@ class TreeManagerBootstrap implements \yii\base\BootstrapInterface {
         $manager = $app->getUrlManager();
 
         $rules = [
-            '/tree-manager/node/save' => '/tree-manager/node/save',
-            '/tree-manager/node/manage' => '/tree-manager/node/manage',
-            '/tree-manager/node/remove' => '/tree-manager/node/remove',
-            '/tree-manager/node/move' => '/tree-manager/node/move',
+            '/treemanager/node/<_a:(save|manage|remove|move)>' => '/treemanager/node/<_a>',
         ];
 
         $manager->addRules($rules, true);

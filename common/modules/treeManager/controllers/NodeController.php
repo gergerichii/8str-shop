@@ -49,6 +49,23 @@ class NodeController extends Controller
     ];
 
     /**
+     * @inheritdoc
+     */
+    public function behaviors() {
+        return [
+            'access' => [
+                'class' => \yii\filters\AccessControl::className(),
+                'rules' => [
+                    [
+                        'allow' => true,
+                        'roles' => ['admin'],
+                    ],
+                ],
+            ],
+        ];
+    }
+
+    /**
      * Processes a code block and catches exceptions
      *
      * @param Closure $callback the function to execute (this returns a valid `$success`)

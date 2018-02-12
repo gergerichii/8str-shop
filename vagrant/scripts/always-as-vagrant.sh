@@ -8,5 +8,5 @@ function info {
 
 info "Init project"
 cd ~/sites
-./init --env=Development --overwrite=y
+php init --env=Development --overwrite=y
 

@@ -212,7 +212,13 @@ class RoleController extends Controller {
              *   Process for ajax request
              */
             Yii::$app->response->format = Response::FORMAT_JSON;
-            return ['forceClose' => true, 'forceReload' => true];
+            return [
+                'forceClose' => true,
+                'forceReload' => true,
+                'title' => '3',
+                'content' => '1',
+                'footer' => '2'
+            ];
         } else {
             /*
              *   Process for non-ajax request

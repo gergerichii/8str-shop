@@ -19,23 +19,10 @@ class RbacPlusBootstrap implements BootstrapInterface {
         $manager = $app->getUrlManager();
 
         $rules = [
-            '/rbac/rule' => '/rbac/rule/index',
-            '/rbac/rule/view/<name:\w+>' => '/rbac/rule/view',
-            '/rbac/rule/create' => '/rbac/rule/create',
-            '/rbac/rule/update/<name:\w+>' => '/rbac/rule/update',
-            '/rbac/rule/delete/<name:\w+>' => '/rbac/rule/delete',
-            '/rbac/role' => '/rbac/role/index',
-            '/rbac/role/view/<name:\w+>' => '/rbac/role/view',
-            '/rbac/role/create' => '/rbac/role/create',
-            '/rbac/role/update/<name:\w+>' => '/rbac/role/update',
-            '/rbac/role/delete/<name:\w+>' => '/rbac/role/delete',
-            '/rbac/permission' => '/rbac/permission/index',
-            '/rbac/permission/view/<name:\w+>' => '/rbac/permission/view',
-            '/rbac/permission/create' => '/rbac/permission/create',
-            '/rbac/permission/update/<name:\w+>' => '/rbac/permission/update',
-            '/rbac/permission/delete/<name:\w+>' => '/rbac/permission/delete',
-            '/rbac/assignment' => '/rbac/assignment/index',
             '/rbac/assignment/assignment/<id:\d+>' => '/rbac/assignment/assignment',
+            '/rbac/<_c:(rule|permission|role|assignment)>' => '/rbac/<_c>/index',
+            '/rbac/<_c:(rule|permission|role)/create>' => '/rbac/<_c>/create',
+            '/rbac/<_c:(rule|permission|role)>/<_a:(view|update|delete)>/<name:\w+>' => '/rbac/<_c>/<_a>',
         ];
 
         $manager->addRules($rules, true);

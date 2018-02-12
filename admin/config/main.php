@@ -4,12 +4,22 @@ return [
     'id' => '', /* Если не указан, то генерится КонфигМенеджером из имени папки приложения */
     'basePath' => dirname(__DIR__),
     'controllerNamespace' => 'admin\controllers',
-    'bootstrap' => [
-        'common\modules\order\Bootstrap',
-        'catalog',
-        \common\modules\rbac\RbacPlusBootstrap::className(),
-    ],
+    'bootstrap' => ['\common\modules\treeManager\TreeManagerBootstrap', '\common\modules\rbac\RbacPlusBootstrap',
+                    'common\modules\order\Bootstrap',
+            'catalog',
+            \common\modules\rbac\RbacPlusBootstrap::className(),
+        
+        ],
     'modules' => [
+        'treemanager' => [
+            'class' => '\common\modules\treeManager\Module',
+        ],
+        'gridview' => [
+            'class' => '\kartik\grid\Module'
+        ],
+        'rbac' => [
+            'class' => 'common\modules\rbac\Module'
+        ],
         'order' => [
             'class' => common\modules\order\Module::className(),
             'controllerNamespace' => 'common\modules\order\controllers\admin',
@@ -20,18 +30,9 @@ return [
             'controllerNamespace' => 'common\modules\catalog\controllers\admin',
             'viewPath' => '@common/modules/catalog/views/admin'
         ],
-        'rbac' => [
-            'class' => common\modules\rbac\Module::className(),
-        ],
-        'gridview' => [
-            'class' => '\kartik\grid\Module'
-        ]
     ],
     'components' => [
         'urlManager' => [
-            'class' => 'yii\web\UrlManager',
-            'enablePrettyUrl' => true,
-            'showScriptName' => false,
             'rules' => [
                 '/' => '/site/index',
                 '/login' => '/site/login',

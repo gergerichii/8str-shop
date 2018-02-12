@@ -16,6 +16,8 @@ return [
                 '@common/modules/cart/migrations',
                 '@common/modules/order/migrations',
                 '@yii/web/migrations',
+                '@common/modules/treeManager/migrations',
+//                '@yii/rbac/migrations',
                 '@yii/rbac/migrations',
 //                '@yii/log/migrations',
 //                '@yii/i18n/migrations',

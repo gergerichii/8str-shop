@@ -19,7 +19,7 @@ $this->title = 'My Yii Application';
 HTML;
 
     echo \common\modules\treeManager\TreeView::widget([
-        'query' => \common\modules\catalog\models\ProductRubric::find()->addOrderBy('root, left_key'),
+        'query' => \common\modules\catalog\models\ProductRubric::find()->addOrderBy('tree, left_key'),
         'headingOptions' => ['label' => 'Categories'],
         'fontAwesome' => false,
         'isAdmin' => false,

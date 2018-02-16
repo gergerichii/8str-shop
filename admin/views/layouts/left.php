@@ -1,3 +1,7 @@
+<?php
+/** @var string $directoryAsset */
+?>
+
 <aside class="main-sidebar">
 
     <section class="sidebar">
@@ -41,6 +45,16 @@
                             ['label' => 'Permission', 'icon' => 'shield', 'url' => ['/rbac/permission']],
                             ['label' => 'Assignment', 'icon' => 'share-alt', 'url' => ['/rbac/assignment']],
                             ['label' => 'Rule', 'icon' => 'share', 'url' => ['/rbac/rule']],
+                        ]
+                    ],
+                    [
+                        'label' => 'Catalog',
+                        'icon' => 'list',
+                        'url' => '#',
+                        'items' => [
+                            ['label' => 'Products', 'icon' => 'gift', 'url' => ['/catalog']],
+                            ['label' => 'Rubrics', 'icon' => 'folder', 'url' => ['/catalog/default/rubrics']],
+                            ['label' => 'Create', 'icon' => 'plus', 'url' => ['/catalog/default/create']],
                         ]
                     ],
                     ['label' => 'Login', 'url' => ['site/login'], 'visible' => Yii::$app->user->isGuest],

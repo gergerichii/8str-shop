@@ -2,11 +2,9 @@
 
 namespace common\modules\catalog\models;
 
-use common\helpers\CatalogHelper;
 use common\models\entities\User;
 use Yii;
 use yii\base\ErrorException;
-use yii\base\InvalidConfigException;
 use yii\behaviors\BlameableBehavior;
 use yii\db\ActiveRecord;
 use yii\db\Expression;
@@ -27,12 +25,16 @@ use yii\db\Expression;
  */
 class ProductPrice extends ActiveRecord implements ProductPriceInterface
 {
-    public function behaviors () {
+    /**
+     * @inheritdoc
+     */
+    public function behaviors()
+    {
         return [
             [
-               'class' => BlameableBehavior::className(),
-               'createdByAttribute' => 'author_id',
-               'updatedByAttribute' => false,
+                'class' => BlameableBehavior::className(),
+                'createdByAttribute' => 'author_id',
+                'updatedByAttribute' => false,
             ],
         ];
     }
@@ -83,11 +85,17 @@ class ProductPrice extends ActiveRecord implements ProductPriceInterface
      * @return string
      *
      */
-    public function __toString () {
+    public function __toString()
+    {
         return Yii::$app->formatter->asDecimal($this->value) . ' р.';
     }
 
-    public function getValue(){
+    /**
+     * Get value
+     * @return mixed
+     */
+    public function getValue()
+    {
         return $this->getAttribute('value');
     }
 
@@ -122,12 +130,22 @@ class ProductPrice extends ActiveRecord implements ProductPriceInterface
      * @return bool
      * @throws \yii\base\ErrorException
      */
-    public function beforeSave($insert){
-         if ($this->isNewRecord) {
-             return parent::beforeSave($insert);
-         } else {
-             throw new ErrorException('Price is read only. Create a new price record for update current product price');
-         }
-     }
+    public function beforeSave($insert)
+    {
+        if ($this->isNewRecord || $this->isFuture()) {
+            return parent::beforeSave($insert);
+        } else {
+            throw new ErrorException('Price is read only. Create a new price record for update current product price.');
+        }
+    }
 
+    /**
+     * Is this the future price
+     * @return bool
+     */
+    public function isFuture(){
+        $now = \DateTime::createFromFormat('Y-m-d H:i:s', 'NOW');
+        $activeFrom = \DateTime::createFromFormat('Y-m-d H:i:s', $this->active_from);
+        return $now < $activeFrom;
+    }
 }

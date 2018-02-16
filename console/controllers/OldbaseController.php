@@ -153,7 +153,11 @@ class OldbaseController extends Controller
             return 1;
         }
     }
-    
+
+    /**
+     * Migrate old database dump
+     * @return int
+     */
     public function actionMigrateOldDbDump() {
         chdir(dirname(__FILE__));
         try {
@@ -403,7 +407,7 @@ class OldbaseController extends Controller
                         'product_id' => $product->id,
                         'domain_name' => Yii::$app->params['domains'][$domain],
                     ];
-                    if (!ProductPrice::findOne($priceParams)) {
+                    if (!ProductPrice::find()->onlyActive()->andWhere($priceParams)->one()) {
                         $price = new ProductPrice($priceParams);
                         if (!$price->save()) {
                             $this->error(
@@ -481,10 +485,21 @@ class OldbaseController extends Controller
         return $ret[$name];
     }
 
+    /**
+     * Export rubrics
+     * @param Connection $remoteDb
+     * @return int
+     */
     protected function exportRubrics($remoteDb) {
         $this->trace('Экспорт рубрикатора');
 
-        /* Читаме рубрикатор */
+        $rootRubric = new ProductRubric([
+            'name' => 'Каталог'
+        ]);
+
+        $rootRubric->makeRoot();
+
+        /* Читаем рубрикатор */
         $query = new Query();
         $query->select('[[c]].[[tid]] as [[rubric_id]]')
             ->addSelect('[[c]].[[name]] as [[rubric_name]]')
@@ -501,38 +516,40 @@ class OldbaseController extends Controller
         do {
             if (empty($rubricsPull) || !empty($rubricsPull[0]['depends_on'])) {
                 $batch->next();
-                $rubricsPull = array_merge((array) $batch->current(), $rubricsPull);
+                $rubricsPull = array_merge((array)$batch->current(), $rubricsPull);
             }
+
             $currentRubric = array_shift($rubricsPull);
-            
             if (!empty($currentRubric['parent_rubric_id'])) {
                 if (!isset($createdRubrics[$currentRubric['parent_rubric_id']])) {
                     $currentRubric['depends_on'] = $currentRubric['parent_rubric_id'];
                     array_push($rubricsPull, $currentRubric);
                     continue;
                 }
+
                 if (!$parentRubric = ProductRubric::findOne(['old_id' => $currentRubric['parent_rubric_id']])) {
                     $this->error('Непредвиденная ошибка. Невозможно найти родительскую рубрику old_id=' .
                         $currentRubric['parent_rubric_id']);
                     return 1;
                 }
+
                 /** @noinspection MissedFieldInspection */
                 $newRubric = new ProductRubric([
                     'name' => $currentRubric['rubric_name'],
                     'old_id' => $currentRubric['rubric_id'],
                     'old_parent_id' => $currentRubric['parent_rubric_id'],
                 ]);
+
                 $newRubric->appendTo($parentRubric);
-            } else {
-                if (!$newRubric = ProductRubric::findOne(['old_id' => $currentRubric['rubric_id']])) {
-                    /** @noinspection MissedFieldInspection */
-                    $newRubric = new ProductRubric([
-                        'old_id' => $currentRubric['rubric_id'],
-                        'name' => $currentRubric['rubric_name']
-                    ]);
-                    $newRubric->makeRoot();
-                }
+            } elseif (!$newRubric = ProductRubric::findOne(['old_id' => $currentRubric['rubric_id']])) {
+                /** @noinspection MissedFieldInspection */
+                $newRubric = new ProductRubric([
+                    'old_id' => $currentRubric['rubric_id'],
+                    'name' => $currentRubric['rubric_name']
+                ]);
+                $newRubric->appendTo($rootRubric);
             }
+
             $createdRubrics[$newRubric->getAttribute('old_id')] = $newRubric->id;
         } while (!empty($rubricsPull));
         
@@ -589,7 +606,11 @@ class OldbaseController extends Controller
         }
         return 0;
     }
-    
+
+    /**
+     * Delete AUX fields
+     * @return int
+     */
     protected function deleteAuxFields() {
         $this->trace('Удаляем вспомогательные поля из базы');
         $error = false;
@@ -637,19 +658,39 @@ class OldbaseController extends Controller
 
         return $ret;
     }
-    
+
+    /**
+     * Trace
+     * @param $msg
+     */
     protected function trace($msg) {
         $msg = $this->ansiFormat($msg, Console::FG_YELLOW);
         $this->stdout($msg . "\n");
     }
+
+    /**
+     * Success
+     * @param string $msg
+     */
     protected function success($msg) {
         $msg = $this->ansiFormat($msg, Console::FG_GREEN);
         $this->stdout($msg . "\n");
     }
+
+    /**
+     * Notice
+     * @param string $msg
+     */
     protected function notice($msg) {
         $msg = $this->ansiFormat($msg, Console::FG_CYAN);
         $this->stdout("\t- $msg\n");
     }
+
+    /**
+     * Error
+     * @param string $msg
+     * @param array $errors
+     */
     protected function error($msg, $errors = []) {
         $msg = $this->ansiFormat($msg, Console::FG_RED);
         $this->stderr($msg . "\n");

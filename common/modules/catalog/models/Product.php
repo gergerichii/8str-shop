@@ -5,7 +5,6 @@ namespace common\modules\catalog\models;
 use common\helpers\ProductHelper;
 use common\models\entities\User;
 use common\modules\cart\interfaces\CartElement;
-use common\modules\catalog\Module;
 use Yii;
 use yii\base\ErrorException;
 use yii\behaviors\AttributeBehavior;
@@ -51,11 +50,10 @@ use yii\db\Expression;
  * @property User $creator
  * @property User $modifier
  * @property ProductType $type
-
  * @property ProductRubric[] $rubrics
  * @property ProductRubric $mainRubric
  * @property Product2productRubric[] $tags2products
- * @property ProductRubric[] $tags
+ * @property ProductTag[] $tags
  * @property ProductPrice[] $prices
  * @property RelatedProduct2product[] $relatedProduct2productsParent
  * @property RelatedProduct2product[] $relatedProduct2productsChild
@@ -65,7 +63,16 @@ use yii\db\Expression;
  * @property int $old_id        [INT(10)]
  * @property int $old_rubric_id [INT(10)]
  *
- *  TODO: Добавить основную рубрику
+ * @todo Replace to business logic or form model
+ * @property string $listOfRubrics Used for the form of editing.
+ * @property array $tagCollection Used for the form of editing.
+ * @property array $actualPrices Actual prices. Must be at most one future price. Used for the form of editing. ```[['value'=>0.0, 'active_from'=>Y-m-d H:i:s], ...]```
+ * @property ProductPrice|null $futurePrice Future price
+ * @property ProductPrice|null $price
+ * @property ProductPrice|null $oldPrice
+ * @property ProductPrice[] $frontendPrices
+ *
+ * TODO: Добавить основную рубрику
  *
  * TODO: Добавить сеттер для прайса и скидки с автоматической генерацией соответствующих записей в базе
  *
@@ -73,7 +80,6 @@ use yii\db\Expression;
  */
 class Product extends ActiveRecord implements CartElement
 {
-
     /**
      * Статусы продуктов
      */
@@ -94,16 +100,38 @@ class Product extends ActiveRecord implements CartElement
     ];
 
     /**
+     * The indexes used for prices array
+     */
+    const PRICE_INDEX_FOR_ACTUAL = 0;
+    const PRICE_INDEX_FOR_OLD = 1;
+
+    /**
      * @var array
      */
     private $_files = self::DEFAULT_FILES_JSON_STRUCTURE;
 
-    /** ------------------------------------ Настройка внутрренней структуры ---------------------------------------- */
+    /**
+     * @var string|null $_listOfRubric List of rubrics
+     */
+    private $_listOfRubric = null;
+
+    /**
+     * @var array|null $_tagCollection Collection of tag
+     */
+    private $_tagCollection = null;
+
+    /**
+     * @var array|null $_actualPrices Actual prices
+     */
+    private $_actualPrices = null;
+
+    /** ------------------------------------ Настройка внутренней структуры ---------------------------------------- */
     /**
      * @inheritdoc
      */
 
-    public function behaviors(){
+    public function behaviors()
+    {
         return [
             'blameable' => [
                 'class' => BlameableBehavior::className(),
@@ -127,15 +155,20 @@ class Product extends ActiveRecord implements CartElement
                     return json_encode($this->_files);
                 },
             ],
-       ];
+        ];
     }
 
+    /**
+     * @inheritdoc
+     */
     public static function tableName()
     {
         return 'product';
     }
 
-
+    /**
+     * @inheritdoc
+     */
     public function scenarios()
     {
         return array(
@@ -143,6 +176,10 @@ class Product extends ActiveRecord implements CartElement
                 '!id', 'name', 'title', 'desc', 'status', 'count',
                 'show_on_home', 'on_list_top', 'market_upload', '!files',
                 'delivery_time', 'created_at', 'modified_at', 'creator_id',
+                'main_rubric_id',
+                'listOfRubrics', // Uses for a custom field
+                'tagCollection', // Uses for a custom field
+                'actualPrices', //  Uses for a custom field
                 'modifier_id', 'product_type_id', 'brand_id',
                 'old_id', 'old_rubric_id'  //TODO: Удалить, когда запустится сайт
             ],
@@ -164,7 +201,7 @@ class Product extends ActiveRecord implements CartElement
             [['name', 'ext_attributes', 'files', '1c_data', 'creator_id', 'modifier_id'], 'required'],
             [['desc'], 'string'],
             [['status', 'count', 'delivery_time', 'show_on_home', 'on_list_top', 'market_upload',
-              'creator_id', 'modifier_id', 'product_type_id', 'brand_id', 'main_rubric_id'], 'integer'],
+                'creator_id', 'modifier_id', 'product_type_id', 'brand_id', 'main_rubric_id'], 'integer'],
             [['created_at', 'modified_at'], 'safe'],
             [['name'], 'string', 'max' => 150],
             [['title'], 'string', 'max' => 255],
@@ -174,6 +211,7 @@ class Product extends ActiveRecord implements CartElement
             [['modifier_id'], 'exist', 'skipOnError' => true, 'targetClass' => User::className(), 'targetAttribute' => ['modifier_id' => 'id']],
             [['product_type_id'], 'exist', 'skipOnError' => true, 'targetClass' => ProductType::className(), 'targetAttribute' => ['product_type_id' => 'id']],
             [['main_rubric_id'], 'exist', 'skipOnError' => true, 'targetClass' => ProductRubric::className(), 'targetAttribute' => ['main_rubric_id' => 'id']],
+            [['listOfRubrics', 'tagCollection', 'actualPrices'], 'safe'],
 
             [['old_rubric_id', 'old_id'], 'integer'], //TODO: Удалить, когда запустится сайт
         ];
@@ -185,31 +223,58 @@ class Product extends ActiveRecord implements CartElement
     public function attributeLabels()
     {
         return [
-            'id' => Yii::t('app', 'ID'),
-            'name' => Yii::t('app', 'Name'),
-            'title' => Yii::t('app', 'Title'),
-            'desc' => Yii::t('app', 'Desc'),
-            'status' => Yii::t('app', 'Status'),
-            'count' => Yii::t('app', 'Count'),
-            'show_on_home' => Yii::t('app', 'Show On Home'),
-            'on_list_top' => Yii::t('app', 'On List Top'),
-            'market_upload' => Yii::t('app', 'Market Upload'),
-            'files' => Yii::t('app', 'Files'),
-            'delivery_time' => Yii::t('app', 'Delivery Time'),
-            'created_at' => Yii::t('app', 'Created At'),
-            'modified_at' => Yii::t('app', 'Modified At'),
-            'creator_id' => Yii::t('app', 'Creator ID'),
-            'modifier_id' => Yii::t('app', 'Modifier ID'),
-            'product_type_id' => Yii::t('app', 'Product Type ID'),
-            'brand_id' => Yii::t('app', 'Brand ID'),
-            'main_rubric_id' => Yii::t('app', 'Main Rubric ID'),
+            /**
+             * @todo Add translation opportunity
+             * 'id' => Yii::t('app', 'ID'),
+             * 'name' => Yii::t('app', 'Name'),
+             * 'title' => Yii::t('app', 'Title'),
+             * 'desc' => Yii::t('app', 'Desc'),
+             * 'status' => Yii::t('app', 'Status'),
+             * 'count' => Yii::t('app', 'Count'),
+             * 'show_on_home' => Yii::t('app', 'Show On Home'),
+             * 'on_list_top' => Yii::t('app', 'On List Top'),
+             * 'market_upload' => Yii::t('app', 'Market Upload'),
+             * 'files' => Yii::t('app', 'Files'),
+             * 'delivery_time' => Yii::t('app', 'Delivery Time'),
+             * 'created_at' => Yii::t('app', 'Created At'),
+             * 'modified_at' => Yii::t('app', 'Modified At'),
+             * 'creator_id' => Yii::t('app', 'Creator ID'),
+             * 'modifier_id' => Yii::t('app', 'Modifier ID'),
+             * 'product_type_id' => Yii::t('app', 'Product Type ID'),
+             * 'brand_id' => Yii::t('app', 'Brand ID'),
+             * 'main_rubric_id' => Yii::t('app', 'Main Rubric ID'),
+             *
+             */
+            'id' => 'ID',
+            'name' => 'Name',
+            'title' => 'Title',
+            'desc' => 'Desc',
+            'status' => 'Status',
+            'count' => 'Count',
+            'show_on_home' => 'Show On Home',
+            'on_list_top' => 'On List Top',
+            'market_upload' => 'Market Upload',
+            'files' => 'Files',
+            'delivery_time' => 'Delivery Time',
+            'created_at' => 'Created At',
+            'modified_at' => 'Modified At',
+            'creator_id' => 'Creator ID',
+            'modifier_id' => 'Modifier ID',
+            'product_type_id' => 'Product Type ID',
+            'brand_id' => 'Brand ID',
+            'main_rubric_id' => 'Main Rubric ID',
+            'listOfRubrics' => 'List of rubrics',
+            'tagCollection' => 'Tag collection',
+            'actualPrices' => 'Actual prices',
+            'brandName' => 'Brand name'
         ];
     }
 
     /**
      * @return string[]
      */
-    public function getFiles() : array {
+    public function getFiles(): array
+    {
         return $this->_files;
     }
 
@@ -218,7 +283,8 @@ class Product extends ActiveRecord implements CartElement
      * @return Product
      * @throws ErrorException
      */
-    public function setFiles(array $files) {
+    public function setFiles(array $files)
+    {
         $tmpFiles = [];
         foreach ($files as $key => $file) {
             if (!is_string($file)) {
@@ -236,7 +302,8 @@ class Product extends ActiveRecord implements CartElement
      * @param string $file
      * @return Product
      */
-    public function addFile(string $file) {
+    public function addFile(string $file)
+    {
         $part = ProductHelper::getFileStorePart($file);
         if (!in_array($file, $this->_files[$part]))
             $this->_files[$part][] = $file;
@@ -246,30 +313,39 @@ class Product extends ActiveRecord implements CartElement
     /**
      * @return string
      */
-    public function getMainImage() {
+    public function getMainImage()
+    {
         return (!empty($this->_files['images'][0])) ? $this->_files['images'][0] : '';
     }
 
     /**
      * @return string[]
      */
-    public function getImages() {
+    public function getImages()
+    {
         return (!empty($this->_files['images'])) ? $this->_files['images'] : [];
     }
 
-    public function getDefaultFilesJson() {
+    /**
+     * Get default files as JSON
+     * @return string
+     */
+    public function getDefaultFilesJson()
+    {
         return json_encode([
             'images' => [],
             'files' => [],
         ]);
     }
 
-    public function afterFind(){
+    public function afterFind()
+    {
         $this->_prepareFiles();
         parent::afterFind();
     }
 
-    public function afterRefresh(){
+    public function afterRefresh()
+    {
         $this->_prepareFiles();
         parent::afterRefresh();
     }
@@ -279,7 +355,8 @@ class Product extends ActiveRecord implements CartElement
     /**
      * TODO: Посмотреть, как можно сделать это лучше
      */
-    private function _prepareFiles() {
+    private function _prepareFiles()
+    {
         $this->_files = json_decode($this->getAttribute('files'), true);
     }
 
@@ -288,7 +365,8 @@ class Product extends ActiveRecord implements CartElement
     /**
      * @return string
      */
-    public function __toString() {
+    public function __toString()
+    {
         return (isset($this->title)) ? $this->title : $this->name;
     }
 
@@ -298,57 +376,87 @@ class Product extends ActiveRecord implements CartElement
     /**
      * @return \yii\db\ActiveQuery
      */
-    public function getBrand(){
+    public function getBrand()
+    {
         return $this->hasOne(ProductBrand::className(), ['id' => 'brand_id'])->inverseOf('products');
     }
 
     /**
      * @return \yii\db\ActiveQuery
      */
-    public function getCreator(){
+    public function getCreator()
+    {
         return $this->hasOne(User::className(), ['id' => 'creator_id'])->inverseOf('products');
     }
 
     /**
      * @return \yii\db\ActiveQuery
      */
-    public function getModifier(){
+    public function getModifier()
+    {
         return $this->hasOne(User::className(), ['id' => 'modifier_id'])->inverseOf('products0');
     }
 
     /**
      * @return \yii\db\ActiveQuery
      */
-    public function getType(){
+    public function getType()
+    {
         return $this->hasOne(ProductType::className(), ['id' => 'product_type_id'])->inverseOf('products');
     }
 
     /**
      * @return \yii\db\ActiveQuery
      */
-    public function getProduct2Rubrics(){
+    public function getProduct2Rubrics()
+    {
         return $this->hasMany(Product2productRubric::className(), ['product_id' => 'id'])->inverseOf('product');
     }
 
     /**
      * @return \yii\db\ActiveQuery
      */
-    public function getRubrics(){
+    public function getRubrics()
+    {
         return $this->hasMany(ProductRubric::className(), ['id' => 'rubric_id'])->viaTable('product2product_rubric', ['product_id' => 'id']);
     }
 
     /**
      * @return \yii\db\ActiveQuery
      */
-    public function getMainRubric(){
+    public function getMainRubric()
+    {
         return $this->hasOne(ProductRubric::className(), ['id' => 'main_rubric_id']);
+    }
+
+    /**
+     * @return ActiveQuery|ProductPriceQuery
+     */
+    public function getPrices()
+    {
+        return $this->hasMany(ProductPrice::className(), ['product_id' => 'id'])->inverseOf('product');
+    }
+
+    /**
+     * Get two prices for frontend. New and old.
+     * @return ProductPriceQuery
+     */
+    public function getFrontendPrices()
+    {
+        /** @var ProductPriceQuery $query */
+        $query = $this->hasMany(ProductPrice::className(), ['product_id' => 'id']);
+        $query->onlyActive();
+        $query->orderBy(['active_from' => SORT_DESC]);
+        $query->limit(2);
+        $query->inverseOf('product');
+        return $query;
     }
 
     /**
      * @return ActiveQuery
      */
-    public function getPrices(){
-        return $this->hasMany(ProductPrice::className(), ['product_id' => 'id'])->inverseOf('product');
+    public function getFuturePrice(){
+        return $this->hasOne(ProductPrice::className(), ['product_id' => 'id'])->where(['>', 'active_from', new Expression('NOW()')]);
     }
 
     /**
@@ -409,28 +517,378 @@ class Product extends ActiveRecord implements CartElement
     {
         return new ProductQuery(get_called_class());
     }
-    
+
     /* Выпилить отсюда создав бихэйвор */
-    
-    public
-    function getCartId() {
+
+    /**
+     * Get cart id
+     * @return int
+     */
+    public function getCartId()
+    {
         return $this->id;
     }
-    
-    public
-    function getCartName() {
+
+    /**
+     * Get cart name
+     * @return string
+     */
+    public function getCartName()
+    {
         return $this->name;
     }
-    
-    public
-    function getCartPrice() {
+
+    /**
+     * Get cart price
+     * @return int|string
+     */
+    public function getCartPrice()
+    {
         /** @var \common\modules\catalog\Module $catalog */
         $catalog = yii::$app->getModule('catalog');
         return $catalog->priceOf($this, false);
     }
-    
-    public
-    function getCartOptions() {
+
+    /**
+     * Get cart options
+     * @return array
+     */
+    public function getCartOptions()
+    {
         return [];
+    }
+
+    /**
+     * Get list of rubrics
+     * @return string ```'rubricId1,rubricId2,rubricId3'```
+     */
+    public function getListOfRubrics()
+    {
+        if (is_null($this->_listOfRubric) && $this->rubrics) {
+            $this->_listOfRubric = array_reduce($this->rubrics, function ($carry, $item) {
+                $id = $item->id;
+                return $carry ? $carry . ',' . $id : $id;
+            });
+        }
+
+        return $this->_listOfRubric;
+    }
+
+    /**
+     * Set list of rubrics
+     * @param string $listOfRubric List of rubrics
+     */
+    public function setListOfRubrics($listOfRubric)
+    {
+        $this->_listOfRubric = $listOfRubric;
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function afterSave($insert, $changedAttributes)
+    {
+        parent::afterSave($insert, $changedAttributes);
+
+        // TODO Replace at business logic or form model
+        if (isset($this->listOfRubrics)) {
+            $rubricIds = array_filter(explode(',', $this->listOfRubrics));
+            $this->updateLinksWithRubrics($rubricIds);
+        }
+
+        if (isset($this->tagCollection)) {
+            $this->updateLinksWithTags($this->tagCollection);
+        }
+
+        if (isset($this->_actualPrices)) {
+            $this->updateActualPrices($this->_actualPrices);
+        }
+    }
+
+    /**
+     * Update links with rubrics
+     * @param array $rubricIds Identifiers of rubrics
+     * @throws \yii\db\Exception
+     */
+    public function updateLinksWithRubrics($rubricIds)
+    {
+        $rubricIds = array_filter($rubricIds);
+
+        $transaction = Yii::$app->getDb()->beginTransaction();
+        foreach ($this->rubrics as $rubric) {
+            if (false === ($index = array_search($rubric->id, $rubricIds))) {
+                $this->unlink('rubrics', $rubric, true);
+            } else {
+                unset($rubricIds[$index]);
+            }
+        }
+
+        $this->linkRubrics($rubricIds);
+
+        $transaction->commit();
+    }
+
+    /**
+     * Link rubrics
+     * @param array $rubricIds Identifiers of rubrics
+     */
+    public function linkRubrics($rubricIds)
+    {
+        if ($rubricIds) {
+            $rublics = ProductRubric::find()->where(['in', 'id', $rubricIds])->all();
+            foreach ($rublics as $rublic) {
+                $this->link('rubrics', $rublic);
+            }
+        }
+    }
+
+    /**
+     * Get tag collection
+     * @return array
+     */
+    public function getTagCollection()
+    {
+        if (is_null($this->_tagCollection) && $this->tags) {
+            $tagsKey = $tagsValue = array_keys($this->tags);
+            $this->_tagCollection = array_combine($tagsKey, $tagsValue);
+        }
+
+        return $this->_tagCollection;
+    }
+
+    /**
+     * Set tag collection
+     * @param array $tagCollection
+     */
+    public function setTagCollection($tagCollection)
+    {
+        if (!$tagCollection) {
+            $this->_tagCollection = [];
+        } else {
+            $this->_tagCollection = $tagCollection;
+        }
+    }
+
+    /**
+     * Update links with tags
+     * @param array $tagCollection
+     * @throws \yii\db\Exception
+     */
+    public function updateLinksWithTags($tagCollection)
+    {
+        $transaction = Yii::$app->getDb()->beginTransaction();
+        foreach ($this->tags as $tag) {
+            if (false === ($index = array_search($tag->name, $tagCollection))) {
+                $this->unlink('tags', $tag, true);
+            } else {
+                unset($tagCollection[$index]);
+            }
+        }
+
+        $this->linkTags($tagCollection);
+
+        $transaction->commit();
+    }
+
+    /**
+     * Link tags
+     * @param array $tagCollection Tags
+     */
+    public function linkTags($tagCollection)
+    {
+        if ($tagCollection) {
+            $tags = ProductTag::find()->where(['in', 'name', $tagCollection])->all();
+            foreach ($tags as $tag) {
+                $this->link('tags', $tag);
+            }
+        }
+    }
+
+    /**
+     * Get actual prices
+     * @return array|null
+     */
+    public function getActualPrices()
+    {
+        if (is_null($this->_actualPrices)) {
+            $this->_actualPrices = [];
+            if ($this->price) {
+                $this->_actualPrices['price'] = [
+                    'id' => $this->price->id,
+                    'value' => $this->price->value,
+                    'active_from' => $this->price->active_from
+                ];
+            } else {
+                $this->_actualPrices['price'] = [
+                    'value' => 0.0,
+                    'active_from' => ''
+                ];
+            }
+
+            if ($this->futurePrice) {
+                $this->_actualPrices['future'] = [
+                    'id' => $this->futurePrice->id,
+                    'value' => $this->futurePrice->value,
+                    'active_from' => $this->futurePrice->active_from
+                ];
+            } else {
+                $this->_actualPrices['future'] = [
+                    'value' => 0.0,
+                    'active_from' => ''
+                ];
+            }
+        }
+
+        return $this->_actualPrices;
+    }
+
+    /**
+     * Get price
+     * @return ProductPrice
+     */
+    public function getPrice()
+    {
+        if ($this->frontendPrices && array_key_exists(self::PRICE_INDEX_FOR_ACTUAL, $this->frontendPrices)) {
+            return $this->frontendPrices[self::PRICE_INDEX_FOR_ACTUAL];
+        }
+
+        return null;
+    }
+
+    /**
+     * Get old price
+     * @return ProductPrice
+     */
+    public function getOldPrice()
+    {
+        if ($this->frontendPrices && array_key_exists(self::PRICE_INDEX_FOR_OLD, $this->frontendPrices)) {
+            return $this->frontendPrices[self::PRICE_INDEX_FOR_OLD];
+        }
+
+        return null;
+    }
+
+    /**
+     * Set actual prices
+     * @param $actualPrices
+     */
+    public function setActualPrices($actualPrices)
+    {
+        $this->_actualPrices = $actualPrices;
+    }
+
+    /**
+     * Insert new price
+     * @param float $value The value of new price
+     * @return bool
+     * @throws \Exception
+     * @throws \Throwable
+     */
+    public function insertNewPrice($value)
+    {
+        if ($this->price && $this->price->value == $value) {
+            // Nothing to change
+            return true;
+        }
+
+        try {
+            $price = new ProductPrice();
+            $price->product_id = $this->id;
+
+            $price->domain_name = \Yii::$app->params['domains'][\Yii::$app->params['domain']];
+            $price->value = $value;
+
+            if($price->isFuture()&&$this->futurePrice){
+                $this->addError('price', 'An error occurred while setting a new price: "' . implode(' ', $price->getFirstErrors()) . '".');
+                return false;
+            }
+
+            if (false === $price->save()) {
+                $this->addError('price', 'An error occurred while setting a new price: "' . implode(' ', $price->getFirstErrors()) . '".');
+                return false;
+            }
+        } catch(ErrorException $exception) {
+            $this->addError('price', 'An error occurred while setting a new price: "' . $exception->getMessage() . '".');
+            return false;
+        } catch(\Exception $exception){
+            Yii::error($exception->getMessage());
+            $this->addError('price', 'Unknown error occurred while setting a new price.');
+            return false;
+        }
+
+        return true;
+    }
+
+    /**
+     * Update future price
+     * @param float $value The value of future price
+     * @param string $activeFrom The date which of price is actual
+     * @return bool
+     * @throws \Exception
+     * @throws \Throwable
+     */
+    public function updateFuturePrice($value, $activeFrom = null)
+    {
+        try {
+            if($this->futurePrice){
+                $price = $this->futurePrice;
+            } else {
+                $price = new ProductPrice();
+                $price->product_id = $this->id;
+                $price->domain_name = \Yii::$app->params['domains'][\Yii::$app->params['domain']];
+            }
+
+            $price->value = $value;
+            $price->active_from = $activeFrom;
+
+            if (false === $price->save()) {
+                $this->addError('price', 'An error occurred while setting a new price: "' . implode(' ', $price->getFirstErrors()) . '".');
+                return false;
+            }
+        } catch(ErrorException $exception) {
+            $this->addError('price', 'An error occurred while setting a new price: "' . $exception->getMessage() . '".');
+            return false;
+        } catch(\Exception $exception){
+            Yii::error($exception->getMessage());
+            $this->addError('price', 'Unknown error occurred while setting a new price.');
+            return false;
+        }
+
+        return true;
+    }
+
+    /**
+     * Update actual prices
+     * @param array $actualPrices
+     * @throws \Exception
+     * @throws \Throwable
+     */
+    public function updateActualPrices($actualPrices)
+    {
+        if (array_key_exists('price', $actualPrices)) {
+            $this->insertNewPrice($actualPrices['price']['value']);
+        }
+
+        if (array_key_exists('future', $actualPrices)) {
+            $this->updateFuturePrice($actualPrices['future']['value'], $actualPrices['future']['active_from']);
+        }
+    }
+
+    /**
+     * Get brand name
+     * @return string
+     */
+    public function getBrandName()
+    {
+        return $this->brand ? $this->brand->name : null;
+    }
+
+    /**
+     * Get rubric name
+     * @return string
+     */
+    public function getRubricName()
+    {
+        return $this->rubrics ? current($this->rubrics)->name : null;
     }
 }

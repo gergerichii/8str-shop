@@ -5,10 +5,10 @@ return [
     'basePath' => dirname(__DIR__),
     'controllerNamespace' => 'admin\controllers',
     'bootstrap' => [
-        'catalog',
         '\common\modules\rbac\RbacPlusBootstrap',
         '\common\modules\order\Bootstrap',
         '\common\modules\treeManager\TreeManagerBootstrap',
+        '\common\modules\catalog\CatalogAdminBootstrap'
     ],
     'modules' => [
         'gridview' => [

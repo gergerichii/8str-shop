@@ -170,12 +170,12 @@ class Module extends \yii\base\Module implements BootstrapInterface
      * @return \common\modules\catalog\models\ProductPrice|null
      */
     public function priceObjectOf(Product $product) {
-        return isset($product->prices[0]) ? $product->prices[0] : null;
+        return isset($product->frontendPrices[0]) ? $product->frontendPrices[0] : null;
     }
 
     /**
      * @param \common\modules\catalog\models\Product $product
-     * @param bool                          $format
+     * @param bool $format
      *
      * @return integer|string
      */
@@ -194,7 +194,7 @@ class Module extends \yii\base\Module implements BootstrapInterface
      * @return \common\modules\catalog\models\ProductPrice|null
      */
     public function oldPriceObjectOf(Product $product, $format = true) {
-        return isset($product->prices[1]) ? $product->prices[1] : null;
+        return isset($product->frontendPrices[1]) ? $product->frontendPrices[1] : null;
     }
 
     /**
@@ -231,8 +231,8 @@ class Module extends \yii\base\Module implements BootstrapInterface
             return $this->_products[$product->id];
         }
 
-        $price = isset($product->prices[0]) ? $product->prices[0]->value : 0;
-        $oldPrice = isset($product->prices[1]) ? $product->prices[1]->value : 0;
+        $price = isset($product->frontendPrices[0]) ? $product->frontendPrices[0]->value : 0;
+        $oldPrice = isset($product->frontendPrices[1]) ? $product->frontendPrices[1]->value : 0;
 
         /** TODO: Сделать чтобы был механизм управляемого сложения или взаимоисключения скидок */
         $discounts = [];
@@ -259,7 +259,7 @@ class Module extends \yii\base\Module implements BootstrapInterface
         $activeDiscounts = [];
         return $this->_products[$product->id] = compact('price', 'oldPrice', 'discount', 'activeDiscounts');
     }
-    
+
     /**
      * @param float $value
      *

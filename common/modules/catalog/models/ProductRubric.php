@@ -3,7 +3,7 @@
 namespace common\modules\catalog\models;
 
 use common\base\models\nestedSets\NSActiveRecord;
-use Yii;
+use common\modules\treeManager\models\TreeTrait;
 
 /**
  * This is the model class for table "product_rubric".
@@ -26,7 +26,7 @@ use Yii;
  */
 class ProductRubric extends NSActiveRecord
 {
-    use \common\modules\treeManager\models\TreeTrait {
+    use TreeTrait {
         isDisabled as parentIsDisabled;
     }
 
@@ -82,7 +82,7 @@ class ProductRubric extends NSActiveRecord
     {
         return [
 //            [['tree', 'level', 'left_key', 'right_key', 'name'], 'required'],
-            [['tree', 'level', 'left_key', 'right_key'], 'integer'],
+            [['tree', 'level', 'left_key', 'right_key', 'active'], 'integer'],
             [['desc'], 'string'],
             [['name'], 'string', 'max' => 150],
             [['title'], 'string', 'max' => 255],
@@ -123,6 +123,7 @@ class ProductRubric extends NSActiveRecord
             'title' => 'Title',
             'desc' => 'Desc',
             'material_path' => 'Material path',
+            'active' => 'Active'
         ];
     }
 
@@ -164,6 +165,10 @@ class ProductRubric extends NSActiveRecord
         return $this->parentIsDisabled();
     }
 
+    /**
+     * To string
+     * @return string
+     */
     public function __toString () {
         return (isset($this->title)) ? $this->title : $this->name;
     }

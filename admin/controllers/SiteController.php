@@ -26,7 +26,7 @@ class SiteController extends Controller
                         'allow' => true,
                     ],
                     [
-                        'actions' => ['logout', 'index'],
+                        'actions' => ['logout', 'index', 'icons'],
                         'allow' => true,
                         'roles' => ['@'],
                     ],
@@ -61,6 +61,16 @@ class SiteController extends Controller
     public function actionIndex()
     {
         return $this->render('index');
+    }
+
+    /**
+     * Displays icons.
+     *
+     * @return string
+     */
+    public function actionIcons()
+    {
+        return $this->render('icons');
     }
 
     /**

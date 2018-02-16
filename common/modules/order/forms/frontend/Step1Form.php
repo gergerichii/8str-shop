@@ -8,7 +8,23 @@
 
 namespace common\modules\order\forms\frontend;
 use common\models\forms\LoginForm;
+use yii\helpers\ArrayHelper;
 
 class Step1Form extends LoginForm {
-    public $orderMode;
+    public $orderMode = 'register';
+    
+    public function rules() {
+        return ArrayHelper::merge(parent::rules(), [
+            ['orderMode', 'in', 'range' => ['guest', 'login', 'register'], 'strict' => false]
+        ]);
+    }
+    
+    public function attributeLabels() {
+        return [
+            'orderMode' => 'Способ идентификации покупателя',
+            'rememberMe' => 'Запомнить пароль',
+            'username' => 'Email/Логин',
+            'password' => 'Пароль',
+        ];
+    }
 }

@@ -29,7 +29,6 @@ AppAsset::register($this);
     <div id="wrapper" class="boxed">
         <?=$this->renderFile('@app/views/layouts/pieces/header.php')?>
         <section id="content">
-            <?= Alert::widget() ?>
             <?php if (\yii::$app->request->url !== \yii::$app->homeUrl): ?>
             <div id="breadcrumb-container">
                 <div class="container">

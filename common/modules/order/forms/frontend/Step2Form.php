@@ -9,5 +9,5 @@
 namespace common\modules\order\forms\frontend;
 use yii\base\Model;
 
-class Step2 extends Model {
+class Step2Form extends Model {
 }

@@ -10,6 +10,15 @@ class Module extends \yii\base\Module
     const EVENT_ORDER_DELETE = 'delete';
     const EVENT_ELEMENT_DELETE = 'delete_element';
     const EVENT_ORDER_UPDATE_STATUS = 'update_status';
+    
+    const ORDER_MODE_GUEST = 'guest';
+    const ORDER_MODE_LOGIN = 'login';
+    const ORDER_MODE_REGISTER = 'register';
+    const ORDER_MODES = [
+        self::ORDER_MODE_GUEST => 'Продолжить как гость',
+        self::ORDER_MODE_LOGIN => 'Войти под своим именем',
+        self::ORDER_MODE_REGISTER => 'Зарегистрироваться',
+    ];
 
     public $countryCode = 'RU';
 

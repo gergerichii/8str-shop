@@ -28,6 +28,7 @@ class ProductRubric extends NSActiveRecord
 {
     use TreeTrait {
         isDisabled as parentIsDisabled;
+        find as treeFind;
     }
 
     /**
@@ -97,6 +98,14 @@ class ProductRubric extends NSActiveRecord
      */
     public function behaviors() {
         return parent::behaviors();
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public static function find()
+    {
+        return parent::find();
     }
 
     /**

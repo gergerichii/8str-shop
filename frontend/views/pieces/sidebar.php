@@ -5,13 +5,20 @@
  * Date: 10.01.2018
  * Time: 19:04
  */
+
+use yii\widgets\Menu;
+
 ?>
 <div class="col-md-3 col-sm-4 col-xs-12 sidebar">
     <div class="widget">
         <h3>Категории</h3>
-            <?=\yii\widgets\Menu::widget([
-                'items' => \Yii::$app->getModule('catalog')->getMenuStructure(1),
-            ]);?>
+            <?php
+            /** @var \common\modules\catalog\Module $catalog */
+            $catalog = \Yii::$app->getModule('catalog');
+            echo Menu::widget([
+                'items' => $catalog->getMenuStructure(1),
+            ])
+            ;?>
     </div>
 
     <div class="widget">

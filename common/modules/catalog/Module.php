@@ -4,6 +4,7 @@ namespace common\modules\catalog;
 
 use common\modules\catalog\models\Product;
 use common\modules\catalog\models\ProductRubric;
+use common\modules\catalog\models\ProductRubricMenuItems;
 use Yii;
 use yii\base\Application;
 use yii\base\BootstrapInterface;
@@ -30,8 +31,7 @@ class Module extends \yii\base\Module implements BootstrapInterface
     /**
      * @inheritdoc
      */
-    public function init()
-    {
+    public function init() {
         parent::init();
 
         // custom initialization code goes here
@@ -41,8 +41,7 @@ class Module extends \yii\base\Module implements BootstrapInterface
      * Bootstrap method to be called during application bootstrap stage.
      * @param Application $app the application currently running
      */
-    public function bootstrap ($app)
-    {
+    public function bootstrap($app) {
         $urlManagers = [];
         foreach (array_keys($app->components) as $componentName) {
             if (strPos($componentName, 'UrlManager') > 0)
@@ -79,6 +78,7 @@ class Module extends \yii\base\Module implements BootstrapInterface
             $app->urlManager->addRules($rules);
         }
     }
+
     /**
      * @param ProductRubric|string|null $rubric
      * @param Product|int|null $product
@@ -86,7 +86,7 @@ class Module extends \yii\base\Module implements BootstrapInterface
      * @return string
      * @throws \yii\base\ErrorException
      */
-    public function getCatalogUri($rubric=null, $product=null) {
+    public function getCatalogUri($rubric = null, $product = null) {
         $uriParams = ["/$this->id/$this->defaultRoute"];
 
         if (is_int($product)) {
@@ -136,7 +136,7 @@ class Module extends \yii\base\Module implements BootstrapInterface
 
     /**
      * @param \common\modules\catalog\models\Product $product
-     * @param string                        $rubricPath
+     * @param string $rubricPath
      *
      * @return bool
      */
@@ -152,7 +152,7 @@ class Module extends \yii\base\Module implements BootstrapInterface
     /**
      *
      * @param \common\modules\catalog\models\Product $product
-     * @param bool                          $format
+     * @param bool $format
      *
      * @return integer|string
      */
@@ -189,7 +189,7 @@ class Module extends \yii\base\Module implements BootstrapInterface
 
     /**
      * @param \common\modules\catalog\models\Product $product
-     * @param bool                          $format
+     * @param bool $format
      *
      * @return \common\modules\catalog\models\ProductPrice|null
      */
@@ -199,7 +199,7 @@ class Module extends \yii\base\Module implements BootstrapInterface
 
     /**
      * @param \common\modules\catalog\models\Product $product
-     * @param bool                          $format
+     * @param bool $format
      *
      * @return integer|string
      */
@@ -213,7 +213,7 @@ class Module extends \yii\base\Module implements BootstrapInterface
 
     /**
      * @param \common\modules\catalog\models\Product $product
-     * @param bool                          $format
+     * @param bool $format
      *
      * @return \common\modules\catalog\models\ProductPriceDiscount[]
      */
@@ -237,7 +237,7 @@ class Module extends \yii\base\Module implements BootstrapInterface
         /** TODO: Сделать чтобы был механизм управляемого сложения или взаимоисключения скидок */
         $discounts = [];
         foreach ($product->tags as $tag) {
-            foreach($tag->productPriceDiscounts as $discount) {
+            foreach ($tag->productPriceDiscounts as $discount) {
                 if ($discount->isActive) $discounts[$discount->id] = $discount;
             }
         }
@@ -268,7 +268,7 @@ class Module extends \yii\base\Module implements BootstrapInterface
     protected function _formatCurrency($value) {
         try {
             return Yii::$app->formatter->asCurrency($value);
-        } catch(InvalidConfigException $e) {
+        } catch (InvalidConfigException $e) {
             Yii::error($e->getMessage());
             return $value;
         }
@@ -320,22 +320,22 @@ class Module extends \yii\base\Module implements BootstrapInterface
      * @return array
      * @throws \yii\base\ErrorException
      */
-    public function getBreadcrumbs($target, $product = null) : array {
+    public function getBreadcrumbs($target, $product = null): array {
         if (is_string($target)) {
             $catalogPath = $target;
-        } elseif($target instanceof ProductRubric) {
+        } elseif ($target instanceof ProductRubric) {
             $catalogPath = $this->getRubricPath($target, false);
         } else {
             $catalogPath = '';
         }
 
         $breadcrumbs = [];
-        if ( $catalogPath && $currentRubric = $this->getRubricByPath($catalogPath)) {
+        if ($catalogPath && $currentRubric = $this->getRubricByPath($catalogPath)) {
             $rubricsPath = $currentRubric->parents()->all();
             $rubricsPath[] = $currentRubric;
             /** @var ProductRubric $rubric */
             foreach ($rubricsPath as $rubric) {
-                $label = (string) $rubric;
+                $label = (string)$rubric;
                 $breadcrumbs[] = [
                     'label' => $label,
                     'url' => $this->getCatalogUri($rubric),
@@ -347,11 +347,11 @@ class Module extends \yii\base\Module implements BootstrapInterface
             if (is_int($product)) {
                 $product = Product::findOne($product);
             }
-            $productLabel = (string) $product;
+            $productLabel = (string)$product;
 
             if ($productLabel) {
                 $breadcrumbs[] = [
-                    'label' => (string) $product,
+                    'label' => (string)$product,
                 ];
             }
         }
@@ -372,29 +372,35 @@ class Module extends \yii\base\Module implements BootstrapInterface
     }
 
     /**
-     * @param $depth
-     *
+     * Get menu structure
+     * @param int $depth
      * @return array
-     *
-     * TODO: Доделать для уровней вложенности
-     * @throws \yii\base\ErrorException
      */
     public function getMenuStructure($depth) {
-        $menuObj = ProductRubric::find()->roots()->all();
-        $menu = [];
-        foreach ($menuObj as $obj){
-            $mItem = [];
-            $mItem['label'] = (string) $obj;
-            $mItem['url'] = $this->getCatalogUri($obj);
-            $menu[] = $mItem;
+        /** @var ProductRubric $root */
+        $root = ProductRubric::find()->roots()->one();
+        if (!$root) {
+            return [];
         }
 
-        return $menu;
+        /** @var ProductRubric[] $rubrics */
+        $rubrics = $root->children($depth)->all();
+        $module = $this;
+
+        $menuItems = new ProductRubricMenuItems($rubrics, function ($rubric) use ($module) {
+            return [
+                'label' => $rubric->name,
+                'items' => null,
+                'url' => $module->getCatalogUri($rubric)
+            ];
+        });
+
+        return $menuItems->render();
     }
 
     /**
      * @param \common\modules\catalog\models\Product $product
-     * @param string                        $tagName
+     * @param string $tagName
      *
      * @return bool
      */

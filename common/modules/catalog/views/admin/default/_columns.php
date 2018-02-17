@@ -24,10 +24,6 @@ return [
         'attribute' => 'rubricName',
     ],
     [
-        'class' => '\kartik\grid\DataColumn',
-        'attribute' => 'statusName',
-    ],
-    [
         'class' => 'kartik\grid\ActionColumn',
         'dropdown' => false,
         'vAlign' => 'middle',

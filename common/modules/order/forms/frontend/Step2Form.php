@@ -72,7 +72,7 @@ class Step2Form extends Model {
             'agreeToNews', 'address', 'city', 'region', 'privacyAgree'
         ];
         $scenarios[self::SCENARIO_REGISTER] = [
-            'firstName', 'lastName', 'email', 'phoneNumber', 'company', 'password', 'passwordConfirm',
+            'firstName', 'lastName', 'login', 'email', 'phoneNumber', 'company', 'password', 'passwordConfirm',
             'agreeToNews', 'address', 'city', 'region', 'privacyAgree'
         ];
         return $scenarios;

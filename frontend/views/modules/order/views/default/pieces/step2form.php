@@ -17,8 +17,14 @@
             'formConfig' => [
             
             ],
-            ''
         ])?>
+        
+        <?php $formFields = [
+            'firstName', 'lastName', 'login', 'email', 'phoneNumber', 'company', 'password', 'passwordConfirm',
+            'agreeToNews'
+        ] ?>
+        <?php foreach($step2form->getAttributes($formFields) as $field): ?>
+        <?php endforeach; ?>
         
         <div class="input-group">
             <span class="input-group-addon"><span

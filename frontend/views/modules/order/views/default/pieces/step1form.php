@@ -20,9 +20,9 @@
         <div class="xs-margin"></div>
         <?= $form->field($step1form, 'orderMode')->radioList(
             [
-                'guest' => 'Продолжить как гость',
+                \common\modules\order\forms\frontend\Step2Form::SCENARIO_GUEST => 'Продолжить как гость',
                 'login' => 'Войти под своим именем',
-                'register' => 'Зарегистрироваться',
+                \common\modules\order\forms\frontend\Step2Form::SCENARIO_REGISTER => 'Зарегистрироваться',
             ], [
                 'item' => function($index, $label, $name, $checked, $value) use ($form){
                     $opts = [

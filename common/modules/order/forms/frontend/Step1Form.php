@@ -10,8 +10,10 @@ namespace common\modules\order\forms\frontend;
 use common\models\forms\LoginForm;
 use yii\helpers\ArrayHelper;
 
+/* TODO: Добавить нормальную валидацию с when */
+
 class Step1Form extends LoginForm {
-    public $orderMode = 'register';
+    public $orderMode = Step2Form::SCENARIO_REGISTER;
     
     public function rules() {
         return ArrayHelper::merge(parent::rules(), [

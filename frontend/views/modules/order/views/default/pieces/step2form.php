@@ -8,7 +8,18 @@
 <div class="row">
     <div class="col-md-6 col-sm-6 col-xs-12">
 
-        <h2 class="checkout-title">Your personal details</h2>
+        <h2 class="checkout-title">Персональные данные</h2>
+        <?= \kartik\widgets\ActiveForm::widget([
+            'type' => \kartik\form\ActiveForm::TYPE_VERTICAL,
+            'fieldConfig' => [
+                'autoPlaceholder' => true,
+            ],
+            'formConfig' => [
+            
+            ],
+            ''
+        ])?>
+        
         <div class="input-group">
             <span class="input-group-addon"><span
                     class="input-icon input-icon-user"></span><span class="input-text">First Name&#42;</span></span>

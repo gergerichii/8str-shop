@@ -402,17 +402,19 @@ class OldbaseController extends Controller
                 ];
                 foreach($domains as $domain => $field) {
                     if (empty($src[$field])) continue;
+
+                    $priceValue = round((float)$src[$field], 2);
+
                     $priceParams = [
-                        'value' => round((float)$src[$field], 2),
+                        'value' => $priceValue,
                         'product_id' => $product->id,
                         'domain_name' => Yii::$app->params['domains'][$domain],
                     ];
                     if (!ProductPrice::find()->onlyActive()->andWhere($priceParams)->one()) {
-                        $price = new ProductPrice($priceParams);
-                        if (!$price->save()) {
+                        if (!$product->insertNewPrice($priceValue, $domain)) {
                             $this->error(
                                 "Цена для товара {$src['old_id']}:{$src['name']} и домена $domain не установлена. Откат добавления товара",
-                                $price->errors
+                                $product->errors
                             );
                             $transaction->rollBack();
                             continue;

@@ -24,6 +24,7 @@ EOT;
             '[[domain_name]]' => $this->string(150)->notNull(),
             '[[author_id]]' => $this->integer(11)->notNull(),
             '[[active_from]]' => $this->timestamp()->notNull()->defaultExpression('NOW()'),
+            '[[status]]' => "enum('inactive','active','future') DEFAULT 'inactive'",
         ], 'ENGINE=InnoDB, COMMENT=' . $tableComment . ", COLLATE 'utf8_general_ci'");
 
         $this->createIndex('price_type_product_index', '{{%product_price}}',

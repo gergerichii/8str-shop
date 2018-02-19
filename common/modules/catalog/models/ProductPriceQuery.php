@@ -45,7 +45,17 @@ class ProductPriceQuery extends BaseDefaultQuery
      */
     public function onlyActive()
     {
-        return $this->andWhere(['<=', 'active_from', new Expression('NOW()')]);
+        return $this->andWhere(['<=', 'active_from', new Expression('NOW()')])
+            ->andWhere('status="active"');
+    }
+
+    /**
+     * Only active prices
+     * @return $this
+     */
+    public function onlyInactive() {
+        return $this->andWhere(['<=', 'active_from', new Expression('NOW()')])
+            ->andWhere('status="inactive"');
     }
 
     /**
@@ -54,7 +64,8 @@ class ProductPriceQuery extends BaseDefaultQuery
      */
     public function onlyFuture()
     {
-        return $this->andWhere(['>', 'active_from', new Expression('NOW()')]);
+        return $this->andWhere(['>', 'active_from', new Expression('NOW()')])
+            ->andWhere('status="active"');
     }
 
     /**

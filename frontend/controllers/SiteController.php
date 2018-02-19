@@ -10,7 +10,7 @@ use yii\web\BadRequestHttpException;
 use yii\web\Controller;
 use yii\filters\VerbFilter;
 use yii\filters\AccessControl;
-use common\models\LoginForm;
+use common\models\forms\LoginForm;
 use frontend\models\PasswordResetRequestForm;
 use frontend\models\ResetPasswordForm;
 use frontend\models\SignupForm;
@@ -79,7 +79,11 @@ class SiteController extends Controller
         $tags = ProductTag::find()->forFrontEnd()->usedAsGroup()->indexBy('name')
             ->with(['products' => function(ProductQuery $q) {
                 $q->forFrontEnd()->showOnHome();
-            }])->all();
+            }])
+            ->with('products.rubrics')
+            ->with('products.price')
+            ->with('products.oldPrice')
+            ->all();
 
         $params['topModels'] = ArrayHelper::map($tags, 'name', 'products');
 

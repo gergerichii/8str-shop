@@ -63,14 +63,15 @@ use yii\db\Expression;
  * @property int $old_id        [INT(10)]
  * @property int $old_rubric_id [INT(10)]
  *
- * @todo Replace to business logic or form model
+ * TODO Replace to business logic or form model
  * @property string $listOfRubrics Used for the form of editing.
  * @property array $tagCollection Used for the form of editing.
- * @property array $actualPrices Actual prices. Must be at most one future price. Used for the form of editing. ```[['value'=>0.0, 'active_from'=>Y-m-d H:i:s], ...]```
+ * @property array $fieldForFuturePrice Field for future price with specific structure. Must be at most one future price. Used for the form of editing. ```['future' => ['value'=>0.0, 'active_from'=>Y-m-d H:i:s]]```
  * @property ProductPrice|null $futurePrice Future price
  * @property ProductPrice|null $price
  * @property ProductPrice|null $oldPrice
  * @property ProductPrice[] $frontendPrices
+ * @property float|null $priceValue
  *
  * TODO: Добавить основную рубрику
  *
@@ -121,9 +122,15 @@ class Product extends ActiveRecord implements CartElement
     private $_tagCollection = null;
 
     /**
-     * @var array|null $_actualPrices Actual prices
+     * @var array|null $_fieldForFuturePrice Actual prices
      */
-    private $_actualPrices = null;
+    private $_fieldForFuturePrice = null;
+
+    /**
+     * Price value
+     * @var float|null $_price
+     */
+    private $_price;
 
     /** ------------------------------------ Настройка внутренней структуры ---------------------------------------- */
     /**
@@ -179,7 +186,8 @@ class Product extends ActiveRecord implements CartElement
                 'main_rubric_id',
                 'listOfRubrics', // Uses for a custom field
                 'tagCollection', // Uses for a custom field
-                'actualPrices', //  Uses for a custom field
+                'fieldForFuturePrice', //  Uses for a custom field
+                'priceValue', // Uses for a custom field
                 'modifier_id', 'product_type_id', 'brand_id',
                 'old_id', 'old_rubric_id'  //TODO: Удалить, когда запустится сайт
             ],
@@ -211,7 +219,8 @@ class Product extends ActiveRecord implements CartElement
             [['modifier_id'], 'exist', 'skipOnError' => true, 'targetClass' => User::className(), 'targetAttribute' => ['modifier_id' => 'id']],
             [['product_type_id'], 'exist', 'skipOnError' => true, 'targetClass' => ProductType::className(), 'targetAttribute' => ['product_type_id' => 'id']],
             [['main_rubric_id'], 'exist', 'skipOnError' => true, 'targetClass' => ProductRubric::className(), 'targetAttribute' => ['main_rubric_id' => 'id']],
-            [['listOfRubrics', 'tagCollection', 'actualPrices'], 'safe'],
+            [['listOfRubrics', 'tagCollection', 'fieldForFuturePrice'], 'safe'],
+            [['priceValue'], 'number', 'min' => 0],
 
             [['old_rubric_id', 'old_id'], 'integer'], //TODO: Удалить, когда запустится сайт
         ];
@@ -265,8 +274,9 @@ class Product extends ActiveRecord implements CartElement
             'main_rubric_id' => 'Main Rubric ID',
             'listOfRubrics' => 'List of rubrics',
             'tagCollection' => 'Tag collection',
-            'actualPrices' => 'Actual prices',
-            'brandName' => 'Brand name'
+            'fieldForFuturePrice' => 'Field for future price',
+            'brandName' => 'Brand name',
+            'priceValue' => 'Price value'
         ];
     }
 
@@ -279,6 +289,7 @@ class Product extends ActiveRecord implements CartElement
     }
 
     /**
+     * Set files
      * @param string[] $files
      * @return Product
      * @throws ErrorException
@@ -299,6 +310,7 @@ class Product extends ActiveRecord implements CartElement
     }
 
     /**
+     * Add file
      * @param string $file
      * @return Product
      */
@@ -435,28 +447,6 @@ class Product extends ActiveRecord implements CartElement
     public function getPrices()
     {
         return $this->hasMany(ProductPrice::className(), ['product_id' => 'id'])->inverseOf('product');
-    }
-
-    /**
-     * Get two prices for frontend. New and old.
-     * @return ProductPriceQuery
-     */
-    public function getFrontendPrices()
-    {
-        /** @var ProductPriceQuery $query */
-        $query = $this->hasMany(ProductPrice::className(), ['product_id' => 'id']);
-        $query->onlyActive();
-        $query->orderBy(['active_from' => SORT_DESC]);
-        $query->limit(2);
-        $query->inverseOf('product');
-        return $query;
-    }
-
-    /**
-     * @return ActiveQuery
-     */
-    public function getFuturePrice(){
-        return $this->hasOne(ProductPrice::className(), ['product_id' => 'id'])->where(['>', 'active_from', new Expression('NOW()')]);
     }
 
     /**
@@ -600,8 +590,13 @@ class Product extends ActiveRecord implements CartElement
             $this->updateLinksWithTags($this->tagCollection);
         }
 
-        if (isset($this->_actualPrices)) {
-            $this->updateActualPrices($this->_actualPrices);
+        // Insert a new price when there is no actual price or the price has a different value
+        if (isset($this->_price) && (!$this->price || (float)$this->price->value !== (float)$this->_price)) {
+            $this->insertNewPrice($this->_price);
+        }
+
+        if (isset($this->_fieldForFuturePrice)) {
+            $this->updateFieldForFuturePrice($this->_fieldForFuturePrice);
         }
     }
 
@@ -705,114 +700,125 @@ class Product extends ActiveRecord implements CartElement
     }
 
     /**
-     * Get actual prices
+     * Get field for future price
      * @return array|null
      */
-    public function getActualPrices()
+    public function getFieldForFuturePrice()
     {
-        if (is_null($this->_actualPrices)) {
-            $this->_actualPrices = [];
-            if ($this->price) {
-                $this->_actualPrices['price'] = [
-                    'id' => $this->price->id,
-                    'value' => $this->price->value,
-                    'active_from' => $this->price->active_from
-                ];
-            } else {
-                $this->_actualPrices['price'] = [
-                    'value' => 0.0,
-                    'active_from' => ''
-                ];
-            }
+        if (is_null($this->_fieldForFuturePrice)) {
+            $this->_fieldForFuturePrice = [];
 
             if ($this->futurePrice) {
-                $this->_actualPrices['future'] = [
+                $this->_fieldForFuturePrice['future'] = [
                     'id' => $this->futurePrice->id,
                     'value' => $this->futurePrice->value,
                     'active_from' => $this->futurePrice->active_from
                 ];
             } else {
-                $this->_actualPrices['future'] = [
+                $this->_fieldForFuturePrice['future'] = [
                     'value' => 0.0,
                     'active_from' => ''
                 ];
             }
         }
 
-        return $this->_actualPrices;
+        return $this->_fieldForFuturePrice;
     }
 
     /**
      * Get price
-     * @return ProductPrice
+     * @return ProductPriceQuery
      */
     public function getPrice()
     {
-        if ($this->frontendPrices && array_key_exists(self::PRICE_INDEX_FOR_ACTUAL, $this->frontendPrices)) {
-            return $this->frontendPrices[self::PRICE_INDEX_FOR_ACTUAL];
-        }
-
-        return null;
+        /** @var ProductPriceQuery $query */
+        $query = $this->hasOne(ProductPrice::className(), ['product_id' => 'id']);
+        $query->onlyActive();
+        $query->orderBy(['active_from' => SORT_DESC])->limit(1);
+        $query->inverseOf('product');
+        return $query;
     }
 
     /**
      * Get old price
-     * @return ProductPrice
+     * @return ProductPriceQuery
      */
     public function getOldPrice()
     {
-        if ($this->frontendPrices && array_key_exists(self::PRICE_INDEX_FOR_OLD, $this->frontendPrices)) {
-            return $this->frontendPrices[self::PRICE_INDEX_FOR_OLD];
-        }
-
-        return null;
+        /** @var ProductPriceQuery $query */
+        $query = $this->hasOne(ProductPrice::className(), ['product_id' => 'id']);
+        $query->onlyInactive();
+        $query->orderBy(['active_from' => SORT_DESC])->limit(1);
+        $query->inverseOf('product');
+        return $query;
     }
 
     /**
-     * Set actual prices
-     * @param $actualPrices
+     * Get future price
+     * @return ProductPriceQuery
      */
-    public function setActualPrices($actualPrices)
+    public function getFuturePrice() {
+        /** @var ProductPriceQuery $query */
+        $query = $this->hasOne(ProductPrice::className(), ['product_id' => 'id']);
+        $query->onlyFuture();
+        $query->inverseOf('product');
+        return $query;
+    }
+
+    /**
+     * Set field for future price
+     * @param $fieldForFuturePrice
+     */
+    public function setFieldForFuturePrice($fieldForFuturePrice)
     {
-        $this->_actualPrices = $actualPrices;
+        $this->_fieldForFuturePrice = $fieldForFuturePrice;
     }
 
     /**
      * Insert new price
      * @param float $value The value of new price
+     * @param string|null $domain Domain name
      * @return bool
-     * @throws \Exception
-     * @throws \Throwable
+     * @throws \yii\db\Exception
      */
-    public function insertNewPrice($value)
+    public function insertNewPrice($value, $domain = null)
     {
         if ($this->price && $this->price->value == $value) {
             // Nothing to change
             return true;
         }
 
+        if (is_null($domain)) {
+            $domain = \Yii::$app->params['domains'][\Yii::$app->params['domain']];
+        }
+
+        $transaction = Yii::$app->getDb()->beginTransaction();
         try {
+            if ($this->price) {
+                $this->price->status = 'inactive';
+                $this->price->save();
+            }
+
             $price = new ProductPrice();
             $price->product_id = $this->id;
-
-            $price->domain_name = \Yii::$app->params['domains'][\Yii::$app->params['domain']];
+            $price->domain_name = $domain;
             $price->value = $value;
-
-            if($price->isFuture()&&$this->futurePrice){
-                $this->addError('price', 'An error occurred while setting a new price: "' . implode(' ', $price->getFirstErrors()) . '".');
-                return false;
-            }
+            $price->status = 'active';
 
             if (false === $price->save()) {
                 $this->addError('price', 'An error occurred while setting a new price: "' . implode(' ', $price->getFirstErrors()) . '".');
                 return false;
             }
+
+            $transaction->commit();
         } catch(ErrorException $exception) {
             $this->addError('price', 'An error occurred while setting a new price: "' . $exception->getMessage() . '".');
+            $transaction->rollBack();
             return false;
         } catch(\Exception $exception){
             Yii::error($exception->getMessage());
-            $this->addError('price', 'Unknown error occurred while setting a new price.');
+            $this->addError('price', 'Unknown error occurred while setting a new price: "' . $exception->getMessage() . '".');
+            $transaction->rollBack();
             return false;
         }
 
@@ -827,30 +833,46 @@ class Product extends ActiveRecord implements CartElement
      * @throws \Exception
      * @throws \Throwable
      */
-    public function updateFuturePrice($value, $activeFrom = null)
-    {
+    public function updateFuturePrice($value, $activeFrom = null) {
+        if ($value == 0) {
+            return false;
+        }
+
         try {
-            if($this->futurePrice){
+            if ($this->futurePrice) {
                 $price = $this->futurePrice;
             } else {
                 $price = new ProductPrice();
                 $price->product_id = $this->id;
                 $price->domain_name = \Yii::$app->params['domains'][\Yii::$app->params['domain']];
+                $price->status = 'active';
+                $this->populateRelation('futurePrice', $price);
+            }
+
+            if ($price->value == $value && $price->active_from === $activeFrom) {
+                return false;
             }
 
             $price->value = $value;
             $price->active_from = $activeFrom;
 
-            if (false === $price->save()) {
-                $this->addError('price', 'An error occurred while setting a new price: "' . implode(' ', $price->getFirstErrors()) . '".');
+            if (!$price->isFuture()) {
+                $this->addError('futurePrice', 'The price date must be future.');
+                // TODO Do not shows errors for multiinput field
+                $price->addError('futurePrice', 'The price date must be future.');
                 return false;
             }
-        } catch(ErrorException $exception) {
-            $this->addError('price', 'An error occurred while setting a new price: "' . $exception->getMessage() . '".');
+
+            if (false === $price->save()) {
+                $this->addError('futurePrice', 'An error occurred while setting a new price: "' . implode(' ', $price->getFirstErrors()) . '".');
+                return false;
+            }
+        } catch (ErrorException $exception) {
+            $this->addError('futurePrice', 'An error occurred while setting a new price: "' . $exception->getMessage() . '".');
             return false;
-        } catch(\Exception $exception){
+        } catch (\Exception $exception) {
             Yii::error($exception->getMessage());
-            $this->addError('price', 'Unknown error occurred while setting a new price.');
+            $this->addError('futurePrice', 'Unknown error occurred while setting a new price.');
             return false;
         }
 
@@ -859,18 +881,14 @@ class Product extends ActiveRecord implements CartElement
 
     /**
      * Update actual prices
-     * @param array $actualPrices
+     * @param array $fieldForFuturePrice
      * @throws \Exception
      * @throws \Throwable
      */
-    public function updateActualPrices($actualPrices)
+    public function updateFieldForFuturePrice($fieldForFuturePrice)
     {
-        if (array_key_exists('price', $actualPrices)) {
-            $this->insertNewPrice($actualPrices['price']['value']);
-        }
-
-        if (array_key_exists('future', $actualPrices)) {
-            $this->updateFuturePrice($actualPrices['future']['value'], $actualPrices['future']['active_from']);
+        if (array_key_exists('future', $fieldForFuturePrice)) {
+            $this->updateFuturePrice($fieldForFuturePrice['future']['value'], $fieldForFuturePrice['future']['active_from']);
         }
     }
 
@@ -890,5 +908,26 @@ class Product extends ActiveRecord implements CartElement
     public function getRubricName()
     {
         return $this->rubrics ? current($this->rubrics)->name : null;
+    }
+
+    /**
+     * Get price value
+     * @return float|null
+     */
+    public function getPriceValue() {
+        if (is_null($this->_price)) {
+            $this->_price = $this->price ? (float)$this->price->value : null;
+        }
+
+        return $this->_price;
+    }
+
+    /**
+     * Set value of price
+     * @param float $value
+     * @return void
+     */
+    public function setPriceValue($value) {
+        $this->_price = $value;
     }
 }

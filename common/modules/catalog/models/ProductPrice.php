@@ -4,7 +4,6 @@ namespace common\modules\catalog\models;
 
 use common\models\entities\User;
 use Yii;
-use yii\base\ErrorException;
 use yii\behaviors\BlameableBehavior;
 use yii\db\ActiveRecord;
 use yii\db\Expression;
@@ -18,6 +17,7 @@ use yii\db\Expression;
  * @property int $author_id
  * @property string $active_from
  * @property string $value
+ * @property string $status (active, inactive)
  *
  * @property User $author
  * @property Product $product
@@ -57,6 +57,7 @@ class ProductPrice extends ActiveRecord implements ProductPriceInterface
 
             [['product_id', 'author_id'], 'integer'],
             [['product_id', 'domain_name', 'value'], 'required'],
+            [['status'], 'in', 'range' => ['active', 'inactive', 'future']],
             [['active_from'], 'safe'],
             [['value'], 'number'],
             [['domain_name'], 'string', 'max' => 150],
@@ -125,26 +126,11 @@ class ProductPrice extends ActiveRecord implements ProductPriceInterface
     }
 
     /**
-     * @param bool $insert
-     *
-     * @return bool
-     * @throws \yii\base\ErrorException
-     */
-    public function beforeSave($insert)
-    {
-        if ($this->isNewRecord || $this->isFuture()) {
-            return parent::beforeSave($insert);
-        } else {
-            throw new ErrorException('Price is read only. Create a new price record for update current product price.');
-        }
-    }
-
-    /**
      * Is this the future price
      * @return bool
      */
     public function isFuture(){
-        $now = \DateTime::createFromFormat('Y-m-d H:i:s', 'NOW');
+        $now = new \DateTime();
         $activeFrom = \DateTime::createFromFormat('Y-m-d H:i:s', $this->active_from);
         return $now < $activeFrom;
     }

@@ -4,13 +4,13 @@ use common\modules\catalog\models\Product;
 use common\modules\catalog\models\ProductRubric;
 use common\modules\catalog\models\ProductTag;
 use common\modules\treeManager\TreeViewInput;
-use kartik\date\DatePicker;
 use kartik\number\NumberControl;
 use kartik\widgets\Select2;
 use unclead\multipleinput\MultipleInput;
 use unclead\multipleinput\MultipleInputColumn;
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
+use yii\widgets\MaskedInput;
 
 /* @var $this yii\web\View */
 /* @var $model common\modules\catalog\models\Product */
@@ -91,11 +91,21 @@ NumberControl::$autoIdPrefix = 'numberControl';
     ]);
     ?>
 
+    <?= $form->field($model, 'priceValue')->widget(MaskedInput::class, [
+        'clientOptions' => [
+            'alias' => 'currency',
+            'prefix' => '',
+            'suffix' => '',
+            'groupSeparator' => '',
+            'radixPoint' => '.'
+        ]
+    ]); ?>
+
     <?=
-    $form->field($model, 'actualPrices')->widget(MultipleInput::class, [
+    $form->field($model, 'fieldForFuturePrice')->widget(MultipleInput::class, [
         'id' => 'pricesMultipleInput',
-        'max' => 2,
-        'min' => 2,
+        'max' => 1,
+        'min' => 1,
         'allowEmptyList' => false,
         'enableGuessTitle' => true,
         'addButtonPosition' => MultipleInput::POS_HEADER,
@@ -107,7 +117,7 @@ NumberControl::$autoIdPrefix = 'numberControl';
             ],
             [
                 'name' => 'value',
-                'type' => \yii\widgets\MaskedInput::class,
+                'type' => MaskedInput::class,
                 'title' => 'Price',
                 'options' => [
                     'clientOptions' => [
@@ -122,11 +132,12 @@ NumberControl::$autoIdPrefix = 'numberControl';
             ],
             [
                 'name' => 'active_from',
-                'type' => DatePicker::className(),
+                'type' => \kartik\widgets\DateTimePicker::class,
                 'title' => 'Active from',
                 'options' => [
+                    'options' => ['placeholder' => 'Select operating time ...'],
                     'pluginOptions' => [
-                        'format' => 'dd.mm.yyyy',
+                        'format' => 'yyyy-mm-dd hh:ii:ss',
                         'todayHighlight' => true
                     ]
                 ],

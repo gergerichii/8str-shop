@@ -26,6 +26,7 @@ class CatalogAdminBootstrap implements BootstrapInterface
         $rules = [
             '/catalog' => '/catalog/default/index',
             '/catalog/rubrics' => '/catalog/default/rubrics',
+            '/catalog/create' => '/catalog/default/create',
             '/catalog/<_a:(view|delete|update)>/<id:\d+>' => '/catalog/default/<_a>',
         ];
 

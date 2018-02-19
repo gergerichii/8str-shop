@@ -231,8 +231,15 @@ class Module extends \yii\base\Module implements BootstrapInterface
             return $this->_products[$product->id];
         }
 
-        $price = isset($product->frontendPrices[0]) ? $product->frontendPrices[0]->value : 0;
-        $oldPrice = isset($product->frontendPrices[1]) ? $product->frontendPrices[1]->value : 0;
+        $price = 0;
+        if ($product->price) {
+            $price = $product->price->value;
+        }
+
+        $oldPrice = 0;
+        if ($product->oldPrice) {
+            $oldPrice = $product->oldPrice->value;
+        }
 
         /** TODO: Сделать чтобы был механизм управляемого сложения или взаимоисключения скидок */
         $discounts = [];

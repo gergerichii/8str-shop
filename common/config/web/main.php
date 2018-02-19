@@ -65,7 +65,7 @@ $config = [
             'class' => 'common\modules\order\Module',
         ],
         'rbac' => [
-            'class' => common\modules\rbac\Module::className(),
+            'class' => 'common\modules\rbac\Module',
         ],
         'treemanager' => [
             'class' => '\common\modules\treeManager\Module',

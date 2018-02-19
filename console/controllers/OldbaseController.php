@@ -65,7 +65,7 @@ class OldbaseController extends Controller
     private $oldSqlDump = '../migrations/files/oldDb.sql';
     private $imagesPath = '@common/protected/webFiles/catalog/images/';
     private $oldDbName = 'fbkru_0_8str';
-    private $badProductsFile = __DIR__ . 'bad_products.csv';
+    private $badProductsFile = '../bad_products.csv';
     private $currentPID;
     
     public $defaultAction = 'import';
@@ -255,7 +255,7 @@ class OldbaseController extends Controller
                 'Название дубля' => '',
             ];
             
-            $badProdFile = fopen($this->badProductsFile, 'w');
+            $badProdFile = fopen(dirname(__DIR__) . '/runtime/' . $this->badProductsFile, 'w');
             fputcsv($badProdFile, array_keys($badProducts), ';');
             $badProducts = [];
         }
@@ -570,7 +570,8 @@ class OldbaseController extends Controller
         if (!$this->checkAuxFields()) {
             try {
                 foreach(self::TABLES_AUX_FIELDS as $table) {
-                    $query = Yii::$app->db->queryBuilder->delete("{{%{$table['table']}}}", [], $params);
+                    $params = [];
+                    $query = Yii::$app->db->queryBuilder->delete("{{%{$table['table']}}}", '', $params);
                     Yii::$app->db->createCommand($query)->execute();
                     Yii::$app->db->createCommand("ALTER TABLE {{%{$table['table']}}} AUTO_INCREMENT=0")->execute();
                 }

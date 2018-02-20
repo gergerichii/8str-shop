@@ -23,7 +23,7 @@
 
                     <div id="checkout-option" class="collapse <?= $step == 1 ? 'in' : '' ?>">
                         <div class="panel-body">
-                            <?php \yii\widgets\Pjax::begin(); ?>
+                            <?php \yii\widgets\Pjax::begin(['id' => 'step1']); ?>
                                 <?php if (!yii::$app->getUser()->getIsGuest()): ?>
                                     <p>
                                         Вы уже авторизованы как <b><?= yii::$app->getUser()->identity->username ?> </b>
@@ -41,14 +41,14 @@
                 </div><!-- End .panel -->
                 <div class="panel" data-step="2">
                     <div class="accordion-header">
-                        <div class="accordion-title">2 Step: <span>Billing Information</span></div>
+                        <div class="accordion-title">2 Шаг: <span>Персональные данные</span></div>
                         <!-- End .accordion-title -->
                         <a class="accordion-btn <?= $step == 2 ? 'opened' : '' ?>" data-toggle="collapse" data-parent="#checkout" data-target="#billing"></a>
                     </div><!-- End .accordion-header -->
 
                     <div id="billing" class="collapse <?= $step == 2 ? 'in' : '' ?>">
                         <div class="panel-body">
-                            <?php \yii\widgets\Pjax::begin(); ?>
+                            <?php \yii\widgets\Pjax::begin(['id' => 'step2']); ?>
                                 <?php echo $this->render('pieces/step2form', compact('step2form')); ?>
                             <?php \yii\widgets\Pjax::end(); ?>
                         </div><!-- End .panel-body -->
@@ -57,12 +57,13 @@
                 </div><!-- End .panel -->
                 <div class="panel" data-step="3">
                     <div class="accordion-header">
-                        <div class="accordion-title">3 Step: <span>Delivery Details</span></div>
+                        <div class="accordion-title">3 Шаг: <span>Информация о доставке</span></div>
                         <!-- End .accordion-title -->
-                        <a class="accordion-btn" data-toggle="collapse" data-parent="#checkout" data-target="#delivery-details"></a>
+                        <a class="accordion-btn <?= $step == 3 ? 'opened' : '' ?>" data-toggle="collapse"
+                           data-parent="#checkout" data-target="#delivery-details"></a>
                     </div><!-- End .accordion-header -->
 
-                    <div id="delivery-details" class="collapse">
+                    <div id="delivery-details" class="collapse <?= $step == 3 ? 'in' : '' ?>">
                         <div class="panel-body">
                             <p>Details about delivery</p>
                             <a href="#" class="btn btn-custom-2" role="button" data-action="next-step">Продолжить</a>
@@ -225,25 +226,59 @@
 
 <?php common\helpers\ViewHelper::startRegisterScript($this); ?>
 <script>
+    $(document).ready(function() {
+        setTimeout(function () {
+            $('html, body').animate({scrollTop: $('.panel[data-step=<?=$step?>]').offset().top-70}, 1000);
+        }, 1000);
+        
+    });
     $(document).delegate('[data-action=next-step]', 'click', function(){
         panel = $(this).parents('.panel');
         nextStep = $(panel).data('step') + 1;
         nextPanel = $(panel).siblings('.panel[data-step=' + nextStep + ']');
         pjaxContainer = $(this).parents('[data-pjax-container]');
+        if($(nextPanel).find('[data-pjax-container]').length) {
+            nextPjaxContainerId = '#' + $(nextPanel).find('[data-pjax-container]').attr('id');
+        } else {
+            nextPjaxContainerId = false;
+        }
         if (pjaxContainer.length && $(this).attr('href') !== '#') {
             $(pjaxContainer).one('pjax:success', function(a,b,c,d){
                 if (d.status == 200) {
-                    $(nextPanel).find('.accordion-header a').click();
-                    scrollDest = $(panel).offset().top;
-                    $('html, body').animate({scrollTop: scrollDest}, 500);
+                    if (nextPjaxContainerId) {
+                        $.pjax.reload({container: nextPjaxContainerId, "timeout" : 10000});
+                        $(nextPjaxContainerId).one('pjax:success', function(a,b,c,d){
+                            if (d.status == 200) {
+                                scrollToNext();
+                            }
+                        });
+                    } else {
+                        scrollToNext();
+                    }
                 }
             });
-            return true;
+            ret = true;
         } else {
+            if (nextPjaxContainerId) {
+                $.pjax.reload({container: nextPjaxContainerId, "timeout" : 10000});
+                $(nextPjaxContainerId).one('pjax:success', function(a,b,c,d){
+                    if (d.status == 200) {
+                        scrollToNext();
+                    }
+                });
+                ret = false;
+            } else {
+                scrollToNext();
+                ret = false;
+            }
+        }
+        
+        return ret;
+        
+        function scrollToNext () {
             $(nextPanel).find('.accordion-header a').click();
             scrollDest = $(panel).offset().top;
             $('html, body').animate({scrollTop: scrollDest}, 500);
-            return false;
         }
     });
 </script>

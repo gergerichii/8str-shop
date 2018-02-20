@@ -23,8 +23,8 @@ class Step2Form extends Model {
     public $passwordConfirm;
     public $agreeToNews = true;
     public $address;
-    public $city;
-    public $region;
+    public $city = 'Москва';
+    public $region = 'Московская';
     public $privacyAgree = false;
     
     
@@ -35,9 +35,10 @@ class Step2Form extends Model {
             [['firstName', 'lastName', 'login'], 'string', 'min' => 2, 'max' => 255],
             
             [['password', 'passwordConfirm'], 'trim'],
+            [['password', 'passwordConfirm'], 'required'],
             [['password', 'passwordConfirm'], 'string', 'min' => 6, 'max' => 255],
             ['passwordConfirm', 'compare', 'compareAttribute' => 'password'],
-            ['password', 'compare'],
+//            ['password', 'compare'],
             
             ['email', 'trim'],
             ['email', 'required'],
@@ -46,22 +47,20 @@ class Step2Form extends Model {
             
             ['phoneNumber', 'trim'],
             ['phoneNumber', 'required'],
-            ['phoneNumber', 'match', '/^((8|\+7)[\- ]?)?(\(?\d{3}\)?[\- ]?)?[\d\- ]{7,10}$/'],
+            ['phoneNumber', 'match', 'pattern' => '/^((8|\+7)[\- ]?)?(\(?\d{3}\)?[\- ]?)?[\d\- ]{7,10}$/'],
             ['phoneNumber', 'string', 'min' => 9],
 
             [['company', 'city', 'region', 'address'], 'trim'],
-            [['company', 'city', 'region', 'address'], 'required'],
-            [['company', 'city', 'region', 'address'], 'match', '/^[\w+]$/'],
-            [['company', 'city', 'region'], 'string', 'min' => 3, 'max' => 255],
+            [['city', 'address'], 'required'],
+//            [['company', 'city', 'region', 'address'], 'match', 'pattern' => '#\w$#g'],
+            [['company', 'city', ], 'string', 'min' => 3, 'max' => 255],
             ['address', 'string', 'min' => 10, 'max' => 255],
-
-            ['region', 'trim'],
             ['region', 'string', 'max' => 255, 'skipOnEmpty' => true],
 
             [['agreeToNews', 'privacyAgree'], 'boolean'],
             ['privacyAgree', 'required'],
-            ['privacyAgree', 'compare', 'compareValue' => true, 'operator' => '='],
-            ['agreeToNews', 'default', false],
+            ['privacyAgree', 'compare', 'compareValue' => true],
+            ['agreeToNews', 'default', 'value' => false],
         ];
     }
     
@@ -69,12 +68,30 @@ class Step2Form extends Model {
         $scenarios = parent::scenarios();
         $scenarios[self::SCENARIO_GUEST] = [
             'firstName', 'lastName', 'email', 'phoneNumber',
-            'agreeToNews', 'address', 'city', 'region', 'privacyAgree'
+            'agreeToNews', 'city', 'region', 'address', 'privacyAgree'
         ];
         $scenarios[self::SCENARIO_REGISTER] = [
             'firstName', 'lastName', 'login', 'email', 'phoneNumber', 'company', 'password', 'passwordConfirm',
-            'agreeToNews', 'address', 'city', 'region', 'privacyAgree'
+            'agreeToNews', 'city', 'region', 'address', 'privacyAgree'
         ];
         return $scenarios;
+    }
+    
+    public function attributeLabels() {
+        return [
+            'firstName' => 'Имя',
+            'lastName' => 'Фамилия',
+            'login' => 'Логин',
+            'email' => 'Email',
+            'phoneNumber' => 'Телефон',
+            'company' => 'Организация',
+            'password' => 'Пароль',
+            'passwordConfirm' => 'Пароль еще раз',
+            'agreeToNews' => 'Хочу подписаться на новостную рассылку',
+            'city' => 'Город',
+            'region' => 'Область',
+            'address' => 'Адрес',
+            'privacyAgree' => 'Согласие на обработку персональных данных'
+        ];
     }
 }

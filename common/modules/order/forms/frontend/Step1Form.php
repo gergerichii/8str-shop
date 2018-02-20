@@ -10,8 +10,6 @@ namespace common\modules\order\forms\frontend;
 use common\models\forms\LoginForm;
 use yii\helpers\ArrayHelper;
 
-/* TODO: Добавить нормальную валидацию с when */
-
 class Step1Form extends LoginForm {
     public $orderMode = Step2Form::SCENARIO_REGISTER;
     
@@ -27,6 +25,17 @@ class Step1Form extends LoginForm {
             'rememberMe' => 'Запомнить пароль',
             'username' => 'Email/Логин',
             'password' => 'Пароль',
+        ];
+    }
+    
+    public function scenarios() {
+        return [
+            'default' => [
+                'orderMode'
+            ],
+            'login' => [
+                'orderMode', 'username', 'password', 'rememberMe'
+            ]
         ];
     }
 }

@@ -2,9 +2,11 @@
 
 namespace common\modules\order\controllers;
 
+use common\models\entities\User;
 use common\modules\order\forms\frontend\Step1Form;
 use common\modules\order\forms\frontend\Step2Form;
 use common\modules\order\Module as OrderModule;
+use yii\base\Exception;
 use yii\web\Controller;
 use yii\web\Response;
 
@@ -22,6 +24,7 @@ class DefaultController extends Controller
         
         $step1form = new Step1Form();
         
+        /* Достаем данные из сессии */
         if ($orderSteps = \Yii::$app->session->get('order_steps')) {
             $step1form->setAttributes($orderSteps['step1']);
             $step = $orderSteps['step'];
@@ -32,30 +35,80 @@ class DefaultController extends Controller
                 $orderSteps["step{$i}"] = [];
             }
         }
-        $step2form = new Step2Form($orderSteps['step2']);
         
-        // Если пришли данные формы первого шага
+        // ШАГ 1
         if ($step1form->load($request->post())) {
-            // Если продолжаем как гость или если нормально логинимся, то шаг 2
-            if (
-                $step1form->orderMode === OrderModule::ORDER_MODE_GUEST
-                || (
-                    $step1form->orderMode === OrderModule::ORDER_MODE_LOGIN
-                    && $step1form->login()
-                )
-            ) {
+            if ($step1form->orderMode === OrderModule::ORDER_MODE_LOGIN){
+                $step1form->scenario = 'login';
+                $ok = $step1form->login();
+            } else {
+                $ok = $step1form->validate();
+            }
+            if ($ok) {
                 $step = 2;
-                $step2form->scenario = $step1form->orderMode;
-                
-                $orderSteps['step'] = $step;
-                $orderSteps['step1'] = $step1form->getAttributes();
-            } elseif ($step1form->errors) {
-                \Yii::$app->session->setFlash('modelErrors', $step1form->errors);
-                \Yii::$app->response->on(Response::EVENT_BEFORE_SEND, function(){
-                    \Yii::$app->response->setStatusCode(207, 'error');
-                });
             }
         }
+        
+        if ($step1form->errors) {
+            \Yii::$app->session->setFlash('modelErrors', $step1form->errors);
+            \Yii::$app->response->on(Response::EVENT_BEFORE_SEND, function(){
+                \Yii::$app->response->setStatusCode(207, 'error');
+            });
+        }
+        
+        // ШАГ 2
+        $step2form = new Step2Form($orderSteps['step2']);
+        $step2form->scenario = $step1form->orderMode;
+        
+        if ($step2form->load($request->post())) {
+            if ($step2form->validate()) {
+                $ok = true;
+                if ($step1form->orderMode === OrderModule::ORDER_MODE_REGISTER) {
+                    $user = new User();
+                    $user->username = $step2form->login;
+                    $user->email = $step2form->email;
+                    $user->status = User::STATUS_ACTIVE;
+                    try {
+                        $user->setPassword($step2form->password);
+                        $user->generateAuthKey();
+                    } catch(Exception $e) {
+                        \Yii::error($e->getMessage(), 'order.defaultController');
+                        $ok = false;
+                        \Yii::$app->session->setFlash('modelErrors', 'Произошла непредвиденная ошибка.');
+                        \Yii::$app->response->on(Response::EVENT_BEFORE_SEND, function(){
+                            \Yii::$app->response->setStatusCode(207, 'error');
+                        });
+                    }
+                    $ok &= $user->save();
+                    
+                    if ($ok) {
+                        $ok = \Yii::$app->user->login($user, 3600 * 24 * 30);
+                    }
+                    if ($user->errors) {
+                        \Yii::$app->session->setFlash('modelErrors', $user->errors);
+                        \Yii::$app->response->on(Response::EVENT_BEFORE_SEND, function(){
+                            \Yii::$app->response->setStatusCode(207, 'error');
+                        });
+                    }
+                }
+                
+                if ($ok) {
+                    $step = 3;
+                }
+            }
+        }
+        if ($step2form->errors) {
+            \Yii::$app->session->setFlash('modelErrors', $step2form->errors);
+            \Yii::$app->response->on(Response::EVENT_BEFORE_SEND, function(){
+                \Yii::$app->response->setStatusCode(207, 'error');
+            });
+        }
+        
+        //ШАГ 3
+        
+        $orderSteps['step'] = $step;
+        $orderSteps['step1'] = $step1form->getAttributes();
+        $orderSteps['step2'] = $step2form->getAttributes();
         
         \Yii::$app->session->set('order_steps', $orderSteps);
         

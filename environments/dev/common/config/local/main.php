@@ -16,6 +16,12 @@ $config = [
             // for the mailer to send real emails.
             'useFileTransport' => true,
         ],
+        'sphinx' => [
+            'class' => 'yii\sphinx\Connection',
+            'dsn' => 'mysql:host=127.0.0.1;port=54729;',
+            'username' => 'homestead',
+            'password' => 'secret',
+        ],
     ],
 ];
 

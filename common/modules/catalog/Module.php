@@ -5,6 +5,7 @@ namespace common\modules\catalog;
 use common\modules\catalog\models\Product;
 use common\modules\catalog\models\ProductRubric;
 use common\modules\catalog\models\ProductRubricMenuItems;
+use common\modules\catalog\models\ProductSphinxIndex;
 use Yii;
 use yii\base\Application;
 use yii\base\BootstrapInterface;

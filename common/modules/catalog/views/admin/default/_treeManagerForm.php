@@ -5,4 +5,4 @@ use kartik\switchinput\SwitchInput;
 
 /** @var ProductRubric $node */
 
-echo $form->field($node, 'active')->widget(SwitchInput::class);
+echo $form->field($node, 'visible_on_home_page')->widget(SwitchInput::class);

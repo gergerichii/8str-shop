@@ -289,13 +289,12 @@ class DefaultController extends Controller
             */
             Yii::$app->response->format = Response::FORMAT_JSON;
             return ['forceClose' => true, 'forceReload' => '#crud-datatable-pjax'];
-        } else {
-            /*
-            *   Process for non-ajax request
-            */
-            return $this->redirect(['index']);
         }
 
+        /*
+        *   Process for non-ajax request
+        */
+        return $this->redirect(['index']);
     }
 
     /**
@@ -309,8 +308,8 @@ class DefaultController extends Controller
     {
         if (($model = Product::findOne($id)) !== null) {
             return $model;
-        } else {
-            throw new NotFoundHttpException('The requested page does not exist.');
         }
+
+        throw new NotFoundHttpException('The requested page does not exist.');
     }
 }

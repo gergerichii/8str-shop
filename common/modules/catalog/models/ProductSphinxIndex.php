@@ -14,6 +14,27 @@ use yii\sphinx\ActiveRecord;
  */
 class ProductSphinxIndex extends ActiveRecord
 {
+
+    /**
+     * @inheritdoc
+     */
+    /*public function attributeLabels() {
+        return [
+            'id' => 'ID',
+            'name' => 'Name'
+        ];
+    }*/
+
+    /**
+     * @inheritdoc
+     */
+    /*public function rules() {
+        return [
+            [['id'], 'number'],
+            [['name'], 'string']
+        ];
+    }*/
+
     /**
      * @inheritdoc
      */

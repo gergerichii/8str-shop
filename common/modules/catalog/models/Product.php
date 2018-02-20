@@ -598,6 +598,17 @@ class Product extends ActiveRecord implements CartElement
         if (isset($this->_fieldForFuturePrice)) {
             $this->updateFieldForFuturePrice($this->_fieldForFuturePrice);
         }
+
+        // Update sphinx index
+        /*$sphinxIndex = ProductSphinxIndex::find()->where(['id' => $this->id])->one();
+        if (!$sphinxIndex) {
+            $sphinxIndex = new ProductSphinxIndex();
+            $sphinxIndex->setAttribute('id', $this->id);
+        }
+
+        $sphinxIndex->setAttribute('name', $this->name);
+        $sphinxIndex->save();
+        */
     }
 
     /**

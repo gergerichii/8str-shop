@@ -382,9 +382,10 @@ class Module extends \yii\base\Module implements BootstrapInterface
     /**
      * Get menu structure
      * @param int $depth
+     * @param bool $showHidden Whether to show rubrics that are hidden on the home page
      * @return array
      */
-    public function getMenuStructure($depth) {
+    public function getMenuStructure($depth, $showHidden = false) {
         /** @var ProductRubric $root */
         $root = ProductRubric::find()->roots()->one();
         if (!$root) {
@@ -392,7 +393,12 @@ class Module extends \yii\base\Module implements BootstrapInterface
         }
 
         /** @var ProductRubric[] $rubrics */
-        $rubrics = $root->children($depth)->all();
+        $query = $root->children($depth);
+        if (!$showHidden) {
+            $query->andWhere('visible_on_home_page=1');
+        }
+
+        $rubrics = $query->all();
         $module = $this;
 
         $menuItems = new ProductRubricMenuItems($rubrics, function ($rubric) use ($module) {

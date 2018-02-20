@@ -17,6 +17,7 @@ use common\modules\treeManager\models\TreeTrait;
  * @property string $title
  * @property string $desc
  * @property string $material_path
+ * @property int $visible_on_home_page Whether to show rubrics that are hidden on the home page
  *
  * @property Product2productRubric[] $product2productRubrics
  * @property Product[] $products
@@ -83,9 +84,9 @@ class ProductRubric extends NSActiveRecord
     {
         return [
 //            [['tree', 'level', 'left_key', 'right_key', 'name'], 'required'],
-            [['tree', 'level', 'left_key', 'right_key', 'active'], 'integer'],
+            [['tree', 'level', 'left_key', 'right_key', 'visible_on_home_page'], 'integer'],
             [['desc'], 'string'],
-            [['name'], 'string', 'max' => 150],
+            [['name', 'icon'], 'string', 'max' => 150],
             [['title'], 'string', 'max' => 255],
             [['material_path'], 'string', 'max' => 500],
             [['tree', 'left_key', 'right_key', 'level'], 'unique', 'targetAttribute' => ['tree', 'left_key', 'right_key', 'level']],
@@ -131,8 +132,9 @@ class ProductRubric extends NSActiveRecord
             'name' => 'Name',
             'title' => 'Title',
             'desc' => 'Desc',
+            'icon' => 'Icon',
             'material_path' => 'Material path',
-            'active' => 'Active'
+            'visible_on_home_page' => 'Visible on the home page'
         ];
     }
 

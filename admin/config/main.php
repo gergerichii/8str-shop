@@ -14,9 +14,6 @@ return [
         'gridview' => [
             'class' => '\kartik\grid\Module'
         ],
-        'rbac' => [
-            'class' => 'common\modules\rbac\Module'
-        ],
         'order' => [
             'class' => common\modules\order\Module::className(),
             'controllerNamespace' => 'common\modules\order\controllers\admin',

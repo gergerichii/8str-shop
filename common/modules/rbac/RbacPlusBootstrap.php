@@ -21,7 +21,7 @@ class RbacPlusBootstrap implements BootstrapInterface {
         $rules = [
             '/rbac/assignment/assignment/<id:\d+>' => '/rbac/assignment/assignment',
             '/rbac/<_c:(rule|permission|role|assignment)>' => '/rbac/<_c>/index',
-            '/rbac/<_c:(rule|permission|role)/create>' => '/rbac/<_c>/create',
+            '/rbac/<_c:(rule|permission|role)>/create' => '/rbac/<_c>/create',
             '/rbac/<_c:(rule|permission|role)>/<_a:(view|update|delete)>/<name:\w+>' => '/rbac/<_c>/<_a>',
         ];
 

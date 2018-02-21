@@ -41,7 +41,10 @@ class BaseActiveRecord extends ActiveRecord
      */
     public function __set($name, $value) {
         if (!isset($this->$name)) {
-            $name = $this->cc2lc($name);
+            $newName = $this->cc2lc($name);
+            if (isset($this->$newName)) {
+                $name = $newName;
+            }
         }
         parent::__set($name, $value);
     }
@@ -55,7 +58,10 @@ class BaseActiveRecord extends ActiveRecord
      */
     public function __get($name) {
         if (!isset($this->$name)) {
-            $name = $this->cc2lc($name);
+            $newName = $this->cc2lc($name);
+            if (isset($this->$newName)) {
+                $name = $newName;
+            }
         }
         return parent::__get($name);
     }

@@ -2,6 +2,8 @@
 
 namespace common\modules\catalog\models;
 
+use common\base\models\BaseDefaultQuery;
+
 /**
  * This is the ActiveQuery class for [[ProductTag]].
  *

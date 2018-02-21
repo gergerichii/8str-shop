@@ -7,7 +7,7 @@ use common\modules\cart\events\Cart as CartEvent;
 use common\modules\cart\interfaces\Element;
 use yii;
 use yii\base\Exception;
-use yii\db\ActiveRecord;
+use common\base\models\BaseActiveRecord;
 
 /**
  *
@@ -26,7 +26,7 @@ use yii\db\ActiveRecord;
  * @property int   $item_id   [int(55)]
  * @property string $hash     [varchar(255)]
  */
-class CartElement extends ActiveRecord implements Element
+class CartElement extends BaseActiveRecord implements Element
 {
     const EVENT_ELEMENT_UPDATE = 'element_count';
     const EVENT_ELEMENT_DELETE = 'element_delete';

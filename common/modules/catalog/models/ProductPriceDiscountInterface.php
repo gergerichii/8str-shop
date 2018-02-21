@@ -7,6 +7,7 @@
  */
 
 namespace common\modules\catalog\models;
+
 interface ProductPriceDiscountInterface {
     public function __toString();
 

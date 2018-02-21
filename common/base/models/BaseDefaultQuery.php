@@ -6,9 +6,9 @@
  * Time: 16:24
  */
 
-namespace common\modules\catalog\models;
+namespace common\base\models;
+
 use yii\db\ActiveQuery;
-use yii\db\Query;
 
 /**
  * Class BaseDefaultQuery

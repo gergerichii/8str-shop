@@ -3,6 +3,7 @@
 namespace common\modules\catalog\models;
 
 use common\base\models\nestedSets\NSActiveRecord;
+use common\modules\treeManager\models\TreeTrait;
 use Yii;
 
 /**
@@ -26,7 +27,7 @@ use Yii;
  */
 class ProductRubric extends NSActiveRecord
 {
-    use \common\modules\treeManager\models\TreeTrait {
+    use TreeTrait {
         isDisabled as parentIsDisabled;
     }
 

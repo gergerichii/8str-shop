@@ -65,12 +65,11 @@ class DefaultController extends Controller
                 $ok = true;
                 if ($step1form->orderMode === OrderModule::ORDER_MODE_REGISTER) {
                     $user = new User();
-                    $user->username = $step2form->login;
-                    $user->email = $step2form->email;
                     $user->status = User::STATUS_ACTIVE;
                     try {
-                        $user->setPassword($step2form->password);
+                        $user->setAttributes($step2form->getAttributes());
                         $user->generateAuthKey();
+                        $ok &= $user->save();
                     } catch(Exception $e) {
                         \Yii::error($e->getMessage(), 'order.defaultController');
                         $ok = false;
@@ -79,13 +78,12 @@ class DefaultController extends Controller
                             \Yii::$app->response->setStatusCode(207, 'error');
                         });
                     }
-                    $ok &= $user->save();
                     
                     if ($ok) {
                         $ok = \Yii::$app->user->login($user, 3600 * 24 * 30);
                     }
-                    if ($user->errors) {
-                        \Yii::$app->session->setFlash('modelErrors', $user->errors);
+                    if ($user->getErrors()) {
+                        \Yii::$app->session->setFlash('error', $user->getErrorSummary(true));
                         \Yii::$app->response->on(Response::EVENT_BEFORE_SEND, function(){
                             \Yii::$app->response->setStatusCode(207, 'error');
                         });

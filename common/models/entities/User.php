@@ -1,10 +1,10 @@
 <?php
 namespace common\models\entities;
 
+use common\base\models\BaseActiveRecord;
 use Yii;
 use yii\base\NotSupportedException;
 use yii\behaviors\TimestampBehavior;
-use yii\db\ActiveRecord;
 use yii\web\IdentityInterface;
 
 /**
@@ -14,7 +14,13 @@ use yii\web\IdentityInterface;
  * User model
  *
  * @property integer $id
+ * @property string $first_name
+ * @property string $last_name
  * @property string $username
+ * @property string $login
+ * @property string $company
+ * @property string $phone_number
+ * @property boolean $agree_to_news
  * @property string $password_hash
  * @property string $password_reset_token
  * @property string $email
@@ -25,7 +31,7 @@ use yii\web\IdentityInterface;
  * @property integer $updated_at
  * @property-write string $password write-only password
  */
-class User extends ActiveRecord implements IdentityInterface {
+class User extends BaseActiveRecord implements IdentityInterface {
     const STATUS_DELETED = 0;
     const STATUS_ACTIVE = 10;
 
@@ -71,7 +77,21 @@ class User extends ActiveRecord implements IdentityInterface {
      */
     public function rules() {
         return [
+            [['login', 'password'], 'safe'],
             [['username', 'password_hash', 'email'], 'required'],
+            
+            [['first_name', 'last_name'], 'trim'],
+            [['first_name', 'last_name'], 'string', 'min' => 2, 'max' => 255],
+
+            ['phone_number', 'trim'],
+            ['phone_number', 'match', 'pattern' => '/^((8|\+7)[\- ]?)?(\(?\d{3}\)?[\- ]?)?[\d\- ]{7,10}$/'],
+            ['phone_number', 'string', 'min' => 9],
+
+            ['company', 'trim'],
+            ['company', 'string', 'min' => 3, 'max' => 255],
+            
+            ['agree_to_news', 'boolean'],
+            
             [['status', 'created_at', 'updated_at', 'id'], 'integer'],
             [['username', 'password_hash', 'password_reset_token', 'email'], 'string', 'max' => 255],
             [['auth_key'], 'string', 'max' => 32],
@@ -82,7 +102,20 @@ class User extends ActiveRecord implements IdentityInterface {
             ['status', 'in', 'range' => [self::STATUS_ACTIVE, self::STATUS_DELETED]],
         ];
     }
-
+    
+    public function attributeLabels() {
+        return [
+            'first_name' => 'Имя',
+            'last_name' => 'Фамилия',
+            'username' => 'Логин',
+            'email' => 'Email',
+            'phone_number' => 'Телефон',
+            'company' => 'Организация',
+            'password_hash' => 'Пароль',
+            'agree_to_news' => 'Согласие на новостную рассылку',
+        ];
+    }
+    
     /**
      * @inheritdoc
      */
@@ -201,6 +234,24 @@ class User extends ActiveRecord implements IdentityInterface {
     public function setPassword($password)
     {
         $this->password_hash = Yii::$app->security->generatePasswordHash($password);
+    }
+    
+    /**
+     * Alias for username
+     *
+     * @return string
+     */
+    public function getLogin() {
+        return $this->username;
+    }
+    
+    /**
+     * Alias for username
+     *
+     * @param $value
+     */
+    public function setLogin($value) {
+        $this->username = $value;
     }
 
     /**

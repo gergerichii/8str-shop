@@ -2,12 +2,14 @@
 
 namespace common\modules\catalog\models;
 
+use common\base\models\BaseDefaultQuery;
+
 /**
  * This is the ActiveQuery class for [[ProductBrand]].
  *
  * @see ProductBrand
  */
-class ProductBrandQuery extends \yii\db\ActiveQuery
+class ProductBrandQuery extends BaseDefaultQuery
 {
     /*public function active()
     {
@@ -30,5 +32,13 @@ class ProductBrandQuery extends \yii\db\ActiveQuery
     public function one($db = null)
     {
         return parent::one($db);
+    }
+    
+    /**
+     * Эта функция должна задавать настройки для запроса по умолчанию
+     */
+    protected
+    function _prepareQuery() {
+        // TODO: Implement _prepareQuery() method.
     }
 }

@@ -5,7 +5,7 @@ namespace common\modules\order\models;
 use yii;
 use common\modules\order\interfaces\OrderElement as ElementInterface;
 
-class Element extends \yii\db\ActiveRecord implements ElementInterface
+class Element extends \common\base\models\BaseActiveRecord implements ElementInterface
 {
     public static function tableName()
     {

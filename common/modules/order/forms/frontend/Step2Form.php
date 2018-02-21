@@ -68,11 +68,11 @@ class Step2Form extends Model {
         $scenarios = parent::scenarios();
         $scenarios[self::SCENARIO_GUEST] = [
             'firstName', 'lastName', 'email', 'phoneNumber',
-            'agreeToNews', 'city', 'region', 'address', 'privacyAgree'
+            'agreeToNews', 'region', 'city', 'address', 'privacyAgree'
         ];
         $scenarios[self::SCENARIO_REGISTER] = [
             'firstName', 'lastName', 'login', 'email', 'phoneNumber', 'company', 'password', 'passwordConfirm',
-            'agreeToNews', 'city', 'region', 'address', 'privacyAgree'
+            'agreeToNews', 'region', 'city', 'address', 'privacyAgree'
         ];
         return $scenarios;
     }
@@ -88,8 +88,8 @@ class Step2Form extends Model {
             'password' => 'Пароль',
             'passwordConfirm' => 'Пароль еще раз',
             'agreeToNews' => 'Хочу подписаться на новостную рассылку',
-            'city' => 'Город',
             'region' => 'Область',
+            'city' => 'Город',
             'address' => 'Адрес',
             'privacyAgree' => 'Согласие на обработку персональных данных'
         ];

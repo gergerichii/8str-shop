@@ -1,6 +1,8 @@
 <?php
 
 namespace common\modules\catalog\models;
+
+use common\base\models\BaseDefaultQuery;
 use yii\db\Expression;
 
 /**

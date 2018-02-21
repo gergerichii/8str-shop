@@ -6,7 +6,7 @@ use common\modules\order\models\FieldValueVariant;
 use common\modules\order\models\FieldValue;
 use common\modules\order\models\FieldType;
 
-class Field extends \yii\db\ActiveRecord
+class Field extends \common\base\models\BaseActiveRecord
 {
     public static function tableName()
     {

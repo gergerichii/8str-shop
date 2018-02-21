@@ -2,18 +2,26 @@
 
 namespace common\modules\catalog\models;
 
+use common\base\models\BaseDefaultQuery;
+
 /**
  * This is the ActiveQuery class for [[Product2ProductRubric]].
  *
  * @see Product2ProductRubric
  */
-class Product2ProductRubricQuery extends \yii\db\ActiveQuery
+class Product2ProductRubricQuery extends BaseDefaultQuery
 {
     /*public function active()
     {
         return $this->andWhere('[[status]]=1');
     }*/
-
+    /**
+     *
+     */
+    public function _prepareQuery() {
+        // TODO: Implement _prepareQuery() method.
+    }
+    
     /**
      * @inheritdoc
      * @return Product2ProductRubric[]|array

@@ -17,7 +17,7 @@ use yii;
  * @property int $created_time   [int(11)]
  * @property int $updated_time   [int(11)]
  */
-class Cart extends yii\db\ActiveRecord implements CartInterface
+class Cart extends \common\base\models\BaseActiveRecord implements CartInterface
 {
     private $element = null;
     

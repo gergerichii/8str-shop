@@ -4,6 +4,7 @@ namespace common\modules\catalog\models;
 
 use Yii;
 use yii\behaviors\AttributeBehavior;
+use common\base\models\BaseActiveRecord;
 use yii\db\ActiveRecord;
 
 /**
@@ -26,7 +27,7 @@ use yii\db\ActiveRecord;
  * @property bool                   $show_on_product [tinyint(1)]
  * @property bool                   $use_as_group    [tinyint(1)]
  */
-class ProductTag extends ActiveRecord
+class ProductTag extends BaseActiveRecord
 {
 
     const STATUS = [

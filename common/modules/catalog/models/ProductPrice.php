@@ -2,13 +2,11 @@
 
 namespace common\modules\catalog\models;
 
-use common\helpers\CatalogHelper;
 use common\models\entities\User;
 use Yii;
 use yii\base\ErrorException;
-use yii\base\InvalidConfigException;
 use yii\behaviors\BlameableBehavior;
-use yii\db\ActiveRecord;
+use common\base\models\BaseActiveRecord;
 use yii\db\Expression;
 
 /**
@@ -25,7 +23,7 @@ use yii\db\Expression;
  * @property Product $product
  *
  */
-class ProductPrice extends ActiveRecord implements ProductPriceInterface
+class ProductPrice extends BaseActiveRecord implements ProductPriceInterface
 {
     public function behaviors () {
         return [

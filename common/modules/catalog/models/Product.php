@@ -5,13 +5,13 @@ namespace common\modules\catalog\models;
 use common\helpers\ProductHelper;
 use common\models\entities\User;
 use common\modules\cart\interfaces\CartElement;
-use common\modules\catalog\Module;
 use Yii;
 use yii\base\ErrorException;
 use yii\behaviors\AttributeBehavior;
 use \yii\db\ActiveQuery;
 use yii\behaviors\BlameableBehavior;
 use yii\behaviors\TimestampBehavior;
+use common\base\models\BaseActiveRecord;
 use yii\db\ActiveRecord;
 use yii\db\Expression;
 
@@ -71,7 +71,7 @@ use yii\db\Expression;
  *
  * TODO: Всемто имплемента, переделать на бихэйвор который будет накладываться на модель модулем Cart, исходя из настроек
  */
-class Product extends ActiveRecord implements CartElement
+class Product extends BaseActiveRecord implements CartElement
 {
 
     /**

@@ -3,10 +3,11 @@
 namespace common\modules\order\controllers;
 
 use common\models\entities\User;
+use common\models\entities\UserAddresses;
 use common\modules\order\forms\frontend\Step1Form;
 use common\modules\order\forms\frontend\Step2Form;
 use common\modules\order\Module as OrderModule;
-use yii\base\Exception;
+use Throwable;
 use yii\web\Controller;
 use yii\web\Response;
 
@@ -17,6 +18,10 @@ use yii\web\Response;
  */
 class DefaultController extends Controller
 {
+    /**
+     * @return string
+     * @throws \yii\db\Exception
+     */
     public function actionIndex()
     {
         $request = \Yii::$app->request;
@@ -66,11 +71,23 @@ class DefaultController extends Controller
                 if ($step1form->orderMode === OrderModule::ORDER_MODE_REGISTER) {
                     $user = new User();
                     $user->status = User::STATUS_ACTIVE;
+                    $address = new UserAddresses();
                     try {
+                        $transaction = \Yii::$app->db->beginTransaction();
                         $user->setAttributes($step2form->getAttributes());
                         $user->generateAuthKey();
-                        $ok &= $user->save();
-                    } catch(Exception $e) {
+                        if ($ok &= $user->save()){
+                            $address->setAttributes($step2form->getAttributes());
+                            $address->link('user', $user);
+                            $ok = empty($address->errors);
+                        }
+                        if ($ok) {
+                            $transaction->commit();
+                        } else {
+                            $transaction->rollBack();
+                        }
+                    } catch(Throwable $e) {
+                        $transaction->rollBack();
                         \Yii::error($e->getMessage(), 'order.defaultController');
                         $ok = false;
                         \Yii::$app->session->setFlash('modelErrors', 'Произошла непредвиденная ошибка.');

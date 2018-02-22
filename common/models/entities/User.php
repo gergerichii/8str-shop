@@ -29,6 +29,7 @@ use yii\web\IdentityInterface;
  * @property integer $status
  * @property integer $created_at
  * @property integer $updated_at
+ * @property UserAddresses[] $addresses
  * @property-write string $password write-only password
  */
 class User extends BaseActiveRecord implements IdentityInterface {
@@ -280,5 +281,12 @@ class User extends BaseActiveRecord implements IdentityInterface {
     public function removePasswordResetToken()
     {
         $this->password_reset_token = null;
+    }
+    
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getAddresses() {
+        return $this->hasMany(UserAddresses::className(), ['user_id' => 'id']);
     }
 }

@@ -1,6 +1,7 @@
 <?php
 namespace common\modules\cart\models;
 
+use common\base\models\BaseActiveRecord;
 use common\modules\cart\interfaces\Cart as CartInterface;
 use common\modules\cart\interfaces\CartElement;
 use common\modules\cart\interfaces\Element;
@@ -17,7 +18,7 @@ use yii;
  * @property int $created_time   [int(11)]
  * @property int $updated_time   [int(11)]
  */
-class Cart extends \common\base\models\BaseActiveRecord implements CartInterface
+class Cart extends BaseActiveRecord implements CartInterface
 {
     private $element = null;
     

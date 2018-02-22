@@ -40,9 +40,9 @@ class BaseActiveRecord extends ActiveRecord
      * @param mixed  $value
      */
     public function __set($name, $value) {
-        if (!isset($this->$name)) {
+        if (!$this->hasAttribute($name)) {
             $newName = $this->cc2lc($name);
-            if (isset($this->$newName)) {
+            if ($this->hasAttribute($newName)) {
                 $name = $newName;
             }
         }
@@ -57,9 +57,9 @@ class BaseActiveRecord extends ActiveRecord
      * @return mixed
      */
     public function __get($name) {
-        if (!isset($this->$name)) {
+        if (!$this->hasAttribute($name)) {
             $newName = $this->cc2lc($name);
-            if (isset($this->$newName)) {
+            if ($this->hasAttribute($newName)) {
                 $name = $newName;
             }
         }

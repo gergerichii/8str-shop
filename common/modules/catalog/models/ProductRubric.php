@@ -19,6 +19,8 @@ use common\modules\treeManager\models\TreeTrait;
  * @property string $material_path
  * @property int $visible_on_home_page Whether to show rubrics that are hidden on the home page
  *
+ * @property string $icon
+ *
  * @property Product2productRubric[] $product2productRubrics
  * @property Product[] $products
  * @property ProductPriceDiscount[] $productPriceDiscounts

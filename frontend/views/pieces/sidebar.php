@@ -6,64 +6,40 @@
  * Time: 19:04
  */
 
+use frontend\widgets\LeftMenu;
 use yii\widgets\Menu;
+
+/** @var \common\modules\catalog\Module $catalog */
+$catalog = \Yii::$app->getModule('catalog');
 
 ?>
 <div class="col-md-3 col-sm-4 col-xs-12 sidebar">
     <div class="widget">
         <h3>Категории</h3>
-            <?php
-            /** @var \common\modules\catalog\Module $catalog */
-            $catalog = \Yii::$app->getModule('catalog');
-            echo Menu::widget([
-                'items' => $catalog->getMenuStructure(1),
-            ])
-            ;?>
-    </div>
 
-    <div class="widget">
-        <h3>Categories</h3>
-
-        <div class="list-group list-group-brand list-group-accordion">
-            <a href="#" class="list-group-item">Fashion
-                <span class="filter-icon filter-icon-fashion"></span>
-            </a>
-            <a href="#" class="list-group-item">Furniture
-                <span class="filter-icon filter-icon-furniture"></span>
-            </a>
-            <a href="#" class="list-group-item">Electronics
-                <span class="filter-icon filter-icon-electronics"></span>
-            </a>
-            <a href="#" class="list-group-item">Gifts
-                <span class="filter-icon filter-icon-gifts"></span>
-            </a>
-            <a href="#" class="list-group-item">Books
-                <span class="filter-icon filter-icon-books"></span>
-            </a>
-            <a href="#" class="list-group-item">Music
-                <span class="filter-icon filter-icon-music"></span>
-            </a>
-            <a href="#" class="list-group-item">Sport &amp; Tourism
-                <span class="filter-icon filter-icon-sport"></span>
-            </a>
-            <a href="#" class="list-group-item">Games
-                <span class="filter-icon filter-icon-games"></span>
-            </a>
-        </div><!-- End .list-group -->
+        <?= LeftMenu::widget([
+            'options' => [
+                'tag' => 'div',
+                'class' => 'list-group list-group-brand list-group-accordion'
+            ],
+            'itemOptions' => ['tag' => false],
+            'items' => $catalog->getMenuStructure(1),
+            'linkTemplate' => '<a href="{url}" class="list-group-item">{label}<span class="filter-icon filter-icon-{icon}"></span></a>',
+        ]); ?>
     </div>
 
     <div class="widget">
         <h3>Brands</h3>
 
-        <div class="list-group list-group-brand">
-            <a href="#" class="list-group-item">Armani</a>
-            <a href="#" class="list-group-item">Bulgari</a>
-            <a href="#" class="list-group-item">Christion Dior</a>
-            <a href="#" class="list-group-item">Dolce &amp; Gabbana</a>
-            <a href="#" class="list-group-item">Fendi</a>
-            <a href="#" class="list-group-item">Givenchy</a>
-            <a href="#" class="list-group-item">Donna Karan</a>
-        </div><!-- End .list-group -->
+        <?= Menu::widget([
+            'options' => [
+                'tag' => 'div',
+                'class' => 'list-group list-group-brand'
+            ],
+            'itemOptions' => ['tag' => false],
+            'linkTemplate' => '<a href="{url}" class="list-group-item">{label}</a>',
+            'items' => $catalog->getBrandMenuStructure(),
+        ]); ?>
     </div>
 
     <div class="widget subscribe">

@@ -3,9 +3,9 @@
 namespace common\modules\catalog;
 
 use common\modules\catalog\models\Product;
+use common\modules\catalog\models\ProductBrand;
 use common\modules\catalog\models\ProductRubric;
 use common\modules\catalog\models\ProductRubricMenuItems;
-use common\modules\catalog\models\ProductSphinxIndex;
 use Yii;
 use yii\base\Application;
 use yii\base\BootstrapInterface;
@@ -67,6 +67,7 @@ class Module extends \yii\base\Module implements BootstrapInterface
                 ],
                 'encodeParams' => false,
             ],
+            'catalog/seacrh' => '/catalog/default/search',
             'catalog' => 'catalog/default/index/',
         ];
         if (count($urlManagers)) {
@@ -98,6 +99,7 @@ class Module extends \yii\base\Module implements BootstrapInterface
                     ->with(['main_rubric', 'rubrics'])->active()->where(['id' => $product])->one();
             }
         }
+
         if ($product instanceof Product) {
             $uriParams['productId'] = $product->id;
             $uriParams[0] .= '/' . $this->productActionId;
@@ -120,6 +122,16 @@ class Module extends \yii\base\Module implements BootstrapInterface
             throw new ErrorException('$rubric must be string or instance of common\modules\catalog\models\ProductRubric');
         }
         return str_replace('%2F', urldecode('%2F'), Url::to($uriParams));
+    }
+
+    /**
+     * Gets the brand uri
+     * @param ProductBrand $brand
+     * @return string
+     */
+    public function getBrandUri(ProductBrand $brand)
+    {
+        return Url::to('/catalog/brand/' . $brand->id);
     }
 
     /** ---------------------------------Продукты------------------------------------*/
@@ -402,14 +414,33 @@ class Module extends \yii\base\Module implements BootstrapInterface
         $module = $this;
 
         $menuItems = new ProductRubricMenuItems($rubrics, function ($rubric) use ($module) {
+            /** @var ProductRubric $rubric */
             return [
                 'label' => $rubric->name,
                 'items' => null,
-                'url' => $module->getCatalogUri($rubric)
+                'url' => $module->getCatalogUri($rubric),
+                'icon' => $rubric->icon
             ];
         });
 
         return $menuItems->render();
+    }
+
+    /**
+     * Gets the structure of the brand menu
+     */
+    public function getBrandMenuStructure(){
+        $module = $this;
+        $brands = ProductBrand::find()->all();
+        $menuItems = array_map(function($brand) use ($module){
+            /** @var ProductBrand $brand */
+            return [
+                'label' => $brand->name,
+                'url' => $module->getBrandUri($brand),
+            ];
+        }, $brands);
+
+        return $menuItems;
     }
 
     /**

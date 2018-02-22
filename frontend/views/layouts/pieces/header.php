@@ -8,6 +8,7 @@
 
 use common\modules\cart\widgets\CartInformer;
 use common\modules\cart\widgets\ElementsList;
+use common\modules\catalog\widgets\MainSearchWidget;
 use yii\helpers\Url;
 
 /* @var $this \yii\web\View */
@@ -92,12 +93,7 @@ use yii\helpers\Url;
                         <?php endif; ?>
 
                         <div id="quick-access">
-                            <form class="form-inline quick-search-form" role="form" action="#">
-                                <div class="form-group">
-                                    <input type="text" class="form-control" placeholder="Search here">
-                                </div><!-- End .form-inline -->
-                                <button type="submit" id="quick-search" class="btn btn-custom"></button>
-                            </form>
+                            <?= MainSearchWidget::widget(); ?>
                         </div><!-- End #quick-access -->
 
                         <div class="header-box contact-infos pull-right">

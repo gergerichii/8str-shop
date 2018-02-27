@@ -31,8 +31,7 @@
         "kartik-v/yii2-number": "1.0.0",
         "2amigos/yii2-ckeditor-widget": "2.1.0",
         "kartik-v/yii2-widget-typeahead": "^1.0@dev",
-        "yurkinx/yii2-image": "1.1",
-        "rkit/filemanager-yii2": "4.1.0"
+        "yurkinx/yii2-image": "1.1"
     },
     "require-dev": {
         "yiisoft/yii2-debug": "~2.0.0",
@@ -43,7 +42,6 @@
         "kartik-v/yii2-mpdf": "@dev",
         "nex/yii2-datepicker": "@dev",
         "dvizh/yii2-order": "@dev",
-        "dpodium/yii2-filemanager": "@dev",
         "kartik-v/yii2-grid": "@dev"
     },
     "config": {

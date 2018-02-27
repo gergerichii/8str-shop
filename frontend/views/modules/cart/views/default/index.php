@@ -3,8 +3,6 @@
 use common\modules\cart\widgets\DeleteButton;
 use common\modules\cart\widgets\ElementCost;
 use common\modules\cart\widgets\ElementPrice;
-use common\modules\cart\widgets\ElementsList;
-use common\modules\cart\widgets\TruncateButton;
 use common\modules\cart\widgets\ChangeCount;
 use common\modules\cart\widgets\CartInformer;
 use common\modules\cart\widgets\ChangeOptions;
@@ -15,6 +13,9 @@ use yii\helpers\Url;
 $this->title = yii::t('cart', 'Cart');
 /** @var \common\modules\catalog\Module $catalog */
 $catalog = \Yii::$app->getModule('catalog');
+
+/** @var \common\modules\files\Module $filesManager */
+$filesManager = Yii::$app->getModule('files');
 
 $this->registerCss('
 .custom-quantity-input input[type=number]::-webkit-inner-spin-button,
@@ -53,7 +54,7 @@ $this->registerCss('
                             <?php
                             $model = $element->getModel();
                             $image = isset($model->images[0]) ? $model->images[0] : 'default.jpg';
-                            $image = \common\modules\files\Module::getImageUri($image);
+                            $image = $filesManager->getFileUri('products/images', $image);
                             try{
                                 $productUrl = $catalog->getCatalogUri(NULL, $model);
                             } catch(ErrorException $e){
@@ -400,7 +401,7 @@ $this->registerCss('
 
 <?php return; ?>
 <div class="cart">
-    <h1><?=yii::t('cart', 'Cart');?></h1>
+    <h1><?= Yii::t('cart', 'Cart'); ?></h1>
     <?php foreach($elements as $element) { ?>
         <div class="row">
             <div class="col-lg-6 col-xs-6">

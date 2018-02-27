@@ -8,15 +8,15 @@
 
 use yii\base\ErrorException;
 
+/** @var \common\modules\catalog\Module $catalog */
+$catalog = \Yii::$app->getModule('catalog');
+
 /** @var \common\modules\catalog\models\Product $model */
 
 $image1 = isset($model->images[0]) ? $model->images[0] : 'default.jpg';
 $image2 = isset($model->images[1]) ? $model->images[1] : $image1;
-$image1 = \common\modules\files\Module::getImageUri($image1);
-$image2 = \common\modules\files\Module::getImageUri($image2);
-
-/** @var \common\modules\catalog\Module $catalog */
-$catalog = \Yii::$app->getModule('catalog');
+$image1 = $catalog->getProductThumbnailUri($image1, 'large');
+$image2 = $catalog->getProductThumbnailUri($image2, 'large');
 
 try{
     $productUrl = $catalog->getCatalogUri(NULL, $model);

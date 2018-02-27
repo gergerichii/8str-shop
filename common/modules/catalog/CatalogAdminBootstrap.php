@@ -3,6 +3,7 @@
 namespace common\modules\catalog;
 
 use yii\base\BootstrapInterface;
+use yii\web\Application;
 
 /**
  * Class bootstrap catalog admin
@@ -17,6 +18,7 @@ class CatalogAdminBootstrap implements BootstrapInterface
      */
     public function bootstrap($app)
     {
+        /** @var Application $app */
         $urlManagers = [];
         foreach (array_keys($app->components) as $componentName) {
             if (strPos($componentName, 'UrlManager') > 0)
@@ -25,8 +27,7 @@ class CatalogAdminBootstrap implements BootstrapInterface
 
         $rules = [
             '/catalog' => '/catalog/default/index',
-            '/catalog/rubrics' => '/catalog/default/rubrics',
-            '/catalog/create' => '/catalog/default/create',
+            '/catalog/<_a:(rubrics|create|delete-image)>' => '/catalog/default/<_a>',
             '/catalog/<_a:(view|delete|update)>/<id:\d+>' => '/catalog/default/<_a>',
         ];
 

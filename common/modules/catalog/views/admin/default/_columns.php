@@ -1,5 +1,6 @@
 <?php
 
+use yii\helpers\Html;
 use yii\helpers\Url;
 
 return [
@@ -30,6 +31,17 @@ return [
         'urlCreator' => function ($action, $model, $key, $index) {
             return Url::to([$action, 'id' => $key]);
         },
+        'template' => '{images} {view} {update} {delete}',
+        'buttons' => [
+            'images' => function ($url, $model, $key) {
+                $icon = Html::tag('span', '', ['class' => 'glyphicon glyphicon-picture']);
+                return Html::a($icon, ['images', 'id' => $model->id], [
+                    'role' => 'modal-remote',
+                    'title' => 'Images',
+                    'data-toggle' => 'tooltip'
+                ]);
+            },
+        ],
         'viewOptions' => ['role' => 'modal-remote', 'title' => 'View', 'data-toggle' => 'tooltip'],
         'updateOptions' => ['role' => 'modal-remote', 'title' => 'Update', 'data-toggle' => 'tooltip'],
         'deleteOptions' => ['role' => 'modal-remote', 'title' => 'Delete',

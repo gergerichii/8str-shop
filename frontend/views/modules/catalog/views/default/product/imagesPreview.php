@@ -6,13 +6,15 @@
  * Time: 22:54
  */
 
-use common\modules\files\Module;
-
-/** @var \yii\web\View $this */
-/** @var \common\modules\catalog\models\Product $product */
-
-/** @var \common\modules\catalog\Module $catalog */
+/**
+ * @var \yii\web\View $this
+ * @var \common\modules\catalog\models\Product $product
+ * @var \common\modules\catalog\Module $catalog
+ */
 $catalog = \Yii::$app->getModule('catalog');
+
+/** @var \common\modules\files\Module $filesManager */
+$filesManager = \Yii::$app->getModule('files');
 ?>
 
 <div class="col-md-6 col-sm-12 col-xs-12 product-viewer clearfix">
@@ -22,8 +24,8 @@ $catalog = \Yii::$app->getModule('catalog');
 
             <!-- TODO: Сделать ссылки на разные картинки, ака тумбы, биг и т.д.-->
             <?php $active = 'class="active-slide"'; ?>
-            <? foreach ($product->images as $image): ?>
-                <?php $image = Module::getImageUri($image); ?>
+            <?php foreach ($product->images as $image): ?>
+                <?php $image = $filesManager->getFileUri('products/images', $image); ?>
                 <li <?=$active?>>
                     <a data-rel='prettyPhoto[product]' href="<?=$image?>"
                        data-image="<?=$image?>" data-zoom-image="<?=$image?>"
@@ -42,7 +44,7 @@ $catalog = \Yii::$app->getModule('catalog');
         // TODO Rewrite to get default image
         $image = null;
         if ($product->images && array_key_exists(0, $product->images)) {
-            $image = Module::getImageUri($product->images[0]);
+            $image = $filesManager->getFileUri('products/images', $product->images[0]);
         }
         ?>
         <figure><img src="<?=$image?>" data-zoom-image="<?=$image?>" alt="<?=$product?>" id="product-image">

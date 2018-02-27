@@ -39,6 +39,8 @@ class DefaultController extends BaseFrontendController
             $query->select('product.*')->distinct()
                 ->joinWith('rubrics r', false)
                 ->joinWith('mainRubric mr', false)
+                ->with('price')
+                ->with('oldPrice')
                 ->andWhere(['or',
                     ['in', 'r.id', $rubricsIds],
                     ['in', 'mr.id', $rubricsIds],

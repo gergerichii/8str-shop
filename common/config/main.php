@@ -33,6 +33,10 @@ $config = [
             'currencyShowDecimals' => false,
             'currencySymbol' => '₽',
         ],
+        'image' => array(
+            'class' => '\yii\image\ImageDriver',
+            'driver' => 'GD',
+        )
     ],
     'modules' => [
     ],

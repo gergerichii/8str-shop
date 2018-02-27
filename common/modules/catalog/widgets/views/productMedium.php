@@ -8,19 +8,23 @@
 
 use yii\base\ErrorException;
 
-/** @var \common\modules\catalog\models\Product $model */
+/**
+ * @var \common\modules\catalog\models\Product $model
+ * @var \common\modules\catalog\Module $catalog
+ * @var \common\modules\files\Module $filesManager
+ */
+
+$catalog = \Yii::$app->getModule('catalog');
+$filesManager = \Yii::$app->getModule('files');
 
 $image1 = isset($model->images[0]) ? $model->images[0] : 'default.jpg';
 $image2 = isset($model->images[1]) ? $model->images[1] : $image1;
-$image1 = \common\modules\files\Module::getImageUri($image1);
-$image2 = \common\modules\files\Module::getImageUri($image2);
+$image1 = $filesManager->getFileUri('products/images', $image1);
+$image2 = $filesManager->getFileUri('products/images', $image2);
 
-/** @var \common\modules\catalog\Module $catalog */
-$catalog = \Yii::$app->getModule('catalog');
-
-try{
+try {
     $productUrl = $catalog->getCatalogUri(NULL, $model);
-} catch(ErrorException $e){
+} catch (ErrorException $e) {
     Yii::error($e->getMessage());
     $productUrl = '';
 }

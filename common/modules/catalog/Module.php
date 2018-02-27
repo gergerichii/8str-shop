@@ -6,6 +6,7 @@ use common\modules\catalog\models\Product;
 use common\modules\catalog\models\ProductBrand;
 use common\modules\catalog\models\ProductRubric;
 use common\modules\catalog\models\ProductRubricMenuItems;
+use common\modules\files\models\Image;
 use Yii;
 use yii\base\Application;
 use yii\base\BootstrapInterface;
@@ -451,5 +452,25 @@ class Module extends \yii\base\Module implements BootstrapInterface
      */
     public function productHasTag(Product $product, string $tagName): bool {
         return !empty($product->tags[$tagName]);
+    }
+
+    /**
+     * Get thambnail uri of product by image name
+     * @param string $imageName
+     * @param string $thumbName
+     * @return string
+     * @throws InvalidConfigException
+     */
+    public function getProductThumbnailUri(string $imageName, string $thumbName) {
+        /** @var \common\modules\files\Module $filesManager */
+        $filesManager = Yii::$app->getModule('files');
+        /** @var Image $entity */
+        $entity = $filesManager->getEntityInstance('products/images');
+        $entity->fileName = $imageName;
+        if ($thumb = $entity->getThumb($thumbName)) {
+            return $thumb->getUri();
+        }
+
+        return $entity->getUri();
     }
 }

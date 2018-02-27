@@ -7,7 +7,6 @@ use common\modules\catalog\models\ProductBrand;
 use common\modules\catalog\models\ProductRubric;
 use common\modules\catalog\Module;
 use common\modules\catalog\providers\FrontendSearchProvider;
-use common\modules\files\Module as FilesModule;
 use yii\web\Controller;
 use yii\web\Response;
 
@@ -45,6 +44,8 @@ class DataController extends Controller
 
         /** @var Module $catalog */
         $catalog = \Yii::$app->getModule('catalog');
+        /** @var \common\modules\files\Module $filesManager */
+        $filesManager = \Yii::$app->getModule('files');
 
         $rubricsItems = array_map(function ($rubric) use ($catalog) {
             /** @var ProductRubric $rubric */
@@ -68,9 +69,9 @@ class DataController extends Controller
             ];
         }, $search->getBrands());
 
-        $productsItems = array_map(function ($product) use ($catalog) {
+        $productsItems = array_map(function ($product) use ($catalog, $filesManager) {
             $pictureName = isset($product->images[0]) ? $product->images[0] : 'default.jpg';
-            $pictureSrc = FilesModule::getImageUri($pictureName);
+            $pictureSrc = $filesManager->getFileUri('products/images', $pictureName);
 
             $template = $this->renderPartial('search/product', [
                 'model' => $product,

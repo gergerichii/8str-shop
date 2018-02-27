@@ -9,6 +9,8 @@ use common\modules\catalog\models\ProductPrice;
 use common\modules\catalog\models\ProductRubric;
 use common\modules\catalog\models\ProductTag;
 use common\modules\catalog\models\ProductTag2product;
+use common\modules\files\models\Image;
+use common\modules\files\Module;
 use Yii;
 use yii\console\Controller;
 use yii\db\Connection;
@@ -181,12 +183,15 @@ class OldbaseController extends Controller
      *
      * @return int
      * @throws Exception
+     * @throws \yii\base\ErrorException
+     * @throws \yii\base\Exception
+     * @throws \yii\base\InvalidConfigException
      */
     public function actionImport()
     {
-        if (isset(yii::$app->old_db)) {
-            $remoteDb = yii::$app->old_db;
-        } else {
+        /** @var Connection $remoteDb */
+        $remoteDb = Yii::$app->get('old_db', false);
+        if (!$remoteDb) {
             $remoteDb = clone yii::$app->db;
             $remoteDb->dsn = preg_replace(
                 '#dbname=[^;]+#',
@@ -241,6 +246,9 @@ class OldbaseController extends Controller
      * @param $remoteDb
      * @return int
      * @throws Exception
+     * @throws \yii\base\ErrorException
+     * @throws \yii\base\Exception
+     * @throws \yii\base\InvalidConfigException
      */
     protected function exportProducts($remoteDb) {
         
@@ -301,6 +309,9 @@ class OldbaseController extends Controller
             ->andWhere(['`n`.`status`' => 1])
             ->andWhere(['IS NOT', '`f`.`uri`', null])
             ->orderBy(['`n`.`changed`' => SORT_DESC]);
+
+        /** @var Module $filesManager */
+        $filesManager = Yii::$app->getModule('files');
 
         foreach ($query->each(100, $remoteDb) as $src) {
             /* Попытка исправить найденные товары с ошибками */
@@ -457,6 +468,13 @@ class OldbaseController extends Controller
                     $product->errors
                 );
             }
+
+            /** @var Image $image */
+            $image = $filesManager->createEntity('products/images', $src['filename']);
+            if ($image->exists()) {
+                $image->createThumbs();
+            }
+
 
             $msg = $this->ansiFormat('.', Console::FG_GREEN);
             $this->stdout($msg);

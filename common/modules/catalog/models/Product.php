@@ -137,8 +137,7 @@ class Product extends ActiveRecord implements CartElement
      * @inheritdoc
      */
 
-    public function behaviors()
-    {
+    public function behaviors() {
         return [
             'blameable' => [
                 'class' => BlameableBehavior::className(),
@@ -168,16 +167,14 @@ class Product extends ActiveRecord implements CartElement
     /**
      * @inheritdoc
      */
-    public static function tableName()
-    {
+    public static function tableName() {
         return 'product';
     }
 
     /**
      * @inheritdoc
      */
-    public function scenarios()
-    {
+    public function scenarios() {
         return array(
             'default' => [
                 '!id', 'name', 'title', 'desc', 'status', 'count',
@@ -197,8 +194,7 @@ class Product extends ActiveRecord implements CartElement
     /**
      * @inheritdoc
      */
-    public function rules()
-    {
+    public function rules() {
         return [
             [['creator_id', 'modifier_id'], 'default', 'value' => Yii::$app->user->id],
             [['files'], 'default', 'value' => $this->getDefaultFilesJson()],
@@ -229,8 +225,7 @@ class Product extends ActiveRecord implements CartElement
     /**
      * @inheritdoc
      */
-    public function attributeLabels()
-    {
+    public function attributeLabels() {
         return [
             /**
              * @todo Add translation opportunity
@@ -283,8 +278,7 @@ class Product extends ActiveRecord implements CartElement
     /**
      * @return string[]
      */
-    public function getFiles(): array
-    {
+    public function getFiles(): array {
         return $this->_files;
     }
 
@@ -294,8 +288,7 @@ class Product extends ActiveRecord implements CartElement
      * @return Product
      * @throws ErrorException
      */
-    public function setFiles(array $files)
-    {
+    public function setFiles(array $files) {
         $tmpFiles = [];
         foreach ($files as $key => $file) {
             if (!is_string($file)) {
@@ -314,27 +307,46 @@ class Product extends ActiveRecord implements CartElement
      * @param string $file
      * @return Product
      */
-    public function addFile(string $file)
-    {
+    public function addFile(string $file) {
         $part = ProductHelper::getFileStorePart($file);
-        if (!in_array($file, $this->_files[$part]))
+        if (!in_array($file, $this->_files[$part])){
             $this->_files[$part][] = $file;
+        }
+
         return $this;
     }
 
     /**
-     * @return string
+     * Delete file
+     * @param string $file
+     * @return $this
      */
-    public function getMainImage()
-    {
-        return (!empty($this->_files['images'][0])) ? $this->_files['images'][0] : '';
+    public function deleteFile(string $file) {
+        $part = ProductHelper::getFileStorePart($file);
+        if (false !== ($index = array_search($file, $this->_files[$part]))) {
+            unset($this->_files[$part][$index]);
+        }
+
+        return $this;
     }
 
     /**
+     * Get main image
+     * @return string
+     */
+    public function getMainImage() {
+        if ($this->images) {
+            return current($this->images);
+        }
+
+        return '';
+    }
+
+    /**
+     * Get images
      * @return string[]
      */
-    public function getImages()
-    {
+    public function getImages() {
         return (!empty($this->_files['images'])) ? $this->_files['images'] : [];
     }
 
@@ -342,22 +354,19 @@ class Product extends ActiveRecord implements CartElement
      * Get default files as JSON
      * @return string
      */
-    public function getDefaultFilesJson()
-    {
+    public function getDefaultFilesJson() {
         return json_encode([
             'images' => [],
             'files' => [],
         ]);
     }
 
-    public function afterFind()
-    {
+    public function afterFind() {
         $this->_prepareFiles();
         parent::afterFind();
     }
 
-    public function afterRefresh()
-    {
+    public function afterRefresh() {
         $this->_prepareFiles();
         parent::afterRefresh();
     }
@@ -367,8 +376,7 @@ class Product extends ActiveRecord implements CartElement
     /**
      * TODO: Посмотреть, как можно сделать это лучше
      */
-    private function _prepareFiles()
-    {
+    private function _prepareFiles() {
         $this->_files = json_decode($this->getAttribute('files'), true);
     }
 
@@ -377,8 +385,7 @@ class Product extends ActiveRecord implements CartElement
     /**
      * @return string
      */
-    public function __toString()
-    {
+    public function __toString() {
         return (isset($this->title)) ? $this->title : $this->name;
     }
 
@@ -388,112 +395,98 @@ class Product extends ActiveRecord implements CartElement
     /**
      * @return \yii\db\ActiveQuery
      */
-    public function getBrand()
-    {
+    public function getBrand() {
         return $this->hasOne(ProductBrand::className(), ['id' => 'brand_id'])->inverseOf('products');
     }
 
     /**
      * @return \yii\db\ActiveQuery
      */
-    public function getCreator()
-    {
+    public function getCreator() {
         return $this->hasOne(User::className(), ['id' => 'creator_id'])->inverseOf('products');
     }
 
     /**
      * @return \yii\db\ActiveQuery
      */
-    public function getModifier()
-    {
+    public function getModifier() {
         return $this->hasOne(User::className(), ['id' => 'modifier_id'])->inverseOf('products0');
     }
 
     /**
      * @return \yii\db\ActiveQuery
      */
-    public function getType()
-    {
+    public function getType() {
         return $this->hasOne(ProductType::className(), ['id' => 'product_type_id'])->inverseOf('products');
     }
 
     /**
      * @return \yii\db\ActiveQuery
      */
-    public function getProduct2Rubrics()
-    {
+    public function getProduct2Rubrics() {
         return $this->hasMany(Product2productRubric::className(), ['product_id' => 'id'])->inverseOf('product');
     }
 
     /**
      * @return \yii\db\ActiveQuery
      */
-    public function getRubrics()
-    {
+    public function getRubrics() {
         return $this->hasMany(ProductRubric::className(), ['id' => 'rubric_id'])->viaTable('product2product_rubric', ['product_id' => 'id']);
     }
 
     /**
      * @return \yii\db\ActiveQuery
      */
-    public function getMainRubric()
-    {
+    public function getMainRubric() {
         return $this->hasOne(ProductRubric::className(), ['id' => 'main_rubric_id']);
     }
 
     /**
      * @return ActiveQuery|ProductPriceQuery
      */
-    public function getPrices()
-    {
+    public function getPrices() {
         return $this->hasMany(ProductPrice::className(), ['product_id' => 'id'])->inverseOf('product');
     }
 
     /**
      * @return \yii\db\ActiveQuery
      */
-    public function getRelatedProduct2productsParent()
-    {
+    public function getRelatedProduct2productsParent() {
         return $this->hasMany(RelatedProduct2product::className(), ['parent_product_id' => 'id'])->inverseOf('parentProduct');
     }
 
     /**
      * @return \yii\db\ActiveQuery
      */
-    public function getRelatedProduct2productsChild()
-    {
+    public function getRelatedProduct2productsChild() {
         return $this->hasMany(RelatedProduct2product::className(), ['related_product_id' => 'id'])->inverseOf('relatedProduct');
     }
 
     /**
      * @return \yii\db\ActiveQuery
      */
-    public function getRelatedProducts()
-    {
+    public function getRelatedProducts() {
         return $this->hasMany(Product::className(), ['id' => 'related_product_id'])->viaTable('related_product2product', ['parent_product_id' => 'id']);
     }
 
     /**
      * @return \yii\db\ActiveQuery
      */
-    public function getParentProducts()
-    {
+    public function getParentProducts() {
         return $this->hasMany(Product::className(), ['id' => 'parent_product_id'])->viaTable('related_product2product', ['related_product_id' => 'id']);
     }
 
     /**
      * @return \yii\db\ActiveQuery
      */
-    public function getTags2products()
-    {
+    public function getTags2products() {
         return $this->hasMany(ProductTag2product::className(), ['product_id' => 'id'])->inverseOf('product');
     }
 
     /**
      * @return \yii\db\ActiveQuery
      */
-    public function getTags()
-    {
+    public function getTags() {
         return $this->hasMany(ProductTag::className(), ['id' => 'product_tag_id'])
             ->viaTable('product_tag2product', ['product_id' => 'id'])
             ->indexBy('name');
@@ -503,8 +496,7 @@ class Product extends ActiveRecord implements CartElement
      * @inheritdoc
      * @return ProductQuery the active query used by this AR class.
      */
-    public static function find()
-    {
+    public static function find() {
         return new ProductQuery(get_called_class());
     }
 
@@ -514,8 +506,7 @@ class Product extends ActiveRecord implements CartElement
      * Get cart id
      * @return int
      */
-    public function getCartId()
-    {
+    public function getCartId() {
         return $this->id;
     }
 
@@ -523,8 +514,7 @@ class Product extends ActiveRecord implements CartElement
      * Get cart name
      * @return string
      */
-    public function getCartName()
-    {
+    public function getCartName() {
         return $this->name;
     }
 
@@ -532,8 +522,7 @@ class Product extends ActiveRecord implements CartElement
      * Get cart price
      * @return int|string
      */
-    public function getCartPrice()
-    {
+    public function getCartPrice() {
         /** @var \common\modules\catalog\Module $catalog */
         $catalog = yii::$app->getModule('catalog');
         return $catalog->priceOf($this, false);
@@ -543,8 +532,7 @@ class Product extends ActiveRecord implements CartElement
      * Get cart options
      * @return array
      */
-    public function getCartOptions()
-    {
+    public function getCartOptions() {
         return [];
     }
 
@@ -552,8 +540,7 @@ class Product extends ActiveRecord implements CartElement
      * Get list of rubrics
      * @return string ```'rubricId1,rubricId2,rubricId3'```
      */
-    public function getListOfRubrics()
-    {
+    public function getListOfRubrics() {
         if (is_null($this->_listOfRubric) && $this->rubrics) {
             $this->_listOfRubric = array_reduce($this->rubrics, function ($carry, $item) {
                 $id = $item->id;
@@ -568,16 +555,14 @@ class Product extends ActiveRecord implements CartElement
      * Set list of rubrics
      * @param string $listOfRubric List of rubrics
      */
-    public function setListOfRubrics($listOfRubric)
-    {
+    public function setListOfRubrics($listOfRubric) {
         $this->_listOfRubric = $listOfRubric;
     }
 
     /**
      * @inheritdoc
      */
-    public function afterSave($insert, $changedAttributes)
-    {
+    public function afterSave($insert, $changedAttributes) {
         parent::afterSave($insert, $changedAttributes);
 
         // TODO Replace at business logic or form model
@@ -616,8 +601,7 @@ class Product extends ActiveRecord implements CartElement
      * @param array $rubricIds Identifiers of rubrics
      * @throws \yii\db\Exception
      */
-    public function updateLinksWithRubrics($rubricIds)
-    {
+    public function updateLinksWithRubrics($rubricIds) {
         $rubricIds = array_filter($rubricIds);
 
         $transaction = Yii::$app->getDb()->beginTransaction();
@@ -638,8 +622,7 @@ class Product extends ActiveRecord implements CartElement
      * Link rubrics
      * @param array $rubricIds Identifiers of rubrics
      */
-    public function linkRubrics($rubricIds)
-    {
+    public function linkRubrics($rubricIds) {
         if ($rubricIds) {
             $rublics = ProductRubric::find()->where(['in', 'id', $rubricIds])->all();
             foreach ($rublics as $rublic) {
@@ -652,8 +635,7 @@ class Product extends ActiveRecord implements CartElement
      * Get tag collection
      * @return array
      */
-    public function getTagCollection()
-    {
+    public function getTagCollection() {
         if (is_null($this->_tagCollection) && $this->tags) {
             $tagsKey = $tagsValue = array_keys($this->tags);
             $this->_tagCollection = array_combine($tagsKey, $tagsValue);
@@ -666,8 +648,7 @@ class Product extends ActiveRecord implements CartElement
      * Set tag collection
      * @param array $tagCollection
      */
-    public function setTagCollection($tagCollection)
-    {
+    public function setTagCollection($tagCollection) {
         if (!$tagCollection) {
             $this->_tagCollection = [];
         } else {
@@ -680,8 +661,7 @@ class Product extends ActiveRecord implements CartElement
      * @param array $tagCollection
      * @throws \yii\db\Exception
      */
-    public function updateLinksWithTags($tagCollection)
-    {
+    public function updateLinksWithTags($tagCollection) {
         $transaction = Yii::$app->getDb()->beginTransaction();
         foreach ($this->tags as $tag) {
             if (false === ($index = array_search($tag->name, $tagCollection))) {
@@ -700,8 +680,7 @@ class Product extends ActiveRecord implements CartElement
      * Link tags
      * @param array $tagCollection Tags
      */
-    public function linkTags($tagCollection)
-    {
+    public function linkTags($tagCollection) {
         if ($tagCollection) {
             $tags = ProductTag::find()->where(['in', 'name', $tagCollection])->all();
             foreach ($tags as $tag) {
@@ -714,8 +693,7 @@ class Product extends ActiveRecord implements CartElement
      * Get field for future price
      * @return array|null
      */
-    public function getFieldForFuturePrice()
-    {
+    public function getFieldForFuturePrice() {
         if (is_null($this->_fieldForFuturePrice)) {
             $this->_fieldForFuturePrice = [];
 
@@ -740,8 +718,7 @@ class Product extends ActiveRecord implements CartElement
      * Get price
      * @return ProductPriceQuery
      */
-    public function getPrice()
-    {
+    public function getPrice() {
         /** @var ProductPriceQuery $query */
         $query = $this->hasOne(ProductPrice::className(), ['product_id' => 'id']);
         $query->onlyActive();
@@ -754,8 +731,7 @@ class Product extends ActiveRecord implements CartElement
      * Get old price
      * @return ProductPriceQuery
      */
-    public function getOldPrice()
-    {
+    public function getOldPrice() {
         /** @var ProductPriceQuery $query */
         $query = $this->hasOne(ProductPrice::className(), ['product_id' => 'id']);
         $query->onlyInactive();
@@ -780,8 +756,7 @@ class Product extends ActiveRecord implements CartElement
      * Set field for future price
      * @param $fieldForFuturePrice
      */
-    public function setFieldForFuturePrice($fieldForFuturePrice)
-    {
+    public function setFieldForFuturePrice($fieldForFuturePrice) {
         $this->_fieldForFuturePrice = $fieldForFuturePrice;
     }
 
@@ -792,8 +767,7 @@ class Product extends ActiveRecord implements CartElement
      * @return bool
      * @throws \yii\db\Exception
      */
-    public function insertNewPrice($value, $domain = null)
-    {
+    public function insertNewPrice($value, $domain = null) {
         if ($this->price && $this->price->value == $value) {
             // Nothing to change
             return true;
@@ -822,11 +796,11 @@ class Product extends ActiveRecord implements CartElement
             }
 
             $transaction->commit();
-        } catch(ErrorException $exception) {
+        } catch (ErrorException $exception) {
             $this->addError('price', 'An error occurred while setting a new price: "' . $exception->getMessage() . '".');
             $transaction->rollBack();
             return false;
-        } catch(\Exception $exception){
+        } catch (\Exception $exception) {
             Yii::error($exception->getMessage());
             $this->addError('price', 'Unknown error occurred while setting a new price: "' . $exception->getMessage() . '".');
             $transaction->rollBack();
@@ -896,8 +870,7 @@ class Product extends ActiveRecord implements CartElement
      * @throws \Exception
      * @throws \Throwable
      */
-    public function updateFieldForFuturePrice($fieldForFuturePrice)
-    {
+    public function updateFieldForFuturePrice($fieldForFuturePrice) {
         if (array_key_exists('future', $fieldForFuturePrice)) {
             $this->updateFuturePrice($fieldForFuturePrice['future']['value'], $fieldForFuturePrice['future']['active_from']);
         }
@@ -907,8 +880,7 @@ class Product extends ActiveRecord implements CartElement
      * Get brand name
      * @return string
      */
-    public function getBrandName()
-    {
+    public function getBrandName() {
         return $this->brand ? $this->brand->name : null;
     }
 
@@ -916,8 +888,7 @@ class Product extends ActiveRecord implements CartElement
      * Get rubric name
      * @return string
      */
-    public function getRubricName()
-    {
+    public function getRubricName() {
         return $this->rubrics ? current($this->rubrics)->name : null;
     }
 

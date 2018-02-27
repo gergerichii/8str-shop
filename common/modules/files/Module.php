@@ -1,35 +1,39 @@
 <?php
 
 namespace common\modules\files;
+
+use common\modules\files\models\BaseFile;
 use yii\base\Application;
 use yii\base\BootstrapInterface;
+use yii\base\InvalidConfigException;
 use yii\web\UrlManager;
 
 /**
- * file module definition class
- *
- * @property string $productImagesPath
- * @property string $productThumbnailsPath
- *
- * TODO: Доделать чтобы все пути можно было настраивать в конфиге
+ * Class Module for the Files
  */
 class Module extends \yii\base\Module implements BootstrapInterface
 {
-    const PRODUCTS_RELATIVE_PATH = 'products';
-    const IMAGES_RELATIVE_PATH = 'images';
-    const THUMBNAIL_RELATIVE_PATH = 'images/thumbnails';
-    private $_defaultFilesPath = '@commonFiles';
-
     /**
      * @inheritdoc
      */
     public $controllerNamespace = 'common\modules\files\controllers';
 
     /**
+     * Entities
+     * @var array
+     */
+    public $entities = [];
+
+    /**
+     * Entities instances
+     * @var array
+     */
+    private $_entityInstances = [];
+
+    /**
      * @inheritdoc
      */
-    public function init()
-    {
+    public function init() {
         parent::init();
 
         // custom initialization code goes here
@@ -39,8 +43,7 @@ class Module extends \yii\base\Module implements BootstrapInterface
      * Bootstrap method to be called during application bootstrap stage.
      * @param Application $app the application currently running
      */
-    public function bootstrap ($app)
-    {
+    public function bootstrap($app) {
         $urlManagers = [];
         foreach (array_keys($app->components) as $componentName) {
             if (strPos($componentName, 'UrlManager') > 0)
@@ -50,7 +53,7 @@ class Module extends \yii\base\Module implements BootstrapInterface
         $rules = [
             [
                 'name' => 'fileRule',
-                'pattern' => 'files/<_a:download|upload|.{0}>/<filePath:[\w\-\.,/_]*>',
+                'pattern' => 'files/<_a:download|upload|delete|.{0}>/<filePath:[\w\-\.,/_]*>',
                 'route' => 'files/default/<_a>',
                 'defaults' => [
                     'filePath' => '',
@@ -58,6 +61,7 @@ class Module extends \yii\base\Module implements BootstrapInterface
                 ]
             ]
         ];
+
         if (count($urlManagers)) {
             foreach ($urlManagers as $urlManager) {
                 /** @var UrlManager $urlManager */
@@ -68,48 +72,78 @@ class Module extends \yii\base\Module implements BootstrapInterface
             $app->urlManager->addRules($rules);
         }
     }
-    /** TODO: Позже доделать */
-    public function getProductThumbnailsPath() {
-        return $this->getProductImagesPath();
+
+    /**
+     * Get the path of file
+     * @param string $entityName
+     * @param string $filename
+     * @return string
+     * @throws InvalidConfigException
+     */
+    public function getFilePath(string $entityName, string $filename) {
+        $entity = $this->getEntityInstance($entityName);
+        $entity->fileName = $filename;
+        $ret = \Yii::$app->urlManager->createUrl(['/files/default/download', 'filePath' => $entity->subdir . $entity->fileName]);
+        return str_replace('%2F', urldecode('%2F'), $ret);
     }
 
     /**
-     * @return string
+     * Get files redirect uri
+     * @param $filePath
+     * @return bool|string
      */
-    public function getProductImagesPath() : string {
-        return isset(\Yii::$app->params['productsImagesPath'])
-            ? \YII::getAlias(\Yii::$app->params['productsImagesPath'])
-            : \YII::getAlias($this->_defaultFilesPath)
-            . DIRECTORY_SEPARATOR . self::PRODUCTS_RELATIVE_PATH
-            . DIRECTORY_SEPARATOR . self::IMAGES_RELATIVE_PATH;
-    }
-
-    public function getFilePath($filename) {
-        return \yii::getAlias($this->_defaultFilesPath) . DIRECTORY_SEPARATOR . $filename;
-    }
-
     public function getFileRedirectUri($filePath) {
         return \yii::getAlias("@commonFilesUri/$filePath");
     }
 
     /**
-     * @param $fileName
-     *
+     * Get image uri
+     * @param string $entityName
+     * @param string $imageName
      * @return string
+     * @throws InvalidConfigException
      */
-    public function getProductImagePath($fileName) {
-        return $this->getProductImagesPath() . DIRECTORY_SEPARATOR . $fileName;
+    public function getFileUri(string $entityName, string $imageName) {
+        $entity = $this->getEntityInstance($entityName);
+        $entity->fileName = $imageName;
+        $ret = \Yii::$app->urlManager->createUrl(['/files/default/download', 'filePath' => $entity->subdir . DIRECTORY_SEPARATOR . $entity->fileName]);
+        return str_replace('%2F', urldecode('%2F'), $ret);
     }
 
     /**
-     * @param string $imageName
-     *
-     * @return string
+     * Create entity
+     * @param string $entityName
+     * @param string $fileName
+     * @return BaseFile|object
+     * @throws InvalidConfigException
      */
-    public static function getImageUri (string $imageName) {
-        $filePath = self::PRODUCTS_RELATIVE_PATH . DIRECTORY_SEPARATOR
-            . self::IMAGES_RELATIVE_PATH . DIRECTORY_SEPARATOR ;
-        $ret = \Yii::$app->urlManager->createUrl(['/files/default/download', 'filePath' => $filePath . $imageName]);
-        return str_replace('%2F', urldecode('%2F'), $ret);
+    public function createEntity($entityName, $fileName) {
+        if (!array_key_exists($entityName, $this->entities)) {
+            throw new InvalidConfigException('The requested essence is not defined.');
+        }
+
+        $objectData = $this->entities[$entityName];
+        if (!is_array($objectData)) {
+            throw new InvalidConfigException('The configuration of this entity should be an array.');
+        }
+
+        $objectData['entityName'] = $entityName;
+        $objectData['fileName'] = $fileName;
+
+        return \Yii::createObject($objectData);
+    }
+
+    /**
+     * Get entity instance
+     * @param string $entityName
+     * @return BaseFile|object
+     * @throws InvalidConfigException
+     */
+    public function getEntityInstance(string $entityName) {
+        if (array_key_exists($entityName, $this->_entityInstances)) {
+            return $this->_entityInstances[$entityName];
+        }
+
+        return $this->createEntity($entityName, '');
     }
 }

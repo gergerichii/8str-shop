@@ -3,6 +3,7 @@
 namespace common\modules\files\controllers;
 
 use Yii;
+use yii\base\InvalidConfigException;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use common\modules\files\Module as FileModule;
@@ -21,27 +22,28 @@ class DefaultController extends Controller
 
     /**
      * Renders the index view for the module
-     * @param $filePath
+     * @param string $entityName
+     * @param string $fileName
      * @return string
      * @throws NotFoundHttpException
      */
-    public function actionDownload($filePath)
-    {
+    public function actionDownload($entityName, $fileName) {
         /** @var FileModule $fileModule */
         $fileModule = $this->module;
-        $filePath = str_replace('../', '', $filePath);
-        $fileRealPath = $fileModule->getFilePath($filePath);
+        try {
+            $entity = $fileModule->createEntity($entityName, $fileName);
+        } catch (InvalidConfigException $exception) {
+            throw new NotFoundHttpException($exception->getMessage());
+        }
 
-        if (!file_exists($fileRealPath)) {
+
+        if (!$entity->exists()) {
             throw new NotFoundHttpException('Файл не существует!');
         }
 
-        $fileLocation = Yii::getAlias("@commonFilesUri/$filePath");
-        yii::$app->response->xSendFile($fileLocation, null, [
-            'xHeader' => 'X-Accel-Redirect',
-            'inline' => true
-        ]);
-        yii::$app->response->send();
+        $response = Yii::$app->getResponse();
+        $response->sendFile($entity->getFilename(), null, ['inline' => true]);
+        $response->send();
 
         return false;
     }

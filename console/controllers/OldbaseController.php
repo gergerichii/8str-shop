@@ -12,7 +12,6 @@ use common\modules\catalog\models\ProductTag2product;
 use common\modules\files\models\Image;
 use common\modules\files\Module;
 use Yii;
-use yii\console\Controller;
 use yii\db\Connection;
 use yii\db\Exception;
 use yii\db\Query;
@@ -27,7 +26,7 @@ use yii\helpers\Console;
  *
  * @property mixed $oldDb
  */
-class OldbaseController extends Controller
+class OldbaseController extends BaseController
 {
     /** Дополнительные поля к таблицам для удобного переноса данных */
     private const TABLES_AUX_FIELDS = [
@@ -688,38 +687,4 @@ class OldbaseController extends Controller
         $msg = $this->ansiFormat($msg, Console::FG_YELLOW);
         $this->stdout($msg . "\n");
     }
-
-    /**
-     * Success
-     * @param string $msg
-     */
-    protected function success($msg) {
-        $msg = $this->ansiFormat($msg, Console::FG_GREEN);
-        $this->stdout($msg . "\n");
-    }
-
-    /**
-     * Notice
-     * @param string $msg
-     */
-    protected function notice($msg) {
-        $msg = $this->ansiFormat($msg, Console::FG_CYAN);
-        $this->stdout("\t- $msg\n");
-    }
-
-    /**
-     * Error
-     * @param string $msg
-     * @param array $errors
-     */
-    protected function error($msg, $errors = []) {
-        $msg = $this->ansiFormat($msg, Console::FG_RED);
-        $this->stderr($msg . "\n");
-        foreach ((array)$errors as $name => $mess) {
-            foreach ($mess as $mes) {
-                $this->error("\t-$name: $mes");
-            }
-        }
-    }
-
 }

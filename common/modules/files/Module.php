@@ -2,6 +2,7 @@
 
 namespace common\modules\files;
 
+use common\modules\files\components\FileUrlRule;
 use common\modules\files\models\BaseFile;
 use yii\base\Application;
 use yii\base\BootstrapInterface;
@@ -52,14 +53,17 @@ class Module extends \yii\base\Module implements BootstrapInterface
 
         $rules = [
             [
+                'class' => FileUrlRule::class,
+            ],
+            /*[
                 'name' => 'fileRule',
-                'pattern' => 'files/<_a:download|upload|delete|.{0}>/<filePath:[\w\-\.,/_]*>',
+                'pattern' => 'files/<_a:download|upload|.{0}>/<filePath:[\w\-\.,/_-]*>',
                 'route' => 'files/default/<_a>',
                 'defaults' => [
                     'filePath' => '',
                     '_a' => 'download',
                 ]
-            ]
+            ]*/
         ];
 
         if (count($urlManagers)) {

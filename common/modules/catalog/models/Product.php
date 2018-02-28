@@ -351,6 +351,13 @@ class Product extends ActiveRecord implements CartElement
     }
 
     /**
+     * Desolate images
+     */
+    public function desolateImages() {
+        $this->_files['images'] = [];
+    }
+
+    /**
      * Get default files as JSON
      * @return string
      */

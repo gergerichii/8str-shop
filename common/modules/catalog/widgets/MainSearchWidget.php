@@ -16,8 +16,18 @@ class MainSearchWidget extends Widget
     /**
      * @inheritdoc
      */
-    public function run()
-    {
+    public function run() {
+        $rubricsOptions = $this->getRubricsOptions();
+        return $this->render('search_form', [
+            'rubricsOptions' => ['' => 'Choose a rubric'] + $rubricsOptions
+        ]);
+    }
+
+    /**
+     * Get rubrics options
+     * @return array
+     */
+    public function getRubricsOptions() {
         /** @var Module $catalog */
         /** @var ProductRubric $root */
         $root = ProductRubric::find()->roots()->one();
@@ -31,9 +41,6 @@ class MainSearchWidget extends Widget
         $query = $root->children($depth);
         $query->andWhere('visible_on_home_page=1');
 
-        $rubricsOptions = $query->select('name,id')->indexBy('id')->asArray()->column();
-        return $this->render('search_form', [
-            'rubricsOptions' => ['' => 'Choose a rubric'] + $rubricsOptions
-        ]);
+        return $query->select('name,id')->indexBy('id')->asArray()->column();
     }
 }

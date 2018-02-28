@@ -72,8 +72,7 @@ class FrontendSearchProvider extends BaseDataProvider
     /**
      * Set for top
      */
-    public function top()
-    {
+    public function top() {
         $this->_top = true;
     }
 
@@ -81,8 +80,7 @@ class FrontendSearchProvider extends BaseDataProvider
      * Prepares the data models that will be made available in the current page.
      * @return array the available data models
      */
-    protected function prepareModels()
-    {
+    protected function prepareModels() {
         // $pagination = $this->getPagination();
         // TODO Add pagination
 
@@ -96,6 +94,10 @@ class FrontendSearchProvider extends BaseDataProvider
         if (!$root) {
             /** @var ProductRubric $root */
             $root = ProductRubric::find()->roots()->one();
+        }
+
+        if (!$root) {
+            return [];
         }
 
         $rubricQuery = $root->children(5)
@@ -163,8 +165,7 @@ class FrontendSearchProvider extends BaseDataProvider
      * @param array $models the available data models
      * @return array the keys
      */
-    protected function prepareKeys($models)
-    {
+    protected function prepareKeys($models) {
         return array_keys($models);
     }
 
@@ -172,8 +173,7 @@ class FrontendSearchProvider extends BaseDataProvider
      * Returns a value indicating the total number of data models in this data provider.
      * @return int total number of data models in this data provider.
      */
-    protected function prepareTotalCount()
-    {
+    protected function prepareTotalCount() {
         return $this->_amountOfRubrics + $this->_amountOfBrands + $this->_amountOfProducts;
     }
 
@@ -181,8 +181,7 @@ class FrontendSearchProvider extends BaseDataProvider
      * Get products
      * @return array|null
      */
-    public function getProducts()
-    {
+    public function getProducts() {
         return $this->_products ?? [];
     }
 
@@ -190,8 +189,7 @@ class FrontendSearchProvider extends BaseDataProvider
      * Get rubrics
      * @return array|null
      */
-    public function getRubrics()
-    {
+    public function getRubrics() {
         return $this->_rubrics ?? [];
     }
 
@@ -199,8 +197,7 @@ class FrontendSearchProvider extends BaseDataProvider
      * Get brands
      * @return array|null
      */
-    public function getBrands()
-    {
+    public function getBrands() {
         return $this->_brands ?? [];
     }
 }

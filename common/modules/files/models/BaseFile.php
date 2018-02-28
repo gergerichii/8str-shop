@@ -3,7 +3,6 @@
 namespace common\modules\files\models;
 
 use yii\base\Model;
-use yii\helpers\Url;
 
 /**
  * Class BaseFile
@@ -57,8 +56,7 @@ abstract class BaseFile extends Model
      * @return string
      */
     public function getUri($scheme = false) {
-        $url = Url::to(['/files/default/download', 'filePath' => $this->subdir . DIRECTORY_SEPARATOR . $this->fileName], $scheme);
-        return str_replace('%2F', urldecode('%2F'), $url);
+        return \Yii::$app->urlManager->createAbsoluteUrl(['/files/default/download', 'entityName' => $this->entityName, 'fileName' => $this->fileName], $scheme);
     }
 
     /**
@@ -100,5 +98,31 @@ abstract class BaseFile extends Model
         if ($this->exists()) {
             unlink($this->getFilename());
         }
+    }
+
+    /**
+     * Pick the file from path
+     * @param string $path
+     * @return bool
+     */
+    public function pickFrom($path) {
+        $oldName = $path . DIRECTORY_SEPARATOR . $this->fileName;
+        if (!file_exists($oldName)) {
+            $this->addError('', 'No file to move.');
+            return false;
+        }
+
+        if ($this->exists()) {
+            $this->addError('', 'The file ' . $this->getFilename() . ' already exists.');
+            return false;
+        }
+
+        $result = copy($oldName, $this->getFilename());
+        if (false === $result) {
+            $this->addError('', 'Unknown error!');
+            return false;
+        }
+
+        return true;
     }
 }

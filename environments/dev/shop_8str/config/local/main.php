@@ -3,7 +3,7 @@
 return [
     'components' => [
         'urlManager' => [
-            'hostInfo' => '8str.ln'
+            'hostInfo' => 'http://8str.ln'
         ],
     ]
 ];

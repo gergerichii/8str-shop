@@ -1,5 +1,6 @@
 <?php
 return [
+    // TODO Need to configure access to files
     'products/files' => [
         'class' => \common\modules\files\models\File::class,
         'path' => '@common/webFiles',
@@ -10,24 +11,30 @@ return [
         'path' => '@common/webFiles',
         'subdir' => 'products/images',
         'thumbsOptions' => [
-            'little' => [
-                'path' => '@common/webFiles',
-                'subdir' => 'products/images/little',
-                'width' => 115,
-                'height' => 115,
-            ],
-            'medium' => [
-                'path' => '@common/webFiles',
-                'subdir' => 'products/images/medium',
-                'width' => 122,
-                'height' => 170,
-            ],
-            'large' => [
-                'path' => '@common/webFiles',
-                'subdir' => 'products/images/large',
-                'width' => 222,
-                'height' => 311,
-            ],
+            'little' => 'products/images/little',
+            'medium' => 'products/images/little',
+            'large' => 'products/images/little',
         ]
-    ]
+    ],
+    'products/images/little' => [
+        'class' => \common\modules\files\models\Thumb::class,
+        'path' => '@common/webFiles',
+        'subdir' => 'products/images/little',
+        'width' => 115,
+        'height' => 115,
+    ],
+    'products/images/medium' => [
+        'class' => \common\modules\files\models\Thumb::class,
+        'path' => '@common/webFiles',
+        'subdir' => 'products/images/medium',
+        'width' => 122,
+        'height' => 170,
+    ],
+    'products/images/large' => [
+        'class' => \common\modules\files\models\Thumb::class,
+        'path' => '@common/webFiles',
+        'subdir' => 'products/images/large',
+        'width' => 222,
+        'height' => 311,
+    ],
 ];

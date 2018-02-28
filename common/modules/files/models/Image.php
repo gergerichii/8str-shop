@@ -2,6 +2,7 @@
 
 namespace common\modules\files\models;
 
+use common\modules\files\Module;
 use yii\helpers\FileHelper;
 use yii\image\drivers\Image_GD;
 use yii\image\ImageDriver;
@@ -43,7 +44,7 @@ class Image extends BaseFile
      */
     public function getThumbs() {
         if (is_null($this->_thumbs)) {
-            $this->createThumbs();
+            $this->createThumbs(false);
         }
 
         return $this->_thumbs;
@@ -51,22 +52,19 @@ class Image extends BaseFile
 
     /**
      * Create thumbs
+     * @param bool $save
      * @throws \yii\base\ErrorException
      * @throws \yii\base\Exception
      * @throws \yii\base\InvalidConfigException
      */
-    public function createThumbs() {
+    public function createThumbs($save = true) {
         $this->_thumbs = [];
-        foreach ($this->thumbsOptions as $thumbName => $thumbOptions) {
-            $thumbOptions['entityName'] = $this->entityName . DIRECTORY_SEPARATOR . $thumbName;
-            $thumbOptions['fileName'] = $this->fileName;
+        foreach ($this->thumbsOptions as $thumbName => $entityName) {
+            /** @var Module $filesManagers */
+            $filesManagers = \Yii::$app->getModule('files');
+            $thumb = $filesManagers->createEntity($entityName, $this->fileName);
 
-            if (!array_key_exists('class', $thumbOptions)) {
-                $thumbOptions['class'] = Thumb::class;
-            }
-
-            $thumb = \Yii::createObject($thumbOptions);
-            if (!$thumb->exists()) {
+            if ($save && !$thumb->exists()) {
                 $this->saveThumb($thumb);
             }
 

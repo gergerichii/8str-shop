@@ -465,11 +465,8 @@ class Module extends \yii\base\Module implements BootstrapInterface
         /** @var \common\modules\files\Module $filesManager */
         $filesManager = Yii::$app->getModule('files');
         /** @var Image $entity */
-        $entity = $filesManager->getEntityInstance('products/images');
+        $entity = $filesManager->getEntityInstance('products/images' . '/' . $thumbName);
         $entity->fileName = $imageName;
-        if ($thumb = $entity->getThumb($thumbName)) {
-            return $thumb->getUri();
-        }
 
         return $entity->getUri();
     }

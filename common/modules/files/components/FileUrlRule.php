@@ -23,7 +23,7 @@ class FileUrlRule extends BaseObject implements UrlRuleInterface
      */
     public function parseRequest($manager, $request) {
         $pathInfo = $request->getPathInfo();
-        if (preg_match('%^file\/((\w+)(\/\w+)+)\/([a-zA-ZА-Яа-я.()_ \-0-9]+\.(png|jpg|jpeg|gif))$%iu', $pathInfo, $matches)) {
+        if (preg_match('%^file\/((\w+)(\/\w+)*)\/([a-zA-ZА-Яа-я.()_ \-0-9]+\.(png|jpg|jpeg|gif))$%iu', $pathInfo, $matches)) {
             $params = [
                 'entityName' => $matches[1],
                 'fileName' => $matches[4]

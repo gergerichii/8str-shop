@@ -130,8 +130,7 @@ class Module extends \yii\base\Module implements BootstrapInterface
      * @param ProductBrand $brand
      * @return string
      */
-    public function getBrandUri(ProductBrand $brand)
-    {
+    public function getBrandUri(ProductBrand $brand) {
         return Url::to('/catalog/brand/' . $brand->id);
     }
 
@@ -430,10 +429,10 @@ class Module extends \yii\base\Module implements BootstrapInterface
     /**
      * Gets the structure of the brand menu
      */
-    public function getBrandMenuStructure(){
+    public function getBrandMenuStructure() {
         $module = $this;
         $brands = ProductBrand::find()->all();
-        $menuItems = array_map(function($brand) use ($module){
+        $menuItems = array_map(function ($brand) use ($module) {
             /** @var ProductBrand $brand */
             return [
                 'label' => $brand->name,
@@ -462,12 +461,41 @@ class Module extends \yii\base\Module implements BootstrapInterface
      * @throws InvalidConfigException
      */
     public function getProductThumbnailUri(string $imageName, string $thumbName) {
+        // TODO Need speedup
         /** @var \common\modules\files\Module $filesManager */
         $filesManager = Yii::$app->getModule('files');
         /** @var Image $entity */
         $entity = $filesManager->getEntityInstance('products/images' . '/' . $thumbName);
         $entity->fileName = $imageName;
 
+        if (!$entity->exists()) {
+            $entity = $filesManager->getEntityInstance('defaults');
+            $entity->fileName = 'pixel.png';
+        }
+
         return $entity->getUri();
+    }
+
+    /**
+     * Get thambnail path of product by image name
+     * @param string $imageName
+     * @param string $thumbName
+     * @return string
+     * @throws InvalidConfigException
+     */
+    public function getProductThumbnailPath(string $imageName, string $thumbName) {
+        // TODO Need speedup
+        /** @var \common\modules\files\Module $filesManager */
+        $filesManager = Yii::$app->getModule('files');
+        /** @var Image $entity */
+        $entity = $filesManager->getEntityInstance('products/images' . '/' . $thumbName);
+        $entity->fileName = $imageName;
+
+        if (!$entity->exists()) {
+            $entity = $filesManager->getEntityInstance('defaults');
+            $entity->fileName = 'pixel.png';
+        }
+
+        return $entity->getFilename();
     }
 }

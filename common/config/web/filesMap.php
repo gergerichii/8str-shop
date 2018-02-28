@@ -16,6 +16,11 @@ return [
             'large' => 'products/images/little',
         ]
     ],
+    'defaults' => [
+        'class' => \common\modules\files\models\Image::class,
+        'path' => '@common/webFiles',
+        'subdir' => 'defaults',
+    ],
     'products/images/little' => [
         'class' => \common\modules\files\models\Thumb::class,
         'path' => '@common/webFiles',

@@ -4,6 +4,8 @@ namespace common\modules\catalog\models;
 
 use common\base\models\nestedSets\NSActiveRecord;
 use common\modules\treeManager\models\TreeTrait;
+use yii\behaviors\TimestampBehavior;
+use yii\db\Expression;
 
 /**
  * This is the model class for table "product_rubric".
@@ -18,6 +20,8 @@ use common\modules\treeManager\models\TreeTrait;
  * @property string $desc
  * @property string $material_path
  * @property int $visible_on_home_page Whether to show rubrics that are hidden on the home page
+ * @property string $created_at
+ * @property string $modified_at
  *
  * @property string $icon
  *
@@ -100,7 +104,15 @@ class ProductRubric extends NSActiveRecord
      * @inheritdoc
      */
     public function behaviors() {
-        return parent::behaviors();
+        $behaviors = parent::behaviors();
+        $behaviors[] = [
+            'class' => TimestampBehavior::className(),
+            'createdAtAttribute' => 'created_at',
+            'updatedAtAttribute' => 'modified_at',
+            'value' => new Expression('NOW()'),
+        ];
+
+        return $behaviors;
     }
 
     /**

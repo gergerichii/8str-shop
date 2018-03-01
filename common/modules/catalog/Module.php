@@ -12,6 +12,7 @@ use yii\base\Application;
 use yii\base\BootstrapInterface;
 use yii\base\ErrorException;
 use yii\base\InvalidConfigException;
+use yii\caching\DbDependency;
 use yii\helpers\ArrayHelper;
 use yii\helpers\Url;
 
@@ -398,6 +399,13 @@ class Module extends \yii\base\Module implements BootstrapInterface
      * @return array
      */
     public function getMenuStructure($depth, $showHidden = false) {
+        $cacheKey = __CLASS__ . '::' . __FUNCTION__;
+        $cache = Yii::$app->getCache();
+        $data = $cache->get($cacheKey);
+        if (false !== $data) {
+            return $data;
+        }
+
         /** @var ProductRubric $root */
         $root = ProductRubric::find()->roots()->one();
         if (!$root) {
@@ -423,7 +431,11 @@ class Module extends \yii\base\Module implements BootstrapInterface
             ];
         });
 
-        return $menuItems->render();
+        $data = $menuItems->render();
+
+        $cache->set($cacheKey, $data, null, new DbDependency(['sql' => 'SELECT MAX(modified_at) FROM ' . ProductRubric::tableName()]));
+
+        return $data;
     }
 
     /**

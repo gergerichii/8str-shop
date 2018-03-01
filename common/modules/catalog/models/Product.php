@@ -8,6 +8,7 @@ use common\modules\cart\interfaces\CartElement;
 use Yii;
 use yii\base\ErrorException;
 use yii\behaviors\AttributeBehavior;
+use yii\caching\TagDependency;
 use \yii\db\ActiveQuery;
 use yii\behaviors\BlameableBehavior;
 use yii\behaviors\TimestampBehavior;
@@ -601,6 +602,8 @@ class Product extends ActiveRecord implements CartElement
         $sphinxIndex->setAttribute('name', $this->name);
         $sphinxIndex->save();
         */
+        
+        TagDependency::invalidate(Yii::$app->getCache(), __CLASS__);
     }
 
     /**

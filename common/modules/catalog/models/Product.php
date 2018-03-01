@@ -732,7 +732,7 @@ class Product extends ActiveRecord implements CartElement
         /** @var ProductPriceQuery $query */
         $query = $this->hasOne(ProductPrice::className(), ['product_id' => 'id']);
         $query->onlyActive();
-        $query->orderBy(['active_from' => SORT_DESC])->limit(1);
+        $query->orderBy(['active_from' => SORT_DESC]);
         $query->inverseOf('product');
         return $query;
     }
@@ -745,7 +745,7 @@ class Product extends ActiveRecord implements CartElement
         /** @var ProductPriceQuery $query */
         $query = $this->hasOne(ProductPrice::className(), ['product_id' => 'id']);
         $query->onlyInactive();
-        $query->orderBy(['active_from' => SORT_DESC])->limit(1);
+        $query->orderBy(['active_from' => SORT_DESC]);
         $query->inverseOf('product');
         return $query;
     }

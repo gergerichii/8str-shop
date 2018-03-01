@@ -29,6 +29,11 @@ return [
                     '@common/widgets' => '@app/views/widgets',
                 ],
             ],
+        ],
+        'urlManager' => [
+            'rules' => [
+                '/data/<_a:(search)>.json' => '/data/<_a>'
+            ]
         ]
     ],
     'params' => [], /* Автоматически цепляется КонфигМенеджером */

@@ -40,6 +40,9 @@ class ProductTag extends BaseActiveRecord
         'hideAt' => 0,
     ];
 
+    /**
+     * @inheritdoc
+     */
     public function behaviors(){
         return [
             [
@@ -143,5 +146,14 @@ class ProductTag extends BaseActiveRecord
     public static function find()
     {
         return new ProductTagQuery(get_called_class());
+    }
+
+    /**
+     * Get tags for select
+     * @return array
+     */
+    public static function getTagsForSelect()
+    {
+        return static::find()->select('name')->indexBy('name')->column();
     }
 }

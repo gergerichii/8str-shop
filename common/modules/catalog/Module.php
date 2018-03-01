@@ -3,12 +3,16 @@
 namespace common\modules\catalog;
 
 use common\modules\catalog\models\Product;
+use common\modules\catalog\models\ProductBrand;
 use common\modules\catalog\models\ProductRubric;
+use common\modules\catalog\models\ProductRubricMenuItems;
+use common\modules\files\models\Image;
 use Yii;
 use yii\base\Application;
 use yii\base\BootstrapInterface;
 use yii\base\ErrorException;
 use yii\base\InvalidConfigException;
+use yii\caching\DbDependency;
 use yii\helpers\ArrayHelper;
 use yii\helpers\Url;
 
@@ -30,8 +34,7 @@ class Module extends \yii\base\Module implements BootstrapInterface
     /**
      * @inheritdoc
      */
-    public function init()
-    {
+    public function init() {
         parent::init();
 
         // custom initialization code goes here
@@ -41,8 +44,7 @@ class Module extends \yii\base\Module implements BootstrapInterface
      * Bootstrap method to be called during application bootstrap stage.
      * @param Application $app the application currently running
      */
-    public function bootstrap ($app)
-    {
+    public function bootstrap($app) {
         $urlManagers = [];
         foreach (array_keys($app->components) as $componentName) {
             if (strPos($componentName, 'UrlManager') > 0)
@@ -67,6 +69,7 @@ class Module extends \yii\base\Module implements BootstrapInterface
                 ],
                 'encodeParams' => false,
             ],
+            'catalog/seacrh' => '/catalog/default/search',
             'catalog' => 'catalog/default/index/',
         ];
         if (count($urlManagers)) {
@@ -79,6 +82,7 @@ class Module extends \yii\base\Module implements BootstrapInterface
             $app->urlManager->addRules($rules);
         }
     }
+
     /**
      * @param ProductRubric|string|null $rubric
      * @param Product|int|null $product
@@ -86,7 +90,7 @@ class Module extends \yii\base\Module implements BootstrapInterface
      * @return string
      * @throws \yii\base\ErrorException
      */
-    public function getCatalogUri($rubric=null, $product=null) {
+    public function getCatalogUri($rubric = null, $product = null) {
         $uriParams = ["/$this->id/$this->defaultRoute"];
 
         if (is_int($product)) {
@@ -97,6 +101,7 @@ class Module extends \yii\base\Module implements BootstrapInterface
                     ->with(['main_rubric', 'rubrics'])->active()->where(['id' => $product])->one();
             }
         }
+
         if ($product instanceof Product) {
             $uriParams['productId'] = $product->id;
             $uriParams[0] .= '/' . $this->productActionId;
@@ -121,6 +126,15 @@ class Module extends \yii\base\Module implements BootstrapInterface
         return str_replace('%2F', urldecode('%2F'), Url::to($uriParams));
     }
 
+    /**
+     * Gets the brand uri
+     * @param ProductBrand $brand
+     * @return string
+     */
+    public function getBrandUri(ProductBrand $brand) {
+        return Url::to('/catalog/brand/' . $brand->id);
+    }
+
     /** ---------------------------------Продукты------------------------------------*/
 
     /**
@@ -136,7 +150,7 @@ class Module extends \yii\base\Module implements BootstrapInterface
 
     /**
      * @param \common\modules\catalog\models\Product $product
-     * @param string                        $rubricPath
+     * @param string $rubricPath
      *
      * @return bool
      */
@@ -152,7 +166,7 @@ class Module extends \yii\base\Module implements BootstrapInterface
     /**
      *
      * @param \common\modules\catalog\models\Product $product
-     * @param bool                          $format
+     * @param bool $format
      *
      * @return integer|string
      */
@@ -170,12 +184,12 @@ class Module extends \yii\base\Module implements BootstrapInterface
      * @return \common\modules\catalog\models\ProductPrice|null
      */
     public function priceObjectOf(Product $product) {
-        return isset($product->prices[0]) ? $product->prices[0] : null;
+        return isset($product->frontendPrices[0]) ? $product->frontendPrices[0] : null;
     }
 
     /**
      * @param \common\modules\catalog\models\Product $product
-     * @param bool                          $format
+     * @param bool $format
      *
      * @return integer|string
      */
@@ -189,17 +203,17 @@ class Module extends \yii\base\Module implements BootstrapInterface
 
     /**
      * @param \common\modules\catalog\models\Product $product
-     * @param bool                          $format
+     * @param bool $format
      *
      * @return \common\modules\catalog\models\ProductPrice|null
      */
     public function oldPriceObjectOf(Product $product, $format = true) {
-        return isset($product->prices[1]) ? $product->prices[1] : null;
+        return isset($product->frontendPrices[1]) ? $product->frontendPrices[1] : null;
     }
 
     /**
      * @param \common\modules\catalog\models\Product $product
-     * @param bool                          $format
+     * @param bool $format
      *
      * @return integer|string
      */
@@ -213,7 +227,7 @@ class Module extends \yii\base\Module implements BootstrapInterface
 
     /**
      * @param \common\modules\catalog\models\Product $product
-     * @param bool                          $format
+     * @param bool $format
      *
      * @return \common\modules\catalog\models\ProductPriceDiscount[]
      */
@@ -231,13 +245,20 @@ class Module extends \yii\base\Module implements BootstrapInterface
             return $this->_products[$product->id];
         }
 
-        $price = isset($product->prices[0]) ? $product->prices[0]->value : 0;
-        $oldPrice = isset($product->prices[1]) ? $product->prices[1]->value : 0;
+        $price = 0;
+        if ($product->price) {
+            $price = $product->price->value;
+        }
+
+        $oldPrice = 0;
+        if ($product->oldPrice) {
+            $oldPrice = $product->oldPrice->value;
+        }
 
         /** TODO: Сделать чтобы был механизм управляемого сложения или взаимоисключения скидок */
         $discounts = [];
         foreach ($product->tags as $tag) {
-            foreach($tag->productPriceDiscounts as $discount) {
+            foreach ($tag->productPriceDiscounts as $discount) {
                 if ($discount->isActive) $discounts[$discount->id] = $discount;
             }
         }
@@ -259,7 +280,7 @@ class Module extends \yii\base\Module implements BootstrapInterface
         $activeDiscounts = [];
         return $this->_products[$product->id] = compact('price', 'oldPrice', 'discount', 'activeDiscounts');
     }
-    
+
     /**
      * @param float $value
      *
@@ -268,7 +289,7 @@ class Module extends \yii\base\Module implements BootstrapInterface
     protected function _formatCurrency($value) {
         try {
             return Yii::$app->formatter->asCurrency($value);
-        } catch(InvalidConfigException $e) {
+        } catch (InvalidConfigException $e) {
             Yii::error($e->getMessage());
             return $value;
         }
@@ -320,22 +341,22 @@ class Module extends \yii\base\Module implements BootstrapInterface
      * @return array
      * @throws \yii\base\ErrorException
      */
-    public function getBreadcrumbs($target, $product = null) : array {
+    public function getBreadcrumbs($target, $product = null): array {
         if (is_string($target)) {
             $catalogPath = $target;
-        } elseif($target instanceof ProductRubric) {
+        } elseif ($target instanceof ProductRubric) {
             $catalogPath = $this->getRubricPath($target, false);
         } else {
             $catalogPath = '';
         }
 
         $breadcrumbs = [];
-        if ( $catalogPath && $currentRubric = $this->getRubricByPath($catalogPath)) {
+        if ($catalogPath && $currentRubric = $this->getRubricByPath($catalogPath)) {
             $rubricsPath = $currentRubric->parents()->all();
             $rubricsPath[] = $currentRubric;
             /** @var ProductRubric $rubric */
             foreach ($rubricsPath as $rubric) {
-                $label = (string) $rubric;
+                $label = (string)$rubric;
                 $breadcrumbs[] = [
                     'label' => $label,
                     'url' => $this->getCatalogUri($rubric),
@@ -347,11 +368,11 @@ class Module extends \yii\base\Module implements BootstrapInterface
             if (is_int($product)) {
                 $product = Product::findOne($product);
             }
-            $productLabel = (string) $product;
+            $productLabel = (string)$product;
 
             if ($productLabel) {
                 $breadcrumbs[] = [
-                    'label' => (string) $product,
+                    'label' => (string)$product,
                 ];
             }
         }
@@ -372,33 +393,121 @@ class Module extends \yii\base\Module implements BootstrapInterface
     }
 
     /**
-     * @param $depth
-     *
+     * Get menu structure
+     * @param int $depth
+     * @param bool $showHidden Whether to show rubrics that are hidden on the home page
      * @return array
-     *
-     * TODO: Доделать для уровней вложенности
-     * @throws \yii\base\ErrorException
      */
-    public function getMenuStructure($depth) {
-        $menuObj = ProductRubric::find()->roots()->all();
-        $menu = [];
-        foreach ($menuObj as $obj){
-            $mItem = [];
-            $mItem['label'] = (string) $obj;
-            $mItem['url'] = $this->getCatalogUri($obj);
-            $menu[] = $mItem;
+    public function getMenuStructure($depth, $showHidden = false) {
+        $cacheKey = __CLASS__ . '::' . __FUNCTION__;
+        $cache = Yii::$app->getCache();
+        $data = $cache->get($cacheKey);
+        if (false !== $data) {
+            return $data;
         }
 
-        return $menu;
+        /** @var ProductRubric $root */
+        $root = ProductRubric::find()->roots()->one();
+        if (!$root) {
+            return [];
+        }
+
+        /** @var ProductRubric[] $rubrics */
+        $query = $root->children($depth);
+        if (!$showHidden) {
+            $query->andWhere('visible_on_home_page=1');
+        }
+
+        $rubrics = $query->all();
+        $module = $this;
+
+        $menuItems = new ProductRubricMenuItems($rubrics, function ($rubric) use ($module) {
+            /** @var ProductRubric $rubric */
+            return [
+                'label' => $rubric->name,
+                'items' => null,
+                'url' => $module->getCatalogUri($rubric),
+                'icon' => $rubric->icon
+            ];
+        });
+
+        $data = $menuItems->render();
+
+        $cache->set($cacheKey, $data, null, new DbDependency(['sql' => 'SELECT MAX(modified_at) FROM ' . ProductRubric::tableName()]));
+
+        return $data;
+    }
+
+    /**
+     * Gets the structure of the brand menu
+     */
+    public function getBrandMenuStructure() {
+        $module = $this;
+        $brands = ProductBrand::find()->all();
+        $menuItems = array_map(function ($brand) use ($module) {
+            /** @var ProductBrand $brand */
+            return [
+                'label' => $brand->name,
+                'url' => $module->getBrandUri($brand),
+            ];
+        }, $brands);
+
+        return $menuItems;
     }
 
     /**
      * @param \common\modules\catalog\models\Product $product
-     * @param string                        $tagName
+     * @param string $tagName
      *
      * @return bool
      */
     public function productHasTag(Product $product, string $tagName): bool {
         return !empty($product->tags[$tagName]);
+    }
+
+    /**
+     * Get thambnail uri of product by image name
+     * @param string $imageName
+     * @param string $thumbName
+     * @return string
+     * @throws InvalidConfigException
+     */
+    public function getProductThumbnailUri(string $imageName, string $thumbName) {
+        // TODO Need speedup
+        /** @var \common\modules\files\Module $filesManager */
+        $filesManager = Yii::$app->getModule('files');
+        /** @var Image $entity */
+        $entity = $filesManager->getEntityInstance('products/images' . '/' . $thumbName);
+        $entity->fileName = $imageName;
+
+        if (!$entity->exists()) {
+            $entity = $filesManager->getEntityInstance('defaults');
+            $entity->fileName = 'pixel.png';
+        }
+
+        return $entity->getUri();
+    }
+
+    /**
+     * Get thambnail path of product by image name
+     * @param string $imageName
+     * @param string $thumbName
+     * @return string
+     * @throws InvalidConfigException
+     */
+    public function getProductThumbnailPath(string $imageName, string $thumbName) {
+        // TODO Need speedup
+        /** @var \common\modules\files\Module $filesManager */
+        $filesManager = Yii::$app->getModule('files');
+        /** @var Image $entity */
+        $entity = $filesManager->getEntityInstance('products/images' . '/' . $thumbName);
+        $entity->fileName = $imageName;
+
+        if (!$entity->exists()) {
+            $entity = $filesManager->getEntityInstance('defaults');
+            $entity->fileName = 'pixel.png';
+        }
+
+        return $entity->getFilename();
     }
 }

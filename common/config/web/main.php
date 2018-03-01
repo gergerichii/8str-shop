@@ -41,7 +41,7 @@ $config = [
         'urlManager' => [
             'enablePrettyUrl' => true,
             'showScriptName' => false,
-            'enableStrictParsing' => true,
+            //'enableStrictParsing' => true,
             'normalizer' => [
                 'class' => 'yii\web\UrlNormalizer',
                 'collapseSlashes' => true,
@@ -76,6 +76,7 @@ $config = [
     'modules' => [
         'files' => [
             'class' => 'common\modules\files\Module',
+            'entities' => require 'filesMap.php'
         ],
         'cart' => [
             'class' => 'common\modules\cart\Module',
@@ -84,7 +85,7 @@ $config = [
             'class' => 'common\modules\order\Module',
         ],
         'rbac' => [
-            'class' => common\modules\rbac\Module::className(),
+            'class' => 'common\modules\rbac\Module',
         ],
         'treemanager' => [
             'class' => '\common\modules\treeManager\Module',

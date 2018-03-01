@@ -4,6 +4,8 @@ namespace common\modules\catalog\models;
 
 use common\base\models\nestedSets\NSActiveRecord;
 use common\modules\treeManager\models\TreeTrait;
+use yii\behaviors\TimestampBehavior;
+use yii\db\Expression;
 use Yii;
 
 /**
@@ -18,6 +20,11 @@ use Yii;
  * @property string $title
  * @property string $desc
  * @property string $material_path
+ * @property int $visible_on_home_page Whether to show rubrics that are hidden on the home page
+ * @property string $created_at
+ * @property string $modified_at
+ *
+ * @property string $icon
  *
  * @property Product2productRubric[] $product2productRubrics
  * @property Product[] $products
@@ -29,6 +36,7 @@ class ProductRubric extends NSActiveRecord
 {
     use TreeTrait {
         isDisabled as parentIsDisabled;
+        find as treeFind;
     }
 
     /**
@@ -83,9 +91,9 @@ class ProductRubric extends NSActiveRecord
     {
         return [
 //            [['tree', 'level', 'left_key', 'right_key', 'name'], 'required'],
-            [['tree', 'level', 'left_key', 'right_key'], 'integer'],
+            [['tree', 'level', 'left_key', 'right_key', 'visible_on_home_page'], 'integer'],
             [['desc'], 'string'],
-            [['name'], 'string', 'max' => 150],
+            [['name', 'icon'], 'string', 'max' => 150],
             [['title'], 'string', 'max' => 255],
             [['material_path'], 'string', 'max' => 500],
             [['tree', 'left_key', 'right_key', 'level'], 'unique', 'targetAttribute' => ['tree', 'left_key', 'right_key', 'level']],
@@ -97,7 +105,23 @@ class ProductRubric extends NSActiveRecord
      * @inheritdoc
      */
     public function behaviors() {
-        return parent::behaviors();
+        $behaviors = parent::behaviors();
+        $behaviors[] = [
+            'class' => TimestampBehavior::className(),
+            'createdAtAttribute' => 'created_at',
+            'updatedAtAttribute' => 'modified_at',
+            'value' => new Expression('NOW()'),
+        ];
+
+        return $behaviors;
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public static function find()
+    {
+        return parent::find();
     }
 
     /**
@@ -123,7 +147,9 @@ class ProductRubric extends NSActiveRecord
             'name' => 'Name',
             'title' => 'Title',
             'desc' => 'Desc',
+            'icon' => 'Icon',
             'material_path' => 'Material path',
+            'visible_on_home_page' => 'Visible on the home page'
         ];
     }
 
@@ -165,6 +191,10 @@ class ProductRubric extends NSActiveRecord
         return $this->parentIsDisabled();
     }
 
+    /**
+     * To string
+     * @return string
+     */
     public function __toString () {
         return (isset($this->title)) ? $this->title : $this->name;
     }

@@ -31,6 +31,9 @@
     "uglify-js": "latest"
   },
   "dependencies": {
-    "popper.js": "latest"
+    "bootstrap-3-typeahead": "^4.0.2",
+    "jquery-typeahead": "^2.10.4",
+    "popper.js": "latest",
+    "uglify-js": "3.3.11"
   }
 }

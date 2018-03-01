@@ -5,58 +5,42 @@
  * Date: 10.01.2018
  * Time: 19:04
  */
+
+use common\modules\catalog\widgets\ProductTagWidget;
+use frontend\widgets\LeftMenu;
+use yii\widgets\Menu;
+
+/** @var \common\modules\catalog\Module $catalog */
+$catalog = \Yii::$app->getModule('catalog');
+
 ?>
 <div class="col-md-3 col-sm-4 col-xs-12 sidebar">
     <div class="widget">
         <h3>Категории</h3>
-            <?=\yii\widgets\Menu::widget([
-                'items' => \Yii::$app->getModule('catalog')->getMenuStructure(1),
-            ]);?>
-    </div>
 
-    <div class="widget">
-        <h3>Categories</h3>
-
-        <div class="list-group list-group-brand list-group-accordion">
-            <a href="#" class="list-group-item">Fashion
-                <span class="filter-icon filter-icon-fashion"></span>
-            </a>
-            <a href="#" class="list-group-item">Furniture
-                <span class="filter-icon filter-icon-furniture"></span>
-            </a>
-            <a href="#" class="list-group-item">Electronics
-                <span class="filter-icon filter-icon-electronics"></span>
-            </a>
-            <a href="#" class="list-group-item">Gifts
-                <span class="filter-icon filter-icon-gifts"></span>
-            </a>
-            <a href="#" class="list-group-item">Books
-                <span class="filter-icon filter-icon-books"></span>
-            </a>
-            <a href="#" class="list-group-item">Music
-                <span class="filter-icon filter-icon-music"></span>
-            </a>
-            <a href="#" class="list-group-item">Sport &amp; Tourism
-                <span class="filter-icon filter-icon-sport"></span>
-            </a>
-            <a href="#" class="list-group-item">Games
-                <span class="filter-icon filter-icon-games"></span>
-            </a>
-        </div><!-- End .list-group -->
+        <?= LeftMenu::widget([
+            'options' => [
+                'tag' => 'div',
+                'class' => 'list-group list-group-brand list-group-accordion'
+            ],
+            'itemOptions' => ['tag' => false],
+            'items' => $catalog->getMenuStructure(1),
+            'linkTemplate' => '<a href="{url}" class="list-group-item">{label}<span class="filter-icon filter-icon-{icon}"></span></a>',
+        ]); ?>
     </div>
 
     <div class="widget">
         <h3>Brands</h3>
 
-        <div class="list-group list-group-brand">
-            <a href="#" class="list-group-item">Armani</a>
-            <a href="#" class="list-group-item">Bulgari</a>
-            <a href="#" class="list-group-item">Christion Dior</a>
-            <a href="#" class="list-group-item">Dolce &amp; Gabbana</a>
-            <a href="#" class="list-group-item">Fendi</a>
-            <a href="#" class="list-group-item">Givenchy</a>
-            <a href="#" class="list-group-item">Donna Karan</a>
-        </div><!-- End .list-group -->
+        <?= Menu::widget([
+            'options' => [
+                'tag' => 'div',
+                'class' => 'list-group list-group-brand'
+            ],
+            'itemOptions' => ['tag' => false],
+            'linkTemplate' => '<a href="{url}" class="list-group-item">{label}</a>',
+            'items' => $catalog->getBrandMenuStructure(),
+        ]); ?>
     </div>
 
     <div class="widget subscribe">
@@ -109,141 +93,11 @@
         <h3>Popular</h3>
 
         <div class="related-slider flexslider sidebarslider">
-            <ul class="related-list clearfix">
-                <li>
-                    <div class="related-product clearfix">
-                        <figure>
-                            <img src="/images/products/thumbnails/item1.jpg" alt="item1">
-                        </figure>
-                        <h5><a href="#">Jacket Suiting Blazer</a></h5>
-                        <div class="ratings-container">
-                            <div class="ratings">
-                                <div class="ratings-result" data-result="84"></div>
-                            </div><!-- End .ratings -->
-                        </div><!-- End .rating-container -->
-                        <div class="related-price">$40</div><!-- End .related-price -->
-                    </div><!-- End .related-product -->
-
-                    <div class="related-product clearfix">
-                        <figure>
-                            <img src="/images/products/thumbnails/item2.jpg" alt="item2">
-                        </figure>
-                        <h5><a href="#">Gap Graphic Cuffed</a></h5>
-                        <div class="ratings-container">
-                            <div class="ratings">
-                                <div class="ratings-result" data-result="84"></div>
-                            </div><!-- End .ratings -->
-                        </div><!-- End .rating-container -->
-                        <div class="related-price">$17</div><!-- End .related-price -->
-                    </div><!-- End .related-product -->
-                    <div class="related-product clearfix">
-                        <figure>
-                            <img src="/images/products/thumbnails/item2.jpg" alt="item2">
-                        </figure>
-                        <h5><a href="#">Gap Graphic Cuffed</a></h5>
-                        <div class="ratings-container">
-                            <div class="ratings">
-                                <div class="ratings-result" data-result="84"></div>
-                            </div><!-- End .ratings -->
-                        </div><!-- End .rating-container -->
-                        <div class="related-price">18$</div><!-- End .related-price -->
-                    </div><!-- End .related-product -->
-
-                    <div class="related-product clearfix">
-                        <figure>
-                            <img src="/images/products/thumbnails/item3.jpg" alt="item3">
-                        </figure>
-                        <h5><a href="#">Women's Lauren Dress</a></h5>
-                        <div class="ratings-container">
-                            <div class="ratings">
-                                <div class="ratings-result" data-result="84"></div>
-                            </div><!-- End .ratings -->
-                        </div><!-- End .rating-container -->
-                        <div class="related-price">$30</div><!-- End .related-price -->
-                    </div><!-- End .related-product -->
-                </li>
-                <li>
-                    <div class="related-product clearfix">
-                        <figure>
-                            <img src="/images/products/thumbnails/item4.jpg" alt="item4">
-                        </figure>
-                        <h5><a href="#">Swiss Mobile Phone</a></h5>
-                        <div class="ratings-container">
-                            <div class="ratings">
-                                <div class="ratings-result" data-result="64"></div>
-                            </div><!-- End .ratings -->
-                        </div><!-- End .rating-container -->
-                        <div class="related-price">$39</div><!-- End .related-price -->
-                    </div><!-- End .related-product -->
-
-                    <div class="related-product clearfix">
-                        <figure>
-                            <img src="/images/products/thumbnails/item5.jpg" alt="item5">
-                        </figure>
-                        <h5><a href="#">Zwinzed HeadPhones</a></h5>
-                        <div class="ratings-container">
-                            <div class="ratings">
-                                <div class="ratings-result" data-result="94"></div>
-                            </div><!-- End .ratings -->
-                        </div><!-- End .rating-container -->
-                        <div class="related-price">$18.99</div><!-- End .related-price -->
-                    </div><!-- End .related-product -->
-
-                    <div class="related-product clearfix">
-                        <figure>
-                            <img src="/images/products/thumbnails/item1.jpg" alt="item1">
-                        </figure>
-                        <h5><a href="#">Jacket Suiting Blazer</a></h5>
-                        <div class="ratings-container">
-                            <div class="ratings">
-                                <div class="ratings-result" data-result="84"></div>
-                            </div><!-- End .ratings -->
-                        </div><!-- End .rating-container -->
-                        <div class="related-price">$40</div><!-- End .related-price -->
-                    </div><!-- End .related-product -->
-
-                    <div class="related-product clearfix">
-                        <figure>
-                            <img src="/images/products/thumbnails/item6.jpg" alt="item6">
-                        </figure>
-                        <h5><a href="#">Kless Man Suit</a></h5>
-                        <div class="ratings-container">
-                            <div class="ratings">
-                                <div class="ratings-result" data-result="74"></div>
-                            </div><!-- End .ratings -->
-                        </div><!-- End .rating-container -->
-                        <div class="related-price">$99</div><!-- End .related-price -->
-                    </div><!-- End .related-product -->
-                </li>
-                <li>
-
-                    <div class="related-product clearfix">
-                        <figure>
-                            <img src="/images/products/thumbnails/item2.jpg" alt="item2">
-                        </figure>
-                        <h5><a href="#">Gap Graphic Cuffed</a></h5>
-                        <div class="ratings-container">
-                            <div class="ratings">
-                                <div class="ratings-result" data-result="84"></div>
-                            </div><!-- End .ratings -->
-                        </div><!-- End .rating-container -->
-                        <div class="related-price">$17</div><!-- End .related-price -->
-                    </div><!-- End .related-product -->
-
-                    <div class="related-product clearfix">
-                        <figure>
-                            <img src="/images/products/thumbnails/item4.jpg" alt="item4">
-                        </figure>
-                        <h5><a href="#">Women's Lauren Dress</a></h5>
-                        <div class="ratings-container">
-                            <div class="ratings">
-                                <div class="ratings-result" data-result="84"></div>
-                            </div><!-- End .ratings -->
-                        </div><!-- End .rating-container -->
-                        <div class="related-price">$30</div><!-- End .related-price -->
-                    </div><!-- End .related-product -->
-                </li>
-            </ul>
+            <?= ProductTagWidget::widget([
+                'limit' => 12,
+                'tagName' => 'popular',
+                'viewName' => '@frontend/views/modules/catalog/widgets/views/productTagWidget/sidebarPromo'
+            ]); ?>
         </div><!-- End .related-slider -->
     </div>
 

@@ -3,11 +3,17 @@ use yii\helpers\Html;
 use common\modules\cart\widgets\ChangeCount;
 use common\modules\cart\widgets\DeleteButton;
 use common\modules\cart\widgets\ElementPrice;
-use common\modules\cart\widgets\ElementCost;
 
-
+/**
+ * @var \common\modules\files\Module $filesManager
+ * @var \common\modules\catalog\models\Product $product
+ * @var array $controllerActions
+ * @var bool $showCountArrows
+ * @var string $name
+ */
+$filesManager = Yii::$app->getModule('files');
 $image = isset($product->images[0]) ? $product->images[0] : 'default.jpg';
-$image = \common\modules\files\Module::getImageUri($image);
+$image = $filesManager->getFileUri('products/images', $image);
 
 /** @var \common\modules\catalog\Module $catalog */
 $catalog = \Yii::$app->getModule('catalog');
@@ -63,7 +69,7 @@ try{
 <li class="shop-cart-row ">
     <div class=" row">
         <div class="col-xs-8">
-            <?= $name ?>
+            <?= $name; ?>
 
             <?php if ($options) {
                 $productOptions = '';

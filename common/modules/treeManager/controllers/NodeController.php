@@ -9,6 +9,7 @@
 namespace common\modules\treeManager\controllers;
 
 use Closure;
+use common\modules\catalog\models\ProductRubric;
 use Exception;
 use common\modules\treeManager\models\Tree;
 use common\modules\treeManager\TreeView;
@@ -21,6 +22,7 @@ use yii\base\InvalidParamException;
 use yii\base\NotSupportedException;
 use yii\console\Application;
 use yii\db\Exception as DbException;
+use yii\filters\AccessControl;
 use yii\helpers\ArrayHelper;
 use yii\helpers\Json;
 use yii\web\Controller;
@@ -54,7 +56,7 @@ class NodeController extends Controller
     public function behaviors() {
         return [
             'access' => [
-                'class' => \yii\filters\AccessControl::className(),
+                'class' => AccessControl::className(),
                 'rules' => [
                     [
                         'allow' => true,
@@ -165,6 +167,7 @@ class NodeController extends Controller
      * @param string $newHashData the raw new data for hasing
      *
      * @throws InvalidCallException
+     * @throws InvalidConfigException
      */
     protected static function checkSignature($action, $oldHash = '', $newHashData = null)
     {
@@ -189,6 +192,7 @@ class NodeController extends Controller
 
     /**
      * Saves a node once form is submitted
+     * @throws ErrorException
      */
     public function actionSave()
     {
@@ -391,8 +395,8 @@ class NodeController extends Controller
         $allowNewRoots = ArrayHelper::getValue($data, 'allowNewRoots', true);
         $newHashData = $modelClass . $allowNewRoots;
         /**
-         * @var Tree $nodeFrom
-         * @var Tree $nodeTo
+         * @var Tree|ProductRubric $nodeFrom
+         * @var Tree|ProductRubric $nodeTo
          */
         $nodeFrom = $modelClass::findOne($idFrom);
         $nodeTo = $modelClass::findOne($idTo);
@@ -419,8 +423,10 @@ class NodeController extends Controller
                 } elseif ($dir == 'r') {
                     $nodeFrom->appendTo($nodeTo);
                 }
-                return $nodeFrom->save();
+
+                return !$nodeFrom->hasErrors();
             }
+
             return true;
         };
         return self::process($callback, $errorMsg, Yii::t('kvtree', 'The node was moved successfully.'));

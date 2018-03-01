@@ -105,7 +105,6 @@ class RoleController extends Controller {
                     Html::button(Yii::t('rbac', 'Save'), ['class' => 'btn btn-primary', 'type' => "submit"])
                 ];
             } else if ($model->load($request->post()) && $model->save()) {
-//                \johnitvn\userplus\Helper::dump($model);
                 return [
                     'forceReload' => 'true',
                     'title' => Yii::t('rbac', "Create new {0}", ["Role"]),
@@ -214,7 +213,7 @@ class RoleController extends Controller {
             Yii::$app->response->format = Response::FORMAT_JSON;
             return [
                 'forceClose' => true,
-                'forceReload' => true,
+                'forceReload' => 'true',
                 'title' => '3',
                 'content' => '1',
                 'footer' => '2'

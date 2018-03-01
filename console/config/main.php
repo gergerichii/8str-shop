@@ -42,5 +42,11 @@ return [
             'class' => 'yii\rbac\DbManager',
         ],
     ],
+    'modules' => [
+        'files' => [
+            'class' => 'common\modules\files\Module',
+            'entities' => require Yii::getAlias('@common/config/web/filesMap.php'),
+        ],
+    ],
     'params' => [],
 ];

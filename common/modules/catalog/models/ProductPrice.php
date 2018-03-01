@@ -18,6 +18,7 @@ use yii\db\Expression;
  * @property int $author_id
  * @property string $active_from
  * @property string $value
+ * @property string $status (active, inactive)
  *
  * @property User $author
  * @property Product $product
@@ -25,12 +26,16 @@ use yii\db\Expression;
  */
 class ProductPrice extends BaseActiveRecord implements ProductPriceInterface
 {
-    public function behaviors () {
+    /**
+     * @inheritdoc
+     */
+    public function behaviors()
+    {
         return [
             [
-               'class' => BlameableBehavior::className(),
-               'createdByAttribute' => 'author_id',
-               'updatedByAttribute' => false,
+                'class' => BlameableBehavior::className(),
+                'createdByAttribute' => 'author_id',
+                'updatedByAttribute' => false,
             ],
         ];
     }
@@ -53,6 +58,7 @@ class ProductPrice extends BaseActiveRecord implements ProductPriceInterface
 
             [['product_id', 'author_id'], 'integer'],
             [['product_id', 'domain_name', 'value'], 'required'],
+            [['status'], 'in', 'range' => ['active', 'inactive', 'future']],
             [['active_from'], 'safe'],
             [['value'], 'number'],
             [['domain_name'], 'string', 'max' => 150],
@@ -81,11 +87,17 @@ class ProductPrice extends BaseActiveRecord implements ProductPriceInterface
      * @return string
      *
      */
-    public function __toString () {
+    public function __toString()
+    {
         return Yii::$app->formatter->asDecimal($this->value) . ' р.';
     }
 
-    public function getValue(){
+    /**
+     * Get value
+     * @return mixed
+     */
+    public function getValue()
+    {
         return $this->getAttribute('value');
     }
 
@@ -107,11 +119,21 @@ class ProductPrice extends BaseActiveRecord implements ProductPriceInterface
 
     /**
      * @inheritdoc
-     * @return ProductPriceQuery the active query used by this AR class.
+     * @return \common\modules\catalog\models\ProductPriceQuery the active query used by this AR class.
      */
     public static function find()
     {
         return new ProductPriceQuery(get_called_class());
+    }
+
+    /**
+     * Is this the future price
+     * @return bool
+     */
+    public function isFuture(){
+        $now = new \DateTime();
+        $activeFrom = \DateTime::createFromFormat('Y-m-d H:i:s', $this->active_from);
+        return $now < $activeFrom;
     }
 
     /**
@@ -127,5 +149,4 @@ class ProductPrice extends BaseActiveRecord implements ProductPriceInterface
              throw new ErrorException('Price is read only. Create a new price record for update current product price');
          }
      }
-
 }

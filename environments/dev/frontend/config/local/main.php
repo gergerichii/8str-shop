@@ -3,7 +3,7 @@
 $config = [
     'components' => [
         'urlManager' => [
-            'hostInfo' => 'test.8str.ln'
+            'hostInfo' => 'http://test.8str.ln'
         ],
     ],
 ];

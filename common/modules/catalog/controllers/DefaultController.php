@@ -5,6 +5,7 @@ namespace common\modules\catalog\controllers;
 use common\base\BaseFrontendController;
 use common\modules\catalog\models\Product;
 use common\modules\catalog\Module;
+use common\modules\catalog\providers\FrontendSearchProvider;
 use yii\data\ActiveDataProvider;
 use yii\web\NotFoundHttpException;
 
@@ -20,7 +21,8 @@ class DefaultController extends BaseFrontendController
      * @throws \yii\web\NotFoundHttpException
      * @throws \yii\base\ErrorException
      */
-    public function actionIndex($catalogPath = '') {
+    public function actionIndex($catalogPath = '')
+    {
         /** @var Module $catalog */
         $catalog = $this->module;
         $query = Product::find()->forFrontEnd()->with('rubrics');
@@ -37,6 +39,8 @@ class DefaultController extends BaseFrontendController
             $query->select('product.*')->distinct()
                 ->joinWith('rubrics r', false)
                 ->joinWith('mainRubric mr', false)
+                ->with('price')
+                ->with('oldPrice')
                 ->andWhere(['or',
                     ['in', 'r.id', $rubricsIds],
                     ['in', 'mr.id', $rubricsIds],
@@ -60,7 +64,8 @@ class DefaultController extends BaseFrontendController
      * @throws NotFoundHttpException
      * @throws \yii\base\ErrorException
      */
-    public function actionProduct($catalogPath = '', $productId = null) {
+    public function actionProduct($catalogPath = '', $productId = null)
+    {
         $product = Product::find()->forFrontEnd()->where(['id' => $productId])->one();
         /** @var Module $catalog */
         $catalog = $this->module;
@@ -71,12 +76,27 @@ class DefaultController extends BaseFrontendController
 
         $this->addBreadcrumbs($catalog->getBreadcrumbs($catalogPath, $product));
 
-        $this->view->title = (string) $product;
+        $this->view->title = (string)$product;
         $params = [
             'productModel' => $product,
             'catalogPath' => $catalogPath,
         ];
 
         return $this->render('product', $params);
+    }
+
+    /**
+     * Search
+     */
+    public function actionSearch()
+    {
+        $search = new FrontendSearchProvider();
+        $search->q = \Yii::$app->getRequest()->get('q');
+        $search->rubric = \Yii::$app->getRequest()->get('rubric');
+        $search->top();
+
+        return $this->render('search', [
+            'provider' => $search
+        ]);
     }
 }

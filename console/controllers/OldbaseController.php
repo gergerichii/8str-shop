@@ -9,8 +9,9 @@ use common\modules\catalog\models\ProductPrice;
 use common\modules\catalog\models\ProductRubric;
 use common\modules\catalog\models\ProductTag;
 use common\modules\catalog\models\ProductTag2product;
+use common\modules\files\models\Image;
+use common\modules\files\Module;
 use Yii;
-use yii\console\Controller;
 use yii\db\Connection;
 use yii\db\Exception;
 use yii\db\Query;
@@ -25,7 +26,7 @@ use yii\helpers\Console;
  *
  * @property mixed $oldDb
  */
-class OldbaseController extends Controller
+class OldbaseController extends BaseController
 {
     /** Дополнительные поля к таблицам для удобного переноса данных */
     private const TABLES_AUX_FIELDS = [
@@ -65,7 +66,7 @@ class OldbaseController extends Controller
     private $oldSqlDump = '../migrations/files/oldDb.sql';
     private $imagesPath = '@common/protected/webFiles/catalog/images/';
     private $oldDbName = 'fbkru_0_8str';
-    private $badProductsFile = __DIR__ . 'bad_products.csv';
+    private $badProductsFile = '../bad_products.csv';
     private $currentPID;
     
     public $defaultAction = 'import';
@@ -153,7 +154,11 @@ class OldbaseController extends Controller
             return 1;
         }
     }
-    
+
+    /**
+     * Migrate old database dump
+     * @return int
+     */
     public function actionMigrateOldDbDump() {
         chdir(dirname(__FILE__));
         try {
@@ -177,12 +182,15 @@ class OldbaseController extends Controller
      *
      * @return int
      * @throws Exception
+     * @throws \yii\base\ErrorException
+     * @throws \yii\base\Exception
+     * @throws \yii\base\InvalidConfigException
      */
     public function actionImport()
     {
-        if (isset(yii::$app->old_db)) {
-            $remoteDb = yii::$app->old_db;
-        } else {
+        /** @var Connection $remoteDb */
+        $remoteDb = Yii::$app->get('old_db', false);
+        if (!$remoteDb) {
             $remoteDb = clone yii::$app->db;
             $remoteDb->dsn = preg_replace(
                 '#dbname=[^;]+#',
@@ -237,6 +245,9 @@ class OldbaseController extends Controller
      * @param $remoteDb
      * @return int
      * @throws Exception
+     * @throws \yii\base\ErrorException
+     * @throws \yii\base\Exception
+     * @throws \yii\base\InvalidConfigException
      */
     protected function exportProducts($remoteDb) {
         
@@ -251,7 +262,7 @@ class OldbaseController extends Controller
                 'Название дубля' => '',
             ];
             
-            $badProdFile = fopen($this->badProductsFile, 'w');
+            $badProdFile = fopen(dirname(__DIR__) . '/runtime/' . $this->badProductsFile, 'w');
             fputcsv($badProdFile, array_keys($badProducts), ';');
             $badProducts = [];
         }
@@ -297,6 +308,9 @@ class OldbaseController extends Controller
             ->andWhere(['`n`.`status`' => 1])
             ->andWhere(['IS NOT', '`f`.`uri`', null])
             ->orderBy(['`n`.`changed`' => SORT_DESC]);
+
+        /** @var Module $filesManager */
+        $filesManager = Yii::$app->getModule('files');
 
         foreach ($query->each(100, $remoteDb) as $src) {
             /* Попытка исправить найденные товары с ошибками */
@@ -398,17 +412,19 @@ class OldbaseController extends Controller
                 ];
                 foreach($domains as $domain => $field) {
                     if (empty($src[$field])) continue;
+
+                    $priceValue = round((float)$src[$field], 2);
+
                     $priceParams = [
-                        'value' => round((float)$src[$field], 2),
+                        'value' => $priceValue,
                         'product_id' => $product->id,
                         'domain_name' => Yii::$app->params['domains'][$domain],
                     ];
-                    if (!ProductPrice::findOne($priceParams)) {
-                        $price = new ProductPrice($priceParams);
-                        if (!$price->save()) {
+                    if (!ProductPrice::find()->onlyActive()->andWhere($priceParams)->one()) {
+                        if (!$product->insertNewPrice($priceValue, $domain)) {
                             $this->error(
                                 "Цена для товара {$src['old_id']}:{$src['name']} и домена $domain не установлена. Откат добавления товара",
-                                $price->errors
+                                $product->errors
                             );
                             $transaction->rollBack();
                             continue;
@@ -452,6 +468,13 @@ class OldbaseController extends Controller
                 );
             }
 
+            /** @var Image $image */
+            $image = $filesManager->createEntity('products/images', $src['filename']);
+            if ($image->exists()) {
+                $image->createThumbs();
+            }
+
+
             $msg = $this->ansiFormat('.', Console::FG_GREEN);
             $this->stdout($msg);
             
@@ -481,10 +504,21 @@ class OldbaseController extends Controller
         return $ret[$name];
     }
 
+    /**
+     * Export rubrics
+     * @param Connection $remoteDb
+     * @return int
+     */
     protected function exportRubrics($remoteDb) {
         $this->trace('Экспорт рубрикатора');
 
-        /* Читаме рубрикатор */
+        $rootRubric = new ProductRubric([
+            'name' => 'Каталог'
+        ]);
+
+        $rootRubric->makeRoot();
+
+        /* Читаем рубрикатор */
         $query = new Query();
         $query->select('[[c]].[[tid]] as [[rubric_id]]')
             ->addSelect('[[c]].[[name]] as [[rubric_name]]')
@@ -501,38 +535,40 @@ class OldbaseController extends Controller
         do {
             if (empty($rubricsPull) || !empty($rubricsPull[0]['depends_on'])) {
                 $batch->next();
-                $rubricsPull = array_merge((array) $batch->current(), $rubricsPull);
+                $rubricsPull = array_merge((array)$batch->current(), $rubricsPull);
             }
+
             $currentRubric = array_shift($rubricsPull);
-            
             if (!empty($currentRubric['parent_rubric_id'])) {
                 if (!isset($createdRubrics[$currentRubric['parent_rubric_id']])) {
                     $currentRubric['depends_on'] = $currentRubric['parent_rubric_id'];
                     array_push($rubricsPull, $currentRubric);
                     continue;
                 }
+
                 if (!$parentRubric = ProductRubric::findOne(['old_id' => $currentRubric['parent_rubric_id']])) {
                     $this->error('Непредвиденная ошибка. Невозможно найти родительскую рубрику old_id=' .
                         $currentRubric['parent_rubric_id']);
                     return 1;
                 }
+
                 /** @noinspection MissedFieldInspection */
                 $newRubric = new ProductRubric([
                     'name' => $currentRubric['rubric_name'],
                     'old_id' => $currentRubric['rubric_id'],
                     'old_parent_id' => $currentRubric['parent_rubric_id'],
                 ]);
+
                 $newRubric->appendTo($parentRubric);
-            } else {
-                if (!$newRubric = ProductRubric::findOne(['old_id' => $currentRubric['rubric_id']])) {
-                    /** @noinspection MissedFieldInspection */
-                    $newRubric = new ProductRubric([
-                        'old_id' => $currentRubric['rubric_id'],
-                        'name' => $currentRubric['rubric_name']
-                    ]);
-                    $newRubric->makeRoot();
-                }
+            } elseif (!$newRubric = ProductRubric::findOne(['old_id' => $currentRubric['rubric_id']])) {
+                /** @noinspection MissedFieldInspection */
+                $newRubric = new ProductRubric([
+                    'old_id' => $currentRubric['rubric_id'],
+                    'name' => $currentRubric['rubric_name']
+                ]);
+                $newRubric->appendTo($rootRubric);
             }
+
             $createdRubrics[$newRubric->getAttribute('old_id')] = $newRubric->id;
         } while (!empty($rubricsPull));
         
@@ -551,7 +587,8 @@ class OldbaseController extends Controller
         if (!$this->checkAuxFields()) {
             try {
                 foreach(self::TABLES_AUX_FIELDS as $table) {
-                    $query = Yii::$app->db->queryBuilder->delete("{{%{$table['table']}}}", [], $params);
+                    $params = [];
+                    $query = Yii::$app->db->queryBuilder->delete("{{%{$table['table']}}}", '', $params);
                     Yii::$app->db->createCommand($query)->execute();
                     Yii::$app->db->createCommand("ALTER TABLE {{%{$table['table']}}} AUTO_INCREMENT=0")->execute();
                 }
@@ -589,7 +626,11 @@ class OldbaseController extends Controller
         }
         return 0;
     }
-    
+
+    /**
+     * Delete AUX fields
+     * @return int
+     */
     protected function deleteAuxFields() {
         $this->trace('Удаляем вспомогательные поля из базы');
         $error = false;
@@ -637,27 +678,13 @@ class OldbaseController extends Controller
 
         return $ret;
     }
-    
+
+    /**
+     * Trace
+     * @param $msg
+     */
     protected function trace($msg) {
         $msg = $this->ansiFormat($msg, Console::FG_YELLOW);
         $this->stdout($msg . "\n");
     }
-    protected function success($msg) {
-        $msg = $this->ansiFormat($msg, Console::FG_GREEN);
-        $this->stdout($msg . "\n");
-    }
-    protected function notice($msg) {
-        $msg = $this->ansiFormat($msg, Console::FG_CYAN);
-        $this->stdout("\t- $msg\n");
-    }
-    protected function error($msg, $errors = []) {
-        $msg = $this->ansiFormat($msg, Console::FG_RED);
-        $this->stderr($msg . "\n");
-        foreach ((array)$errors as $name => $mess) {
-            foreach ($mess as $mes) {
-                $this->error("\t-$name: $mes");
-            }
-        }
-    }
-
 }

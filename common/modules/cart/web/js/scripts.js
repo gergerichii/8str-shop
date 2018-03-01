@@ -2,6 +2,7 @@ if (typeof shop == "undefined" || !shop) {
     var shop = {};
 }
 
+/** @global shop */
 shop.cart = {
     init: function () {
 

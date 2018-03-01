@@ -22,6 +22,7 @@ class AppAsset extends AssetBundle
         'css/prettyPhoto.css',
         'css/revslider.css',
         'css/colpick.css',
+        'css/jquery.typeahead.css'
     ];
     public $depends = [
         'yii\web\YiiAsset',
@@ -50,6 +51,7 @@ class AppAsset extends AssetBundle
         'js/jquery.elastislide.js',
         'js/jquery.selectbox.min.js',
         'js/jquery.debouncedresize.js',
+        'js/jquery.typeahead.js',
         'js/colpick.js',
         'js/main.js',
     ];

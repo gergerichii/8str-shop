@@ -5,17 +5,14 @@ return [
     'basePath' => dirname(__DIR__),
     'controllerNamespace' => 'admin\controllers',
     'bootstrap' => [
-        'catalog',
         '\common\modules\rbac\RbacPlusBootstrap',
         '\common\modules\order\Bootstrap',
         '\common\modules\treeManager\TreeManagerBootstrap',
+        '\common\modules\catalog\CatalogAdminBootstrap'
     ],
     'modules' => [
         'gridview' => [
             'class' => '\kartik\grid\Module'
-        ],
-        'rbac' => [
-            'class' => 'common\modules\rbac\Module'
         ],
         'order' => [
             'class' => common\modules\order\Module::className(),
@@ -31,6 +28,7 @@ return [
     'components' => [
         'urlManager' => [
             'rules' => [
+                '/search' => '/site/search',
                 // kartik\grid for export in rbac
                 '/gridview/export/download' => '/gridview/export/download',
             ],

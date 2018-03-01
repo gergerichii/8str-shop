@@ -72,14 +72,20 @@ class SiteController extends Controller
      * Displays homepage.
      *
      * @return mixed
+     * @throws \Exception
+     * @throws \Throwable
      */
     public function actionIndex()
     {
         $params = [];
-        $tags = ProductTag::find()->forFrontEnd()->usedAsGroup()->indexBy('name')
-            ->with(['products' => function(ProductQuery $q) {
-                $q->forFrontEnd()->showOnHome();
-            }])->all();
+        $tags = ProductTag::getDb()->cache(function () {
+            return ProductTag::find()->forFrontEnd()->usedAsGroup()->indexBy('name')
+                ->with(['products' => function (ProductQuery $q) {
+                    $q->forFrontEnd()->showOnHome();
+                }])
+                ->with(['products.rubrics', 'products.price', 'products.oldPrice', 'products.mainRubric'])
+                ->all();
+        });
 
         $params['topModels'] = ArrayHelper::map($tags, 'name', 'products');
 

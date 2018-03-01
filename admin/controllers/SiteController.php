@@ -1,6 +1,9 @@
 <?php
 namespace admin\controllers;
 
+use common\modules\catalog\models\ProductSphinxIndex;
+use common\modules\catalog\models\ProductSphinxSearch;
+use common\modules\catalog\Module;
 use Yii;
 use yii\web\Controller;
 use yii\filters\VerbFilter;
@@ -26,7 +29,7 @@ class SiteController extends Controller
                         'allow' => true,
                     ],
                     [
-                        'actions' => [/*'logout',*/ 'index'],
+                        'actions' => [/*'logout',*/ 'index', 'icons', 'search'],
                         'allow' => true,
                         'roles' => ['@'],
                     ],
@@ -61,6 +64,29 @@ class SiteController extends Controller
     public function actionIndex()
     {
         return $this->render('index');
+    }
+
+    /**
+     * Displays icons.
+     *
+     * @return string
+     */
+    public function actionIcons()
+    {
+        return $this->render('icons');
+    }
+
+    /**
+     * Search by sphinx
+     */
+    public function actionSearch() {
+        $request = Yii::$app->request;
+        $search = new ProductSphinxSearch();
+        $provider = $search->search($request->queryParams);
+        return $this->render('search', [
+            'search' => $search,
+            'provider' => $provider
+        ]);
     }
 
     /**

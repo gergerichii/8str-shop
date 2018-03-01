@@ -27,6 +27,7 @@ EOT;
             '[[name]]' => $this->string(150)->notNull(),
             '[[title]]' => $this->string(255),
             '[[desc]]' => $this->text(),
+            '[[visible_on_home_page]]' => $this->boolean()->notNull()->unsigned()->defaultValue(1)
         ], 'ENGINE=InnoDB, COMMENT=' . $tableComment . ", COLLATE 'utf8_general_ci'");
 
         $this->createIndex(

@@ -39,6 +39,11 @@ class m180209_081436_init_rbac extends Migration {
         } else {
             return false;
         }
+
+        // Admin can see admin settings in the rubrics tree
+        $canSeeAdminSettingsInRubrics = $auth->createPermission('see_admin_settings_in_rubrics');
+        $auth->add($canSeeAdminSettingsInRubrics);
+        $auth->addChild($admin, $canSeeAdminSettingsInRubrics);
     }
 
     /**

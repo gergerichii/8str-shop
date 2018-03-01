@@ -19,6 +19,8 @@ use yii\db\Expression;
 /**
  * Class MyNestedSetsActiveRecord
  * @package common\components
+ *
+ * @property string $slug
  */
 class NSActiveRecord extends BaseActiveRecord {
 
@@ -54,7 +56,7 @@ class NSActiveRecord extends BaseActiveRecord {
      */
     protected $_operation;
     /**
-     * @var NSActiveRecord
+     * @var NSActiveRecord $_node
      */
     protected $_node;
 
@@ -357,12 +359,16 @@ class NSActiveRecord extends BaseActiveRecord {
             case self::OPERATION_INSERT_BEFORE:
             case self::OPERATION_INSERT_AFTER:
             case self::OPERATION_APPEND_TO:
+            /** @noinspection PhpMissingBreakStatementInspection */
             case self::OPERATION_PREPEND_TO:
+                /** @var NSActiveRecord[] $parentParents */
                 $parentParents = $this->_node->parents()
                     ->orderBy($this->depthAttribute)->all();
+
                 foreach ($parentParents as $parent) {
                     $path[] = $parent->slug;
                 }
+
                 if (in_array($this->_operation, [self::OPERATION_PREPEND_TO, self::OPERATION_APPEND_TO])){
                     $path[] = $this->_node->slug;
                 }

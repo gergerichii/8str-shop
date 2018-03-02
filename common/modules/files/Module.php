@@ -105,12 +105,9 @@ class Module extends \yii\base\Module implements BootstrapInterface
      * @param string $entityName
      * @param string $imageName
      * @return string
-     * @throws InvalidConfigException
      */
     public function getFileUri(string $entityName, string $imageName) {
-        $entity = $this->getEntityInstance($entityName);
-        $entity->fileName = $imageName;
-        $ret = \Yii::$app->urlManager->createUrl(['/files/default/download', 'filePath' => $entity->subdir . DIRECTORY_SEPARATOR . $entity->fileName]);
+        $ret = \Yii::$app->urlManager->createUrl(['/files/default/download', 'entityName' => $entityName, 'fileName' => $imageName]);
         return str_replace('%2F', urldecode('%2F'), $ret);
     }
 

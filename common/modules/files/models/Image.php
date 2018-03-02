@@ -3,7 +3,7 @@
 namespace common\modules\files\models;
 
 use common\modules\files\Module;
-use yii\helpers\FileHelper;
+use yii\image\drivers\Image as ExtImageDriver;
 use yii\image\drivers\Image_GD;
 use yii\image\ImageDriver;
 
@@ -43,7 +43,7 @@ class Image extends BaseFile
      * @throws \yii\base\Exception
      */
     public function getThumbs() {
-        if (is_null($this->_thumbs)) {
+        if (is_null($this->_thumbs) && isset($this->thumbsOptions)) {
             $this->createThumbs(false);
         }
 
@@ -77,17 +77,15 @@ class Image extends BaseFile
      * @param Thumb $thumb
      * @return bool
      * @throws \yii\base\ErrorException
-     * @throws \yii\base\Exception
      */
     public function saveThumb(Thumb $thumb) {
-        $dirName = pathinfo($thumb->getFilename(), PATHINFO_DIRNAME);
-        FileHelper::createDirectory($dirName);
+        $thumb->createDirectory();
 
         /** @var ImageDriver $imageComponent */
         $imageComponent = \Yii::$app->get('image');
         /** @var Image_GD $image */
         $image = $imageComponent->load($this->getFilename());
-        $image->resize($thumb->width, $thumb->height);
+        $image->resize($thumb->width, $thumb->height, $thumb->resizingConstrait);
         return $image->save($thumb->getFilename());
     }
 

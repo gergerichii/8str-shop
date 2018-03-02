@@ -11,11 +11,15 @@ use common\modules\catalog\models\ProductTag;
 use common\modules\catalog\models\ProductTag2product;
 use common\modules\files\models\Image;
 use common\modules\files\Module;
+use common\modules\news\models\Article;
+use GuzzleHttp\Client;
 use Yii;
 use yii\db\Connection;
 use yii\db\Exception;
+use yii\db\Expression;
 use yii\db\Query;
 use yii\helpers\Console;
+use yii\helpers\StringHelper;
 
 /**
  * Действия с базой на сайте 8str.ru
@@ -62,50 +66,48 @@ class OldbaseController extends BaseController
             'newValue' => 'Светодиодный светильник Ферекс ДПП 01-135-50-Г65',
         ]
     ];
-    
+
     private $oldSqlDump = '../migrations/files/oldDb.sql';
     private $imagesPath = '@common/protected/webFiles/catalog/images/';
     private $oldDbName = 'fbkru_0_8str';
     private $badProductsFile = '../bad_products.csv';
     private $currentPID;
-    
+
     public $defaultAction = 'import';
     public $autoCreateAuxFields = true;
     public $autoDeleteAuxFields = false;
     public $importCreateBadProductsFile = false;
-    
 
-    public function init(){
+
+    public function init() {
         parent::init();
         $this->imagesPath = Yii::getAlias($this->imagesPath);
     }
-    
-    public function __destruct(){
+
+    public function __destruct() {
         if ($this->currentPID) {
             /* Убиваем процесс ssh тунеля */
             $this->trace('Убиваем процесс ssh тунеля');
             shell_exec("kill -KILL $this->currentPID");
         }
     }
-    
+
     /**
      * @inheritdoc
      */
-    public function options($actionID)
-    {
+    public function options($actionID) {
         return array_merge(parent::options($actionID), [
             'autoCreateAuxFields', // Автоматически создавать вспомогательные поля в базе если их нет
             'autoDeleteAuxFields', // Автоматически удалять вспомогательные поля. Если удалить, то при следующем копировании содержимое базы удалится
             'importCreateBadProductsFile', // При импортировании создать файл с плохими и задвоенными продуктами
         ]);
     }
-    
+
     /**
      * @inheritdoc
      * @since 2.0.8
      */
-    public function optionAliases()
-    {
+    public function optionAliases() {
         return array_merge(parent::optionAliases(), [
             'a' => 'autoCreateAuxFields',
             'd' => 'autoDeleteAuxFields',
@@ -131,7 +133,7 @@ class OldbaseController extends BaseController
     public function actionDeleteAuxFields() {
         return $this->deleteAuxFields();
     }
-    
+
     /**
      * Копирует удаленную базу с сайта 8str.ru в локальный дамп.
      * Необходим файл с настройками доступа к удаленному серверу db2.php
@@ -167,14 +169,35 @@ class OldbaseController extends BaseController
                 yii::$app->db->createCommand("DROP DATABASE `$this->oldDbName`")->execute();
             }
             yii::$app->db->createCommand("CREATE DATABASE `$this->oldDbName`")->execute();
-        } catch(Exception $e){
+        } catch (Exception $e) {
             $this->error($e->getMessage());
             return 1;
         }
-        
+
         shell_exec("mysql -h localhost -u{$this->module->db->username} -p{$this->module->db->password} {$this->oldDbName} < $this->oldSqlDump");
-        
+
         return 0;
+    }
+
+    /**
+     * Get connection to the old database
+     * @return Connection
+     */
+    private function getOldDb() {
+        /** @var Connection $remoteDb */
+        $remoteDb = Yii::$app->get('old_db', false);
+        if (!$remoteDb) {
+            $remoteDb = clone yii::$app->db;
+            $remoteDb->dsn = preg_replace(
+                '#dbname=[^;]+#',
+                "dbname={$this->oldDbName}",
+                yii::$app->db->dsn
+            );
+
+            $remoteDb->tablePrefix = 'pdx';
+        }
+
+        return $remoteDb;
     }
 
     /**
@@ -186,27 +209,16 @@ class OldbaseController extends BaseController
      * @throws \yii\base\Exception
      * @throws \yii\base\InvalidConfigException
      */
-    public function actionImport()
-    {
-        /** @var Connection $remoteDb */
-        $remoteDb = Yii::$app->get('old_db', false);
-        if (!$remoteDb) {
-            $remoteDb = clone yii::$app->db;
-            $remoteDb->dsn = preg_replace(
-                '#dbname=[^;]+#',
-                "dbname={$this->oldDbName}",
-                yii::$app->db->dsn
-            );
-            $remoteDb->tablePrefix = 'pdx';
-        }
-        
+    public function actionImport() {
+        $remoteDb = $this->getOldDb();
+
         try {
             $remoteDb->open();
-        } catch(Exception $e) {
+        } catch (Exception $e) {
             $this->error($e->getMessage());
             return 1;
         }
-        
+
         /* Добавляем вспомагательные поля в базу (при необходимости)*/
         if (!$this->checkAuxFields()) {
             if (!$this->autoCreateAuxFields) {
@@ -217,25 +229,25 @@ class OldbaseController extends BaseController
                 return $err;
             }
         }
-    
-    
+
+
         /* Экспортируем рубрикаторы */
-        if ($err = $this->exportRubrics($remoteDb)){
+        if ($err = $this->exportRubrics($remoteDb)) {
             return $err;
         }
-        
+
         /* Экспортируем продукты */
         if ($err = $this->exportProducts($remoteDb)) {
             return $err;
         }
-        
+
         /* Удаляем вспомогательные поля из базы */
         if ($this->autoDeleteAuxFields) {
-            if ($err = $this->deleteAuxFields()){
+            if ($err = $this->deleteAuxFields()) {
                 return $err;
             }
         }
-        
+
         $this->success('База успешно экспортирована');
         return 0;
     }
@@ -250,9 +262,9 @@ class OldbaseController extends BaseController
      * @throws \yii\base\InvalidConfigException
      */
     protected function exportProducts($remoteDb) {
-        
+
         $this->trace('Экспорт Продутов');
-        
+
         if ($this->importCreateBadProductsFile) {
             $badProducts = [
                 'Тип ошибки' => '',
@@ -261,7 +273,7 @@ class OldbaseController extends BaseController
                 'Номер дубля' => '',
                 'Название дубля' => '',
             ];
-            
+
             $badProdFile = fopen(dirname(__DIR__) . '/runtime/' . $this->badProductsFile, 'w');
             fputcsv($badProdFile, array_keys($badProducts), ';');
             $badProducts = [];
@@ -359,7 +371,7 @@ class OldbaseController extends BaseController
                 /** Создаем продукт */
                 /** @var Product $product */
                 $product = new Product();
-                $src['market_upload'] = (integer)(boolean) $src['market_upload'];
+                $src['market_upload'] = (integer)(boolean)$src['market_upload'];
                 $product->setAttributes($src);
                 $product->brand_id = ($brand) ? $brand->id : null;
 
@@ -410,7 +422,7 @@ class OldbaseController extends BaseController
                     '8str' => 'price',
                     'vigsec' => 'vig_sec_price',
                 ];
-                foreach($domains as $domain => $field) {
+                foreach ($domains as $domain => $field) {
                     if (empty($src[$field])) continue;
 
                     $priceValue = round((float)$src[$field], 2);
@@ -438,7 +450,7 @@ class OldbaseController extends BaseController
                     'promo' => 'is_promo',
                 ];
                 /** Если продукт имеет метку, то добавляем ее к нему */
-                foreach($tags as $tag => $srcTag) {
+                foreach ($tags as $tag => $srcTag) {
                     if (empty($src[$srcTag])) continue;
                     $tag = $this->getTag($tag);
                     $tag2productParams = [
@@ -477,7 +489,7 @@ class OldbaseController extends BaseController
 
             $msg = $this->ansiFormat('.', Console::FG_GREEN);
             $this->stdout($msg);
-            
+
             if ($this->importCreateBadProductsFile && !empty($badProducts)) {
                 /** @noinspection PhpUndefinedVariableInspection */
                 fputcsv($badProdFile, $badProducts, ';');
@@ -528,7 +540,7 @@ class OldbaseController extends BaseController
             ->leftJoin('{{%taxonomy_term_hierarchy}} as {{h}}', '{{c}}.[[tid]] = {{h}}.[[tid]]')
             ->leftJoin('{{%taxonomy_term_data}} as {{p}}', '{{h}}.[[parent]] = {{p}}.[[tid]]')
             ->where(['{{c}}.[[vid]]' => 2])->orderBy('{{p}}.[[tid]]');
-        
+
         $batch = $query->batch(100, $remoteDb);
         $rubricsPull = [];
         $createdRubrics = [];
@@ -571,7 +583,7 @@ class OldbaseController extends BaseController
 
             $createdRubrics[$newRubric->getAttribute('old_id')] = $newRubric->id;
         } while (!empty($rubricsPull));
-        
+
         $this->success('Экспорт рубрикатора успешно завершон');
         return 0;
     }
@@ -583,16 +595,16 @@ class OldbaseController extends BaseController
     protected function createAuxFields() {
         $this->trace('Добавляем вспомогательные поля в базу');
         $error = false;
-        
+
         if (!$this->checkAuxFields()) {
             try {
-                foreach(self::TABLES_AUX_FIELDS as $table) {
+                foreach (self::TABLES_AUX_FIELDS as $table) {
                     $params = [];
                     $query = Yii::$app->db->queryBuilder->delete("{{%{$table['table']}}}", '', $params);
                     Yii::$app->db->createCommand($query)->execute();
                     Yii::$app->db->createCommand("ALTER TABLE {{%{$table['table']}}} AUTO_INCREMENT=0")->execute();
                 }
-            } catch(\Exception $e) {
+            } catch (\Exception $e) {
                 $error = $e->getMessage();
             }
             if (!$error) {
@@ -603,9 +615,9 @@ class OldbaseController extends BaseController
                         $query = Yii::$app->db->queryBuilder->addColumn(
                             "{{%{$tableData['table']}}}",
                             "[[{$tableData['column']}]]", $tableData['type']);
-                        try{
+                        try {
                             Yii::$app->db->createCommand($query)->execute();
-                        }catch (Exception $e) {
+                        } catch (Exception $e) {
                             $error = $e->getMessage();
                             break;
                         }
@@ -641,9 +653,9 @@ class OldbaseController extends BaseController
                 $query = Yii::$app->db->queryBuilder->dropColumn(
                     "{{%{$tableData['table']}}}",
                     "[[{$tableData['column']}]]");
-                try{
+                try {
                     Yii::$app->db->createCommand($query)->execute();
-                }catch (Exception $e) {
+                } catch (Exception $e) {
                     $error = $e->getMessage();
                     break;
                 }
@@ -658,7 +670,7 @@ class OldbaseController extends BaseController
         }
         return 0;
     }
-    
+
     /**
      * Проверка на вспомогательные поля в таблицах
      *
@@ -686,5 +698,83 @@ class OldbaseController extends BaseController
     protected function trace($msg) {
         $msg = $this->ansiFormat($msg, Console::FG_YELLOW);
         $this->stdout($msg . "\n");
+    }
+
+    /**
+     * Export news
+     */
+    public function actionExportNews() {
+        $oldDb = $this->getOldDb();
+        $query = new Query();
+
+        $newsRows = $query->select('node.title as title,' .
+            ' from_unixtime(node.created) as created_at,' .
+            ' body.body_value as fulltext,' .
+            ' files.filename as image,' .
+            ' files.uri as image_uri,' .
+            ' node.nid as external_id')
+            ->addSelect(new Expression('1 as creator_id'))
+            ->addSelect(new Expression('1 as modifier_id'))
+            ->from('{{%node}} node')
+            ->leftJoin('{{%field_data_body}} body', 'body.entity_id=node.nid')
+            ->leftJoin('{{%field_data_field_image}} image', 'image.entity_id=node.nid')
+            ->leftJoin('{{%file_managed}} files', 'files.fid= image.field_image_fid')
+            ->where("node.type='news' AND node.status=1 AND files.uri is not null")
+            ->all($oldDb);
+
+        $this->success('Found ' . count($newsRows) . ' articles of news.' . PHP_EOL);
+
+        if ($newsRows) {
+            /** @var Module $filesManager */
+            $filesManager = Yii::$app->getModule('files');
+            /** @var Image $image */
+            $mainImage = $filesManager->getEntityInstance('news/images');
+            foreach ($newsRows as $newsRow) {
+                $image = clone $mainImage;
+
+                $newsRow['introtext'] = StringHelper::truncate(html_entity_decode(strip_tags($newsRow['fulltext'])), 120);
+                $newsRow['published_at'] = $newsRow['created_at'];
+
+                // Prepare an image uri
+                if (empty($newsRow['image_uri'])) {
+                    $imageUri = '';
+                } else {
+                    $imageUri = str_replace('public://', '', $newsRow['image_uri']);
+                }
+
+                unset($newsRow['image_uri']);
+
+                // Update a article data
+                $article = Article::find()->where(['external_id' => $newsRow['external_id']])->one();
+                if (!$article) {
+                    $article = new Article();
+                }
+
+                $article->load($newsRow, '');
+                if (!$article->save()) {
+                    $this->error('Failed to save article.' . PHP_EOL, $article->getErrors());
+                    continue;
+                }
+
+                // Download an image
+                if ('' !== $imageUri) {
+                    $imageName = basename($imageUri);
+                    $image->fileName = $imageName;
+                    $image->delete();
+                    $image->pickFromRemote('http://8str.ru/sites/default/files/styles/original/public/' . $imageUri);
+                    if ($image->hasErrors()) {
+                        $this->error('Could not get image.' . PHP_EOL, $image->getErrors());
+                    }
+
+                    $image->createThumbs();
+
+                    if ($image->hasErrors()) {
+                        $this->error('Could not create thumbs.' . PHP_EOL, $image->getErrors());
+                    }
+                }
+            }
+        }
+
+        $this->success('Exports are complete.' . PHP_EOL);
     }
 }

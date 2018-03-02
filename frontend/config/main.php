@@ -7,6 +7,7 @@ return [
         'common\modules\order\Bootstrap',
         'catalog',
         'cart',
+        '\common\modules\news\NewsBootstrap',
     ],
     'modules' => [
         'catalog' => [

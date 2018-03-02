@@ -2,10 +2,15 @@
 
 namespace common\modules\news;
 
+use common\modules\news\models\Article;
+use \yii\base\Module as BaseModule;
+use yii\data\ActiveDataProvider;
+use yii\helpers\Url;
+
 /**
- * news module definition class
+ * News module definition class
  */
-class Module extends \yii\base\Module
+class Module extends BaseModule
 {
     /**
      * @inheritdoc
@@ -13,12 +18,28 @@ class Module extends \yii\base\Module
     public $controllerNamespace = 'common\modules\news\controllers';
 
     /**
-     * @inheritdoc
+     * Get article uri
+     * @param Article $article
+     * @return string
      */
-    public function init()
-    {
-        parent::init();
+    public function getArticleUri(Article $article) {
+        return Url::to(['/news/default/index', '#' => $article->alias]);
+    }
 
-        // custom initialization code goes here
+    /**
+     * Get provider of articles
+     * @return ActiveDataProvider
+     */
+    public function getProviderOfArticles() {
+        $query = Article::find()->orderBy('published_at DESC');
+        $provider = new ActiveDataProvider([
+            'query' => $query,
+            'pagination' => [
+                // TODO Replace to configuration
+                'defaultPageSize' => 5
+            ]
+        ]);
+
+        return $provider;
     }
 }

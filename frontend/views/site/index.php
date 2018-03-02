@@ -8,6 +8,7 @@
 
 use common\modules\catalog\Module;
 use common\modules\catalog\widgets\ProductViewWidget;
+use common\modules\news\widgets\LatestNewsWidgets;
 
 /** @var \yii\web\View $this */
 
@@ -98,6 +99,13 @@ $activeTab = 'new';
 
                         </div><!-- End #products-tabs-content -->
                     </div><!-- End .main-tab-container -->
+
+                    <div class="md-margin2x"></div><!-- space -->
+
+                    <?= LatestNewsWidgets::widget(); ?>
+
+                    <div class="md-margin2x"></div><!-- Space -->
+
                 </div><!-- End .col-md-9 -->
             </div><!-- End .row -->
         </div><!-- End .col-md-12 -->

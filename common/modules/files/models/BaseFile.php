@@ -2,7 +2,9 @@
 
 namespace common\modules\files\models;
 
+use GuzzleHttp\Client;
 use yii\base\Model;
+use yii\helpers\FileHelper;
 
 /**
  * Class BaseFile
@@ -117,6 +119,8 @@ abstract class BaseFile extends Model
             return false;
         }
 
+        $this->createDirectory();
+
         $result = copy($oldName, $this->getFilename());
         if (false === $result) {
             $this->addError('', 'Unknown error!');
@@ -124,5 +128,42 @@ abstract class BaseFile extends Model
         }
 
         return true;
+    }
+
+    /**
+     * Pick the image from remote url
+     * @param string $url
+     * @return bool
+     */
+    public function pickFromRemote($url) {
+        if ($this->exists()) {
+            $this->addError('', 'The file ' . $this->getFilename() . ' already exists.');
+            return false;
+        }
+
+        $this->createDirectory();
+
+        try {
+            $client = new Client();
+            $client->request('GET', $url, ['sink' => $this->getFilename()]);
+        } catch (\Exception $exception) {
+            $this->addError('', $exception->getMessage());
+            return false;
+        }
+
+        return true;
+    }
+
+    /**
+     * Make sure the directory exists
+     * @return bool
+     */
+    public function createDirectory() {
+        try {
+            return FileHelper::createDirectory($this->getPath());
+        } catch (\Exception $exception) {
+            $this->addError('', $exception->getMessage());
+            return false;
+        }
     }
 }

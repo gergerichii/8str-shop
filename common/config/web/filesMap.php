@@ -12,8 +12,8 @@ return [
         'subdir' => 'products/images',
         'thumbsOptions' => [
             'little' => 'products/images/little',
-            'medium' => 'products/images/little',
-            'large' => 'products/images/little',
+            'medium' => 'products/images/medium',
+            'large' => 'products/images/large',
         ]
     ],
     'defaults' => [
@@ -27,6 +27,7 @@ return [
         'subdir' => 'products/images/little',
         'width' => 115,
         'height' => 115,
+        'resizingConstrait' => \yii\image\drivers\Image::CROP
     ],
     'products/images/medium' => [
         'class' => \common\modules\files\models\Thumb::class,
@@ -34,6 +35,7 @@ return [
         'subdir' => 'products/images/medium',
         'width' => 122,
         'height' => 170,
+        'resizingConstrait' => \yii\image\drivers\Image::CROP
     ],
     'products/images/large' => [
         'class' => \common\modules\files\models\Thumb::class,
@@ -41,5 +43,31 @@ return [
         'subdir' => 'products/images/large',
         'width' => 222,
         'height' => 311,
+        'resizingConstrait' => \yii\image\drivers\Image::CROP
     ],
+    'news/images' => [
+        'class' => \common\modules\files\models\Image::class,
+        'path' => '@common/webFiles',
+        'subdir' => 'news/images',
+        'thumbsOptions' => [
+            'preview' => 'news/images/preview',
+            'detail' => 'news/images/detail',
+        ]
+    ],
+    'news/images/preview' => [
+        'class' => \common\modules\files\models\Thumb::class,
+        'width' => 370,
+        'height' => 170,
+        'path' => '@common/webFiles',
+        'subdir' => 'news/images/preview',
+        'resizingConstrait' => \yii\image\drivers\Image::CROP
+    ],
+    'news/images/detail' => [
+        'class' => \common\modules\files\models\Thumb::class,
+        'width' => 770,
+        'height' => 300,
+        'path' => '@common/webFiles',
+        'subdir' => 'news/images/detail',
+        'resizingConstrait' => \yii\image\drivers\Image::CROP
+    ]
 ];

@@ -1329,4 +1329,14 @@
         google.maps.event.addDomListener(window, 'load', initialize);
     }
 
+    if (window.location.hash) {
+        var $div = $('[data-hash="' + window.location.hash + '"');
+        if (1 === $div.length) {
+            setTimeout(function(){
+                $('html, body').animate({
+                    scrollTop: $div.offset().top
+                }, 1000);
+            }, 2000);
+        }
+    }
 }());

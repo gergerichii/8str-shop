@@ -20,6 +20,12 @@ class Thumb extends BaseFile
     public $height;
 
     /**
+     * Resizing constrait
+     * @var int $resizingConstrait
+     */
+    public $resizingConstrait;
+
+    /**
      * @inheritdoc
      */
     public function rules() {

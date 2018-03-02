@@ -96,6 +96,7 @@ $config = [
                 'depthAttribute' => 'level',
             ]
         ],
+        'news' => '\common\modules\news\Module'
     ],
 ];
 

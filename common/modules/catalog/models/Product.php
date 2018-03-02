@@ -327,9 +327,22 @@ class Product extends BaseActiveRecord implements CartElement
         $part = ProductHelper::getFileStorePart($file);
         if (false !== ($index = array_search($file, $this->_files[$part]))) {
             unset($this->_files[$part][$index]);
+            $this->_files[$part] = array_values($this->_files[$part]);
         }
 
         return $this;
+    }
+    
+    /**
+     * Checks for a file
+     *
+     * @param $file
+     *
+     * @return false|int|string
+     */
+    public function hasFile($file) {
+        $part = ProductHelper::getFileStorePart($file);
+        return array_search($file, $this->_files[$part]);
     }
 
     /**
@@ -386,7 +399,11 @@ class Product extends BaseActiveRecord implements CartElement
      * TODO: Посмотреть, как можно сделать это лучше
      */
     private function _prepareFiles() {
-        $this->_files = json_decode($this->getAttribute('files'), true);
+        if (is_array($this->getAttribute('files'))) {
+            $this->_files = $this->getAttribute('files');
+        } else {
+            $this->_files = json_decode($this->getAttribute('files'), true);
+        }
     }
 
     /** ---------------------------------------  Магические методы -------------------------------------------------- */
@@ -731,7 +748,7 @@ class Product extends BaseActiveRecord implements CartElement
      */
     public function getPrice() {
         /** @var ProductPriceQuery $query */
-        $query = $this->hasOne(ProductPrice::className(), ['product_id' => 'id']);
+        $query = $this->hasOne(ProductPrice::class, ['product_id' => 'id']);
         $query->onlyActive();
         $query->orderBy(['active_from' => SORT_DESC]);
         $query->inverseOf('product');
@@ -744,7 +761,7 @@ class Product extends BaseActiveRecord implements CartElement
      */
     public function getOldPrice() {
         /** @var ProductPriceQuery $query */
-        $query = $this->hasOne(ProductPrice::className(), ['product_id' => 'id']);
+        $query = $this->hasOne(ProductPrice::class, ['product_id' => 'id']);
         $query->onlyInactive();
         $query->orderBy(['active_from' => SORT_DESC]);
         $query->inverseOf('product');
@@ -757,7 +774,7 @@ class Product extends BaseActiveRecord implements CartElement
      */
     public function getFuturePrice() {
         /** @var ProductPriceQuery $query */
-        $query = $this->hasOne(ProductPrice::className(), ['product_id' => 'id']);
+        $query = $this->hasOne(ProductPrice::class, ['product_id' => 'id']);
         $query->onlyFuture();
         $query->inverseOf('product');
         return $query;

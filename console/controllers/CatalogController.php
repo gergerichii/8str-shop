@@ -5,6 +5,8 @@ namespace console\controllers;
 use common\modules\catalog\models\Product;
 use common\modules\files\models\Image;
 use common\modules\files\Module as FilesManager;
+use dosamigos\transliterator\TransliteratorHelper;
+use yii\helpers\ArrayHelper;
 use yii\helpers\FileHelper;
 
 /**
@@ -34,58 +36,88 @@ class CatalogController extends BaseController
 
         $imageNumber = 0;
         $amountOfFoundProduct = 0;
-        $amountOfNotFoundProduct = 0;
 
         $path = \Yii::getAlias($path);
         if (!is_dir($path)) {
-            $this->error('The path is wrong.' . PHP_EOL);
+            $this->error('The path is wrong.');
             return 0;
         }
 
         $groups = $this->findImages($path);
-        $this->success('Possible quantity of products: ' . count($groups) . '.' . PHP_EOL);
-        foreach ($groups as $productName => $filesInfos) {
-            /** @var Product $product */
-            $product = Product::find()->where(['name' => $productName])->one();
-            if (!$product) {
-                $this->error('Not found product by name "' . $productName . '".' . PHP_EOL);
-                $amountOfNotFoundProduct++;
-                continue;
-            }
-
-            $amountOfFoundProduct++;
-
-            // Deletion old images
-            if ($product->images) {
-                foreach ($product->images as $imageName) {
+        
+        $f = fopen("{$path}/files.csv", 'w');
+        fputcsv($f, array_keys($groups));
+        fclose($f);
+        
+        $this->success('Possible quantity of products: ' . count($groups) . '.');
+        
+        $amountOfNotFoundProduct = $groups;
+        /** @var Product $product */
+        foreach(Product::find()->each() as $product) {
+            echo '.';
+            $productName = preg_replace('#[/]#', '', $product->name);
+            if (isset($groups[$productName])) {
+                $amountOfFoundProduct++;
+                unset($amountOfNotFoundProduct[$productName]);
+                // To growing old images
+                if ($product->images) {
+                    $groupImages = ArrayHelper::getColumn($groups[$productName], 'basename');
+                    foreach ($product->images as $imageName) {
+                        if (false !== array_search($imageName, $groupImages)) {
+                            continue;
+                        }
+                        $image->fileName = $imageName;
+                        // Copy file to archive
+                        if (false === $image->toGrowOld()){
+                            $this->error('To growing old file', $image->getErrorSummary(true));
+                        }
+                        $product->deleteFile($imageName);
+                    }
+//                    $product->desolateImages();
+                }
+                // Addition new images
+                foreach ($groups[$productName] as $fileInfo) {
+                    if (false === $product->hasFile($fileInfo['basename'])) {
+                        $product->addFile($fileInfo['basename']);
+        
+                        $image->fileName = $fileInfo['basename'];
+                        if (false === $image->pickFrom($fileInfo['dirname'])) {
+                            $this->error('Product #' . $product->id . ' error: ' . $image->getFirstError('') . '.');
+                        }
+                    }
+    
+                    if ($image->exists()) {
+                        $imageNumber++;
+                        $image->createThumbs();
+                    }
+                }
+    
+                $product->update();
+            } else {
+                // Create thumbnails from old files
+                $images = $product->images;
+                foreach ($images as $imageName) {
                     $image->fileName = $imageName;
-                    // Physical file deletion
-                    $image->delete();
                     $product->deleteFile($imageName);
+                    $imageName = preg_replace('#\.\w{3,4}$#', '.png', $imageName);
+                    $product->addFile($imageName);
+                    if ($image->exists()) {
+                        $image->adaptSize(\yii\image\drivers\Image::ADAPT, $imageName);
+                        $image->createThumbs(true, \yii\image\drivers\Image::ADAPT);
+                    }
                 }
+    
+                $product->update();
             }
-
-            $product->desolateImages();
-
-            // Addition new images
-            foreach ($filesInfos as $fileInfo) {
-                $product->addFile($fileInfo['basename']);
-
-                $image->fileName = $fileInfo['basename'];
-                if (false === $image->pickFrom($fileInfo['dirname'])) {
-                    $this->error('Product #' . $product->id . ' error: ' . $image->getFirstError('') . '.' . PHP_EOL);
-                }
-
-                if ($image->exists()) {
-                    $imageNumber++;
-                    $image->createThumbs();
-                }
-            }
-
-            $product->update();
         }
-
-        $this->success($imageNumber . ' images have been added. There are ' . $amountOfFoundProduct . ' products found and ' . $amountOfNotFoundProduct . ' not found. ' . PHP_EOL);
+        
+        if (count($amountOfNotFoundProduct)) {
+            $f = fopen("{$path}/notFoundFiles.csv", 'w');
+            fputcsv($f, array_keys($amountOfNotFoundProduct));
+            fclose($f);
+        }
+        
+        $this->success($imageNumber . ' images have been added. There are ' . $amountOfFoundProduct . ' products found and ' . count($amountOfNotFoundProduct) . ' not found. ' . PHP_EOL);
 
         return 0;
     }
@@ -147,7 +179,7 @@ class CatalogController extends BaseController
         $files = FileHelper::findFiles($path, ['only' => ['*.jpg']]);
         $this->success('Amount of files: ' . count($files) . '.' . PHP_EOL);
         foreach ($files as $oldName) {
-            $newName = str_replace('‑', '-', $oldName);
+            $newName = str_replace(html_entity_decode('&#8209;', ENT_HTML5, 'UTF-8'), '-', $oldName);
             if (!rename($oldName, $newName)) {
                 $this->error('Could not rename file ' . $oldName . '.' . PHP_EOL);
             }

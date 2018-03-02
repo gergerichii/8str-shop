@@ -128,7 +128,7 @@ class FrontendSearchProvider extends BaseDataProvider
 
         // Search for products
         $this->_products = [];
-        $productIndexQuery = ProductSphinxIndex::find()->match($this->q)->select('id');
+        $productIndexQuery = ProductSphinxIndex::find()->match('*' . $this->q . '*')->select('id');
 
         if ($this->_top) {
             $productIndexQuery->limit(5);

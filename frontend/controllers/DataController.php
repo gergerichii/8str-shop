@@ -71,7 +71,7 @@ class DataController extends Controller
 
         $productsItems = array_map(function ($product) use ($catalog, $filesManager) {
             $pictureName = isset($product->images[0]) ? $product->images[0] : 'default.jpg';
-            $pictureSrc = $filesManager->getFileUri('products/images', $pictureName);
+            $pictureSrc = $filesManager->getFileUri('products/images/little', $pictureName);
 
             $template = $this->renderPartial('search/product', [
                 'model' => $product,
@@ -92,6 +92,6 @@ class DataController extends Controller
         }, $search->getProducts());
 
         // Merging the results
-        return array_merge($rubricsItems, $brandsItems, $productsItems);
+        return array_merge($productsItems, $brandsItems, $rubricsItems);
     }
 }

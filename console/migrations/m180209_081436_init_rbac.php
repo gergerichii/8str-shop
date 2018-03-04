@@ -1,5 +1,6 @@
 <?php
 
+use common\models\entities\User;
 use yii\db\Migration;
 
 /**
@@ -25,12 +26,12 @@ class m180209_081436_init_rbac extends Migration {
         $auth->add($guest);
 
         // Add guest user
-        $user = new \common\models\entities\User();
+        $user = new User(['scenario' => User::SCENARIO_REGISTER_CONSOLE]);
         $user->setAttributes([
             'id' => 2,
             'username' => 'guest',
             'email' => 'guest@guest.guest',
-            'status' => \common\models\entities\User::STATUS_ACTIVE
+            'status' => User::STATUS_ACTIVE
         ]);
         $user->setPassword('7777777');
         $user->generateAuthKey();
@@ -44,6 +45,8 @@ class m180209_081436_init_rbac extends Migration {
         $canSeeAdminSettingsInRubrics = $auth->createPermission('see_admin_settings_in_rubrics');
         $auth->add($canSeeAdminSettingsInRubrics);
         $auth->addChild($admin, $canSeeAdminSettingsInRubrics);
+
+        return true;
     }
 
     /**
@@ -55,7 +58,7 @@ class m180209_081436_init_rbac extends Migration {
         $auth->removeAll();
 
         // Delete guest
-        $user = \common\models\entities\User::findOne(2);
+        $user = User::findOne(2);
         if (!$user) {
             return true;
         }
@@ -63,6 +66,8 @@ class m180209_081436_init_rbac extends Migration {
         if (false === $user->delete()) {
             return false;
         }
+
+        return true;
     }
 
 }

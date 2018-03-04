@@ -14,6 +14,7 @@ class m130524_201443_create_admin_user extends Migration
     public function safeUp()
     {
         $user = new User([
+            'scenario' => User::SCENARIO_REGISTER_CONSOLE,
             'username' => 'admin',
             'email' => 'admin@8str.ru',
             'password' => 'Volga2015',

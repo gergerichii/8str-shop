@@ -48,6 +48,7 @@ class AppAsset extends AssetBundle
         'js/jquery.themepunch.revolution.js',
         'js/jquery.elevateZoom.min.js',
         'js/jquery.fitvids.js',
+        'js/modernizr.custom.js',
         'js/jquery.elastislide.js',
         'js/jquery.selectbox.min.js',
         'js/jquery.debouncedresize.js',

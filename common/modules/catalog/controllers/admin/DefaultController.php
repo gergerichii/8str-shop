@@ -8,6 +8,7 @@ use common\modules\files\Module;
 use Yii;
 use common\modules\catalog\models\Product;
 use common\modules\catalog\models\ProductSearch;
+use yii\filters\AccessControl;
 use yii\helpers\Json;
 use yii\helpers\Url;
 use yii\web\Controller;
@@ -27,6 +28,15 @@ class DefaultController extends Controller
      */
     public function behaviors() {
         return [
+            'access' => [
+                'class' => AccessControl::className(),
+                'rules' => [
+                    [
+                        'allow' => true,
+                        'roles' => ['admin'],
+                    ],
+                ],
+            ],
             'verbs' => [
                 'class' => VerbFilter::className(),
                 'actions' => [

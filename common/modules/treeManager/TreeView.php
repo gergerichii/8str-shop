@@ -17,7 +17,7 @@ use Yii;
 use yii\base\InvalidConfigException;
 use yii\bootstrap\BootstrapPluginAsset;
 use yii\db\ActiveQuery;
-use common\base\models\BaseActiveRecord;
+use yii\db\ActiveRecord;
 use yii\helpers\ArrayHelper;
 use yii\helpers\Html;
 

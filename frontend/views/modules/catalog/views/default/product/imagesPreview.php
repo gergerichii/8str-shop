@@ -18,24 +18,23 @@ $filesManager = \Yii::$app->getModule('files');
 ?>
 
 <div class="col-md-6 col-sm-12 col-xs-12 product-viewer clearfix">
-
     <div id="product-image-carousel-container">
         <ul id="product-carousel" class="celastislide-list">
-
             <!-- TODO: Сделать ссылки на разные картинки, ака тумбы, биг и т.д.-->
-            <?php $active = 'class="active-slide"'; ?>
+            <?php $active = ' class="active-slide"'; ?>
             <?php foreach ($product->images as $image): ?>
-                <?php $image = $filesManager->getFileUri('products/images', $image); ?>
-                <li <?=$active?>>
-                    <a data-rel='prettyPhoto[product]' href="<?=$image?>"
-                       data-image="<?=$image?>" data-zoom-image="<?=$image?>"
-                       class="product-gallery-item">
-                        <img src="<?=$image?>" alt="<?=$product?>">
+                <?php
+                $mediumImage = $filesManager->getFileUri('products/images/medium', $image);
+                $realImage = $filesManager->getFileUri('products/images', $image);
+                ?>
+
+                <li<?= $active; ?>>
+                    <a data-rel="prettyPhoto[product]" href="<?= $mediumImage; ?>" data-image="<?= $mediumImage; ?>" data-zoom-image="<?= $realImage; ?>" class="product-gallery-item">
+                        <img src="<?= $mediumImage; ?>" alt="<?= $product->name; ?>">
                     </a>
                 </li>
-                <?php $active = '' ?>
+                <?php $active = ''; ?>
             <?php endforeach; ?>
-
         </ul><!-- End product-carousel -->
     </div>
 
@@ -47,22 +46,24 @@ $filesManager = \Yii::$app->getModule('files');
             $image = $filesManager->getFileUri('products/images', $product->images[0]);
         }
         ?>
-        <figure><img src="<?=$image?>" data-zoom-image="<?=$image?>" alt="<?=$product?>" id="product-image">
+
+        <figure>
+            <img src="<?= $image; ?>" data-zoom-image="<?= $image; ?>" alt="<?= $product->name; ?>" id="product-image">
             <figcaption class="item-price-container">
                 <?php if ($catalog->oldPriceOf($product, false)): ?>
-                    <span class="old-price"><?= $catalog->oldPriceOf($product) ?></span>
+                    <span class="old-price"><?= $catalog->oldPriceOf($product); ?></span>
                 <?php endif; ?>
-                <span class="item-price"><?= $catalog->priceOf($product) ?></span>
+                <span class="item-price"><?= $catalog->priceOf($product); ?></span>
             </figcaption>
         </figure>
+
         <!--TODO: Сделать цикл по меткам -->
-        <?php if ($catalog->productHasTag($product, 'new')):?>
+        <?php if ($catalog->productHasTag($product, 'new')): ?>
             <span class="new-rect">New</span>
         <?php endif; ?>
-        <?php if ($catalog->discountOf($product)):?>
-            <span class="discount-rect"><?= $catalog->discountOf($product) ?></span>
+
+        <?php if ($catalog->discountOf($product)): ?>
+            <span class="discount-rect"><?= $catalog->discountOf($product); ?></span>
         <?php endif; ?>
     </div><!-- product-image-container -->
-
 </div><!-- End .col-md-6 -->
-

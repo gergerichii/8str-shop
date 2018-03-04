@@ -9,6 +9,23 @@ $config = [
     ],
     'controllerMap' => [
     ],
+    'container' => [
+        'definitions' => [
+            // common\widgets\Yii2modAlert подгружается к любому выводу кроме Ajax через setUp класс
+            'common\widgets\Yii2modAlert' => [
+                'options' => [
+                    'icon' => 'glyphicon glyphicon-fire',
+                ],
+                'clientOptions' => [
+                    'placement' => [
+                        'from' => 'top',
+                        'align' => 'center',
+                    ],
+                    'mouse_over' => 'pause',
+                ],
+            ],
+        ],
+    ],
     'components' => [
         'user' => [
             'identityClass' => 'common\models\entities\User',
@@ -35,6 +52,8 @@ $config = [
                 '/login' => '/site/login',
                 '/logout' => '/site/logout',
                 '/error' => '/site/error',
+                '/request-password-reset' => '/site/request-password-reset',
+                '/reset-password' => '/site/reset-password',
             ],
         ],
         'authManager' => [

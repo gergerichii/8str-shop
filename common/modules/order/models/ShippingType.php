@@ -4,7 +4,7 @@ namespace common\modules\order\models;
 
 use yii;
 
-class ShippingType extends \yii\db\ActiveRecord
+class ShippingType extends \common\base\models\BaseActiveRecord
 {
     public static function tableName()
     {

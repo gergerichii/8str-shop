@@ -8,7 +8,7 @@
 
 namespace common\modules\treeManager\models;
 
-use yii\db\ActiveRecord;
+use common\base\models\BaseActiveRecord;
 
 /**
  * This is the base model class for the nested set tree structure
@@ -46,7 +46,7 @@ use yii\db\ActiveRecord;
  * @method boolean delete()
  * @method boolean deleteWithChildren()
  */
-class Tree extends ActiveRecord
+class Tree extends BaseActiveRecord
 {
     use TreeTrait;
 

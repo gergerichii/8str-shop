@@ -37,7 +37,7 @@ abstract class BaseController extends Controller
         $msg = $this->ansiFormat($msg, Console::FG_RED);
         $this->stderr($msg . "\n");
         foreach ((array)$errors as $name => $mess) {
-            foreach ($mess as $mes) {
+            foreach ((array)$mess as $mes) {
                 $this->error("\t-$name: $mes");
             }
         }

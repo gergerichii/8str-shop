@@ -3,7 +3,7 @@ namespace common\modules\order\models;
 
 use yii;
 
-class FieldValueVariant extends \yii\db\ActiveRecord
+class FieldValueVariant extends \common\base\models\BaseActiveRecord
 {
     public static function tableName()
     {

@@ -7,13 +7,16 @@
  */
 
 namespace common\modules\catalog\models;
+
 use yii\base\Model;
 
 /**
  *
+ * @property int  $value
  * @property void $activeTo
  */
-class ProductPriceDiscountDummy extends Model implements ProductPriceDiscountInterface{
+class ProductPriceDiscountDummy extends Model implements ProductPriceDiscountInterface
+{
     public function __toString(){
         return '';
     }

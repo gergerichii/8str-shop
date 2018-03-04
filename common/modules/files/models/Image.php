@@ -21,6 +21,24 @@ class Image extends BaseFile
     public $thumbsOptions = null;
 
     /**
+     * Old images subdir
+     * @var string
+     */
+    public $oldImagesDir = null;
+    
+    /**
+     * Width
+     * @var int $width
+     */
+    public $width;
+
+    /**
+     * Heihght
+     * @var int $height
+     */
+    public $height;
+    
+    /**
      * Thumbs collection
      * @var Thumb[]|null
      */
@@ -49,15 +67,18 @@ class Image extends BaseFile
 
         return $this->_thumbs;
     }
-
+    
     /**
      * Create thumbs
+     *
      * @param bool $save
+     * @param int $master
+     *
      * @throws \yii\base\ErrorException
      * @throws \yii\base\Exception
      * @throws \yii\base\InvalidConfigException
      */
-    public function createThumbs($save = true) {
+    public function createThumbs($save = true, $master = null) {
         $this->_thumbs = [];
         foreach ($this->thumbsOptions as $thumbName => $entityName) {
             /** @var Module $filesManagers */
@@ -65,28 +86,86 @@ class Image extends BaseFile
             $thumb = $filesManagers->createEntity($entityName, $this->fileName);
 
             if ($save && !$thumb->exists()) {
-                $this->saveThumb($thumb);
+                $this->saveThumb($thumb, $master);
             }
 
             $this->_thumbs[$thumbName] = $thumb;
         }
     }
-
+    
     /**
      * Save thumb
+     *
      * @param Thumb $thumb
+     * @param int  $master
+     *
      * @return bool
      * @throws \yii\base\ErrorException
      */
-    public function saveThumb(Thumb $thumb) {
+    public function saveThumb(Thumb $thumb, $master = null) {
         $thumb->createDirectory();
 
         /** @var ImageDriver $imageComponent */
         $imageComponent = \Yii::$app->get('image');
         /** @var Image_GD $image */
         $image = $imageComponent->load($this->getFilename());
-        $image->resize($thumb->width, $thumb->height, $thumb->resizingConstrait);
+        $image->resize($thumb->width, $thumb->height, !is_null($master) ? $master : $thumb->resizingConstrait);
         return $image->save($thumb->getFilename());
+    }
+    
+    /**
+     * @param             $master
+     *
+     * @param string|null $saveAs
+     *
+     * @param bool        $force
+     *
+     * @return bool
+     * @throws \yii\base\ErrorException
+     */
+    public function adaptSize($master, $saveAs = null, $force = false) {
+        $this->clearErrors();
+        /** @var ImageDriver $imageComponent */
+        $imageComponent = \Yii::$app->get('image');
+        /** @var Image_GD $image */
+        $image = $imageComponent->load($this->getFilename());
+        if ($force || ($image->width !== $this->width || $image->height !== $this->height)) {
+            $image->resize($this->width, $this->height, $master);
+            FileHelper::unlink($this->getFilename());
+            if ($saveAs) {
+                $this->fileName = $saveAs;
+            }
+            return $image->save($this->getFilename());
+        } else {
+            $this->addError('', "Do not need to resize {$this->getFilename()}");
+            return false;
+        }
+    }
+    
+    public function toGrowOld() {
+        $this->clearErrors();
+        $oldImagesPath = $this->getPath() . DIRECTORY_SEPARATOR . $this->oldImagesDir;
+        if (!is_dir($oldImagesPath)) {
+            try{
+                FileHelper::createDirectory($oldImagesPath);
+            } catch(\Exception $e) {
+                $this->addError('', "Don't create subdir {$oldImagesPath}! ({$e->getMessage()})");
+                return false;
+            }
+        }
+        if ($this->exists()) {
+            $oldImagesPath = preg_match('#^[/@]#', $this->oldImagesDir)
+                ? \Yii::getAlias($this->oldImagesDir) . DIRECTORY_SEPARATOR
+                : $oldImagesPath . DIRECTORY_SEPARATOR;
+            $result = rename($this->getFilename(), $oldImagesPath . $this->getBasename());
+            if (false === $result) {
+                $this->addError('', 'Unknown error!');
+                return false;
+            }
+        } else {
+            $this->addError('', "File {$this->getFilename()} not found to grow it old");
+            return false;
+        }
     }
 
     /**

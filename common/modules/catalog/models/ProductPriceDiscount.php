@@ -2,8 +2,9 @@
 
 namespace common\modules\catalog\models;
 
+use common\models\entities\User;
 use Yii;
-use yii\db\ActiveRecord;
+use common\base\models\BaseActiveRecord;
 
 /**
  * This is the model class for table "product_price_discount".
@@ -20,11 +21,11 @@ use yii\db\ActiveRecord;
  * @property float      $weight
  * @property int        $product_tag_id
  *
- * @property User       $author
+ * @property \common\models\entities\User       $author
  * @property bool       $isActive
- * @property ProductTag $productTag
+ * @property \ProductTag $productTag
  */
-class ProductPriceDiscount extends ActiveRecord
+class ProductPriceDiscount extends BaseActiveRecord
 {
     const STATUS = [
         'DISABLED' => 0, // Выключена, но показывается в админке

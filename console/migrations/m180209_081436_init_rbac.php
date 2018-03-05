@@ -1,5 +1,6 @@
 <?php
 
+use common\models\entities\User;
 use yii\db\Migration;
 
 /**
@@ -25,21 +26,33 @@ class m180209_081436_init_rbac extends Migration {
         $auth->add($guest);
 
         // Add guest user
-        $user = new \common\models\entities\User();
+        $user = new User();
         $user->setAttributes([
             'id' => 2,
             'username' => 'guest',
             'email' => 'guest@guest.guest',
-            'status' => \common\models\entities\User::STATUS_ACTIVE
+            'status' => 10
         ]);
         $user->setPassword('7777777');
         $user->generateAuthKey();
-        if ($user->save()) {
+        
+        try{
+            $this->insert('{{%user}}', [
+                'id' => 2,
+                'username' => 'guest',
+                'email' => 'guest@guest.guest',
+                'status' => 10,
+                'password_hash' => $user->password_hash,
+                'auth_key' => $user->auth_key,
+                'created_at' => time(),
+                'updated_at' => time(),
+            ]);
             $auth->assign($guest, $user->id);
-        } else {
+        } catch(Exception $e) {
+            echo $e->getMessage();
             return false;
         }
-
+        
         // Admin can see admin settings in the rubrics tree
         $canSeeAdminSettingsInRubrics = $auth->createPermission('see_admin_settings_in_rubrics');
         $auth->add($canSeeAdminSettingsInRubrics);
@@ -55,7 +68,7 @@ class m180209_081436_init_rbac extends Migration {
         $auth->removeAll();
 
         // Delete guest
-        $user = \common\models\entities\User::findOne(2);
+        $user = User::findOne(2);
         if (!$user) {
             return true;
         }

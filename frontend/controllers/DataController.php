@@ -83,7 +83,7 @@ class DataController extends Controller
             /** @var Product $product */
             return [
                 'id' => $product->id,
-                'name' => $product->name,
+                'name' => $product,
                 'picture' => $product->mainImage,
                 'type' => 'template',
                 'template' => $template,

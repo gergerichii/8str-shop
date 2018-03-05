@@ -12,7 +12,11 @@ use yii\web\UrlRuleInterface;
  */
 class FileUrlRule extends BaseObject implements UrlRuleInterface
 {
-
+    /**
+     * @var string;
+     */
+    public $filesManagerModuleId = 'files';
+    
     /**
      * Parses the given request and returns the corresponding route and parameters.
      * @param UrlManager $manager the URL manager
@@ -23,13 +27,28 @@ class FileUrlRule extends BaseObject implements UrlRuleInterface
      */
     public function parseRequest($manager, $request) {
         $pathInfo = $request->getPathInfo();
-        if (preg_match('%^file\/((\w+)(\/\w+)*)\/([a-zA-ZА-Яа-я.()_ \-0-9\']+\.(png|jpg|jpeg|gif))$%iu', $pathInfo, $matches)) {
+        /** @var \common\modules\files\Module $filesUrlManager */
+        $filesUrlManager = \Yii::$app->getModule($this->filesManagerModuleId);
+        $pattern = "%^{$filesUrlManager->id}/(?:(?P<_a>download|upload|.{0})/)?(?:(?P<protected>protected|.{0})/)?(?P<filePath>[\w\-\.,/_-]*)%iu";
+        if (preg_match($pattern, $pathInfo, $matches)) {
+            /** @var \yii\web\Controller $defController */
+            $defController = $filesUrlManager->createController($filesUrlManager->defaultRoute)[0];
+            $action = (empty($matches['_a'])) ? $defController->defaultAction : $matches['_a'];
             $params = [
-                'entityName' => $matches[1],
-                'fileName' => $matches[4]
+                'isProtected' => (boolean)$matches['protected'],
+                'entityType' => 'defaults',
+                'fileName' => $matches['filePath'],
             ];
-
-            return ['files/default/download', $params];
+            
+            foreach (array_keys($filesUrlManager->entities) as $entityType) {
+                if (0 === strpos($matches['filePath'], $entityType)) {
+                    $params['entityType'] = $entityType;
+                    $params['fileName'] = substr($matches['filePath'], strlen($entityType) + 1);
+                    break;
+                }
+            }
+            
+            return ["/{$filesUrlManager->defaultUri}/{$action}", $params];
         }
 
         return false; // this rule does not apply
@@ -43,8 +62,15 @@ class FileUrlRule extends BaseObject implements UrlRuleInterface
      * @return string|bool the created URL, or false if this rule cannot be used for creating this URL.
      */
     public function createUrl($manager, $route, $params) {
-        if ($route === 'files/default/download' && isset($params['entityName']) && isset($params['fileName'])) {
-            return 'file/' . $params['entityName'] . '/' . $params['fileName'];
+        /** @var \common\modules\files\Module $filesUrlManager */
+        $filesUrlManager = \Yii::$app->getModule($this->filesManagerModuleId);
+        
+        if (0 === strpos($route, $filesUrlManager->defaultUri) && !empty($params['fileName'])) {
+            $action = (substr($route, strlen($filesUrlManager->defaultUri) + 1) === 'upload') ? 'upload/' : '';
+            $protected = empty($params['isProtected']) ? '' : 'protected/';
+            $entityType = empty($params['entityType']) ? 'defaults' : $params['entityType'];
+            
+            return "/{$filesUrlManager->id}/{$action}{$protected}{$entityType}/{$params['fileName']}";
         }
 
         return false;

@@ -38,6 +38,10 @@ class User extends BaseActiveRecord implements IdentityInterface {
     const STATUS_ACTIVE = 10;
     const STATUS_GUEST = 1;
     
+    const ADDRESSES_TEMPLATE = [
+        ''
+    ];
+    
     /** @var \common\models\entities\UserAddresses[]  */
     protected $_addresses = [];
 

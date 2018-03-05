@@ -2,12 +2,16 @@
 
 namespace common\modules\files\models;
 
+use common\modules\files\Module as FilesModule;
 use GuzzleHttp\Client;
+use yii\base\InvalidConfigException;
 use yii\base\Model;
 use yii\helpers\FileHelper;
 
 /**
  * Class BaseFile
+ *
+ * @property int $size
  */
 abstract class BaseFile extends Model
 {
@@ -15,82 +19,134 @@ abstract class BaseFile extends Model
      * Entity name
      * @var string
      */
-    public $entityName;
-
+    public $entityType;
     /**
-     * Path
-     * @var string
+     * @var bool
      */
-    public $path;
-
+    public $isProtected = false;
     /**
      * File name
      * @var string
      */
     public $fileName;
-
     /**
-     * Sub directory
+     * Default image
      * @var string
      */
-    public $subdir;
-
+    public $defaultFile = 'default.png';
+    /**
+     * @var \common\modules\files\Module
+     */
+    public $filesManager;
+    
+    /**
+     * @throws \yii\base\InvalidConfigException
+     */
+    public function init() {
+        parent::init();
+        
+        if (empty($this->filesManager)) {
+            if (!$this->filesManager = \Yii::$app->getModule('files')) {
+                throw new InvalidConfigException('Files manager needed!');
+            }
+        }
+    }
+    
     /**
      * @inheritdoc
      */
     public function rules() {
         return [
-            [['entityName', 'path', 'filename', 'subdir'], 'required'],
+            [['entityType', 'filename'], 'required'],
         ];
     }
-
-    /**
-     * Get path
-     * @return bool|string
-     */
-    public function getPath() {
-        return \Yii::getAlias($this->path . DIRECTORY_SEPARATOR . $this->subdir);
-    }
-
+    
     /**
      * Get uri
      * @param bool $scheme
      * @return string
      */
-    public function getUri($scheme = false) {
-        return \Yii::$app->urlManager->createAbsoluteUrl(['/files/default/download', 'entityName' => $this->entityName, 'fileName' => $this->fileName], $scheme);
+    public function getUri($scheme = false, $allowDefault = false) {
+        $ret = \Yii::$app->urlManager->createAbsoluteUrl(
+            [
+                "/{$this->filesManager->defaultUri}/download",
+                'entityType' => $this->entityType,
+                'fileName' => $this->getBasename(),
+                'isProtected' => $this->isProtected
+            ],
+            $scheme
+        );
+        return str_replace('%2F', urldecode('%2F'), $ret);
     }
-
+    
     /**
      * Get base name
+     *
+     * @param bool $allowDefault
+     *
      * @return string
      */
-    public function getBasename() {
-        return $this->fileName;
+    public function getBasename($allowDefault = false) {
+        if ($this->exists()) {
+            return $this->fileName;
+        } elseif($allowDefault) {
+            return $this->defaultFile;
+        }
+        
+        return false;
     }
-
+    
     /**
-     * Get filename
+     * Get file path
+     *
+     * @param bool $allowDefault
+     *
+     * @param bool $checkExists
+     *
      * @return string
      */
-    public function getFilename() {
-        return $this->getPath() . DIRECTORY_SEPARATOR . $this->getBasename();
+    public function getFilePath($allowDefault = false, $checkExists = false) {
+        $pathField = $this->isProtected ? 'protectedPath' : 'publicPath';
+        $path = $this->filesManager->$pathField;
+        $path = \Yii::getAlias($path . DIRECTORY_SEPARATOR . $this->entityType . DIRECTORY_SEPARATOR);
+        $filePath = $path . $this->fileName;
+        if ($checkExists && (!$this->fileName || !file_exists($filePath))) {
+            if ($allowDefault && $this->defaultFile) {
+                $filePath = $path . $this->defaultFile;
+                if (!file_exists($filePath)) {
+                    $filePath = false;
+                }
+            } else {
+                $filePath = false;
+            }
+        }
+        
+        return $filePath;
     }
-
+    
     /**
      * Get size
+     *
+     * @param bool $allowDefault
+     *
      * @return int
      */
-    public function getSize() {
-        return filesize($this->getFilename());
+    public function getSize($allowDefault = false) {
+        if ($path = $this->getFilePath($allowDefault, true)) {
+            return filesize($path);
+        }
+        return false;
     }
-
+    
     /**
      * Whether to exists of file
+     *
+     * @param bool $allowDefault
+     *
      * @return bool
      */
-    public function exists() {
-        return file_exists($this->getFilename());
+    public function exists($allowDefault = false) {
+        return (boolean)$this->getFilePath($allowDefault, true);
     }
 
     /**
@@ -98,7 +154,7 @@ abstract class BaseFile extends Model
      */
     public function delete() {
         if ($this->exists()) {
-            unlink($this->getFilename());
+            unlink($this->getFilePath());
         }
     }
 
@@ -115,13 +171,13 @@ abstract class BaseFile extends Model
         }
 
         if ($this->exists()) {
-            $this->addError('', 'The file ' . $this->getFilename() . ' already exists.');
+            $this->addError('', 'The file ' . $this->getFilePath() . ' already exists.');
             return false;
         }
 
         $this->createDirectory();
 
-        $result = copy($oldName, $this->getFilename());
+        $result = copy($oldName, $this->getFilePath());
         if (false === $result) {
             $this->addError('', 'Unknown error!');
             return false;
@@ -137,7 +193,7 @@ abstract class BaseFile extends Model
      */
     public function pickFromRemote($url) {
         if ($this->exists()) {
-            $this->addError('', 'The file ' . $this->getFilename() . ' already exists.');
+            $this->addError('', 'The file ' . $this->getFilePath() . ' already exists.');
             return false;
         }
 
@@ -145,7 +201,7 @@ abstract class BaseFile extends Model
 
         try {
             $client = new Client();
-            $client->request('GET', $url, ['sink' => $this->getFilename()]);
+            $client->request('GET', $url, ['sink' => $this->getFilePath()]);
         } catch (\Exception $exception) {
             $this->addError('', $exception->getMessage());
             return false;
@@ -160,7 +216,7 @@ abstract class BaseFile extends Model
      */
     public function createDirectory() {
         try {
-            return FileHelper::createDirectory($this->getPath());
+            return FileHelper::createDirectory(dirname($this->getFilePath()));
         } catch (\Exception $exception) {
             $this->addError('', $exception->getMessage());
             return false;

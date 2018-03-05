@@ -6,6 +6,7 @@ return [
     'domains' => [
         '8str' => '8str.ru',
         'vigsec' => 'vigsec.ru',
+        'sputnikvideo' => 'sputnikvideo.ru',
     ],
     'domain' => '8str',
 ];

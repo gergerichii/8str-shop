@@ -13,7 +13,7 @@ $catalog = \Yii::$app->getModule('catalog');
 
 /** @var \common\modules\catalog\models\Product $model */
 
-$image1 = isset($model->images[0]) ? $model->images[0] : 'default.jpg';
+$image1 = isset($model->images[0]) ? $model->images[0] : '';
 $image2 = isset($model->images[1]) ? $model->images[1] : $image1;
 $image1 = $catalog->getProductThumbnailUri($image1, 'large');
 $image2 = $catalog->getProductThumbnailUri($image2, 'large');

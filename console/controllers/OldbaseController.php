@@ -3,16 +3,13 @@
 namespace console\controllers;
 
 use common\modules\catalog\models\Product;
-use common\modules\catalog\models\Product2ProductRubric;
 use common\modules\catalog\models\ProductBrand;
 use common\modules\catalog\models\ProductPrice;
 use common\modules\catalog\models\ProductRubric;
 use common\modules\catalog\models\ProductTag;
-use common\modules\catalog\models\ProductTag2product;
 use common\modules\files\models\Image;
 use common\modules\files\Module;
 use common\modules\news\models\Article;
-use GuzzleHttp\Client;
 use Yii;
 use yii\db\Connection;
 use yii\db\Exception;
@@ -20,6 +17,7 @@ use yii\db\Expression;
 use yii\db\Query;
 use yii\helpers\Console;
 use yii\helpers\StringHelper;
+use yii\image\drivers\Image as ImgDriver;
 
 /**
  * Действия с базой на сайте 8str.ru
@@ -288,8 +286,8 @@ class OldbaseController extends BaseController
             "if (`cat2`.`tid`, {$stActive}, {$stHidden}) as `status`",
             '`n`.`title` as `name`',
             'CONCAT (`bod`.`body_value`, `bod`.`body_summary`) as `desc`',
-            '`prod`.`sell_price` as `price`',
-            '`vsp`.`field__price_vigsec_value` as `vig_sec_price`',
+            '`prod`.`sell_price` as `8str_price`',
+            '`vsp`.`field__price_vigsec_value` as `vigsec_price`',
             '`n`.`promote` as `show_on_home`',
             '`n`.`sticky` as `on_list_top`',
             'REPLACE(`f`.`uri`, \'public://product/\', \'\') as `filename`',
@@ -384,21 +382,6 @@ class OldbaseController extends BaseController
                 /** Если есть рубрика для продукта, то присоединяем продукт к ней */
                 /** @var ProductRubric $rubric */
                 if ($rubric = ProductRubric::findOne(['old_id' => $src['old_rubric_id']])) {
-                    $product2rubricParams = [
-                        'rubric_id' => $rubric->id,
-                        'product_id' => $product->id
-                    ];
-                    if (!Product2ProductRubric::findOne($product2rubricParams)) {
-                        $product2rubric = new Product2ProductRubric($product2rubricParams);
-                        if (!$product2rubric->save()) {
-                            $this->error(
-                                "Невозможно присоединить товар {$src['old_id']}:{$src['name']} к рубрике {$src['rubric_name']}",
-                                $product2rubric->errors
-                            );
-                            $transaction->rollBack();
-                            return 1;
-                        }
-                    }
                     $product->main_rubric_id = $rubric->id;
                     $product->save();
                 } else {
@@ -417,15 +400,12 @@ class OldbaseController extends BaseController
                 }
 
                 /** Назначаем цены, если они не были назначины */
-                /** @var ProductPrice $priceParams */
-                $domains = [
-                    '8str' => 'price',
-                    'vigsec' => 'vig_sec_price',
-                ];
-                foreach ($domains as $domain => $field) {
-                    if (empty($src[$field])) continue;
-
-                    $priceValue = round((float)$src[$field], 2);
+                $domains = yii::$app->params['domains'];
+                $mainDomain = '8str';
+                foreach (array_keys($domains) as $domain) {
+                    $field = "{$domain}_price";
+                    $priceValue = isset($src[$field]) ? $src[$field] :  $src["{$mainDomain}_price"];
+                    $priceValue = round((float)$priceValue, 2);
 
                     $priceParams = [
                         'value' => $priceValue,
@@ -453,40 +433,39 @@ class OldbaseController extends BaseController
                 foreach ($tags as $tag => $srcTag) {
                     if (empty($src[$srcTag])) continue;
                     $tag = $this->getTag($tag);
-                    $tag2productParams = [
-                        'product_id' => $product->id,
-                        'product_tag_id' => $tag->id,
-                    ];
-                    if (!ProductTag2product::findOne($tag2productParams)) {
-                        $tag2product = new ProductTag2product($tag2productParams);
-                        if (!$tag2product->save()) {
-                            $this->error(
-                                "Ошибка при добавлении к товару {$product->id}:{$product->name} метки {$tag->name}. Отка добавления продукта",
-                                $tag2product->errors
-                            );
-                            $transaction->rollBack();
-                            continue;
-                        }
+                    try {
+                        $product->link('tags', $tag);
+                    } catch(\Exception $e) {
+                        $this->error(
+                            "Ошибка при добавлении к товару {$product->id}:{$product->name} метки {$tag->name}. Отка добавления продукта",
+                            $e->getMessage()
+                        );
+                        $transaction->rollBack();
+                        continue;
                     }
                 }
                 $transaction->commit();
             }
 
             /** Добавляем файлы */
-            if (!$product->addFile($src['filename'])->save()) {
-                $this->error(
-                    "Картинка {$src['filename']} для продукта {$src['old_id']}:{$src['name']} не добавлена",
-                    $product->errors
-                );
+            $filePath = $filesManager->getFilePath('products/images', 'old/' . $src['filename'], false, false, true);
+            if ($filePath) {
+                $image = $filesManager->createEntity('products/images', $src['filename']);
+                $image->pickFrom(dirname($filePath));
+                $newName = preg_replace('#\.\w{3,4}$#', '.png', basename($filePath));
+                if (!$product->hasFile($newName)) {
+                    /** @var Image $image */
+                    $image->adaptSize(ImgDriver::ADAPT, $newName);
+                    $image->createThumbs();
+                    if (!$product->addFile($src['filename'])->save()) {
+                        $this->error(
+                            "Картинка {$src['filename']} для продукта {$src['old_id']}:{$src['name']} не добавлена",
+                            $product->errors
+                        );
+                    }
+                }
             }
-
-            /** @var Image $image */
-            $image = $filesManager->createEntity('products/images', $src['filename']);
-            if ($image->exists()) {
-                $image->createThumbs();
-            }
-
-
+    
             $msg = $this->ansiFormat('.', Console::FG_GREEN);
             $this->stdout($msg);
 
@@ -524,12 +503,14 @@ class OldbaseController extends BaseController
     protected function exportRubrics($remoteDb) {
         $this->trace('Экспорт рубрикатора');
 
-        $rootRubric = new ProductRubric([
-            'name' => 'Каталог'
-        ]);
-
-        $rootRubric->makeRoot();
-
+        if (!$rootRubric = ProductRubric::treeFind()->where(['name' => 'Каталог', 'level' => '0'])->one()) {
+            $rootRubric = new ProductRubric([
+                'name' => 'Каталог'
+            ]);
+            $rootRubric->makeRoot();
+        }
+    
+    
         /* Читаем рубрикатор */
         $query = new Query();
         $query->select('[[c]].[[tid]] as [[rubric_id]]')
@@ -558,20 +539,22 @@ class OldbaseController extends BaseController
                     continue;
                 }
 
-                if (!$parentRubric = ProductRubric::findOne(['old_id' => $currentRubric['parent_rubric_id']])) {
-                    $this->error('Непредвиденная ошибка. Невозможно найти родительскую рубрику old_id=' .
-                        $currentRubric['parent_rubric_id']);
-                    return 1;
+                if (!$newRubric = ProductRubric::findOne(['old_id' => $currentRubric['rubric_id']])) {
+                    if (!$parentRubric = ProductRubric::findOne(['old_id' => $currentRubric['parent_rubric_id']])) {
+                        $this->error('Непредвиденная ошибка. Невозможно найти родительскую рубрику old_id=' .
+                            $currentRubric['parent_rubric_id']);
+                        return 1;
+                    }
+                    
+                    /** @noinspection MissedFieldInspection */
+                    $newRubric = new ProductRubric([
+                        'name' => $currentRubric['rubric_name'],
+                        'old_id' => $currentRubric['rubric_id'],
+                        'old_parent_id' => $currentRubric['parent_rubric_id'],
+                    ]);
+    
+                    $newRubric->appendTo($parentRubric);
                 }
-
-                /** @noinspection MissedFieldInspection */
-                $newRubric = new ProductRubric([
-                    'name' => $currentRubric['rubric_name'],
-                    'old_id' => $currentRubric['rubric_id'],
-                    'old_parent_id' => $currentRubric['parent_rubric_id'],
-                ]);
-
-                $newRubric->appendTo($parentRubric);
             } elseif (!$newRubric = ProductRubric::findOne(['old_id' => $currentRubric['rubric_id']])) {
                 /** @noinspection MissedFieldInspection */
                 $newRubric = new ProductRubric([

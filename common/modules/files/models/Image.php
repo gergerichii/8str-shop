@@ -3,6 +3,7 @@
 namespace common\modules\files\models;
 
 use common\modules\files\Module;
+use yii\helpers\FileHelper;
 use yii\image\drivers\Image as ExtImageDriver;
 use yii\image\drivers\Image_GD;
 use yii\image\ImageDriver;
@@ -80,10 +81,10 @@ class Image extends BaseFile
      */
     public function createThumbs($save = true, $master = null) {
         $this->_thumbs = [];
-        foreach ($this->thumbsOptions as $thumbName => $entityName) {
+        foreach ($this->thumbsOptions as $thumbName => $entityType) {
             /** @var Module $filesManagers */
             $filesManagers = \Yii::$app->getModule('files');
-            $thumb = $filesManagers->createEntity($entityName, $this->fileName);
+            $thumb = $filesManagers->createEntity($entityType, $this->fileName);
 
             if ($save && !$thumb->exists()) {
                 $this->saveThumb($thumb, $master);
@@ -108,9 +109,9 @@ class Image extends BaseFile
         /** @var ImageDriver $imageComponent */
         $imageComponent = \Yii::$app->get('image');
         /** @var Image_GD $image */
-        $image = $imageComponent->load($this->getFilename());
+        $image = $imageComponent->load($this->getFilePath());
         $image->resize($thumb->width, $thumb->height, !is_null($master) ? $master : $thumb->resizingConstrait);
-        return $image->save($thumb->getFilename());
+        return $image->save($thumb->getFilePath());
     }
     
     /**
@@ -128,23 +129,23 @@ class Image extends BaseFile
         /** @var ImageDriver $imageComponent */
         $imageComponent = \Yii::$app->get('image');
         /** @var Image_GD $image */
-        $image = $imageComponent->load($this->getFilename());
+        $image = $imageComponent->load($this->getFilePath());
         if ($force || ($image->width !== $this->width || $image->height !== $this->height)) {
             $image->resize($this->width, $this->height, $master);
-            FileHelper::unlink($this->getFilename());
+            FileHelper::unlink($this->getFilePath());
             if ($saveAs) {
                 $this->fileName = $saveAs;
             }
-            return $image->save($this->getFilename());
+            return $image->save($this->getFilePath());
         } else {
-            $this->addError('', "Do not need to resize {$this->getFilename()}");
+            $this->addError('', "Do not need to resize {$this->getFilePath()}");
             return false;
         }
     }
     
     public function toGrowOld() {
         $this->clearErrors();
-        $oldImagesPath = $this->getPath() . DIRECTORY_SEPARATOR . $this->oldImagesDir;
+        $oldImagesPath = dirname($this->getFilePath()) . DIRECTORY_SEPARATOR . $this->oldImagesDir;
         if (!is_dir($oldImagesPath)) {
             try{
                 FileHelper::createDirectory($oldImagesPath);
@@ -157,13 +158,13 @@ class Image extends BaseFile
             $oldImagesPath = preg_match('#^[/@]#', $this->oldImagesDir)
                 ? \Yii::getAlias($this->oldImagesDir) . DIRECTORY_SEPARATOR
                 : $oldImagesPath . DIRECTORY_SEPARATOR;
-            $result = rename($this->getFilename(), $oldImagesPath . $this->getBasename());
+            $result = rename($this->getFilePath(), $oldImagesPath . $this->getBasename());
             if (false === $result) {
                 $this->addError('', 'Unknown error!');
                 return false;
             }
         } else {
-            $this->addError('', "File {$this->getFilename()} not found to grow it old");
+            $this->addError('', "File {$this->getFilePath()} not found to grow it old");
             return false;
         }
     }
@@ -183,12 +184,12 @@ class Image extends BaseFile
 
     /**
      * Get thumb
-     * @param string $entityName Thumb entity name
+     * @param string $entityType Thumb entity name
      * @return Thumb|null
      */
-    public function getThumb($entityName) {
-        if (array_key_exists($entityName, $this->thumbs)) {
-            return $this->thumbs[$entityName];
+    public function getThumb($entityType) {
+        if (array_key_exists($entityType, $this->thumbs)) {
+            return $this->thumbs[$entityType];
         }
 
         return null;

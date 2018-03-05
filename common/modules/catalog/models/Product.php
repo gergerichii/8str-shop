@@ -513,7 +513,7 @@ class Product extends BaseActiveRecord implements CartElement
      * @return \yii\db\ActiveQuery
      */
     public function getTags() {
-        return $this->hasMany(ProductTag::className(), ['id' => 'product_tag_id'])
+        return $this->hasMany(ProductTag::class, ['id' => 'product_tag_id'])
             ->viaTable('product_tag2product', ['product_id' => 'id'])
             ->indexBy('name');
     }

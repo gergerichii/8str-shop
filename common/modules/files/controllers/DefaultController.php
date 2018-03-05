@@ -19,30 +19,35 @@ class DefaultController extends Controller
 {
 
     public $defaultAction = 'download';
-
+    
     /**
      * Renders the index view for the module
-     * @param string $entityName
+     *
+     * @param string $entityType
      * @param string $fileName
+     * @param bool   $isProtected
+     *
      * @return string
-     * @throws NotFoundHttpException
+     * @throws \yii\web\NotFoundHttpException
      */
-    public function actionDownload($entityName, $fileName) {
+    public function actionDownload($entityType, $fileName, $isProtected = false) {
         /** @var FileModule $fileModule */
         $fileModule = $this->module;
         try {
-            $entity = $fileModule->createEntity($entityName, $fileName);
+            $entity = $fileModule->createEntity($entityType, $fileName);
         } catch (InvalidConfigException $exception) {
             throw new NotFoundHttpException($exception->getMessage());
         }
+        
+        $allowDefault = true;
+        $entity->isProtected = $isProtected;
 
-
-        if (!$entity->exists()) {
+        if (!$entity->exists($allowDefault)) {
             throw new NotFoundHttpException('Файл не существует!');
         }
 
         $response = Yii::$app->getResponse();
-        $response->sendFile($entity->getFilename(), null, ['inline' => true]);
+        $response->sendFile($entity->getFilePath($allowDefault), null, ['inline' => true]);
         $response->send();
 
         return false;

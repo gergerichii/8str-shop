@@ -90,13 +90,13 @@ $catalog = \Yii::$app->getModule('catalog');
     </div><!-- End .widget -->
 
     <div class="widget popular">
-        <h3>Popular</h3>
+        <h3>Популярные товары</h3>
 
         <div class="related-slider flexslider sidebarslider">
             <?= ProductTagWidget::widget([
                 'limit' => 12,
                 'tagName' => 'popular',
-                'viewName' => '@frontend/views/modules/catalog/widgets/views/productTagWidget/sidebarPromo'
+                'viewName' => 'sidebarPromo'
             ]); ?>
         </div><!-- End .related-slider -->
     </div>

@@ -3,18 +3,19 @@
 namespace common\modules\catalog\controllers\admin;
 
 use common\modules\catalog\models\forms\ProductImagesForm;
+use common\modules\catalog\models\forms\ProductPricesForm;
+use common\modules\catalog\models\Product;
+use common\modules\catalog\models\ProductSearch;
 use common\modules\files\models\Image;
 use common\modules\files\Module;
 use Yii;
-use common\modules\catalog\models\Product;
-use common\modules\catalog\models\ProductSearch;
+use yii\filters\VerbFilter;
+use yii\helpers\Html;
 use yii\helpers\Json;
 use yii\helpers\Url;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
-use yii\filters\VerbFilter;
-use \yii\web\Response;
-use yii\helpers\Html;
+use yii\web\Response;
 use yii\web\UploadedFile;
 
 /**
@@ -342,6 +343,80 @@ class DefaultController extends Controller
         }
 
         return $this->render('images', [
+            'model' => $model,
+        ]);
+    }
+
+    /**
+     * Updates an existing prices of Product.
+     * For ajax request will return json object
+     * and for non-ajax request if update is successful, the browser will be redirected to the 'view' page.
+     * @param integer $id
+     * @return mixed
+     * @throws NotFoundHttpException
+     */
+    public function actionPrices($id) {
+        $request = Yii::$app->request;
+        $product = $this->findModel($id);
+        if (!$product) {
+            throw new NotFoundHttpException();
+        }
+
+        $model = new ProductPricesForm();
+        $model->id = $product->id;
+
+        if ($request->isAjax) {
+            /**
+             *   Process for ajax request
+             */
+            Yii::$app->response->format = Response::FORMAT_JSON;
+            if ($request->isGet) {
+                return [
+                    'title' => "Update prices o Product #" . $id,
+                    'content' => $this->renderAjax('prices', [
+                        'model' => $model,
+                    ]),
+                    'footer' => Html::button('Close', ['class' => 'btn btn-default pull-left', 'data-dismiss' => "modal"]) .
+                        Html::button('Save', ['class' => 'btn btn-primary', 'type' => "submit"])
+                ];
+            }
+
+            $isLodaded = $model->load($request->post());
+            if ($isLodaded) {
+                $model->save();
+            }
+
+            if ($isLodaded && !$model->hasErrors()) {
+                Yii::$app->response->format = Response::FORMAT_JSON;
+                return [
+                    'forceClose' => true,
+                    'forceReload' => 'true',
+                ];
+            }
+
+            return [
+                'title' => "Update Product #" . $id,
+                'content' => $this->renderAjax('prices', [
+                    'model' => $model,
+                ]),
+                'footer' => Html::button('Close', ['class' => 'btn btn-default pull-left', 'data-dismiss' => "modal"]) .
+                    Html::button('Save', ['class' => 'btn btn-primary', 'type' => "submit"])
+            ];
+        }
+
+        /**
+         *   Process for non-ajax request
+         */
+        $isLodaded = $model->load($request->post());
+        if ($isLodaded) {
+            $model->save();
+        }
+
+        if ($isLodaded && !$model->hasErrors()) {
+            return $this->redirect(['catalog/default/index']);
+        }
+
+        return $this->render('prices', [
             'model' => $model,
         ]);
     }

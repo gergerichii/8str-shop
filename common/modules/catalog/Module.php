@@ -4,6 +4,7 @@ namespace common\modules\catalog;
 
 use common\modules\catalog\models\Product;
 use common\modules\catalog\models\ProductBrand;
+use common\modules\catalog\models\ProductPrice;
 use common\modules\catalog\models\ProductRubric;
 use common\modules\catalog\models\ProductRubricMenuItems;
 use common\modules\files\models\Image;
@@ -509,5 +510,126 @@ class Module extends \yii\base\Module implements BootstrapInterface
         }
 
         return $entity->getFilename();
+    }
+
+    /**
+     * Update future price
+     * @param Product $product
+     * @param float $value The value of future price
+     * @param string $activeFrom The date which of price is actual
+     * @param string $domain Domain alias
+     * @return bool|ProductPrice
+     * @throws \Exception
+     * @throws \Throwable
+     */
+    public function updateFuturePrice($product, $value, $activeFrom = null, $domain = null) {
+        if (is_null($domain)) {
+            $domain = \Yii::$app->params['domain'];
+        }
+
+        $futurePrice = ProductPrice::find()
+            ->where(['product_id' => $product->id])
+            ->andWhere(['domain_name' => $domain])
+            ->onlyFuture()->one();
+
+        try {
+            if (!$futurePrice) {
+                $futurePrice = new ProductPrice();
+                $futurePrice->product_id = $product->id;
+                $futurePrice->domain_name = $domain;
+                $futurePrice->status = 'active';
+            }
+
+            if ($futurePrice->value == $value && $futurePrice->active_from === $activeFrom) {
+                return $futurePrice;
+            }
+
+            $futurePrice->value = $value;
+            $futurePrice->active_from = $activeFrom;
+
+            if (!$futurePrice->isFuture()) {
+                $product->addError('futurePrice', 'The price date must be future.');
+                // TODO Do not shows errors for multiinput field
+                $futurePrice->addError('active_from', 'The price date must be future.');
+                return $futurePrice;
+            }
+
+            if (false === $futurePrice->save()) {
+                $error = 'An error occurred while setting a new price: "' . implode(' ', $futurePrice->getFirstErrors()) . '".';
+                $product->addError('futurePrice', $error);
+                $futurePrice->addError('value', $error);
+                return $futurePrice;
+            }
+        } catch (\ErrorException $exception) {
+            $error = 'An error occurred while setting a new price: "' . $exception->getMessage() . '".';
+            $product->addError('futurePrice', $error);
+            $futurePrice->addError('value', $error);
+            return $futurePrice;
+        } catch (\Exception $exception) {
+            Yii::error($exception->getMessage());
+            $error = 'Unknown error occurred while setting a new price.';
+            $product->addError('futurePrice', $error);
+            $futurePrice->addError('value', $error);
+            return $futurePrice;
+        }
+
+        return $futurePrice;
+    }
+
+    /**
+     * Insert new price
+     * @param Product $product
+     * @param float $value The value of new price
+     * @param string|null $domain Domain name
+     * @return bool|ProductPrice
+     * @throws \yii\db\Exception
+     */
+    public function insertNewPrice($product, $value, $domain = null) {
+        if (is_null($domain)) {
+            $domain = \Yii::$app->params['domain'];
+        }
+
+        /** @var ProductPrice $price */
+        $price = ProductPrice::find()
+            ->where(['product_id' => $product->id])
+            ->andWhere(['domain_name' => $domain])
+            ->onlyActive()->one();
+
+        if ($price && $price->value == $value) {
+            // Nothing to change
+            return $price;
+        }
+
+        $transaction = Yii::$app->getDb()->beginTransaction();
+        try {
+            if ($price) {
+                $price->status = 'inactive';
+                $price->save();
+            }
+
+            $price = new ProductPrice();
+            $price->product_id = $product->id;
+            $price->domain_name = $domain;
+            $price->value = $value;
+            $price->status = 'active';
+
+            if (false === $price->save()) {
+                $price->addError('value', 'An error occurred while setting a new price: "' . implode(' ', $price->getFirstErrors()) . '".');
+                return $price;
+            }
+
+            $transaction->commit();
+        } catch (\ErrorException $exception) {
+            $price->addError('value', 'An error occurred while setting a new price: "' . $exception->getMessage() . '".');
+            $transaction->rollBack();
+            return $price;
+        } catch (\Exception $exception) {
+            Yii::error($exception->getMessage());
+            $price->addError('price', 'Unknown error occurred while setting a new price: "' . $exception->getMessage() . '".');
+            $transaction->rollBack();
+            return $price;
+        }
+
+        return $price;
     }
 }

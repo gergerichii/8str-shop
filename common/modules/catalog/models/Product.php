@@ -5,13 +5,14 @@ namespace common\modules\catalog\models;
 use common\helpers\ProductHelper;
 use common\models\entities\User;
 use common\modules\cart\interfaces\CartElement;
+use common\modules\catalog\Module;
 use Yii;
 use yii\base\ErrorException;
 use yii\behaviors\AttributeBehavior;
-use yii\caching\TagDependency;
-use \yii\db\ActiveQuery;
 use yii\behaviors\BlameableBehavior;
 use yii\behaviors\TimestampBehavior;
+use yii\caching\TagDependency;
+use yii\db\ActiveQuery;
 use yii\db\ActiveRecord;
 use yii\db\Expression;
 
@@ -574,6 +575,8 @@ class Product extends ActiveRecord implements CartElement
         parent::afterSave($insert, $changedAttributes);
 
         // TODO Replace at business logic or form model
+        /** @var Module $catalog */
+        $catalog = Yii::$app->getModule('catalog');
         if (isset($this->listOfRubrics)) {
             $rubricIds = array_filter(explode(',', $this->listOfRubrics));
             $this->updateLinksWithRubrics($rubricIds);
@@ -585,7 +588,7 @@ class Product extends ActiveRecord implements CartElement
 
         // Insert a new price when there is no actual price or the price has a different value
         if (isset($this->_price) && (!$this->price || (float)$this->price->value !== (float)$this->_price)) {
-            $this->insertNewPrice($this->_price);
+            $catalog->insertNewPrice($this,$this->_price);
         }
 
         if (isset($this->_fieldForFuturePrice)) {
@@ -771,110 +774,6 @@ class Product extends ActiveRecord implements CartElement
     }
 
     /**
-     * Insert new price
-     * @param float $value The value of new price
-     * @param string|null $domain Domain name
-     * @return bool
-     * @throws \yii\db\Exception
-     */
-    public function insertNewPrice($value, $domain = null) {
-        if ($this->price && $this->price->value == $value) {
-            // Nothing to change
-            return true;
-        }
-
-        if (is_null($domain)) {
-            $domain = \Yii::$app->params['domains'][\Yii::$app->params['domain']];
-        }
-
-        $transaction = Yii::$app->getDb()->beginTransaction();
-        try {
-            if ($this->price) {
-                $this->price->status = 'inactive';
-                $this->price->save();
-            }
-
-            $price = new ProductPrice();
-            $price->product_id = $this->id;
-            $price->domain_name = $domain;
-            $price->value = $value;
-            $price->status = 'active';
-
-            if (false === $price->save()) {
-                $this->addError('price', 'An error occurred while setting a new price: "' . implode(' ', $price->getFirstErrors()) . '".');
-                return false;
-            }
-
-            $transaction->commit();
-        } catch (ErrorException $exception) {
-            $this->addError('price', 'An error occurred while setting a new price: "' . $exception->getMessage() . '".');
-            $transaction->rollBack();
-            return false;
-        } catch (\Exception $exception) {
-            Yii::error($exception->getMessage());
-            $this->addError('price', 'Unknown error occurred while setting a new price: "' . $exception->getMessage() . '".');
-            $transaction->rollBack();
-            return false;
-        }
-
-        return true;
-    }
-
-    /**
-     * Update future price
-     * @param float $value The value of future price
-     * @param string $activeFrom The date which of price is actual
-     * @return bool
-     * @throws \Exception
-     * @throws \Throwable
-     */
-    public function updateFuturePrice($value, $activeFrom = null) {
-        if ($value == 0) {
-            return false;
-        }
-
-        try {
-            if ($this->futurePrice) {
-                $price = $this->futurePrice;
-            } else {
-                $price = new ProductPrice();
-                $price->product_id = $this->id;
-                $price->domain_name = \Yii::$app->params['domains'][\Yii::$app->params['domain']];
-                $price->status = 'active';
-                $this->populateRelation('futurePrice', $price);
-            }
-
-            if ($price->value == $value && $price->active_from === $activeFrom) {
-                return false;
-            }
-
-            $price->value = $value;
-            $price->active_from = $activeFrom;
-
-            if (!$price->isFuture()) {
-                $this->addError('futurePrice', 'The price date must be future.');
-                // TODO Do not shows errors for multiinput field
-                $price->addError('futurePrice', 'The price date must be future.');
-                return false;
-            }
-
-            if (false === $price->save()) {
-                $this->addError('futurePrice', 'An error occurred while setting a new price: "' . implode(' ', $price->getFirstErrors()) . '".');
-                return false;
-            }
-        } catch (ErrorException $exception) {
-            $this->addError('futurePrice', 'An error occurred while setting a new price: "' . $exception->getMessage() . '".');
-            return false;
-        } catch (\Exception $exception) {
-            Yii::error($exception->getMessage());
-            $this->addError('futurePrice', 'Unknown error occurred while setting a new price.');
-            return false;
-        }
-
-        return true;
-    }
-
-    /**
      * Update actual prices
      * @param array $fieldForFuturePrice
      * @throws \Exception
@@ -882,7 +781,9 @@ class Product extends ActiveRecord implements CartElement
      */
     public function updateFieldForFuturePrice($fieldForFuturePrice) {
         if (array_key_exists('future', $fieldForFuturePrice)) {
-            $this->updateFuturePrice($fieldForFuturePrice['future']['value'], $fieldForFuturePrice['future']['active_from']);
+            /** @var Module $catalog */
+            $catalog = Yii::$app->getModule('catalog');
+            $catalog->updateFuturePrice($this, $this->fieldForFuturePrice['future']['value'], $fieldForFuturePrice['future']['active_from']);
         }
     }
 

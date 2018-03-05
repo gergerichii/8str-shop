@@ -12,7 +12,6 @@ use common\modules\catalog\models\ProductTag2product;
 use common\modules\files\models\Image;
 use common\modules\files\Module;
 use common\modules\news\models\Article;
-use GuzzleHttp\Client;
 use Yii;
 use yii\db\Connection;
 use yii\db\Exception;
@@ -262,6 +261,8 @@ class OldbaseController extends BaseController
      * @throws \yii\base\InvalidConfigException
      */
     protected function exportProducts($remoteDb) {
+        /** @var \common\modules\catalog\Module $catalog */
+        $catalog = Yii::$app->getModule('catalog');
 
         $this->trace('Экспорт Продутов');
 
@@ -433,7 +434,7 @@ class OldbaseController extends BaseController
                         'domain_name' => Yii::$app->params['domains'][$domain],
                     ];
                     if (!ProductPrice::find()->onlyActive()->andWhere($priceParams)->one()) {
-                        if (!$product->insertNewPrice($priceValue, $domain)) {
+                        if (!$catalog->insertNewPrice($product, $priceValue, $domain)) {
                             $this->error(
                                 "Цена для товара {$src['old_id']}:{$src['name']} и домена $domain не установлена. Откат добавления товара",
                                 $product->errors

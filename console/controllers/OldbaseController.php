@@ -447,20 +447,29 @@ class OldbaseController extends BaseController
                 $transaction->commit();
             }
 
-            /** Добавляем файлы */
-            $filePath = $filesManager->getFilePath('products/images', 'old/' . $src['filename'], false, false, true);
-            if ($filePath) {
-                $image = $filesManager->createEntity('products/images', $src['filename']);
-                $image->pickFrom(dirname($filePath));
-                $newName = preg_replace('#\.\w{3,4}$#', '.png', basename($filePath));
-                if (!$product->hasFile($newName)) {
-                    /** @var Image $image */
-                    $image->adaptSize(ImgDriver::ADAPT, $newName);
-                    $image->createThumbs();
-                    if (!$product->addFile($src['filename'])->save()) {
+            if (false === strpos($src['filename'], 'sertifikat')) {
+                /** Добавляем файлы */
+                $filePath = $filesManager->getFilePath('products/images', 'old/' . $src['filename'], false, false, true);
+                if ($filePath) {
+                    try {
+                        $image = $filesManager->createEntity('products/images', $src['filename']);
+                        $image->pickFrom(dirname($filePath));
+                        $newName = preg_replace('#\.\w{3,4}$#', '.png', basename($filePath));
+                        if (!$product->hasFile($newName)) {
+                            /** @var Image $image */
+                            $image->adaptSize(ImgDriver::ADAPT, $newName);
+                            $image->createThumbs();
+                            if (!$product->addFile($image->getBasename())->save()) {
+                                $this->error(
+                                    "Картинка {$src['filename']} для продукта {$src['old_id']}:{$src['name']} не добавлена",
+                                    $product->errors
+                                );
+                            }
+                        }
+                    } catch (\Exception $e) {
                         $this->error(
                             "Картинка {$src['filename']} для продукта {$src['old_id']}:{$src['name']} не добавлена",
-                            $product->errors
+                            $e->getMessage()
                         );
                     }
                 }

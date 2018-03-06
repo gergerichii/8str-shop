@@ -520,4 +520,52 @@ class Module extends \yii\base\Module implements BootstrapInterface
 
         return $entity->getFilename();
     }
+
+    /**
+     * Get thumbnail path of the brand by image name
+     *
+     * @param string $imageName
+     * @param string $thumbName Such as: little
+     * @return string
+     * @throws InvalidConfigException
+     */
+    public function getBrandThumbnailPath($imageName, string $thumbName = 'little') {
+        // TODO Need speedup
+        /** @var \common\modules\files\Module $filesManager */
+        $filesManager = Yii::$app->getModule('files');
+        /** @var Image $entity */
+        $entity = $filesManager->getEntityInstance('brands/images' . '/' . $thumbName);
+        $entity->fileName = (string)$imageName;
+
+        if (!$entity->exists()) {
+            $entity = $filesManager->getEntityInstance('defaults');
+            $entity->fileName = 'brand-logo.png';
+        }
+
+        return $entity->getFilename();
+    }
+
+    /**
+     * Get thambnail uri of brand by image name
+     *
+     * @param string $imageName
+     * @param string $thumbName Such as: little
+     * @return string
+     * @throws InvalidConfigException
+     */
+    public function getBrandThumbnailUri($imageName, string $thumbName = 'little') {
+        // TODO Need speedup
+        /** @var \common\modules\files\Module $filesManager */
+        $filesManager = Yii::$app->getModule('files');
+        /** @var Image $entity */
+        $entity = $filesManager->getEntityInstance('brands/images' . '/' . $thumbName);
+        $entity->fileName = (string)$imageName;
+
+        if (!$entity->exists()) {
+            $entity = $filesManager->getEntityInstance('defaults');
+            $entity->fileName = 'brand-logo.png';
+        }
+
+        return $entity->getUri();
+    }
 }

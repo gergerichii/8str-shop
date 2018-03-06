@@ -9,7 +9,7 @@
 namespace common\base\models\nestedSets;
 
 use common\behaviors\SlugBehavior;
-use \yii\db\ActiveRecord;
+use \common\base\models\BaseActiveRecord;
 use yii\base\NotSupportedException;
 use yii\db\Exception;
 use yii\db\Expression;
@@ -22,7 +22,7 @@ use yii\db\Expression;
  *
  * @property string $slug
  */
-class NSActiveRecord extends ActiveRecord {
+class NSActiveRecord extends BaseActiveRecord {
 
     const OPERATION_MAKE_ROOT = 'makeRoot';
     const OPERATION_PREPEND_TO = 'prependTo';

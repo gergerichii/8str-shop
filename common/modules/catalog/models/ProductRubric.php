@@ -6,6 +6,7 @@ use common\base\models\nestedSets\NSActiveRecord;
 use common\modules\treeManager\models\TreeTrait;
 use yii\behaviors\TimestampBehavior;
 use yii\db\Expression;
+use Yii;
 
 /**
  * This is the model class for table "product_rubric".

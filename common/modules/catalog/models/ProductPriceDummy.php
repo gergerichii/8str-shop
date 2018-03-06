@@ -7,6 +7,7 @@
  */
 
 namespace common\modules\catalog\models;
+
 use yii\base\Model;
 use yii\i18n\Formatter;
 

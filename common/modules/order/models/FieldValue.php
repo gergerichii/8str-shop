@@ -5,7 +5,7 @@ namespace common\modules\order\models;
 use yii;
 use common\modules\order\models\Field;
 
-class FieldValue extends \yii\db\ActiveRecord
+class FieldValue extends \common\base\models\BaseActiveRecord
 {
     public static function tableName()
     {

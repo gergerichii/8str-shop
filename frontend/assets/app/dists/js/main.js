@@ -485,7 +485,7 @@
 
             // Product page zoom plugin settings
             if ($.fn.elevateZoom) {
-                $('#product-image').elevateZoom({
+                productImg.elevateZoom({
                     responsive: true, // simple solution for zoom plugin down here // it can cause bugs at resize
                     zoomType: (self.mobile || $(window).width() < 768) ? 'inner' : 'lens', // you can use 'inner' or 'window' // change inner and go to product.html page and see zoom plugin differances
                     borderColour: '#d0d0d0',
@@ -496,12 +496,13 @@
                     lensColour: 'rgba(255, 255, 255, 0.25)'
                 });
 
-                $('#product-carousel').find('a').on('mouseover', function (e) {
+                carouselContainer.find('a').on('mouseover', function (e) {
                     var ez = $('#product-image').data('elevateZoom'),
                         smallImg = $(this).data('image'),
                         bigImg = $(this).data('zoom-image');
 
                     ez.swaptheimage(smallImg, bigImg);
+                    e.stopPropagation();
                     e.preventDefault();
                 });
             }

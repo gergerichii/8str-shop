@@ -525,11 +525,17 @@ class OldbaseController extends BaseController
     protected function exportRubrics($remoteDb) {
         $this->trace('Экспорт рубрикатора');
 
-        $rootRubric = new ProductRubric([
-            'name' => 'Каталог'
-        ]);
+        $rootName = 'Каталог';
 
-        $rootRubric->makeRoot();
+        // Creates the root rubric when it not exists
+        $rootRubric = ProductRubric::find()->where(['name' => $rootName])->one();
+        if (!$rootRubric) {
+            $rootRubric = new ProductRubric([
+                'name' => 'Каталог'
+            ]);
+
+            $rootRubric->makeRoot();
+        }
 
         /* Читаем рубрикатор */
         $query = new Query();
@@ -565,14 +571,17 @@ class OldbaseController extends BaseController
                     return 1;
                 }
 
-                /** @noinspection MissedFieldInspection */
-                $newRubric = new ProductRubric([
-                    'name' => $currentRubric['rubric_name'],
-                    'old_id' => $currentRubric['rubric_id'],
-                    'old_parent_id' => $currentRubric['parent_rubric_id'],
-                ]);
+                $newRubric = ProductRubric::findOne(['old_id' => $currentRubric['rubric_id']]);
+                if (!$newRubric) {
+                    /** @noinspection MissedFieldInspection */
+                    $newRubric = new ProductRubric([
+                        'name' => $currentRubric['rubric_name'],
+                        'old_id' => $currentRubric['rubric_id'],
+                        'old_parent_id' => $currentRubric['parent_rubric_id'],
+                    ]);
 
-                $newRubric->appendTo($parentRubric);
+                    $newRubric->appendTo($parentRubric);
+                }
             } elseif (!$newRubric = ProductRubric::findOne(['old_id' => $currentRubric['rubric_id']])) {
                 /** @noinspection MissedFieldInspection */
                 $newRubric = new ProductRubric([

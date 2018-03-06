@@ -3,7 +3,7 @@ namespace common\modules\order\models;
 
 use yii;
 
-class FieldType extends \yii\db\ActiveRecord
+class FieldType extends \common\base\models\BaseActiveRecord
 {
     public static function tableName()
     {

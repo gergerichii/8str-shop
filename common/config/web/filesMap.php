@@ -10,11 +10,14 @@ return [
         'class' => \common\modules\files\models\Image::class,
         'path' => '@common/webFiles',
         'subdir' => 'products/images',
+        'oldImagesDir' => 'old',
         'thumbsOptions' => [
             'little' => 'products/images/little',
             'medium' => 'products/images/medium',
             'large' => 'products/images/large',
-        ]
+        ],
+        'width' => 800,
+        'height' => 1120,
     ],
     'defaults' => [
         'class' => \common\modules\files\models\Image::class,

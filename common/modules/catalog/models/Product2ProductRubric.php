@@ -2,6 +2,7 @@
 
 namespace common\modules\catalog\models;
 
+use common\base\models\BaseActiveRecord;
 use Yii;
 
 /**
@@ -13,7 +14,7 @@ use Yii;
  * @property Product $product
  * @property ProductRubric $rubric
  */
-class Product2ProductRubric extends \yii\db\ActiveRecord
+class Product2ProductRubric extends BaseActiveRecord
 {
     /**
      * @inheritdoc

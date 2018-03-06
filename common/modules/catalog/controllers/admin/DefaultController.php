@@ -3,12 +3,11 @@
 namespace common\modules\catalog\controllers\admin;
 
 use common\modules\catalog\models\forms\ProductImagesForm;
-use common\modules\catalog\models\forms\ProductPricesForm;
-use common\modules\catalog\models\Product;
 use common\modules\catalog\models\ProductSearch;
 use common\modules\files\models\Image;
 use common\modules\files\Module;
 use Yii;
+use yii\filters\AccessControl;
 use yii\filters\VerbFilter;
 use yii\helpers\Html;
 use yii\helpers\Json;
@@ -28,6 +27,15 @@ class DefaultController extends Controller
      */
     public function behaviors() {
         return [
+            'access' => [
+                'class' => AccessControl::className(),
+                'rules' => [
+                    [
+                        'allow' => true,
+                        'roles' => ['admin'],
+                    ],
+                ],
+            ],
             'verbs' => [
                 'class' => VerbFilter::className(),
                 'actions' => [

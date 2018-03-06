@@ -4,8 +4,9 @@ namespace common\modules\catalog\models;
 
 use common\models\entities\User;
 use Yii;
+use yii\base\ErrorException;
 use yii\behaviors\BlameableBehavior;
-use yii\db\ActiveRecord;
+use common\base\models\BaseActiveRecord;
 use yii\db\Expression;
 
 /**
@@ -23,7 +24,7 @@ use yii\db\Expression;
  * @property Product $product
  *
  */
-class ProductPrice extends ActiveRecord implements ProductPriceInterface
+class ProductPrice extends BaseActiveRecord implements ProductPriceInterface
 {
     /**
      * @inheritdoc
@@ -110,7 +111,7 @@ class ProductPrice extends ActiveRecord implements ProductPriceInterface
 
     /**
      * @inheritdoc
-     * @return ProductPriceQuery the active query used by this AR class.
+     * @return \common\modules\catalog\models\ProductPriceQuery the active query used by this AR class.
      */
     public static function find() {
         return new ProductPriceQuery(get_called_class());
@@ -125,4 +126,18 @@ class ProductPrice extends ActiveRecord implements ProductPriceInterface
         $activeFrom = \DateTime::createFromFormat('Y-m-d H:i:s', $this->active_from);
         return $now < $activeFrom;
     }
+
+    /**
+     * @param bool $insert
+     *
+     * @return bool
+     * @throws \yii\base\ErrorException
+     */
+    public function beforeSave($insert){
+         if ($this->isNewRecord) {
+             return parent::beforeSave($insert);
+         } else {
+             throw new ErrorException('Price is read only. Create a new price record for update current product price');
+         }
+     }
 }

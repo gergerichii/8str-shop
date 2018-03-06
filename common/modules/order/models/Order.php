@@ -5,7 +5,7 @@ use yii;
 use common\modules\order\models\tools\OrderQuery;
 use common\modules\order\interfaces\Order as OrderInterface;
 
-class Order extends \yii\db\ActiveRecord implements OrderInterface
+class Order extends \common\base\models\BaseActiveRecord implements OrderInterface
 {
     public $sessionId;
 

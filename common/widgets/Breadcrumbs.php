@@ -45,7 +45,7 @@ class Breadcrumbs extends \yii\widgets\Breadcrumbs
         
         if($action->id !== $controller->defaultAction) {
             $url = Url::toRoute("/{$module->id}/{$controller->id}/{$action->id}");
-            if ($beginingBc[count($beginingBc) - 1]['url'][0] !== $url) {
+            if (count($beginingBc) && $beginingBc[count($beginingBc) - 1]['url'][0] !== $url) {
                 $bc['label'] = Yii::t('app.common', $action->id);
                 $bc['url'] = [$url];
                 $beginingBc[] = $bc;

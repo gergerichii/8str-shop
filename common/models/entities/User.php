@@ -1,10 +1,11 @@
 <?php
 namespace common\models\entities;
 
+use common\base\models\BaseActiveRecord;
 use Yii;
 use yii\base\NotSupportedException;
 use yii\behaviors\TimestampBehavior;
-use yii\db\ActiveRecord;
+use yii\helpers\ArrayHelper;
 use yii\web\IdentityInterface;
 
 /**
@@ -14,7 +15,13 @@ use yii\web\IdentityInterface;
  * User model
  *
  * @property integer $id
+ * @property string $first_name
+ * @property string $last_name
  * @property string $username
+ * @property string $login
+ * @property string $company
+ * @property string $phone_number
+ * @property boolean $agree_to_news
  * @property string $password_hash
  * @property string $password_reset_token
  * @property string $email
@@ -23,13 +30,21 @@ use yii\web\IdentityInterface;
  * @property integer $status
  * @property integer $created_at
  * @property integer $updated_at
+ * @property UserAddresses[] $addresses
  * @property-write string $password write-only password
  */
-class User extends ActiveRecord implements IdentityInterface {
+class User extends BaseActiveRecord implements IdentityInterface {
     const STATUS_DELETED = 0;
     const STATUS_ACTIVE = 10;
+    const STATUS_GUEST = 1;
+
+    const SCENARIO_REGISTER_CONSOLE = 'register_console';
+    
+    /** @var \common\models\entities\UserAddresses[]  */
+    protected $_addresses = [];
 
     /**
+     * Sign up
      * @param string $username
      * @param string $email
      * @param string $password
@@ -46,6 +61,10 @@ class User extends ActiveRecord implements IdentityInterface {
         return $user;
     }
 
+    /**
+     * Is active
+     * @return bool
+     */
     public function isActive() {
         return $this->status === self::STATUS_ACTIVE;
     }
@@ -62,8 +81,30 @@ class User extends ActiveRecord implements IdentityInterface {
      */
     public function behaviors() {
         return [
-            TimestampBehavior::className(),
+            TimestampBehavior::class,
         ];
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function scenarios() {
+        $scenarios = parent::scenarios();
+        // The scenario for addition admin for migration
+        $scenarios[self::SCENARIO_REGISTER_CONSOLE] = [
+            'id',
+            'username',
+            'login',
+            'password_hash',
+            'password_reset_token',
+            'email',
+            'auth_key',
+            'authKey',
+            'status',
+            'created_at',
+            'updated_at',
+        ];
+        return $scenarios;
     }
 
     /**
@@ -71,7 +112,21 @@ class User extends ActiveRecord implements IdentityInterface {
      */
     public function rules() {
         return [
+            [['login', 'password'], 'safe'],
             [['username', 'password_hash', 'email'], 'required'],
+            
+            [['first_name', 'last_name'], 'trim'],
+            [['first_name', 'last_name'], 'string', 'min' => 2, 'max' => 255],
+
+            ['phone_number', 'trim'],
+            ['phone_number', 'match', 'pattern' => '/^((8|\+7)[\- ]?)?(\(?\d{3}\)?[\- ]?)?[\d\- ]{7,10}$/'],
+            ['phone_number', 'string', 'min' => 9],
+
+            ['company', 'trim'],
+            ['company', 'string', 'min' => 3, 'max' => 255],
+            
+            ['agree_to_news', 'boolean'],
+            
             [['status', 'created_at', 'updated_at', 'id'], 'integer'],
             [['username', 'password_hash', 'password_reset_token', 'email'], 'string', 'max' => 255],
             [['auth_key'], 'string', 'max' => 32],
@@ -83,6 +138,22 @@ class User extends ActiveRecord implements IdentityInterface {
         ];
     }
 
+    /**
+     * @inheritdoc
+     */
+    public function attributeLabels() {
+        return [
+            'first_name' => 'Имя',
+            'last_name' => 'Фамилия',
+            'username' => 'Логин',
+            'email' => 'Email',
+            'phone_number' => 'Телефон',
+            'company' => 'Организация',
+            'password_hash' => 'Пароль',
+            'agree_to_news' => 'Согласие на новостную рассылку',
+        ];
+    }
+    
     /**
      * @inheritdoc
      */
@@ -107,6 +178,18 @@ class User extends ActiveRecord implements IdentityInterface {
     public static function findByUsername($username)
     {
         return static::findOne(['username' => $username, 'status' => self::STATUS_ACTIVE]);
+    }
+
+    /**
+     * Finds user by email
+     *
+     * @param string $email
+     *
+     * @return static|null
+     */
+    public static function findByEmail($email)
+    {
+        return static::findOne(['email' => $email, 'status' => self::STATUS_ACTIVE]);
     }
 
     /**
@@ -190,6 +273,24 @@ class User extends ActiveRecord implements IdentityInterface {
     {
         $this->password_hash = Yii::$app->security->generatePasswordHash($password);
     }
+    
+    /**
+     * Alias for username
+     *
+     * @return string
+     */
+    public function getLogin() {
+        return $this->username;
+    }
+    
+    /**
+     * Alias for username
+     *
+     * @param $value
+     */
+    public function setLogin($value) {
+        $this->username = $value;
+    }
 
     /**
      * Generates "remember me" authentication key
@@ -217,5 +318,46 @@ class User extends ActiveRecord implements IdentityInterface {
     public function removePasswordResetToken()
     {
         $this->password_reset_token = null;
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function __get($name) {
+        // TODO Why!!!?????
+        return parent::__get($name); // TODO: Change the autogenerated stub
+    }
+    
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getAddresses() {
+        return $this->hasMany(UserAddresses::class, ['user_id' => 'id']);
+    }
+
+    /**
+     * Set addresses
+     * @param array $addresses
+     * TODO Move it to business logic
+     */
+    public function setAddresses(array $addresses) {
+        foreach($addresses as $address) {
+            $this->addAddress($address);
+        }
+    }
+
+    /**
+     * Add address
+     * @param UserAddresses $address
+     * TODO Move it to business logic
+     */
+    public function addAddress(UserAddresses $address) {
+        if (is_array($address) && ArrayHelper::isAssociative($address)) {
+            $_address = new UserAddresses();
+            $_address->setAttributes($address);
+            $address = $_address;
+        }
+        
+        $this->_addresses[] = $address;
     }
 }

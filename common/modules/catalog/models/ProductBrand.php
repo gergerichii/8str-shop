@@ -4,7 +4,7 @@ namespace common\modules\catalog\models;
 
 use Yii;
 use yii\behaviors\SluggableBehavior;
-use yii\db\ActiveRecord;
+use common\base\models\BaseActiveRecord;
 
 /**
  * This is the model class for table "product_brand".
@@ -18,7 +18,7 @@ use yii\db\ActiveRecord;
  * @property Product[] $products
  * @property ProductPriceDiscount[] $productPriceDiscounts
  */
-class ProductBrand extends ActiveRecord
+class ProductBrand extends BaseActiveRecord
 {
     /**
      * @inheritdoc

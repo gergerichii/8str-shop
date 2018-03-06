@@ -3,7 +3,7 @@ namespace common\modules\order\models;
 
 use yii;
 
-class PaymentType extends \yii\db\ActiveRecord
+class PaymentType extends \common\base\models\BaseActiveRecord
 {
     public static function tableName()
     {

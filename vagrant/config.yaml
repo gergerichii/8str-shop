@@ -10,6 +10,13 @@ provider: virtualbox
 authorize: vagrant/.ssh/id_rsa.pub
 keys:
     - vagrant/.ssh/id_rsa
+
+copy:
+    -
+        from: vagrant/scripts/copied_files/sphinx.conf
+        to: /tmp/
+        # !!! Данный файл используется для установки Sphinx
+
 folders:
     -
         map: '.'
@@ -46,7 +53,8 @@ databases:
 name: tima-shop
 hostname: tima-shop
 mongodb: false
-elasticsearch: true
+elasticsearch: false
+sphinxsearch: true
 
 variables:
     - {key: ENV_TYPE, value: VAGRANT_BOX}

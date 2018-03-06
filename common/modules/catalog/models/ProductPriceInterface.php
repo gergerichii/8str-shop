@@ -7,6 +7,7 @@
  */
 
 namespace common\modules\catalog\models;
+
 interface ProductPriceInterface {
     public function __toString();
     public function getValue();

@@ -4,6 +4,7 @@ namespace common\modules\catalog\controllers;
 
 use common\base\BaseFrontendController;
 use common\modules\catalog\models\Product;
+use common\modules\catalog\models\ProductBrandQuery;
 use common\modules\catalog\Module;
 use common\modules\catalog\providers\FrontendSearchProvider;
 use yii\data\ActiveDataProvider;
@@ -21,10 +22,13 @@ class DefaultController extends BaseFrontendController
      * @throws \yii\web\NotFoundHttpException
      * @throws \yii\base\ErrorException
      */
-    public function actionIndex($catalogPath = '')
-    {
+    public function actionIndex($catalogPath = '') {
+        $request = \Yii::$app->getRequest();
+        $brandAlias = $request->get('brand');
+
         /** @var Module $catalog */
         $catalog = $this->module;
+
         $query = Product::find()->forFrontEnd()->with('rubrics');
         if ($catalogPath) {
             $rubric = $catalog->getRubricByPath($catalogPath);
@@ -35,6 +39,7 @@ class DefaultController extends BaseFrontendController
             $rubricsIds = array_keys(
                 $rubric->children()->select('id')->asArray()->indexBy('id')->all()
             );
+
             $rubricsIds[$rubric->id] = $rubric->id;
             $query->select('product.*')->distinct()
                 ->joinWith('rubrics r', false)
@@ -45,6 +50,15 @@ class DefaultController extends BaseFrontendController
                     ['in', 'r.id', $rubricsIds],
                     ['in', 'mr.id', $rubricsIds],
                 ]);
+        }
+
+        if (isset($brandAlias)) {
+            $query->joinWith(['brand' => function ($q) {
+                /** @var ProductBrandQuery $q */
+                $q->alias('brand');
+            }]);
+
+            $query->andWhere(['brand.alias' => $brandAlias]);
         }
 
         $productsDataProvider = new ActiveDataProvider([
@@ -64,8 +78,7 @@ class DefaultController extends BaseFrontendController
      * @throws NotFoundHttpException
      * @throws \yii\base\ErrorException
      */
-    public function actionProduct($catalogPath = '', $productId = null)
-    {
+    public function actionProduct($catalogPath = '', $productId = null) {
         $product = Product::find()->forFrontEnd()->where(['id' => $productId])->one();
         /** @var Module $catalog */
         $catalog = $this->module;
@@ -88,8 +101,7 @@ class DefaultController extends BaseFrontendController
     /**
      * Search
      */
-    public function actionSearch()
-    {
+    public function actionSearch() {
         $search = new FrontendSearchProvider();
         $search->q = \Yii::$app->getRequest()->get('q');
         $search->rubric = \Yii::$app->getRequest()->get('rubric');

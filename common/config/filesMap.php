@@ -58,16 +58,12 @@ return [
     ],
     'brands/images/' => [
         'class' => \common\modules\files\models\Image::class,
-        'path' => '@common/webFiles',
-        'subdir' => 'brands/images',
         'thumbsOptions' => [
             'little' => 'brands/images/little',
         ]
     ],
     'brands/images/little' => [
         'class' => \common\modules\files\models\Thumb::class,
-        'path' => '@common/webFiles',
-        'subdir' => 'brands/images/little',
         'width' => 170,
         'height' => 100,
         'resizingConstrait' => \yii\image\drivers\Image::CROP

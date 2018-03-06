@@ -81,7 +81,6 @@ class Module extends \yii\base\Module implements BootstrapInterface
             'catalog/seacrh' => '/catalog/default/search',
             'catalog' => 'catalog/default/index/',
         ];
-
         if (count($urlManagers)) {
             foreach ($urlManagers as $urlManager) {
                 /** @var \yii\web\UrlManager $urlManager */
@@ -520,53 +519,7 @@ class Module extends \yii\base\Module implements BootstrapInterface
 
         return $entity->getFilePath(true);
     }
-    /**
-     * Get thumbnail path of the brand by image name
-     *
-     * @param string $imageName
-     * @param string $thumbName Such as: little
-     * @return string
-     * @throws InvalidConfigException
-     */
-    public function getBrandThumbnailPath($imageName, string $thumbName = 'little') {
-        // TODO Need speedup
-        /** @var \common\modules\files\Module $filesManager */
-        $filesManager = Yii::$app->getModule('files');
-        /** @var Image $entity */
-        $entity = $filesManager->getEntityInstance('brands/images' . '/' . $thumbName);
-        $entity->fileName = (string)$imageName;
-
-        if (!$entity->exists()) {
-            $entity = $filesManager->getEntityInstance('defaults');
-            $entity->fileName = 'brand-logo.png';
-        }
-
-        return $entity->getFilename();
-    }
-
-    /**
-     * Get thambnail uri of brand by image name
-     *
-     * @param string $imageName
-     * @param string $thumbName Such as: little
-     * @return string
-     * @throws InvalidConfigException
-     */
-    public function getBrandThumbnailUri($imageName, string $thumbName = 'little') {
-        // TODO Need speedup
-        /** @var \common\modules\files\Module $filesManager */
-        $filesManager = Yii::$app->getModule('files');
-        /** @var Image $entity */
-        $entity = $filesManager->getEntityInstance('brands/images' . '/' . $thumbName);
-        $entity->fileName = (string)$imageName;
-
-        if (!$entity->exists()) {
-            $entity = $filesManager->getEntityInstance('defaults');
-            $entity->fileName = 'brand-logo.png';
-        }
-
-        return $entity->getUri();
-    }
+    
     /**
      * Update future price
      * @param Product $product
@@ -686,5 +639,52 @@ class Module extends \yii\base\Module implements BootstrapInterface
         }
 
         return $price;
+    }
+    /**
+     * Get thumbnail path of the brand by image name
+     *
+     * @param string $imageName
+     * @param string $thumbName Such as: little
+     * @return string
+     * @throws InvalidConfigException
+     */
+    public function getBrandThumbnailPath($imageName, string $thumbName = 'little') {
+        // TODO Need speedup
+        /** @var \common\modules\files\Module $filesManager */
+        $filesManager = Yii::$app->getModule('files');
+        /** @var Image $entity */
+        $entity = $filesManager->getEntityInstance('brands/images' . '/' . $thumbName);
+        $entity->fileName = (string)$imageName;
+
+        if (!$entity->exists()) {
+            $entity = $filesManager->getEntityInstance('defaults');
+            $entity->fileName = 'brand-logo.png';
+        }
+
+        return $entity->getFilename();
+    }
+
+    /**
+     * Get thambnail uri of brand by image name
+     *
+     * @param string $imageName
+     * @param string $thumbName Such as: little
+     * @return string
+     * @throws InvalidConfigException
+     */
+    public function getBrandThumbnailUri($imageName, string $thumbName = 'little') {
+        // TODO Need speedup
+        /** @var \common\modules\files\Module $filesManager */
+        $filesManager = Yii::$app->getModule('files');
+        /** @var Image $entity */
+        $entity = $filesManager->getEntityInstance('brands/images' . '/' . $thumbName);
+        $entity->fileName = (string)$imageName;
+
+        if (!$entity->exists()) {
+            $entity = $filesManager->getEntityInstance('defaults');
+            $entity->fileName = 'brand-logo.png';
+        }
+
+        return $entity->getUri();
     }
 }

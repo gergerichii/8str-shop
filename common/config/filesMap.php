@@ -6,7 +6,6 @@ return [
     ],
     'products/images' => [
         'class' => \common\modules\files\models\Image::class,
-        'oldImagesDir' => 'old',
         'thumbsOptions' => [
             'little' => 'products/images/little',
             'medium' => 'products/images/medium',

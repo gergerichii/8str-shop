@@ -22,12 +22,6 @@ class Image extends BaseFile
     public $thumbsOptions = null;
 
     /**
-     * Old images subdir
-     * @var string
-     */
-    public $oldImagesDir = null;
-    
-    /**
      * Width
      * @var int $width
      */
@@ -143,31 +137,6 @@ class Image extends BaseFile
         }
     }
     
-    public function toGrowOld() {
-        $this->clearErrors();
-        $oldImagesPath = dirname($this->getFilePath()) . DIRECTORY_SEPARATOR . $this->oldImagesDir;
-        if (!is_dir($oldImagesPath)) {
-            try{
-                FileHelper::createDirectory($oldImagesPath);
-            } catch(\Exception $e) {
-                $this->addError('', "Don't create subdir {$oldImagesPath}! ({$e->getMessage()})");
-                return false;
-            }
-        }
-        if ($this->exists()) {
-            $oldImagesPath = preg_match('#^[/@]#', $this->oldImagesDir)
-                ? \Yii::getAlias($this->oldImagesDir) . DIRECTORY_SEPARATOR
-                : $oldImagesPath . DIRECTORY_SEPARATOR;
-            $result = rename($this->getFilePath(), $oldImagesPath . $this->getBasename());
-            if (false === $result) {
-                $this->addError('', 'Unknown error!');
-                return false;
-            }
-        } else {
-            $this->addError('', "File {$this->getFilePath()} not found to grow it old");
-            return false;
-        }
-    }
 
     /**
      * Delete image

@@ -146,6 +146,7 @@ class Module extends \yii\base\Module implements BootstrapInterface
      * @throws \yii\base\InvalidConfigException
      */
     public function createEntity($entityType, $fileName = null, $isProtected = false) {
+        /** Если указан только тип, то в нем долен быть указан полный путь к файлу, из которого мы вытащим тип */
         if (is_null($fileName)) {
             $path = \Yii::getAlias($entityType);
             $types = implode('|', array_keys($this->entities));
@@ -169,7 +170,7 @@ class Module extends \yii\base\Module implements BootstrapInterface
         }
 
         $objectData['entityType'] = $entityType;
-        $objectData['fileName'] = $fileName;
+        !empty($fileName) and $objectData['fileName'] = $fileName;
         $objectData['filesManager'] = $this;
         $objectData['isProtected'] = $isProtected;
 

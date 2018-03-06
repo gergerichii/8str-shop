@@ -59,21 +59,18 @@ class CatalogController extends BaseController
             if (isset($groups[$productName])) {
                 $amountOfFoundProduct++;
                 unset($amountOfNotFoundProduct[$productName]);
-                // To growing old images
+                // To deleting old images
                 if ($product->images) {
                     $groupImages = ArrayHelper::getColumn($groups[$productName], 'basename');
                     foreach ($product->images as $imageName) {
-                        if (false !== array_search($imageName, $groupImages)) {
+                        $image->fileName = $imageName;
+                        if (false !== array_search($imageName, $groupImages) && $image->exists()) {
                             continue;
                         }
-                        $image->fileName = $imageName;
-                        // Copy file to archive
-                        if (false === $image->toGrowOld()){
-                            $this->error('To growing old file', $image->getErrorSummary(true));
-                        }
+                        // Delete old files
+                        $image->delete();
                         $product->deleteFile($imageName);
                     }
-//                    $product->desolateImages();
                 }
                 // Addition new images
                 foreach ($groups[$productName] as $fileInfo) {
@@ -89,21 +86,6 @@ class CatalogController extends BaseController
                     if ($image->exists()) {
                         $imageNumber++;
                         $image->createThumbs();
-                    }
-                }
-    
-                $product->update();
-            } else {
-                // Create thumbnails from old files
-                $images = $product->images;
-                foreach ($images as $imageName) {
-                    $image->fileName = $imageName;
-                    $product->deleteFile($imageName);
-                    $imageName = preg_replace('#\.\w{3,4}$#', '.png', $imageName);
-                    $product->addFile($imageName);
-                    if ($image->exists()) {
-                        $image->adaptSize(\yii\image\drivers\Image::ADAPT, $imageName);
-                        $image->createThumbs(true, \yii\image\drivers\Image::ADAPT);
                     }
                 }
     

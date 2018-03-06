@@ -33,7 +33,7 @@ abstract class BaseFile extends Model
      * Default image
      * @var string
      */
-    public $defaultFile = 'default.png';
+    public $defaultFile = 'default.jpg';
     /**
      * @var \common\modules\files\Module
      */
@@ -71,7 +71,7 @@ abstract class BaseFile extends Model
             [
                 "/{$this->filesManager->defaultUri}/download",
                 'entityType' => $this->entityType,
-                'fileName' => $this->getBasename(),
+                'fileName' => $this->getBasename($allowDefault),
                 'isProtected' => $this->isProtected
             ],
             $scheme

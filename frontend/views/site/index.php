@@ -6,7 +6,7 @@
  * Time: 7:55
  */
 
-use common\modules\catalog\Module;
+use common\modules\catalog\widgets\ProductBrandsWidget;
 use common\modules\catalog\widgets\ProductViewWidget;
 use common\modules\news\widgets\LatestNewsWidgets;
 
@@ -45,7 +45,7 @@ $activeTab = 'new';
             <div class="row slider-position">
                 <div class="md-margin"></div><!-- space -->
 
-                <?=$this->render('@app/views/pieces/sidebar')?>
+                <?= $this->render('@app/views/pieces/sidebar'); ?>
 
                 <div class="col-md-9 col-sm-8 col-xs-12 main-content ">
                     <div class="main-tab-container carousel-wrapper">
@@ -102,10 +102,11 @@ $activeTab = 'new';
 
                     <div class="md-margin2x"></div><!-- space -->
 
+                    <?= ProductBrandsWidget::widget(); ?>
+
+                    <div class="md-margin2x"></div><!-- space -->
+
                     <?= LatestNewsWidgets::widget(); ?>
-
-                    <div class="md-margin2x"></div><!-- Space -->
-
                 </div><!-- End .col-md-9 -->
             </div><!-- End .row -->
         </div><!-- End .col-md-12 -->

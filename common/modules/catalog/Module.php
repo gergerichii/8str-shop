@@ -356,6 +356,7 @@ class Module extends \yii\base\Module implements BootstrapInterface
             $rubricsPath[] = $currentRubric;
             /** @var ProductRubric $rubric */
             foreach ($rubricsPath as $rubric) {
+                if ($rubric->level === 0) continue;
                 $label = (string)$rubric;
                 $breadcrumbs[] = [
                     'label' => $label,

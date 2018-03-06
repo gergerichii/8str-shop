@@ -28,8 +28,7 @@ class ProductPrice extends ActiveRecord implements ProductPriceInterface
     /**
      * @inheritdoc
      */
-    public function behaviors()
-    {
+    public function behaviors() {
         return [
             [
                 'class' => BlameableBehavior::className(),
@@ -42,16 +41,14 @@ class ProductPrice extends ActiveRecord implements ProductPriceInterface
     /**
      * @inheritdoc
      */
-    public static function tableName()
-    {
+    public static function tableName() {
         return 'product_price';
     }
 
     /**
      * @inheritdoc
      */
-    public function rules()
-    {
+    public function rules() {
         return [
             [['active_from'], 'default', 'value' => new Expression('NOW()')],
 
@@ -70,8 +67,7 @@ class ProductPrice extends ActiveRecord implements ProductPriceInterface
     /**
      * @inheritdoc
      */
-    public function attributeLabels()
-    {
+    public function attributeLabels() {
         return [
             'id' => Yii::t('app', 'ID'),
             'product_id' => Yii::t('app', 'Product ID'),
@@ -86,8 +82,7 @@ class ProductPrice extends ActiveRecord implements ProductPriceInterface
      * @return string
      *
      */
-    public function __toString()
-    {
+    public function __toString() {
         return Yii::$app->formatter->asDecimal($this->value) . ' р.';
     }
 
@@ -95,24 +90,21 @@ class ProductPrice extends ActiveRecord implements ProductPriceInterface
      * Get value
      * @return mixed
      */
-    public function getValue()
-    {
+    public function getValue() {
         return $this->getAttribute('value');
     }
 
     /**
      * @return \yii\db\ActiveQuery
      */
-    public function getAuthor()
-    {
+    public function getAuthor() {
         return $this->hasOne(User::className(), ['id' => 'author_id'])->inverseOf('productPrices');
     }
 
     /**
      * @return \yii\db\ActiveQuery
      */
-    public function getProduct()
-    {
+    public function getProduct() {
         return $this->hasOne(Product::className(), ['id' => 'product_id'])->inverseOf('productPrices');
     }
 
@@ -120,8 +112,7 @@ class ProductPrice extends ActiveRecord implements ProductPriceInterface
      * @inheritdoc
      * @return ProductPriceQuery the active query used by this AR class.
      */
-    public static function find()
-    {
+    public static function find() {
         return new ProductPriceQuery(get_called_class());
     }
 
@@ -129,7 +120,7 @@ class ProductPrice extends ActiveRecord implements ProductPriceInterface
      * Is this the future price
      * @return bool
      */
-    public function isFuture(){
+    public function isFuture() {
         $now = new \DateTime();
         $activeFrom = \DateTime::createFromFormat('Y-m-d H:i:s', $this->active_from);
         return $now < $activeFrom;

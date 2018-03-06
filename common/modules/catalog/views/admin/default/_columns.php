@@ -31,13 +31,21 @@ return [
         'urlCreator' => function ($action, $model, $key, $index) {
             return Url::to([$action, 'id' => $key]);
         },
-        'template' => '{images} {view} {update} {delete}',
+        'template' => '{images} {prices} {view} {update} {delete}',
         'buttons' => [
             'images' => function ($url, $model, $key) {
                 $icon = Html::tag('span', '', ['class' => 'glyphicon glyphicon-picture']);
                 return Html::a($icon, ['images', 'id' => $model->id], [
                     'role' => 'modal-remote',
                     'title' => 'Images',
+                    'data-toggle' => 'tooltip'
+                ]);
+            },
+            'prices' => function ($url, $model, $key) {
+                $icon = Html::tag('span', '', ['class' => 'glyphicon glyphicon-piggy-bank']);
+                return Html::a($icon, ['prices', 'id' => $model->id], [
+                    'role' => 'modal-remote',
+                    'title' => 'Prices',
                     'data-toggle' => 'tooltip'
                 ]);
             },

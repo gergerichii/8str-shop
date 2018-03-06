@@ -53,6 +53,14 @@ class Module extends \yii\base\Module implements BootstrapInterface
 
         $rules = [
             [
+                'pattern' => 'catalog/producer/<brand:\w+>/<catalogPath:[\w\-\.,/_]*?/[^\d]*$|[\w\-\.,_]+>',
+                'route' => '/catalog/default/index',
+                'defaults' => [
+                    'catalogPath' => ''
+                ],
+                'encodeParams' => false,
+            ],
+            [
                 'pattern' => 'catalog/<catalogPath:[\w\-\.,/_]*?/[^\d]*$|[\w\-\.,_]+>',
                 'route' => '/catalog/default/index',
                 'defaults' => [
@@ -72,6 +80,7 @@ class Module extends \yii\base\Module implements BootstrapInterface
             'catalog/seacrh' => '/catalog/default/search',
             'catalog' => 'catalog/default/index/',
         ];
+
         if (count($urlManagers)) {
             foreach ($urlManagers as $urlManager) {
                 /** @var \yii\web\UrlManager $urlManager */
@@ -128,11 +137,12 @@ class Module extends \yii\base\Module implements BootstrapInterface
 
     /**
      * Gets the brand uri
+     *
      * @param ProductBrand $brand
      * @return string
      */
     public function getBrandUri(ProductBrand $brand) {
-        return Url::to('/catalog/brand/' . $brand->id);
+        return Url::to(['/catalog/default/index', 'brand' => $brand->alias]);
     }
 
     /** ---------------------------------Продукты------------------------------------*/

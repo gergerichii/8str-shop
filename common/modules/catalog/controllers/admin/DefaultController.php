@@ -430,6 +430,8 @@ class DefaultController extends Controller
     }
 
     /**
+     * FIXME: Это должно быть не тут. Это относится к файловому менеджеру. Или хотя бы частично туда перенести
+     *
      * The action to upload an image
      * @return bool|string
      * @throws \Exception
@@ -464,9 +466,8 @@ class DefaultController extends Controller
                 return false;
             }
 
-            $uploadedFile->saveAs($image->getFilename());
+            $uploadedFile->saveAs($image->getFilePath());
 
-            // TODO
             $image->getThumbs();
             $product->addFile($image->fileName);
 

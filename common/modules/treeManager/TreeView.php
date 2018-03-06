@@ -576,11 +576,12 @@ HTML;
      * @var string session identifier for the selected node id
      */
     protected $_nodeSelected = null;
-
+    
     /**
      * Returns the tree view module
      *
      * @return Module
+     * @throws \yii\base\InvalidConfigException
      */
     public static function module()
     {
@@ -1183,7 +1184,7 @@ HTML;
     protected function initTreeView()
     {
         $this->validateSourceData();
-        $this->_module = Config::initModule(Module::className());
+        $this->_module = Config::initModule(Module::class);
         if (empty($this->emptyNodeMsg)) {
             $this->emptyNodeMsg = Yii::t(
                 'kvtree',
@@ -1227,18 +1228,18 @@ HTML;
     {
         if (empty($this->query) || !$this->query instanceof ActiveQuery) {
             throw new InvalidConfigException(
-                "The 'query' property must be defined and must be an instance of '" . ActiveQuery::className() . "'."
+                "The 'query' property must be defined and must be an instance of '" . ActiveQuery::class . "'."
             );
         }
         $class = isset($this->query->modelClass) ? $this->query->modelClass : null;
-        if (empty($class) || !is_subclass_of($class, ActiveRecord::className())) {
+        if (empty($class) || !is_subclass_of($class, ActiveRecord::class)) {
             throw new InvalidConfigException("The 'query' must be implemented using 'ActiveRecord::find()' method.");
         }
         $trait = 'common\modules\treeManager\models\TreeTrait';
         if (!self::usesTrait($class, $trait)) {
             throw new InvalidConfigException(
                 "The model class '{$class}' for the 'query' must use the trait '{$trait}' or extend from '" .
-                Tree::className() . "''."
+                Tree::class . "''."
             );
         }
     }
@@ -1418,7 +1419,7 @@ HTML;
     /**
      * Renders the markup for the detail form to edit/view the selected tree node
      *
-     * @return string
+     * @return string|array
      */
     protected function getIconsList()
     {

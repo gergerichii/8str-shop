@@ -75,8 +75,6 @@ $config = [
     ],
     'modules' => [
         'files' => [
-            'class' => 'common\modules\files\Module',
-            'entities' => require 'filesMap.php'
         ],
         'cart' => [
             'class' => 'common\modules\cart\Module',

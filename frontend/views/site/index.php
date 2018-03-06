@@ -18,7 +18,7 @@ use common\modules\news\widgets\LatestNewsWidgets;
  * TODO: Переделать. Не везде на сайте меню с такими настройками
  */
 Yii::$container->setDefinitions([
-    \yii\widgets\Menu::className() => [
+    \yii\widgets\Menu::class => [
         'options' => [
             'tag' => 'div',
             'class' => 'list-group list-group-brand list-group-accordion'
@@ -28,6 +28,7 @@ Yii::$container->setDefinitions([
     ]
 ]);
 
+/** TODO: Должно быть в самих метках */
 $tagLabels = [
         'new' => 'Новинки',
         'bestseller' => 'Хит продаж',

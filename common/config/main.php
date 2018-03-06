@@ -10,7 +10,6 @@ $config = [
         '@bower' => '@vendor/bower-asset',
         '@npm'   => '@vendor/npm-asset',
         '@commonFiles' => '@common/webFiles',
-        '@commonFilesUri' => '/webFiles',
     ],
     'vendorPath' => dirname(dirname(__DIR__)) . '/vendor',
     'components' => [
@@ -39,6 +38,12 @@ $config = [
         )
     ],
     'modules' => [
+        'files' => [
+            'class' => 'common\modules\files\Module',
+            'entities' => require 'filesMap.php',
+            'publicPath' => '@common/webFiles',
+            'protectedPath' => '@common/webFilesProtected',
+        ],
     ],
     'container' => [
         'definitions' => [

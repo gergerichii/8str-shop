@@ -30,7 +30,7 @@ class ProductTagWidget extends Widget
     public function behaviors() {
         return [
             [
-                'class' => CacheableWidgetBehavior::className(),
+                'class' => CacheableWidgetBehavior::class,
                 'cacheDependency' => [
                     'class' => ChainedDependency::class,
                     'dependencies' => [

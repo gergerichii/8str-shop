@@ -23,12 +23,12 @@ class m180301_073537_add_extra_tags extends Migration
                 'title' => $title,
                 'status' => 1,
                 'use_as_group' => 1,
-                'show_on_product' => 1,
+                'show_on_product' => 0,
             ]);
 
             if (!$tag->save()) {
                 var_dump($tag->getErrors());
-                Yii::trace(var_export($tag->getErrors(), true));
+                Yii::debug(var_export($tag->getErrors(), true));
                 return false;
             }
         }

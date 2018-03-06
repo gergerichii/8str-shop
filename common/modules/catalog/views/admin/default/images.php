@@ -26,7 +26,7 @@ NumberControl::$autoIdPrefix = 'numberControl';
         <?= \common\modules\files\widgets\FileInput::widget([
             'model' => $model,
             'attribute' => 'images',
-            'entityName' => 'products/images',
+            'entityType' => 'products/images',
             'options' => ['multiple' => true],
             'pluginOptions' => [
                 'uploadUrl' => \yii\helpers\Url::to(['/catalog/default/upload-image']),

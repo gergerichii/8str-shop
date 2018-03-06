@@ -100,9 +100,9 @@ class FrontendSearchProvider extends BaseDataProvider
             return [];
         }
 
+        /** TODO: Вынести пятерку в настройки */
         $rubricQuery = $root->children(5)
-            ->andFilterWhere(['like', 'name', $this->q])
-            ->andWhere('visible_on_home_page=1');
+            ->andFilterWhere(['like', 'name', $this->q]);
 
         $this->_amountOfRubrics = $rubricQuery->count();
 

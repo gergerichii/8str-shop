@@ -11,6 +11,8 @@ use yii\web\UrlManager;
 
 /**
  * Class Module for the Files
+ *
+ * @property mixed $defaultUri
  */
 class Module extends \yii\base\Module implements BootstrapInterface
 {
@@ -24,20 +26,41 @@ class Module extends \yii\base\Module implements BootstrapInterface
      * @var array
      */
     public $entities = [];
+    
+    /**
+     * @var string
+     */
+    public $publicPath;
+    
+    /**
+     * @var string
+     */
+    public $protectedPath;
 
     /**
      * Entities instances
      * @var array
      */
     private $_entityInstances = [];
+    
+    protected $_defaultUri;
 
     /**
      * @inheritdoc
      */
     public function init() {
         parent::init();
-
+        
         // custom initialization code goes here
+        $this->_defaultUri = "{$this->id}/{$this->defaultRoute}";
+    }
+    
+    /**
+     * Returns the default uri for this module
+     * @return mixed
+     */
+    public function getDefaultUri() {
+        return $this->_defaultUri;
     }
 
     /**
@@ -54,6 +77,7 @@ class Module extends \yii\base\Module implements BootstrapInterface
         $rules = [
             [
                 'class' => FileUrlRule::class,
+                'filesManagerModuleId' => $this->id,
             ],
             /*[
                 'name' => 'fileRule',
@@ -76,75 +100,93 @@ class Module extends \yii\base\Module implements BootstrapInterface
             $app->urlManager->addRules($rules);
         }
     }
-
+    
     /**
      * Get the path of file
-     * @param string $entityName
-     * @param string $filename
+     *
+     * @param string $entityType
+     * @param string $fileName
+     * @param bool   $isProtected
+     * @param bool   $allowDefault
+     *
      * @return string
-     * @throws InvalidConfigException
+     * @throws \yii\base\InvalidConfigException
      */
-    public function getFilePath(string $entityName, string $filename) {
-        $entity = $this->getEntityInstance($entityName);
-        $entity->fileName = $filename;
-        $ret = \Yii::$app->urlManager->createUrl(['/files/default/download', 'filePath' => $entity->subdir . $entity->fileName]);
-        return str_replace('%2F', urldecode('%2F'), $ret);
+    public function getFilePath(string $entityType, string $fileName, $isProtected = false, $allowDefault = false, $checkExists = false) {
+        $entity = $this->getEntityInstance($entityType);
+        $entity->fileName = $fileName;
+        $entity->isProtected = $isProtected;
+        return $entity->getFilePath($allowDefault, $checkExists);
     }
-
-    /**
-     * Get files redirect uri
-     * @param $filePath
-     * @return bool|string
-     */
-    public function getFileRedirectUri($filePath) {
-        return \yii::getAlias("@commonFilesUri/$filePath");
-    }
-
+    
     /**
      * Get image uri
-     * @param string $entityName
-     * @param string $imageName
+     *
+     * @param string $entityType
+     * @param string $fileName
+     * @param bool   $allowDefault
+     *
      * @return string
+     * @throws \yii\base\InvalidConfigException
      */
-    public function getFileUri(string $entityName, string $imageName) {
-        $ret = \Yii::$app->urlManager->createUrl(['/files/default/download', 'entityName' => $entityName, 'fileName' => $imageName]);
-        return str_replace('%2F', urldecode('%2F'), $ret);
+    public function getFileUri(string $entityType, string $fileName, $allowDefault = false) {
+        $entity = $this->getEntityInstance($entityType);
+        $entity->fileName = $fileName;
+        return $entity->getUri(false, $allowDefault);
     }
-
+    
     /**
      * Create entity
-     * @param string $entityName
+     *
+     * @param string $entityType
      * @param string $fileName
+     * @param bool   $isProtected
+     *
      * @return BaseFile|object
-     * @throws InvalidConfigException
+     * @throws \yii\base\InvalidConfigException
      */
-    public function createEntity($entityName, $fileName) {
-        if (!array_key_exists($entityName, $this->entities)) {
+    public function createEntity($entityType, $fileName = null, $isProtected = false) {
+        if (is_null($fileName)) {
+            $path = \Yii::getAlias($entityType);
+            $types = implode('|', array_keys($this->entities));
+            $rootPaths = \Yii::getAlias($this->publicPath) . '|' . \Yii::getAlias($this->protectedPath);
+            if (preg_match("%(?P<rootPath>{$rootPaths})/(?P<type>{$types})/(?P<fileName>.+)%", $path, $matches)) {
+                if ($matches['rootPath'] === $this->protectedPath) {
+                    $isProtected = true;
+                }
+                $entityType = $matches['type'];
+                $fileName = $matches['fileName'];
+            }
+        }
+        
+        if (!array_key_exists($entityType, $this->entities)) {
             throw new InvalidConfigException('The requested essence is not defined.');
         }
 
-        $objectData = $this->entities[$entityName];
+        $objectData = $this->entities[$entityType];
         if (!is_array($objectData)) {
             throw new InvalidConfigException('The configuration of this entity should be an array.');
         }
 
-        $objectData['entityName'] = $entityName;
+        $objectData['entityType'] = $entityType;
         $objectData['fileName'] = $fileName;
+        $objectData['filesManager'] = $this;
+        $objectData['isProtected'] = $isProtected;
 
         return \Yii::createObject($objectData);
     }
 
     /**
      * Get entity instance
-     * @param string $entityName
+     * @param string $entityType
      * @return BaseFile|object
      * @throws InvalidConfigException
      */
-    public function getEntityInstance(string $entityName) {
-        if (array_key_exists($entityName, $this->_entityInstances)) {
-            return $this->_entityInstances[$entityName];
+    public function getEntityInstance(string $entityType) {
+        if (array_key_exists($entityType, $this->_entityInstances)) {
+            return $this->_entityInstances[$entityType];
         }
 
-        return $this->createEntity($entityName, '');
+        return $this->createEntity($entityType, '');
     }
 }

@@ -367,6 +367,7 @@ class Module extends \yii\base\Module implements BootstrapInterface
             $rubricsPath[] = $currentRubric;
             /** @var ProductRubric $rubric */
             foreach ($rubricsPath as $rubric) {
+                if ($rubric->level === 0) continue;
                 $label = (string)$rubric;
                 $breadcrumbs[] = [
                     'label' => $label,
@@ -491,12 +492,11 @@ class Module extends \yii\base\Module implements BootstrapInterface
         $entity = $filesManager->getEntityInstance('products/images' . '/' . $thumbName);
         $entity->fileName = $imageName;
 
-        if (!$entity->exists()) {
+        if (!$entity->exists(true)) {
             $entity = $filesManager->getEntityInstance('defaults');
-            $entity->fileName = 'pixel.png';
         }
 
-        return $entity->getUri();
+        return $entity->getUri(false, true);
     }
 
     /**
@@ -514,12 +514,11 @@ class Module extends \yii\base\Module implements BootstrapInterface
         $entity = $filesManager->getEntityInstance('products/images' . '/' . $thumbName);
         $entity->fileName = $imageName;
 
-        if (!$entity->exists()) {
+        if (!$entity->exists(true)) {
             $entity = $filesManager->getEntityInstance('defaults');
-            $entity->fileName = 'pixel.png';
         }
 
-        return $entity->getFilename();
+        return $entity->getFilePath(true);
     }
     /**
      * Get thumbnail path of the brand by image name

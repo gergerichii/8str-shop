@@ -78,14 +78,12 @@ class SiteController extends Controller
     public function actionIndex()
     {
         $params = [];
-        $tags = ProductTag::getDb()->cache(function () {
-            return ProductTag::find()->forFrontEnd()->usedAsGroup()->indexBy('name')
-                ->with(['products' => function (ProductQuery $q) {
-                    $q->forFrontEnd()->showOnHome();
-                }])
-                ->with(['products.rubrics', 'products.price', 'products.oldPrice', 'products.mainRubric'])
-                ->all();
-        });
+        $tags = ProductTag::find()->forFrontEnd()->usedAsGroup()->indexBy('name')
+            ->with(['products' => function (ProductQuery $q) {
+                $q->forFrontEnd()->showOnHome();
+            }])
+            ->with(['products.rubrics', 'products.price', 'products.oldPrice', 'products.mainRubric'])
+            ->all();
 
         $params['topModels'] = ArrayHelper::map($tags, 'name', 'products');
 

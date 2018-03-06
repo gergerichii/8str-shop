@@ -20,9 +20,16 @@ class m130524_201443_create_admin_user extends Migration
             'password' => 'Volga2015',
         ]);
         $user->generateAuthKey();
-        $user->status = User::STATUS_ACTIVE;
-
-        return $user->save();
+        
+        $this->insert('{{%user}}', [
+            'username' => 'admin',
+            'email' => 'admin@8str.ru',
+            'status' => 10,
+            'password_hash' => $user->password_hash,
+            'auth_key' => $user->auth_key,
+            'created_at' => time(),
+            'updated_at' => time(),
+        ]);
     }
 
     /**

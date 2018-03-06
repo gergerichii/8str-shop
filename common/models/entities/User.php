@@ -40,6 +40,10 @@ class User extends BaseActiveRecord implements IdentityInterface {
 
     const SCENARIO_REGISTER_CONSOLE = 'register_console';
     
+    const ADDRESSES_TEMPLATE = [
+        ''
+    ];
+    
     /** @var \common\models\entities\UserAddresses[]  */
     protected $_addresses = [];
 

@@ -14,6 +14,7 @@ use yii\filters\VerbFilter;
 use yii\helpers\Html;
 use yii\helpers\Json;
 use yii\helpers\Url;
+use yii\image\drivers\Image as DriverImage;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\web\Response;
@@ -476,6 +477,7 @@ class DefaultController extends Controller
 
             $uploadedFile->saveAs($image->getFilePath());
 
+            $image->adaptSize(DriverImage::CROP);
             $image->createThumbs();
             $product->addFile($image->fileName);
 

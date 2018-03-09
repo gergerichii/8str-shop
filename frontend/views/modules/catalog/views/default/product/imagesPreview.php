@@ -29,7 +29,7 @@ $filesManager = \Yii::$app->getModule('files');
                 ?>
 
                 <li<?= $active; ?>>
-                    <a data-rel="prettyPhoto[product]" href="<?= $mediumImage; ?>" data-image="<?= $mediumImage; ?>" data-zoom-image="<?= $realImage; ?>" class="product-gallery-item">
+                    <a data-rel="prettyPhoto[product]" href="<?= $realImage; ?>" data-image="<?= $realImage; ?>" data-zoom-image="<?= $realImage; ?>" class="product-gallery-item">
                         <img src="<?= $mediumImage; ?>" alt="<?= $product->name; ?>">
                     </a>
                 </li>
@@ -41,14 +41,15 @@ $filesManager = \Yii::$app->getModule('files');
     <div id="product-image-container">
         <?php
         // TODO Rewrite to get default image
-        $image = null;
+        $largeImage = null;
         if ($product->images && array_key_exists(0, $product->images)) {
-            $image = $filesManager->getFileUri('products/images', $product->images[0]);
+            $largeImage = $filesManager->getFileUri('products/images/large', $product->images[0]);
+            $realImage = $filesManager->getFileUri('products/images', $product->images[0]);
         }
         ?>
 
         <figure>
-            <img src="<?= $image; ?>" data-zoom-image="<?= $image; ?>" alt="<?= $product->name; ?>" id="product-image">
+            <img src="<?= $largeImage; ?>" data-zoom-image="<?= $realImage; ?>" alt="<?= $product->name; ?>" id="product-image">
             <figcaption class="item-price-container">
                 <?php if ($catalog->oldPriceOf($product, false)): ?>
                     <span class="old-price"><?= $catalog->oldPriceOf($product); ?></span>

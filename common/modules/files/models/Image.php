@@ -4,7 +4,6 @@ namespace common\modules\files\models;
 
 use common\modules\files\Module;
 use yii\helpers\FileHelper;
-use yii\image\drivers\Image as ExtImageDriver;
 use yii\image\drivers\Image_GD;
 use yii\image\ImageDriver;
 
@@ -109,7 +108,14 @@ class Image extends BaseFile
     }
     
     /**
+     * Adapt size
+     *
      * @param             $master
+     * ```
+     * Image::CROP
+     * Image::ADAPT
+     * etc.
+     * ```
      *
      * @param string|null $saveAs
      *
@@ -117,6 +123,8 @@ class Image extends BaseFile
      *
      * @return bool
      * @throws \yii\base\ErrorException
+     *
+     * @see \yii\image\drivers\Image
      */
     public function adaptSize($master, $saveAs = null, $force = false) {
         $this->clearErrors();

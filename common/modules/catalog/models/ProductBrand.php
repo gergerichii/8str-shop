@@ -14,6 +14,7 @@ use common\base\models\BaseActiveRecord;
  * @property string $alias
  * @property string $desc
  * @property string $logo
+ * @property int $product_quantity
  *
  * @property Product[] $products
  * @property ProductPriceDiscount[] $productPriceDiscounts

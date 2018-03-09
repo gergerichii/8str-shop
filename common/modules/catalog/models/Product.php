@@ -5,6 +5,7 @@ namespace common\modules\catalog\models;
 use common\helpers\ProductHelper;
 use common\models\entities\User;
 use common\modules\cart\interfaces\CartElement;
+use common\modules\catalog\behaviors\ProductQuantityBehavior;
 use common\modules\catalog\Module;
 use Yii;
 use yii\base\ErrorException;
@@ -164,6 +165,9 @@ class Product extends BaseActiveRecord implements CartElement
                     return json_encode($this->_files);
                 },
             ],
+            /*'product_quantity' => [
+                'class' => ProductQuantityBehavior::class,
+            ]*/
         ];
     }
 
@@ -765,6 +769,7 @@ class Product extends BaseActiveRecord implements CartElement
     public function getOldPrice() {
         /** @var ProductPriceQuery $query */
         $query = $this->hasOne(ProductPrice::class, ['product_id' => 'id']);
+        $query->alias('oldPrice');
         $query->onlyInactive();
         $query->orderBy(['active_from' => SORT_DESC]);
         $query->inverseOf('product');
@@ -779,6 +784,7 @@ class Product extends BaseActiveRecord implements CartElement
         /** @var ProductPriceQuery $query */
         $query = $this->hasOne(ProductPrice::class, ['product_id' => 'id']);
         $query->onlyFuture();
+        $query->alias('futurePrice');
         $query->inverseOf('product');
         return $query;
     }

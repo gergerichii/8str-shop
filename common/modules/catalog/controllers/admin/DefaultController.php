@@ -3,6 +3,8 @@
 namespace common\modules\catalog\controllers\admin;
 
 use common\modules\catalog\models\forms\ProductImagesForm;
+use common\modules\catalog\models\forms\ProductPricesForm;
+use common\modules\catalog\models\Product;
 use common\modules\catalog\models\ProductSearch;
 use common\modules\files\models\Image;
 use common\modules\files\Module;
@@ -22,6 +24,12 @@ use yii\web\UploadedFile;
  */
 class DefaultController extends Controller
 {
+    /**
+     * Enable CSRF validation
+     * @var bool
+     */
+    public $enableCsrfValidation = false;
+
     /**
      * @inheritdoc
      */
@@ -468,7 +476,7 @@ class DefaultController extends Controller
 
             $uploadedFile->saveAs($image->getFilePath());
 
-            $image->getThumbs();
+            $image->createThumbs();
             $product->addFile($image->fileName);
 
             $initialPreview[] = $image->getUri(true);

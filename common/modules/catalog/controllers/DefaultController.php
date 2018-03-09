@@ -3,11 +3,10 @@
 namespace common\modules\catalog\controllers;
 
 use common\base\BaseFrontendController;
+use common\modules\catalog\models\forms\ProductFilterForm;
 use common\modules\catalog\models\Product;
-use common\modules\catalog\models\ProductBrandQuery;
 use common\modules\catalog\Module;
 use common\modules\catalog\providers\FrontendSearchProvider;
-use yii\data\ActiveDataProvider;
 use yii\web\NotFoundHttpException;
 
 /**
@@ -24,50 +23,18 @@ class DefaultController extends BaseFrontendController
      */
     public function actionIndex($catalogPath = '') {
         $request = \Yii::$app->getRequest();
-        $brandAlias = $request->get('brand');
 
         /** @var Module $catalog */
         $catalog = $this->module;
 
-        $query = Product::find()->forFrontEnd()->with('rubrics');
-        if ($catalogPath) {
-            $rubric = $catalog->getRubricByPath($catalogPath);
-            if (!$rubric) {
-                throw new NotFoundHttpException('Путь не найден');
-            }
+        $filterForm = new ProductFilterForm();
+        $filterForm->load($request->get(), '');
 
-            $rubricsIds = array_keys(
-                $rubric->children()->select('id')->asArray()->indexBy('id')->all()
-            );
-
-            $rubricsIds[$rubric->id] = $rubric->id;
-            $query->select('product.*')->distinct()
-                ->joinWith('rubrics r', false)
-                ->joinWith('mainRubric mr', false)
-                ->with('price')
-                ->with('oldPrice')
-                ->andWhere(['or',
-                    ['in', 'r.id', $rubricsIds],
-                    ['in', 'mr.id', $rubricsIds],
-                ]);
-        }
-
-        if (isset($brandAlias)) {
-            $query->joinWith(['brand' => function ($q) {
-                /** @var ProductBrandQuery $q */
-                $q->alias('brand');
-            }]);
-
-            $query->andWhere(['brand.alias' => $brandAlias]);
-        }
-
-        $productsDataProvider = new ActiveDataProvider([
-            'query' => $query,
-        ]);
+        $productsDataProvider = $filterForm->makeProductsProvider();
 
         $this->addBreadcrumbs($catalog->getBreadcrumbs($catalogPath));
 
-        return $this->render('index', compact('catalogPath', 'productsDataProvider'));
+        return $this->render('index', compact('catalogPath', 'productsDataProvider', 'filterForm'));
     }
 
     /**

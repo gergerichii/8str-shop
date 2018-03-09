@@ -517,17 +517,20 @@
         priceSlider: function () {
             /* Price Filter Slider / Category pages */
             if ($.fn.noUiSlider) {
-                $('#price-range').noUiSlider({
-                    range: [0, 999],
-                    start: [0, 999],
-                    handles: 2,
-                    connect: true,
-                    step: 1,
-                    serialization: {
-                        to: [$('#price-range-low'), $('#price-range-high')],
-                        resolution: 1
-                    }
-                });
+                var $priceRange = $('#price-range');
+                if (1 === $priceRange.length) {
+                    $priceRange.noUiSlider({
+                        range: [$priceRange.data('rangeMin'), $priceRange.data('rangeMax')],
+                        start: [$priceRange.data('startMin'), $priceRange.data('startMax')],
+                        handles: 2,
+                        connect: true,
+                        step: 1,
+                        serialization: {
+                            to: [$('#price-range-low'), $('#price-range-high')],
+                            resolution: 1
+                        }
+                    });
+                }
             }
         },
         ratings: function () {

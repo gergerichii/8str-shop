@@ -53,6 +53,8 @@ class AppAsset extends AssetBundle
         'js/jquery.selectbox.min.js',
         'js/jquery.debouncedresize.js',
         'js/jquery.typeahead.js',
+        'js/jquery.nouislider.min.js',
+        'js/jquery.jscrollpane.min.js',
         'js/colpick.js',
         'js/main.js',
     ];

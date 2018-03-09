@@ -317,10 +317,11 @@ class Module extends \yii\base\Module implements BootstrapInterface
 
     /** ---------------------------------Рубрики------------------------------------ */
     /**
+     * Gets the path to the rubric
+     *
      * @param ProductRubric $rubric
      * @param bool $asArray
      * @return array|string
-     *
      */
     public function getRubricPath(ProductRubric $rubric, $asArray = true) {
         if (empty($rubric->material_path)) {
@@ -392,6 +393,7 @@ class Module extends \yii\base\Module implements BootstrapInterface
     }
 
     /**
+     * Get rubric by path
      * @param string $path
      * @return bool|ProductRubric
      */
@@ -518,8 +520,8 @@ class Module extends \yii\base\Module implements BootstrapInterface
         }
 
         return $entity->getFilePath(true);
-    }
-    
+    }/** @noinspection PhpUndefinedClassInspection */
+
     /**
      * Update future price
      * @param Product $product
@@ -640,6 +642,7 @@ class Module extends \yii\base\Module implements BootstrapInterface
 
         return $price;
     }
+
     /**
      * Get thumbnail path of the brand by image name
      *
@@ -662,6 +665,31 @@ class Module extends \yii\base\Module implements BootstrapInterface
         }
 
         return $entity->getFilename();
+    }
+
+    /**
+     * Recalculate the quantity of products in each rubric
+     *
+     * @return true;
+     */
+    public function recalculateQuantity() {
+        try {
+            Yii::$app->getDb()->createCommand('UPDATE product_rubric' .
+                ' LEFT JOIN (' .
+                'SELECT parent.id, COUNT(product.name) as product_quantity' .
+                ' FROM product_rubric AS node, product_rubric AS parent, product' .
+                ' LEFT JOIN product2product_rubric as rlink ON rlink.product_id = product.id' .
+                ' WHERE node.left_key BETWEEN parent.left_key AND parent.right_key AND node.id = rlink.rubric_id' .
+                ' GROUP BY parent.id' .
+                ') calculated' .
+                ' ON calculated.id = product_rubric.id' .
+                ' SET product_rubric.product_quantity = calculated.product_quantity')->execute();
+        } catch (\Exception $exception) {
+            Yii::debug('Failed to recalculate the quantity of products in each rubric.');
+            return false;
+        }
+
+        return true;
     }
 
     /**

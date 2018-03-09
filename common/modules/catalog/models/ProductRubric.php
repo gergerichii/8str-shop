@@ -6,7 +6,6 @@ use common\base\models\nestedSets\NSActiveRecord;
 use common\modules\treeManager\models\TreeTrait;
 use yii\behaviors\TimestampBehavior;
 use yii\db\Expression;
-use Yii;
 
 /**
  * This is the model class for table "product_rubric".
@@ -23,6 +22,7 @@ use Yii;
  * @property int $visible_on_home_page Whether to show rubrics that are hidden on the home page
  * @property string $created_at
  * @property string $modified_at
+ * @property int $product_quantity
  *
  * @property string $icon
  *

@@ -64,7 +64,7 @@ class FileInput extends \kartik\widgets\FileInput
         $index = 1;
         $urlDelete = Url::to(['/catalog/default/delete-image']);
         foreach ($files as $file) {
-            $image = $fileManager->createEntity($this->$entityType, $file);
+            $image = $fileManager->createEntity($this->entityType, $file);
             if (!$image->exists()) {
                 continue;
             }

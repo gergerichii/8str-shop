@@ -30,9 +30,9 @@ $catalog = \Yii::$app->getModule('catalog');
     </div>
 
     <div class="widget">
-        <h3>Brands</h3>
+        <h3>Производители</h3>
 
-        <?= Menu::widget([
+        <?= LeftMenu::widget([
             'options' => [
                 'tag' => 'div',
                 'class' => 'list-group list-group-brand'

@@ -51,6 +51,7 @@ $config = [
                 '/' => 'site/index',
                 '/login' => '/site/login',
                 '/logout' => '/site/logout',
+                '/signup' => '/site/signup',
                 '/error' => '/site/error',
                 '/request-password-reset' => '/site/request-password-reset',
                 '/reset-password' => '/site/reset-password',

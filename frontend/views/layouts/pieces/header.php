@@ -14,6 +14,10 @@ use yii\helpers\Url;
 /* @var $this \yii\web\View */
 /* @var $content string */
 
+/** @var \yii\web\User $user */
+$user = yii::$app->getUser();
+/** @var \yii\web\UrlManager $adminUrlManager */
+$adminUrlManager = Yii::$app->get('adminUrlManager');
 ?>
 
 <header id="header" class="header6">
@@ -23,15 +27,26 @@ use yii\helpers\Url;
                 <div class="col-md-12">
                     <div class="header-top-left">
                         <ul id="top-links" class="clearfix">
-                            <li><a href="#" title="Избранные товары"><span class="top-icon top-icon-pencil"></span><span class="hide-for-xs">Избранные товары</span></a></li>
-                            <li><a href="#" title="Мой аккаунт"><span class="top-icon top-icon-user"></span><span class="hide-for-xs">Мой аккаунт</span></a></li>
-                            <li><a href="cart.html" title="Корзина"><span class="top-icon top-icon-cart"></span><span class="hide-for-xs">Корзина</span></a></li>
-                            <li><a href="checkout.html" title="Сделать заказ"><span class="top-icon top-icon-check"></span><span class="hide-for-xs">Сделать заказ</span></a></li>
+<!--                            <li><a href="#" title="Избранные товары"><span class="top-icon top-icon-pencil"></span><span class="hide-for-xs">Избранные товары</span></a></li>-->
+<!--                            <li><a href="#" title="Мой аккаунт"><span class="top-icon top-icon-user"></span><span class="hide-for-xs">Мой аккаунт</span></a></li>-->
+                            <li><a href="<?=Url::toRoute('cart/default/index')?>" title="Корзина"><span class="top-icon top-icon-cart"></span><span  class="hide-for-xs">Корзина</span></a></li>
+                            <li><a href="<?=Url::toRoute('order/default/index')?>" title="Оформить заказ"><span class="top-icon top-icon-check"></span><span class="hide-for-xs">Оформить заказ</span></a></li>
                         </ul>
                     </div><!-- End .header-top-left -->
                     <div class="header-top-right">
                         <div class="header-text-container pull-right">
-                            <p class="header-link"><a href="#">Вход</a>&nbsp;или&nbsp;<a href="#">Создать аккаунт</a></p>
+                            <p class="header-link">
+                                <?php if ($user->isGuest): ?>
+                                    <a href="<?=Url::toRoute($user->loginUrl)?>">Вход</a>
+                                    &nbsp;или&nbsp;
+                                    <a href="<?=Url::toRoute('/site/signup')?>">Создать аккаунт</a>
+                                <?php else: ?>
+                                    <?php if($user->can('access_to_admin_panel')): ?>
+                                        <a href="<?=$adminUrlManager->createAbsoluteUrl(['/'])?>">Админка</a> |
+                                    <?php endif; ?>
+                                    <a href="<?=Url::toRoute('/site/logout')?>">(<?= Yii::$app->user->getIdentity()->username ?>) Выход </a>
+                                <?php endif; ?>
+                            </p>
                         </div><!-- End .float-right -->
                     </div><!-- End .header-top-right -->
                 </div><!-- End .col-md-12 -->

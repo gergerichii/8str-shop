@@ -57,6 +57,11 @@
                             ['label' => 'Create', 'icon' => 'plus', 'url' => ['/catalog/default/create']],
                         ]
                     ],
+                    [
+                        'label' => 'Articles',
+                        'icon' => 'list',
+                        'url' => ['/articles'],
+                    ],
                     ['label' => 'Login', 'url' => ['site/login'], 'visible' => Yii::$app->user->isGuest],
                     ['label' => 'Site', 'icon' => 'square' , 'template' => '<a href="http://' . Yii::$app->shop_8strUrlManager->createAbsoluteUrl('/site/index') . '">{icon} {label}</a>'],
                 ],

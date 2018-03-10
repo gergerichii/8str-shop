@@ -199,6 +199,60 @@ use yii\helpers\Url;
                                                     <li><a href="#">Jackets &amp; Coats</a></li>
                                                 </ul>
                                             </div><!-- End .col-5 -->
+                                            <div class="col-5">
+                                                <a href="category.html" class="mega-menu-title">Clothing</a><!-- End .mega-menu-title -->
+                                                <ul class="mega-menu-list clearfix">
+                                                    <li><a href="#">Dresses</a></li>
+                                                    <li><a href="#">Jeans &amp; Trousers</a></li>
+                                                    <li><a href="#">Blouses &amp; Shirts</a></li>
+                                                    <li><a href="#">Tops &amp; T-Shirts</a></li>
+                                                    <li><a href="#">Jackets &amp; Coats</a></li>
+                                                    <li><a href="#">Skirts</a></li>
+                                                </ul>
+                                            </div><!-- End .col-5 -->
+                                            <div class="col-5">
+                                                <a href="category.html" class="mega-menu-title">Shoes</a><!-- End .mega-menu-title -->
+                                                <ul class="mega-menu-list clearfix">
+                                                    <li><a href="#">Formal Shoes</a></li>
+                                                    <li><a href="#">Casual Shoes</a></li>
+                                                    <li><a href="#">Sandals</a></li>
+                                                    <li><a href="#">Boots</a></li>
+                                                    <li><a href="#">Wide Fit</a></li>
+                                                    <li><a href="#">Slippers</a></li>
+                                                </ul>
+                                            </div><!-- End .col-5 -->
+                                            <div class="col-5">
+                                                <a href="category.html" class="mega-menu-title">Accessories</a><!-- End .mega-menu-title -->
+                                                <ul class="mega-menu-list clearfix">
+                                                    <li><a href="#">Bags &amp; Purses</a></li>
+                                                    <li><a href="#">Belts</a></li>
+                                                    <li><a href="#">Gloves</a></li>
+                                                    <li><a href="#">Jewellery</a></li>
+                                                    <li><a href="#">Sunglasses</a></li>
+                                                    <li><a href="#">Hair Accessories</a></li>
+                                                </ul>
+                                            </div><!-- End .col-5 -->
+                                            <div class="col-5">
+                                                <a href="category.html" class="mega-menu-title">Sports</a><!-- End .mega-menu-title -->
+                                                <ul class="mega-menu-list clearfix">
+                                                    <li><a href="#">Sport Tops &amp; Vests</a></li>
+                                                    <li><a href="#">Swimwear</a></li>
+                                                    <li><a href="#">Footwear</a></li>
+                                                    <li><a href="#">Sports Underwear</a></li>
+                                                    <li><a href="#">Bags</a></li>
+                                                </ul>
+                                            </div><!-- End .col-5 -->
+
+                                            <div class="col-5">
+                                                <a href="category.html" class="mega-menu-title">Maternity</a><!-- End .mega-menu-title -->
+                                                <ul class="mega-menu-list clearfix">
+                                                    <li><a href="#">Tops &amp; Skirts</a></li>
+                                                    <li><a href="#">Dresses</a></li>
+                                                    <li><a href="#">Trousers &amp; Shorts</a></li>
+                                                    <li><a href="#">Knitwear</a></li>
+                                                    <li><a href="#">Jackets &amp; Coats</a></li>
+                                                </ul>
+                                            </div><!-- End .col-5 -->
                                     </div><!-- End .mega-menu -->
                                 </li>
 

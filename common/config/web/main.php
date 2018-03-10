@@ -27,6 +27,14 @@ $config = [
         ],
     ],
     'components' => [
+        'i18n' => [
+            'translations' => [
+                'traits' => [
+                    'class' => 'yii\i18n\PhpMessageSource',
+                    'basePath' => '@vendor/cinghie/yii2-traits/messages',
+                ],
+            ],
+        ],
         'user' => [
             'identityClass' => 'common\models\entities\User',
             'enableAutoLogin' => true,
@@ -94,7 +102,72 @@ $config = [
                 'depthAttribute' => 'level',
             ]
         ],
-        'news' => '\common\modules\news\Module'
+        'news' => '\common\modules\news\Module',
+        'articles' => [
+            'class' => 'cinghie\articles\Articles',
+            'userClass' => \common\models\entities\User::class,
+
+            // Select Languages allowed
+            'languages' => [
+                "ru-RU" => "ru-RU",
+            ],
+
+            // Select Date Format
+            'dateFormat' => 'd F Y',
+
+            // Select Editor: no-editor, ckeditor, imperavi, tinymce, markdown
+            'editor' => 'ckeditor',
+
+            // Select Path To Upload Category Image
+            'categoryImagePath' => '@webroot/img/articles/categories/',
+            // Select URL To Upload Category Image
+            'categoryImageURL'  => '@web/img/articles/categories/',
+            // Select Path To Upload Category Thumb
+            'categoryThumbPath' => '@webroot/img/articles/categories/thumb/',
+            // Select URL To Upload Category Image
+            'categoryThumbURL'  => '@web/img/articles/categories/thumb/',
+
+            // Select Path To Upload Item Image
+            'itemImagePath' => '@webroot/img/articles/items/',
+            // Select URL To Upload Item Image
+            'itemImageURL' => '@web/img/articles/items/',
+            // Select Path To Upload Item Thumb
+            'itemThumbPath' => '@webroot/img/articles/items/thumb/',
+            // Select URL To Upload Item Thumb
+            'itemThumbURL' => '@web/img/articles/items/thumb/',
+
+            // Select Path To Upload Attachments
+            'attachPath' => '@webroot/attachments/',
+            // Select URL To Upload Attachment
+            'attachURL' => '@web/img/articles/items/',
+            // Select Image Types allowed
+            'attachType' => ['jpg','jpeg','gif','png','csv','pdf','txt','doc','docs'],
+
+            // Select Image Name: categoryname, original, casual
+            'imageNameType' => 'categoryname',
+            // Select Image Types allowed
+            'imageType' => ['png','jpg','jpeg'],
+            // Thumbnails Options
+            'thumbOptions'  => [
+                'small'  => ['quality' => 100, 'width' => 150, 'height' => 100],
+                'medium' => ['quality' => 100, 'width' => 200, 'height' => 150],
+                'large'  => ['quality' => 100, 'width' => 300, 'height' => 250],
+                'extra'  => ['quality' => 100, 'width' => 400, 'height' => 350],
+            ],
+
+            // Slugify Options
+            'slugifyOptions' => [
+                'separator' => '-',
+                'lowercase' => true,
+                'trim' => true,
+                'rulesets'  => [
+                    'default'
+                ]
+            ],
+
+            // Show Titles in the views
+            'showTitles' => true,
+        ],
     ],
 ];
 

@@ -19,6 +19,7 @@ return [
                 '@common/modules/treeManager/migrations',
 //                '@yii/rbac/migrations',
                 '@yii/rbac/migrations',
+                '@vendor/cinghie/yii2-articles/migrations',
 //                '@yii/log/migrations',
 //                '@yii/i18n/migrations',
 //                '@yii/caching/migrations',

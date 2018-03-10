@@ -28,7 +28,7 @@ $config = [
             'class' => 'yii\caching\FileCache',
         ],
         'formatter' => [
-            'class' => common\components\Formatter::className(),
+            'class' => common\components\Formatter::class,
             'currencyShowDecimals' => false,
             'currencySymbol' => '₽',
         ],

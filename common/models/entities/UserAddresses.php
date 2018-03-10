@@ -35,7 +35,7 @@ class UserAddresses extends BaseActiveRecord
             [['user_id', 'city', 'address'], 'required'],
             [['user_id'], 'integer'],
             [['region', 'city', 'address'], 'string', 'max' => 255],
-            [['user_id'], 'exist', 'skipOnError' => true, 'targetClass' => User::className(), 'targetAttribute' => ['user_id' => 'id']],
+            [['user_id'], 'exist', 'skipOnError' => true, 'targetClass' => User::class, 'targetAttribute' => ['user_id' => 'id']],
         ];
     }
 
@@ -58,7 +58,7 @@ class UserAddresses extends BaseActiveRecord
      */
     public function getUser()
     {
-        return $this->hasOne(User::className(), ['id' => 'user_id']);
+        return $this->hasOne(User::class, ['id' => 'user_id']);
     }
 
     /**

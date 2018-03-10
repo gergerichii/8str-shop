@@ -173,12 +173,12 @@ class Element extends \common\base\models\BaseActiveRecord implements ElementInt
         $modelStr = $this->model;
         $productModel = new $modelStr();
         
-        return $this->hasOne($productModel::className(), ['id' => 'item_id'])->one();
+        return $this->hasOne($productModel::class, ['id' => 'item_id'])->one();
     }
     
     public function getOrder()
     {
-        return $this->hasOne(Order::className(), ['id' => 'order_id']);
+        return $this->hasOne(Order::class, ['id' => 'order_id']);
     }
 
     public function getModel($withCartElementModel = true)

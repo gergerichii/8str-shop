@@ -67,7 +67,7 @@ class NSActiveRecord extends BaseActiveRecord {
     {
         return [
             'slugBehavior' => [
-                'class' => SlugBehavior::className(),
+                'class' => SlugBehavior::class,
                 'slugField' => 'name',
             ]
         ];

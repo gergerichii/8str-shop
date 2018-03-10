@@ -32,8 +32,8 @@ class ProductTag2product extends BaseActiveRecord
         return [
             [['product_tag_id', 'product_id'], 'required'],
             [['product_tag_id', 'product_id'], 'integer'],
-            [['product_id'], 'exist', 'skipOnError' => true, 'targetClass' => Product::className(), 'targetAttribute' => ['product_id' => 'id']],
-            [['product_tag_id'], 'exist', 'skipOnError' => true, 'targetClass' => ProductTag::className(), 'targetAttribute' => ['product_tag_id' => 'id']],
+            [['product_id'], 'exist', 'skipOnError' => true, 'targetClass' => Product::class, 'targetAttribute' => ['product_id' => 'id']],
+            [['product_tag_id'], 'exist', 'skipOnError' => true, 'targetClass' => ProductTag::class, 'targetAttribute' => ['product_tag_id' => 'id']],
         ];
     }
 
@@ -53,7 +53,7 @@ class ProductTag2product extends BaseActiveRecord
      */
     public function getProduct()
     {
-        return $this->hasOne(Product::className(), ['id' => 'product_id'])->inverseOf('productTag2products');
+        return $this->hasOne(Product::class, ['id' => 'product_id'])->inverseOf('productTag2products');
     }
 
     /**
@@ -61,7 +61,7 @@ class ProductTag2product extends BaseActiveRecord
      */
     public function getProductTag()
     {
-        return $this->hasOne(ProductTag::className(), ['id' => 'product_tag_id'])->inverseOf('productTag2products');
+        return $this->hasOne(ProductTag::class, ['id' => 'product_tag_id'])->inverseOf('productTag2products');
     }
 
     /**

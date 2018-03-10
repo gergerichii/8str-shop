@@ -15,7 +15,7 @@ return [
             'class' => '\kartik\grid\Module'
         ],
         'order' => [
-            'class' => common\modules\order\Module::className(),
+            'class' => common\modules\order\Module::class,
             'controllerNamespace' => 'common\modules\order\controllers\admin',
             'viewPath' => '@common/modules/order/views/admin'
         ],

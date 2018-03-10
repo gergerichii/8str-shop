@@ -34,8 +34,8 @@ class RelatedProduct2product extends BaseActiveRecord
             [['parent_product_id', 'related_product_id'], 'integer'],
             [['parent_product_id', 'related_product_id'], 'unique', 'targetAttribute' => ['parent_product_id', 'related_product_id']],
             [['related_product_id', 'parent_product_id'], 'unique', 'targetAttribute' => ['related_product_id', 'parent_product_id']],
-            [['parent_product_id'], 'exist', 'skipOnError' => true, 'targetClass' => Product::className(), 'targetAttribute' => ['parent_product_id' => 'id']],
-            [['related_product_id'], 'exist', 'skipOnError' => true, 'targetClass' => Product::className(), 'targetAttribute' => ['related_product_id' => 'id']],
+            [['parent_product_id'], 'exist', 'skipOnError' => true, 'targetClass' => Product::class, 'targetAttribute' => ['parent_product_id' => 'id']],
+            [['related_product_id'], 'exist', 'skipOnError' => true, 'targetClass' => Product::class, 'targetAttribute' => ['related_product_id' => 'id']],
         ];
     }
 
@@ -55,7 +55,7 @@ class RelatedProduct2product extends BaseActiveRecord
      */
     public function getParentProduct()
     {
-        return $this->hasOne(Product::className(), ['id' => 'parent_product_id'])->inverseOf('relatedProduct2products');
+        return $this->hasOne(Product::class, ['id' => 'parent_product_id'])->inverseOf('relatedProduct2products');
     }
 
     /**
@@ -63,7 +63,7 @@ class RelatedProduct2product extends BaseActiveRecord
      */
     public function getRelatedProduct()
     {
-        return $this->hasOne(Product::className(), ['id' => 'related_product_id'])->inverseOf('relatedProduct2products0');
+        return $this->hasOne(Product::class, ['id' => 'related_product_id'])->inverseOf('relatedProduct2products0');
     }
 
     /**

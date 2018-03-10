@@ -32,7 +32,7 @@ class ProductPrice extends BaseActiveRecord implements ProductPriceInterface
     public function behaviors() {
         return [
             [
-                'class' => BlameableBehavior::className(),
+                'class' => BlameableBehavior::class,
                 'createdByAttribute' => 'author_id',
                 'updatedByAttribute' => false,
             ],
@@ -60,8 +60,8 @@ class ProductPrice extends BaseActiveRecord implements ProductPriceInterface
             [['value'], 'number'],
             [['domain_name'], 'string', 'max' => 150],
             [['domain_name', 'product_id', 'active_from'], 'unique', 'targetAttribute' => ['domain_name', 'product_id', 'active_from']],
-            [['author_id'], 'exist', 'skipOnError' => true, 'targetClass' => User::className(), 'targetAttribute' => ['author_id' => 'id']],
-            [['product_id'], 'exist', 'skipOnError' => true, 'targetClass' => Product::className(), 'targetAttribute' => ['product_id' => 'id']],
+            [['author_id'], 'exist', 'skipOnError' => true, 'targetClass' => User::class, 'targetAttribute' => ['author_id' => 'id']],
+            [['product_id'], 'exist', 'skipOnError' => true, 'targetClass' => Product::class, 'targetAttribute' => ['product_id' => 'id']],
         ];
     }
 
@@ -99,14 +99,14 @@ class ProductPrice extends BaseActiveRecord implements ProductPriceInterface
      * @return \yii\db\ActiveQuery
      */
     public function getAuthor() {
-        return $this->hasOne(User::className(), ['id' => 'author_id'])->inverseOf('productPrices');
+        return $this->hasOne(User::class, ['id' => 'author_id'])->inverseOf('productPrices');
     }
 
     /**
      * @return \yii\db\ActiveQuery
      */
     public function getProduct() {
-        return $this->hasOne(Product::className(), ['id' => 'product_id'])->inverseOf('productPrices');
+        return $this->hasOne(Product::class, ['id' => 'product_id'])->inverseOf('productPrices');
     }
 
     /**

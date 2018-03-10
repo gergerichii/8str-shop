@@ -17,7 +17,7 @@ class FieldController  extends Controller
     {
         return [
 //            'access' => [
-//                'class' => AccessControl::className(),
+//                'class' => AccessControl::class,
 //                'rules' => [
 //                    [
 //                        'allow' => true,
@@ -26,7 +26,7 @@ class FieldController  extends Controller
 //                ]
 //            ],
             'verbs' => [
-                'class' => VerbFilter::className(),
+                'class' => VerbFilter::class,
                 'actions' => [
                     'delete' => ['post'],
                 ],

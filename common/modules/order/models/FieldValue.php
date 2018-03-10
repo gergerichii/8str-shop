@@ -24,7 +24,7 @@ class FieldValue extends \common\base\models\BaseActiveRecord
 
     public function getField()
     {
-        return $this->hasOne(Field::className(), ['id' => 'field_id'])->one();
+        return $this->hasOne(Field::class, ['id' => 'field_id'])->one();
     }
     
     public function attributeLabels()

@@ -107,7 +107,7 @@ class ProductRubric extends NSActiveRecord
     public function behaviors() {
         $behaviors = parent::behaviors();
         $behaviors[] = [
-            'class' => TimestampBehavior::className(),
+            'class' => TimestampBehavior::class,
             'createdAtAttribute' => 'created_at',
             'updatedAtAttribute' => 'modified_at',
             'value' => new Expression('NOW()'),
@@ -158,7 +158,7 @@ class ProductRubric extends NSActiveRecord
      */
     public function getProduct2productRubrics()
     {
-        return $this->hasMany(Product2productRubric::className(), ['rubric_id' => 'id'])->inverseOf('rubric');
+        return $this->hasMany(Product2productRubric::class, ['rubric_id' => 'id'])->inverseOf('rubric');
     }
 
     /**
@@ -166,7 +166,7 @@ class ProductRubric extends NSActiveRecord
      */
     public function getProducts()
     {
-        return $this->hasMany(Product::className(), ['id' => 'product_id'])->viaTable('product2product_rubric', ['rubric_id' => 'id']);
+        return $this->hasMany(Product::class, ['id' => 'product_id'])->viaTable('product2product_rubric', ['rubric_id' => 'id']);
     }
 
     /**
@@ -174,7 +174,7 @@ class ProductRubric extends NSActiveRecord
      */
     public function getProductPriceDiscounts()
     {
-        return $this->hasMany(ProductPriceDiscount::className(), ['product_rubric_id' => 'id'])->inverseOf('productRubric');
+        return $this->hasMany(ProductPriceDiscount::class, ['product_rubric_id' => 'id'])->inverseOf('productRubric');
     }
 
     /**

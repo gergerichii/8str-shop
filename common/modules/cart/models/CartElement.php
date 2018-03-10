@@ -214,7 +214,7 @@ class CartElement extends BaseActiveRecord implements Element
 
     public function getCart()
     {
-        return $this->hasOne(Cart::className(), ['id' => 'cart_id']);
+        return $this->hasOne(Cart::class, ['id' => 'cart_id']);
     }
 
     public function rules()

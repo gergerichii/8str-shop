@@ -33,7 +33,7 @@ class Module extends \yii\base\Module implements BootstrapInterface
         if (!$app->get('cartService', false)) {
             $app->setComponents([
                 'cartService' => [
-                    'class' => CartService::className(),
+                    'class' => CartService::class,
                 ],
             ]);
         }

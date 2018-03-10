@@ -38,11 +38,11 @@ class Payment extends \common\base\models\BaseActiveRecord
     
     public function getOrder()
     {
-        return $this->hasOne(Order::className(), ['id' => 'order_id']);
+        return $this->hasOne(Order::class, ['id' => 'order_id']);
     }
     
     public function getPayment()
     {
-        return $this->hasOne(PaymentType::className(), ['id' => 'payment_type_id']);
+        return $this->hasOne(PaymentType::class, ['id' => 'payment_type_id']);
     }
 }

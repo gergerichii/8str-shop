@@ -36,12 +36,12 @@ class Field extends \common\base\models\BaseActiveRecord
     
     public function getType()
     {
-        return $this->hasOne(FieldType::className(), ['id' => 'type_id'])->one();
+        return $this->hasOne(FieldType::class, ['id' => 'type_id'])->one();
     }
     
     public function getValue($orderId)
     {
-        if($value = $this->hasOne(FieldValue::className(), ['field_id' => 'id'])->andWhere(['order_id' => $orderId])->one()) {
+        if($value = $this->hasOne(FieldValue::class, ['field_id' => 'id'])->andWhere(['order_id' => $orderId])->one()) {
             return $value->value;
         }
         else {
@@ -51,12 +51,12 @@ class Field extends \common\base\models\BaseActiveRecord
     
     public function getVariants()
     {
-        return $this->hasMany(FieldValueVariant::className(), ['field_id' => 'id']);
+        return $this->hasMany(FieldValueVariant::class, ['field_id' => 'id']);
     }
     
     public function beforeDelete()
     {
-        foreach ($this->hasMany(FieldValue::className(), ['field_id' => 'id'])->all() as $val) {
+        foreach ($this->hasMany(FieldValue::class, ['field_id' => 'id'])->all() as $val) {
             $val->delete();
         }
 

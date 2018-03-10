@@ -63,7 +63,7 @@ trait TreeTrait
     public static function find()
     {
         /** @noinspection PhpUndefinedFieldInspection */
-        $treeQuery = isset(self::$treeQueryClass) ? self::$treeQueryClass : TreeQuery::classname();
+        $treeQuery = isset(self::$treeQueryClass) ? self::$treeQueryClass : TreeQuery::class;
         return new $treeQuery(get_called_class());
     }
 
@@ -73,7 +73,7 @@ trait TreeTrait
     public static function createQuery()
     {
         /** @noinspection PhpUndefinedFieldInspection */
-        $treeQuery = isset(self::$treeQueryClass) ? self::$treeQueryClass : TreeQuery::classname();
+        $treeQuery = isset(self::$treeQueryClass) ? self::$treeQueryClass : TreeQuery::class;
         return new $treeQuery(['modelClass' => get_called_class()]);
     }
 
@@ -83,7 +83,7 @@ trait TreeTrait
     public function behaviors()
     {
         $module = TreeView::module();
-        $settings = ['class' => NestedSetsBehavior::className()] + $module->treeStructure;
+        $settings = ['class' => NestedSetsBehavior::class] + $module->treeStructure;
         return empty($module->treeBehaviorName) ? [$settings] : [$module->treeBehaviorName => $settings];
     }
 

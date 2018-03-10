@@ -49,7 +49,7 @@ NumberControl::$autoIdPrefix = 'numberControl';
     ?>
 
     <?php /*=
-    $form->field($model, 'desc')->widget(TinyMce::className(), [
+    $form->field($model, 'desc')->widget(TinyMce::class, [
         'options' => ['rows' => 6],
         'language' => 'ru',
         'clientOptions' => [

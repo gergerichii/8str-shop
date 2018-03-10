@@ -144,18 +144,18 @@ class Product extends BaseActiveRecord implements CartElement
     public function behaviors() {
         return [
             'blameable' => [
-                'class' => BlameableBehavior::className(),
+                'class' => BlameableBehavior::class,
                 'createdByAttribute' => 'creator_id',
                 'updatedByAttribute' => 'modifier_id',
             ],
             [
-                'class' => TimestampBehavior::className(),
+                'class' => TimestampBehavior::class,
                 'createdAtAttribute' => 'created_at',
                 'updatedAtAttribute' => 'modified_at',
                 'value' => new Expression('NOW()'),
             ],
             [
-                'class' => AttributeBehavior::className(),
+                'class' => AttributeBehavior::class,
                 'attributes' => [
                     ActiveRecord::EVENT_BEFORE_VALIDATE => 'files',
                     ActiveRecord::EVENT_BEFORE_INSERT => 'files',
@@ -217,11 +217,11 @@ class Product extends BaseActiveRecord implements CartElement
             [['name'], 'string', 'max' => 150],
             [['title'], 'string', 'max' => 255],
             [['name'], 'unique'],
-            [['brand_id'], 'exist', 'skipOnError' => true, 'targetClass' => ProductBrand::className(), 'targetAttribute' => ['brand_id' => 'id']],
-            [['creator_id'], 'exist', 'skipOnError' => true, 'targetClass' => User::className(), 'targetAttribute' => ['creator_id' => 'id']],
-            [['modifier_id'], 'exist', 'skipOnError' => true, 'targetClass' => User::className(), 'targetAttribute' => ['modifier_id' => 'id']],
-            [['product_type_id'], 'exist', 'skipOnError' => true, 'targetClass' => ProductType::className(), 'targetAttribute' => ['product_type_id' => 'id']],
-            [['main_rubric_id'], 'exist', 'skipOnError' => true, 'targetClass' => ProductRubric::className(), 'targetAttribute' => ['main_rubric_id' => 'id']],
+            [['brand_id'], 'exist', 'skipOnError' => true, 'targetClass' => ProductBrand::class, 'targetAttribute' => ['brand_id' => 'id']],
+            [['creator_id'], 'exist', 'skipOnError' => true, 'targetClass' => User::class, 'targetAttribute' => ['creator_id' => 'id']],
+            [['modifier_id'], 'exist', 'skipOnError' => true, 'targetClass' => User::class, 'targetAttribute' => ['modifier_id' => 'id']],
+            [['product_type_id'], 'exist', 'skipOnError' => true, 'targetClass' => ProductType::class, 'targetAttribute' => ['product_type_id' => 'id']],
+            [['main_rubric_id'], 'exist', 'skipOnError' => true, 'targetClass' => ProductRubric::class, 'targetAttribute' => ['main_rubric_id' => 'id']],
             [['listOfRubrics', 'tagCollection', 'fieldForFuturePrice'], 'safe'],
             [['priceValue'], 'number', 'min' => 0],
 
@@ -427,91 +427,91 @@ class Product extends BaseActiveRecord implements CartElement
      * @return \yii\db\ActiveQuery
      */
     public function getBrand() {
-        return $this->hasOne(ProductBrand::className(), ['id' => 'brand_id'])->inverseOf('products');
+        return $this->hasOne(ProductBrand::class, ['id' => 'brand_id'])->inverseOf('products');
     }
 
     /**
      * @return \yii\db\ActiveQuery
      */
     public function getCreator() {
-        return $this->hasOne(User::className(), ['id' => 'creator_id'])->inverseOf('products');
+        return $this->hasOne(User::class, ['id' => 'creator_id'])->inverseOf('products');
     }
 
     /**
      * @return \yii\db\ActiveQuery
      */
     public function getModifier() {
-        return $this->hasOne(User::className(), ['id' => 'modifier_id'])->inverseOf('products0');
+        return $this->hasOne(User::class, ['id' => 'modifier_id'])->inverseOf('products0');
     }
 
     /**
      * @return \yii\db\ActiveQuery
      */
     public function getType() {
-        return $this->hasOne(ProductType::className(), ['id' => 'product_type_id'])->inverseOf('products');
+        return $this->hasOne(ProductType::class, ['id' => 'product_type_id'])->inverseOf('products');
     }
 
     /**
      * @return \yii\db\ActiveQuery
      */
     public function getProduct2Rubrics() {
-        return $this->hasMany(Product2productRubric::className(), ['product_id' => 'id'])->inverseOf('product');
+        return $this->hasMany(Product2productRubric::class, ['product_id' => 'id'])->inverseOf('product');
     }
 
     /**
      * @return \yii\db\ActiveQuery
      */
     public function getRubrics() {
-        return $this->hasMany(ProductRubric::className(), ['id' => 'rubric_id'])->viaTable('product2product_rubric', ['product_id' => 'id']);
+        return $this->hasMany(ProductRubric::class, ['id' => 'rubric_id'])->viaTable('product2product_rubric', ['product_id' => 'id']);
     }
 
     /**
      * @return \yii\db\ActiveQuery
      */
     public function getMainRubric() {
-        return $this->hasOne(ProductRubric::className(), ['id' => 'main_rubric_id']);
+        return $this->hasOne(ProductRubric::class, ['id' => 'main_rubric_id']);
     }
 
     /**
      * @return ActiveQuery|ProductPriceQuery
      */
     public function getPrices() {
-        return $this->hasMany(ProductPrice::className(), ['product_id' => 'id'])->inverseOf('product');
+        return $this->hasMany(ProductPrice::class, ['product_id' => 'id'])->inverseOf('product');
     }
 
     /**
      * @return \yii\db\ActiveQuery
      */
     public function getRelatedProduct2productsParent() {
-        return $this->hasMany(RelatedProduct2product::className(), ['parent_product_id' => 'id'])->inverseOf('parentProduct');
+        return $this->hasMany(RelatedProduct2product::class, ['parent_product_id' => 'id'])->inverseOf('parentProduct');
     }
 
     /**
      * @return \yii\db\ActiveQuery
      */
     public function getRelatedProduct2productsChild() {
-        return $this->hasMany(RelatedProduct2product::className(), ['related_product_id' => 'id'])->inverseOf('relatedProduct');
+        return $this->hasMany(RelatedProduct2product::class, ['related_product_id' => 'id'])->inverseOf('relatedProduct');
     }
 
     /**
      * @return \yii\db\ActiveQuery
      */
     public function getRelatedProducts() {
-        return $this->hasMany(Product::className(), ['id' => 'related_product_id'])->viaTable('related_product2product', ['parent_product_id' => 'id']);
+        return $this->hasMany(Product::class, ['id' => 'related_product_id'])->viaTable('related_product2product', ['parent_product_id' => 'id']);
     }
 
     /**
      * @return \yii\db\ActiveQuery
      */
     public function getParentProducts() {
-        return $this->hasMany(Product::className(), ['id' => 'parent_product_id'])->viaTable('related_product2product', ['related_product_id' => 'id']);
+        return $this->hasMany(Product::class, ['id' => 'parent_product_id'])->viaTable('related_product2product', ['related_product_id' => 'id']);
     }
 
     /**
      * @return \yii\db\ActiveQuery
      */
     public function getTags2products() {
-        return $this->hasMany(ProductTag2product::className(), ['product_id' => 'id'])->inverseOf('product');
+        return $this->hasMany(ProductTag2product::class, ['product_id' => 'id'])->inverseOf('product');
     }
 
     /**

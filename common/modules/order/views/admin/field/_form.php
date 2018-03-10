@@ -61,7 +61,7 @@ use yii\helpers\ArrayHelper;
                 'filterModel' => $searchModel,
                 'columns' => [
                     [
-                        'class' => \dosamigos\grid\columns\EditableColumn::className(),
+                        'class' => \dosamigos\grid\columns\EditableColumn::class,
                         'attribute' => 'value',
                         'url' => ['/order/field-value-variant/editable'],
                         'filter' => false,

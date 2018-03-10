@@ -56,7 +56,7 @@ class NodeController extends Controller
     public function behaviors() {
         return [
             'access' => [
-                'class' => AccessControl::className(),
+                'class' => AccessControl::class,
                 'rules' => [
                     [
                         'allow' => true,
@@ -156,7 +156,7 @@ class NodeController extends Controller
      */
     protected static function getModelClass($data = [])
     {
-        return ArrayHelper::getValue($data, 'modelClass', Tree::className());
+        return ArrayHelper::getValue($data, 'modelClass', Tree::class);
     }
 
     /**
@@ -336,7 +336,7 @@ class NodeController extends Controller
                 ];
             if (!empty($module->unsetAjaxBundles)) {
                 Event::on(
-                    View::className(), View::EVENT_AFTER_RENDER, function ($e) use ($module) {
+                    View::class, View::EVENT_AFTER_RENDER, function ($e) use ($module) {
                     foreach ($module->unsetAjaxBundles as $bundle) {
                         unset($e->sender->assetBundles[$bundle]);
                     }

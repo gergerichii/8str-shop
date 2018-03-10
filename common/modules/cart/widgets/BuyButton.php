@@ -85,7 +85,7 @@ class BuyButton extends Widget
             'data-price' => (int)$this->price,
             'data-options' => json_encode($this->options),
             'data-description' => $this->description,
-            'data-model' => $model::className()
+            'data-model' => get_class($model)
         ]);
     }
 }

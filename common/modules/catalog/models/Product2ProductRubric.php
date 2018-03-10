@@ -34,8 +34,8 @@ class Product2ProductRubric extends BaseActiveRecord
             [['product_id', 'rubric_id'], 'integer'],
             [['product_id', 'rubric_id'], 'unique', 'targetAttribute' => ['product_id', 'rubric_id']],
             [['rubric_id', 'product_id'], 'unique', 'targetAttribute' => ['rubric_id', 'product_id']],
-            [['product_id'], 'exist', 'skipOnError' => true, 'targetClass' => Product::className(), 'targetAttribute' => ['product_id' => 'id']],
-            [['rubric_id'], 'exist', 'skipOnError' => true, 'targetClass' => ProductRubric::className(), 'targetAttribute' => ['rubric_id' => 'id']],
+            [['product_id'], 'exist', 'skipOnError' => true, 'targetClass' => Product::class, 'targetAttribute' => ['product_id' => 'id']],
+            [['rubric_id'], 'exist', 'skipOnError' => true, 'targetClass' => ProductRubric::class, 'targetAttribute' => ['rubric_id' => 'id']],
         ];
     }
 
@@ -55,7 +55,7 @@ class Product2ProductRubric extends BaseActiveRecord
      */
     public function getProduct()
     {
-        return $this->hasOne(Product::className(), ['id' => 'product_id'])->inverseOf('product2ProductRubrics');
+        return $this->hasOne(Product::class, ['id' => 'product_id'])->inverseOf('product2ProductRubrics');
     }
 
     /**
@@ -63,7 +63,7 @@ class Product2ProductRubric extends BaseActiveRecord
      */
     public function getRubric()
     {
-        return $this->hasOne(ProductRubric::className(), ['id' => 'rubric_id'])->inverseOf('product2ProductRubrics');
+        return $this->hasOne(ProductRubric::class, ['id' => 'rubric_id'])->inverseOf('product2ProductRubrics');
     }
 
     /**

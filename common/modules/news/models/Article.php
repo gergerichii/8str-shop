@@ -43,24 +43,24 @@ class Article extends ActiveRecord
     public function behaviors() {
         return [
             'blameable' => [
-                'class' => BlameableBehavior::className(),
+                'class' => BlameableBehavior::class,
                 'createdByAttribute' => 'creator_id',
                 'updatedByAttribute' => 'modifier_id',
             ],
             'timestamps' => [
-                'class' => TimestampBehavior::className(),
+                'class' => TimestampBehavior::class,
                 'createdAtAttribute' => 'created_at',
                 'updatedAtAttribute' => 'modified_at',
                 'value' => new Expression('NOW()'),
             ],
             'publish' => [
-                'class' => TimestampBehavior::className(),
+                'class' => TimestampBehavior::class,
                 'createdAtAttribute' => 'published_at',
                 'updatedAtAttribute' => false,
                 'value' => new Expression('NOW()'),
             ],
             'alias' => [
-                'class' => SluggableBehavior::className(),
+                'class' => SluggableBehavior::class,
                 'attribute' => 'title',
                 'slugAttribute' => 'alias'
             ],
@@ -78,8 +78,8 @@ class Article extends ActiveRecord
             [['creator_id', 'modifier_id', 'external_id'], 'integer'],
             [['title', 'alias'], 'string', 'max' => 255],
             [['image'], 'string', 'max' => 512],
-            [['creator_id'], 'exist', 'skipOnError' => true, 'targetClass' => User::className(), 'targetAttribute' => ['creator_id' => 'id']],
-            [['modifier_id'], 'exist', 'skipOnError' => true, 'targetClass' => User::className(), 'targetAttribute' => ['modifier_id' => 'id']],
+            [['creator_id'], 'exist', 'skipOnError' => true, 'targetClass' => User::class, 'targetAttribute' => ['creator_id' => 'id']],
+            [['modifier_id'], 'exist', 'skipOnError' => true, 'targetClass' => User::class, 'targetAttribute' => ['modifier_id' => 'id']],
         ];
     }
 
@@ -107,13 +107,13 @@ class Article extends ActiveRecord
      * @return \yii\db\ActiveQuery
      */
     public function getCreator() {
-        return $this->hasOne(User::className(), ['id' => 'creator_id']);
+        return $this->hasOne(User::class, ['id' => 'creator_id']);
     }
 
     /**
      * @return \yii\db\ActiveQuery
      */
     public function getModifier() {
-        return $this->hasOne(User::className(), ['id' => 'modifier_id']);
+        return $this->hasOne(User::class, ['id' => 'modifier_id']);
     }
 }

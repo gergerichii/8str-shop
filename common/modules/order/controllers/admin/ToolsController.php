@@ -13,7 +13,7 @@ class ToolsController  extends Controller
     {
         return [
 //            'access' => [
-//                'class' => AccessControl::className(),
+//                'class' => AccessControl::class,
 //                'only' => ['ajax-elements-list'],
 //                'rules' => [
 //                    [

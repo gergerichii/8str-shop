@@ -14,10 +14,10 @@ return [
             'class' => 'common\modules\catalog\Module',
         ],
         'order' => [
-            'class' => common\modules\order\Module::className(),
+            'class' => common\modules\order\Module::class,
         ],
         'cart' => [
-            'class' => common\modules\cart\Module::className(),
+            'class' => common\modules\cart\Module::class,
         ],
     ],
     'components' => [

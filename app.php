@@ -37,9 +37,9 @@ $config = $configurator->getConfig(APP_BASE_DIR, $isTest);
 //exit;
 
 if (strpos(APP_BASE_DIR, 'console') !== false) {
-    $class = \yii\console\Application::className();
+    $class = \yii\console\Application::class;
 } else {
-    $class = \yii\web\Application::className();
+    $class = \yii\web\Application::class;
 }
 
 return new $class($config);

@@ -26,7 +26,7 @@ class OrderController  extends Controller
     {
         return [
 //            'adminAccess' => [
-//                'class' => AccessControl::className(),
+//                'class' => AccessControl::class,
 //                'only' => ['update', 'index', 'view', 'print', 'delete', 'editable', 'to-order', 'update-status'],
 //                'rules' => [
 //                    [
@@ -36,7 +36,7 @@ class OrderController  extends Controller
 //                ]
 //            ],
             'verbs' => [
-                'class' => VerbFilter::className(),
+                'class' => VerbFilter::class,
                 'actions' => [
                     'delete' => ['post'],
                     'to-order' => ['post'],

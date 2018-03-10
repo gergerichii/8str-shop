@@ -134,7 +134,7 @@ class Order extends \common\base\models\BaseActiveRecord implements OrderInterfa
     
     public function getTotal()
     {
-        return floatVal($this->hasMany(Element::className(), ['order_id' => 'id'])->sum('price*count'));
+        return floatVal($this->hasMany(Element::class, ['order_id' => 'id'])->sum('price*count'));
     }
 
     public function getTotalFormatted()
@@ -174,14 +174,14 @@ class Order extends \common\base\models\BaseActiveRecord implements OrderInterfa
 
     public function getPaymentType()
     {
-        return $this->hasOne(PaymentType::className(), ['id' => 'payment_type_id']);
+        return $this->hasOne(PaymentType::class, ['id' => 'payment_type_id']);
     }
     
     public function getUser()
     {
         $userModel = yii::$app->getModule('order')->userModel;
         if($userModel && class_exists($userModel)) {
-            return $this->hasOne($userModel::className(), ['id' => 'seller_user_id']);
+            return $this->hasOne($userModel::class, ['id' => 'seller_user_id']);
         }
         
         return null;
@@ -196,7 +196,7 @@ class Order extends \common\base\models\BaseActiveRecord implements OrderInterfa
     {
         $userModel = yii::$app->getModule('order')->sellerModel;
         if($userModel && class_exists($userModel)) {
-            return $this->hasOne($userModel::className(), ['id' => 'seller_user_id']);
+            return $this->hasOne($userModel::class, ['id' => 'seller_user_id']);
         }
         
         return null;
@@ -204,22 +204,22 @@ class Order extends \common\base\models\BaseActiveRecord implements OrderInterfa
     
     public function getPayment()
     {
-        return $this->hasOne(Payment::className(), ['order_id' => 'id']);
+        return $this->hasOne(Payment::class, ['order_id' => 'id']);
     }
     
     public function getShipping()
     {
-        return $this->hasOne(ShippingType::className(), ['id' => 'shipping_type_id']);
+        return $this->hasOne(ShippingType::class, ['id' => 'shipping_type_id']);
     }
     
     public function getCount()
     {
-        return intval($this->hasMany(Element::className(), ['order_id' => 'id'])->sum('count'));
+        return intval($this->hasMany(Element::class, ['order_id' => 'id'])->sum('count'));
     }
 
     public function getFields()
     {
-        return $this->hasMany(FieldValue::className(), ['order_id' => 'id']);
+        return $this->hasMany(FieldValue::class, ['order_id' => 'id']);
     }
     
     public function getAllFields()
@@ -229,7 +229,7 @@ class Order extends \common\base\models\BaseActiveRecord implements OrderInterfa
     
     public function getElementsRelation()
     {
-        return $this->hasMany(Element::className(), ['order_id' => 'id'])->where('({{%order_element}}.is_deleted IS NULL OR {{%order_element}}.is_deleted != 1)');
+        return $this->hasMany(Element::class, ['order_id' => 'id'])->where('({{%order_element}}.is_deleted IS NULL OR {{%order_element}}.is_deleted != 1)');
     }
     
     public function getElements($withModel = true)
@@ -252,12 +252,12 @@ class Order extends \common\base\models\BaseActiveRecord implements OrderInterfa
 
     public function getElementById($id)
     {
-        return $this->hasMany(Element::className(), ['order_id' => 'id'])->andWhere(['id' => $id])->one();
+        return $this->hasMany(Element::class, ['order_id' => 'id'])->andWhere(['id' => $id])->one();
     }
 
     public function haveModelElements($modelName)
     {
-        if ($this->hasMany(Element::className(), ['order_id' => 'id'])->andWhere(['model' => $modelName])->one()) {
+        if ($this->hasMany(Element::class, ['order_id' => 'id'])->andWhere(['model' => $modelName])->one()) {
             return true;
         } else {
             return false;

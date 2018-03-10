@@ -46,7 +46,7 @@ class ProductTag extends BaseActiveRecord
     public function behaviors(){
         return [
             [
-                'class' => AttributeBehavior::className(),
+                'class' => AttributeBehavior::class,
                 'attributes' => [
                     ActiveRecord::EVENT_BEFORE_VALIDATE => 'add_data',
                     ActiveRecord::EVENT_BEFORE_INSERT => 'add_data',
@@ -120,7 +120,7 @@ class ProductTag extends BaseActiveRecord
      */
     public function getProductPriceDiscounts()
     {
-        return $this->hasMany(ProductPriceDiscount::className(), ['product_tag_id' => 'id'])->inverseOf('productTag');
+        return $this->hasMany(ProductPriceDiscount::class, ['product_tag_id' => 'id'])->inverseOf('productTag');
     }
 
     /**
@@ -128,14 +128,14 @@ class ProductTag extends BaseActiveRecord
      */
     public function getProductTag2products()
     {
-        return $this->hasMany(ProductTag2product::className(), ['product_tag_id' => 'id'])->inverseOf('productTag');
+        return $this->hasMany(ProductTag2product::class, ['product_tag_id' => 'id'])->inverseOf('productTag');
     }
     /**
      * @return \yii\db\ActiveQuery
      */
     public function getProducts()
     {
-        return $this->hasMany(Product::className(), ['id' => 'product_id'])
+        return $this->hasMany(Product::class, ['id' => 'product_id'])
             ->viaTable('product_tag2product', ['product_tag_id' => 'id']);
     }
 

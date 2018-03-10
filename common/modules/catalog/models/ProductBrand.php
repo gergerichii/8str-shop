@@ -34,7 +34,7 @@ class ProductBrand extends BaseActiveRecord
     public function behaviors() {
         return [
             'alias' => [
-                'class' => SluggableBehavior::className(),
+                'class' => SluggableBehavior::class,
                 'attribute' => 'name',
                 'slugAttribute' => 'alias',
                 'ensureUnique' => true
@@ -83,7 +83,7 @@ class ProductBrand extends BaseActiveRecord
      * @return \yii\db\ActiveQuery
      */
     public function getProducts() {
-        return $this->hasMany(Product::className(), ['brand_id' => 'id'])->inverseOf('brand');
+        return $this->hasMany(Product::class, ['brand_id' => 'id'])->inverseOf('brand');
     }
 
     /**
@@ -92,7 +92,7 @@ class ProductBrand extends BaseActiveRecord
      * @return \yii\db\ActiveQuery
      */
     public function getProductPriceDiscounts() {
-        return $this->hasMany(ProductPriceDiscount::className(), ['product_brand_id' => 'id'])->inverseOf('productBrand');
+        return $this->hasMany(ProductPriceDiscount::class, ['product_brand_id' => 'id'])->inverseOf('productBrand');
     }
 
     /**

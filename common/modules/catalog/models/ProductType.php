@@ -56,7 +56,7 @@ class ProductType extends BaseActiveRecord
      */
     public function getProducts()
     {
-        return $this->hasMany(Product::className(), ['product_type_id' => 'id'])->inverseOf('productType');
+        return $this->hasMany(Product::class, ['product_type_id' => 'id'])->inverseOf('productType');
     }
 
     /**

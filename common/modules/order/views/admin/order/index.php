@@ -31,7 +31,7 @@ $timeStop = yii::$app->request->get('time_stop');
 $columns = [];
 
 $columns[] = [
-    'class' => \yii\grid\SerialColumn::className(),
+    'class' => \yii\grid\SerialColumn::class,
 ];
 
 $columns[] = [

@@ -55,8 +55,8 @@ class ProductPriceDiscount extends BaseActiveRecord
             [['weight'], 'number'],
             [['name', 'title'], 'string', 'max' => 155],
             [['name'], 'unique'],
-            [['author_id'], 'exist', 'skipOnError' => true, 'targetClass' => User::className(), 'targetAttribute' => ['author_id' => 'id']],
-            [['product_tag_id'], 'exist', 'skipOnError' => true, 'targetClass' => ProductTag::className(), 'targetAttribute' => ['product_tag_id' => 'id']],
+            [['author_id'], 'exist', 'skipOnError' => true, 'targetClass' => User::class, 'targetAttribute' => ['author_id' => 'id']],
+            [['product_tag_id'], 'exist', 'skipOnError' => true, 'targetClass' => ProductTag::class, 'targetAttribute' => ['product_tag_id' => 'id']],
         ];
     }
 
@@ -91,7 +91,7 @@ class ProductPriceDiscount extends BaseActiveRecord
      */
     public function getAuthor()
     {
-        return $this->hasOne(User::className(), ['id' => 'author_id'])->inverseOf('productPriceDiscounts');
+        return $this->hasOne(User::class, ['id' => 'author_id'])->inverseOf('productPriceDiscounts');
     }
 
     /**
@@ -99,7 +99,7 @@ class ProductPriceDiscount extends BaseActiveRecord
      */
     public function getProductTag()
     {
-        return $this->hasOne(ProductTag::className(), ['id' => 'product_tag_id'])->inverseOf('productPriceDiscounts');
+        return $this->hasOne(ProductTag::class, ['id' => 'product_tag_id'])->inverseOf('productPriceDiscounts');
     }
 
     /**

@@ -71,7 +71,7 @@ class DataController extends Controller
 
         $productsItems = array_map(function ($product) use ($catalog, $filesManager) {
             $pictureName = isset($product->images[0]) ? $product->images[0] : 'default.jpg';
-            $pictureSrc = $filesManager->getFileUri('products/images/little', $pictureName);
+            $pictureSrc = $catalog->getProductThumbnailUri($pictureName, 'little');
 
             $template = $this->renderPartial('search/product', [
                 'model' => $product,
@@ -83,7 +83,7 @@ class DataController extends Controller
             /** @var Product $product */
             return [
                 'id' => $product->id,
-                'name' => $product,
+                'name' => $product->name,
                 'picture' => $product->mainImage,
                 'type' => 'template',
                 'template' => $template,

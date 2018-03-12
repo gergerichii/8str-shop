@@ -138,12 +138,15 @@ class FrontendSearchProvider extends BaseDataProvider
         if ($productsIndexes) {
             $rubricIds = $root->children()
                 ->select('id')
-                ->andWhere('visible_on_home_page=1')
                 ->column();
 
             $productQuery = Product::find()->alias('p')
                 ->joinWith('rubrics')
-                ->andFilterWhere(['in', 'product_rubric.id', $rubricIds])
+                ->andFilterWhere([
+                    'or',
+                    ['in', 'p.main_rubric_id', $rubricIds],
+                    ['in', 'product_rubric.id', $rubricIds]
+                ])
                 ->andFilterWhere(['in', 'p.id', $productsIndexes]);
 
             $this->_amountOfProducts = $productQuery->count();

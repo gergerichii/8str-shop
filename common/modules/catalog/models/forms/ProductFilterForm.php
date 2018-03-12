@@ -184,7 +184,11 @@ class ProductFilterForm extends Model
             ->leftJoin(Product2ProductRubric::tableName() . ' rlink', '`rlink`.`product_id` = `product`.`id`')
             ->andWhere([
                 'and',
-                'rubric.id = rlink.rubric_id',
+                [
+                    'or',
+                    'rubric.id = rlink.rubric_id',
+                    'rubric.id = product.main_rubric_id'
+                ],
                 'rubric.left_key BETWEEN parentRubric.left_key AND parentRubric.right_key',
                 ['>', 'parentRubric.left_key', $rubric->left_key],
                 ['<', 'parentRubric.right_key', $rubric->right_key],

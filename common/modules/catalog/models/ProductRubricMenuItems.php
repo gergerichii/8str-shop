@@ -14,6 +14,7 @@ class ProductRubricMenuItems
 
     /**
      * ProductRubricMenuItems constructor.
+     * 
      * @param array $rubrics
      * @param callable $callback
      */
@@ -24,6 +25,7 @@ class ProductRubricMenuItems
 
     /**
      * Render menu items
+     * 
      * @return array
      */
     public function render() {
@@ -33,6 +35,7 @@ class ProductRubricMenuItems
 
     /**
      * Get menu items as tree
+     * 
      * @param int $level
      * @return array
      */
@@ -47,14 +50,13 @@ class ProductRubricMenuItems
             // TODO Related level
             if ($rubric->level == $childrenLevel) {
                 $childrens[$index] = $node;
+                $index++;
+                next($this->rubrics);
             } elseif ($rubric->level > $childrenLevel) {
                 $childrens[$index - 1]['items'] = $this->getTree($childrenLevel);
             } else {
                 break;
             }
-
-            $index++;
-            next($this->rubrics);
         }
 
         return $childrens;

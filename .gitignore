@@ -9,6 +9,9 @@
 # netbeans project files
 nbproject
 
+# visual studio files
+.vscode
+
 # zend studio for eclipse project files
 .buildpath
 .project
@@ -22,7 +25,7 @@ Thumbs.db
 
 # composer itself is not needed
 composer.phar
-#composer.lock
+composer.lock
 
 # Mac DS_Store Files
 .DS_Store
@@ -34,7 +37,10 @@ phpunit.phar
 
 # vagrant runtime
 /.vagrant
+
+# nodejs
 /node_modules
+package-lock.json
 
 /runtime
 .idea

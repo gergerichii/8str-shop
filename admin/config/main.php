@@ -31,6 +31,9 @@ return [
                 '/search' => '/site/search',
                 // kartik\grid for export in rbac
                 '/gridview/export/download' => '/gridview/export/download',
+                // Articles
+                '/articles' => '/articles/default/index',
+                '/articles/items' => '/articles/items/index'
             ],
         ],
     ],

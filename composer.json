@@ -45,7 +45,9 @@
         "kartik-v/yii2-mpdf": "@dev",
         "nex/yii2-datepicker": "@dev",
         "dvizh/yii2-order": "@dev",
-        "kartik-v/yii2-grid": "@dev"
+        "kartik-v/yii2-grid": "@dev",
+        "cinghie/yii2-articles": "dev-fix@dev",
+        "cinghie/yii2-traits": "dev-fixes@dev"
     },
     "config": {
         "process-timeout": 1800
@@ -54,6 +56,14 @@
         {
             "type": "composer",
             "url": "https://asset-packagist.org"
+        },
+        {
+            "type": "vcs",
+            "url": "https://github.com/ivanchenkoandriy/yii2-articles"
+        },
+        {
+            "type": "vcs",
+            "url": "https://github.com/ivanchenkoandriy/yii2-traits"
         }
     ]
 }

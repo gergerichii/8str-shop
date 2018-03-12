@@ -37,7 +37,7 @@ $adminUrlManager = Yii::$app->get('adminUrlManager');
                         <div class="header-text-container pull-right">
                             <p class="header-link">
                                 <?php if ($user->isGuest): ?>
-                                    <a href="<?=Url::toRoute($user->loginUrl)?>">Вход</a>
+                                    <a href="<?=Url::toRoute('/site/login')?>">Вход</a>
                                     &nbsp;или&nbsp;
                                     <a href="<?=Url::toRoute('/site/signup')?>">Создать аккаунт</a>
                                 <?php else: ?>

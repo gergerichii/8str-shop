@@ -18,6 +18,7 @@ use yii\db\Query;
 use yii\helpers\Console;
 use yii\helpers\StringHelper;
 use yii\image\drivers\Image as ImgDriver;
+use yii\helpers\ArrayHelper as ArrayHelper;
 
 /**
  * Действия с базой на сайте 8str.ru
@@ -58,6 +59,21 @@ class OldbaseController extends BaseController
             'type' => 'int',
         ],
     ];
+    
+    private const RUBRICS_ORDER = [
+        1 => NULL, 13 => 1, 230 => 1, 231 => 230, 232 => 230, 200 => 1, 238 => 200, 236 => 200, 237 => 200, 20 => 1,
+        19 => 1, 73 => 1, 60 => 1, 74 => 1, 53 => 1, 54 => 1, 24 => 1, 225 => 1, 55 => 1,
+        -1 => [
+            'rubric_name' => 'Видеонаблюдение',
+            'rubric_id' => 10000,
+        ],
+        26 => 10000, 239 => 26, 4 => 26, 216 => 4, 217 => 4, 148 => 4, 218 => 4, 147 => 4, 51 => 26, 155 => 26, 235 => 155,
+        157 => 26, 102 => 10000, 198 => 102, 196 => 102, 197 => 102, 3 => 10000, 96 => 3, 80 => 3, 62 => 3, 2 => 3,
+        5 => NULL, 122 => 5, 112 => 5, 114 => 5, 111 => 5, 224 => 5, 110 => 5, 113 => 5, 115 => 5, 109 => 5, 123 => 5,
+        52 => NULL, 12 => NULL, 107 => 12, 118 => 12, 108 => 12, 15 => NULL, 79 => NULL, 168 => 79, 170 => 79,
+        206 => 79, 169 => 79, 25 => NULL, 57 => 25, 56 => 25, 18 => NULL,
+    ];
+    
     private const CHANGE_PRODUCT_FIELDS = [
         1505 => [
             'field' => 'name',
@@ -533,27 +549,48 @@ class OldbaseController extends BaseController
             ->leftJoin('{{%taxonomy_term_data}} as {{p}}', '{{h}}.[[parent]] = {{p}}.[[tid]]')
             ->where(['{{c}}.[[vid]]' => 2])->orderBy('{{p}}.[[tid]]');
 
-        $batch = $query->batch(100, $remoteDb);
+        $batch = $query->batch(1000, $remoteDb);
         $rubricsPull = [];
         $createdRubrics = [];
+        $rubricsOrder = self::RUBRICS_ORDER;
         do {
             if (empty($rubricsPull) || !empty($rubricsPull[0]['depends_on'])) {
                 $batch->next();
                 $rubricsPull = array_merge((array)$batch->current(), $rubricsPull);
             }
 
-            $currentRubric = array_shift($rubricsPull);
-            if (!empty($currentRubric['parent_rubric_id'])) {
-                if (!isset($createdRubrics[$currentRubric['parent_rubric_id']])) {
-                    $currentRubric['depends_on'] = $currentRubric['parent_rubric_id'];
+            if ((int)key($rubricsOrder) < 0) {
+                $currentRubric = current($rubricsOrder);
+                unset($rubricsOrder[key($rubricsOrder)]);
+                $rubricsOrder = ArrayHelper::merge([$currentRubric['rubric_id'] => null], $rubricsOrder);
+            } else {
+                $currentRubric = array_shift($rubricsPull);
+            }
+            if (array_key_exists($currentRubric['rubric_id'], $rubricsOrder)) {
+                /* Если рубрика в списке сортировки, но еще не пришла ее очередь, отложим ее */
+                if ($currentRubric['rubric_id'] != key($rubricsOrder)) {
+                    array_push($rubricsPull, $currentRubric);
+                    continue;
+                }
+                $parentRubricId = $rubricsOrder[$currentRubric['rubric_id']];
+            } else {
+                $parentRubricId = $currentRubric['parent_rubric_id'];
+            }
+            /* Если у рубрики есть родитель */
+            if (!empty($parentRubricId)) {
+                /* Если родитель еще не записан в базу, тогда отложим рубрику пока родитель не будет записан. */
+                if (!isset($createdRubrics[$parentRubricId])) {
+                    $currentRubric['depends_on'] = $parentRubricId;
                     array_push($rubricsPull, $currentRubric);
                     continue;
                 }
 
+                /* Если текущая рубрика еще не записана в базу */
                 if (!$newRubric = ProductRubric::findOne(['old_id' => $currentRubric['rubric_id']])) {
-                    if (!$parentRubric = ProductRubric::findOne(['old_id' => $currentRubric['parent_rubric_id']])) {
+                    /* Если родительская рубрика есть в массиве записанных, но отсутствует в базе */
+                    if (!$parentRubric = ProductRubric::findOne(['old_id' => $parentRubricId])) {
                         $this->error('Непредвиденная ошибка. Невозможно найти родительскую рубрику old_id=' .
-                            $currentRubric['parent_rubric_id']);
+                            $parentRubricId);
                         return 1;
                     }
                     
@@ -561,11 +598,13 @@ class OldbaseController extends BaseController
                     $newRubric = new ProductRubric([
                         'name' => $currentRubric['rubric_name'],
                         'old_id' => $currentRubric['rubric_id'],
-                        'old_parent_id' => $currentRubric['parent_rubric_id'],
+                        'old_parent_id' => $parentRubricId,
                     ]);
     
                     $newRubric->appendTo($parentRubric);
+                    unset($rubricsOrder[key($rubricsOrder)]);
                 }
+                /* Если у рубрики нет родителя и эта рубрика еще не записана в базу */
             } elseif (!$newRubric = ProductRubric::findOne(['old_id' => $currentRubric['rubric_id']])) {
                 /** @noinspection MissedFieldInspection */
                 $newRubric = new ProductRubric([
@@ -573,6 +612,7 @@ class OldbaseController extends BaseController
                     'name' => $currentRubric['rubric_name']
                 ]);
                 $newRubric->appendTo($rootRubric);
+                unset($rubricsOrder[key($rubricsOrder)]);
             }
 
             $createdRubrics[$newRubric->getAttribute('old_id')] = $newRubric->id;

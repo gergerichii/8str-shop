@@ -2,7 +2,7 @@
 return [
     'components' => [
         'urlManager' => [
-            'hostInfo' => 'test.8str.ru'
+            'hostInfo' => 'https://test.8str.ru'
         ],
         'user' => [
             'identityCookie' => [

@@ -32,10 +32,15 @@ $config = [
             'currencyShowDecimals' => false,
             'currencySymbol' => '₽',
         ],
-        'image' => array(
+        'image' => [
             'class' => '\yii\image\ImageDriver',
             'driver' => 'GD',
-        )
+        ],
+        'session' => [
+            'class' => 'yii\web\DbSession',
+            'db' => 'db',  // ID компонента для взаимодействия с БД. По умолчанию 'db'.
+            'sessionTable' => 'session', // название таблицы для хранения данных сессии. По умолчанию 'session'.
+        ],
     ],
     'modules' => [
         'files' => [

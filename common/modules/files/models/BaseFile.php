@@ -110,7 +110,7 @@ abstract class BaseFile extends Model
         $path = $this->filesManager->$pathField;
         $path = \Yii::getAlias($path . DIRECTORY_SEPARATOR . $this->entityType . DIRECTORY_SEPARATOR);
         $filePath = $path . $this->fileName;
-        if ($checkExists && (!$this->fileName || !file_exists($filePath))) {
+        if (($checkExists || $allowDefault) && (!$this->fileName || !file_exists($filePath))) {
             if ($allowDefault && $this->defaultFile) {
                 $filePath = $path . $this->defaultFile;
                 if (!file_exists($filePath)) {

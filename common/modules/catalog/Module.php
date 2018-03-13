@@ -404,8 +404,9 @@ class Module extends \yii\base\Module implements BootstrapInterface
      * @return array
      */
     public function getMenuStructure($depth, $showHidden = false) {
-        $cacheKey = __CLASS__ . '::' . __FUNCTION__;
+        $cacheKey = __CLASS__ . '::' . __FUNCTION__ . '::' . $depth . '::' . $showHidden;
         $cache = Yii::$app->getCache();
+//        $cache->flush();
         $data = $cache->get($cacheKey);
         if (false !== $data) {
             return $data;

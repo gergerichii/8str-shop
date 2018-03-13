@@ -254,6 +254,25 @@ shop.cart = {
         jQuery('.shop-cart-block').replaceWith(json.elementsHTML);
         jQuery('.shop-cart-count').html(json.count);
         jQuery('.shop-cart-price').html(json.price);
+        jQuery('.shop-cart-checkout-btn').toggle(!!json.count);
+        
+        if (json.action && json.elementName) {
+            switch (json.action) {
+                case 'delete':
+                    message = 'Товар "' + json.elementName + '" удален из орзины';
+                    break;
+                case 'update':
+                    message = 'Обновлено количество товара "' + json.elementName + '" в корзине';
+                    break;
+                case 'create':
+                    message = 'Товар "' + json.elementName + '" добавлен в корзину';
+                    break;
+                default:
+                    message = 'Изменение товаров в корзине';
+                    break;
+            }
+            $.notify({"icon":"glyphicon glyphicon-fire","id":"w2","message":message},{"placement":{"from":"top","align":"right"},"mouse_over":"pause","type":"success"});
+        }
 
         jQuery(document).trigger("renderCart", json);
 

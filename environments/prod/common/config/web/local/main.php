@@ -1,5 +1,5 @@
 <?php
-return [
+$config = [
     'components' => [
         'user' => [
             'identityCookie' => ['name' => '_identity8str', 'httpOnly' => true, 'domain' => '.8str.ru'],
@@ -10,3 +10,7 @@ return [
         ],
     ],
 ];
+
+$config['modules']['debug']['allowedIPs'][] = '195.19.215.184';
+
+return $config;

@@ -19,6 +19,8 @@ use common\modules\catalog\widgets\MainSearchWidget;
 $user = yii::$app->getUser();
 /** @var \yii\web\UrlManager $adminUrlManager */
 $adminUrlManager = Yii::$app->get('adminUrlManager');
+$cartService = yii::$app->get('cartService');
+$count = $cartService->getCount();
 ?>
 
 <header id="header" class="header6">
@@ -30,8 +32,12 @@ $adminUrlManager = Yii::$app->get('adminUrlManager');
                         <ul id="top-links" class="clearfix">
 <!--                            <li><a href="#" title="Избранные товары"><span class="top-icon top-icon-pencil"></span><span class="hide-for-xs">Избранные товары</span></a></li>-->
 <!--                            <li><a href="#" title="Мой аккаунт"><span class="top-icon top-icon-user"></span><span class="hide-for-xs">Мой аккаунт</span></a></li>-->
-                            <li><a href="<?=Url::toRoute('cart/default/index')?>" title="Корзина"><span class="top-icon top-icon-cart"></span><span  class="hide-for-xs">Корзина</span></a></li>
-                            <li><a href="<?=Url::toRoute('order/default/index')?>" title="Оформить заказ"><span class="top-icon top-icon-check"></span><span class="hide-for-xs">Оформить заказ</span></a></li>
+                            <li>
+                                <a href="<?=Url::toRoute('cart/default/index')?>" title="Корзина"><span class="top-icon top-icon-cart"></span><span  class="hide-for-xs">Корзина</span></a>
+                            </li>
+                            <li style="display: <?= ($count) ? 'initial' : 'none' ?>;" class="shop-cart-checkout-btn">
+                                <a href="<?=Url::toRoute('order/default/index')?>" title="Оформить заказ"><span class="top-icon top-icon-check"></span><span class="hide-for-xs">Оформить заказ</span></a>
+                            </li>
                         </ul>
                     </div><!-- End .header-top-left -->
                     <div class="header-top-right">
@@ -100,8 +106,10 @@ $adminUrlManager = Yii::$app->get('adminUrlManager');
                                     </ul><!-- .dropdown-cart-total -->
                                     <div class="dropdown-cart-action">
                                         <p><a href="<?= Url::toRoute('/cart/default/index') ?>" class="btn btn-custom-2 btn-block">Корзина</a></p>
-                                        <p><a href="<?= Url::toRoute('/order/default/index') ?>" class="btn
-                                        btn-custom btn-block">Оформить</a></p>
+                                        <?php /** @var \common\modules\cart\CartService $cartService */ ?>
+                                        <p style="display: <?= ($count) ? 'initial' : 'none' ?>;" class="shop-cart-checkout-btn">
+                                            <a href="<?=Url::toRoute('/order/default/index') ?>" class="btn btn-custom btn-block">Оформить</a>
+                                        </p>
                                     </div><!-- End .dropdown-cart-action -->
                                 </div><!-- End .dropdown-cart -->
                             </div><!-- End .btn-group -->
@@ -114,16 +122,16 @@ $adminUrlManager = Yii::$app->get('adminUrlManager');
 
                         <div class="header-box contact-infos pull-right">
                             <ul>
-                                <li><span class="header-box-icon header-box-icon-skype"></span>venedor_support</li>
-                                <li><span class="header-box-icon header-box-icon-email"></span><a href="mailto:venedor@gmail.com">venedor@gmail.com</a></li>
+                                <li><span class="header-box-icon header-box-icon-skype"></span>8th_strazh</li>
+                                <li><span class="header-box-icon header-box-icon-email"></span><a href="mailto:712700@bk.ru">712700@bk.ru</a></li>
                             </ul>
                         </div><!-- End .contact-infos -->
 
                         <div class="header-box contact-phones pull-right clearfix">
                             <span class="header-box-icon header-box-icon-earphones"></span>
                             <ul class="pull-left">
-                                <li>+(404) 158 14 25 78</li>
-                                <li>+(404) 851 21 48 15</li>
+                                <li>+7 (495) 604-59-59</li>
+                                <li>+7 (903) 712-70-00</li>
                             </ul>
                         </div><!-- End .contact-phones -->
 
@@ -147,17 +155,17 @@ $adminUrlManager = Yii::$app->get('adminUrlManager');
                             <div class="menu-table">
                                 <ul class="menu clearfix">
                                     <li>
-                                        <a class="active" href="<?= Url::to(['/site/index']); ?>">HOME</a>
+                                        <a class="active" href="<?= Url::to(['/site/index']); ?>">Главная страница</a>
                                     </li>
 
                                     <li class="mega-menu-container">
-                                        <a href="#">SHOP</a>
+                                        <a href="#">Каталог</a>
                                         <?= TopMenu::widget(); ?>
                                     </li>
 
-                                    <li><a href="<?= Url::to(['/articles/default/view', 'alias' => 'nashi-raboti']); ?>"><?= Yii::t('app.common', 'Our works.'); ?></a></li>
-                                    <li><a href="<?= Url::to(['/articles/default/view', 'alias' => 'nashi-contacti']); ?>"><?= Yii::t('app.common', 'Our contacts.'); ?></a></li>
-                                    <li><a href="<?= Url::to(['/news/default/view', 'alias' => 'nashi-contacti']); ?>"><?= Yii::t('app.common', 'Our contacts.'); ?></a></li>
+                                    <li><a href="<?= Url::to(['/articles/default/view', 'alias' => 'nashi-raboti']); ?>"><?= Yii::t('app.common', 'Наши работы'); ?></a></li>
+                                    <li><a href="<?= Url::to(['/articles/default/view', 'alias' => 'nashi-contacti']); ?>"><?= Yii::t('app.common', 'Наши контакты'); ?></a></li>
+                                    <li><a href="<?= Url::to(['/news']); ?>"><?= Yii::t('app.common', 'Новости'); ?></a></li>
                                 </ul>
                             </div>
 

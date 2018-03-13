@@ -28,6 +28,7 @@ class AppAsset extends AssetBundle
         'yii\web\YiiAsset',
         'yii\bootstrap\BootstrapAsset',
         'yii\bootstrap\BootstrapPluginAsset',
+        'yii2mod\notify\BootstrapNotifyAsset',
 //        'frontend\assets\JQuery11Asset',
 //        'common\assets\CommonAsset',
         'rmrevin\yii\fontawesome\cdn\AssetBundle',

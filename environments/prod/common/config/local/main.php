@@ -20,5 +20,11 @@ return [
             'class' => 'yii\swiftmailer\Mailer',
             'viewPath' => '@common/mail',
         ],
+        'sphinx' => [
+            'class' => 'yii\sphinx\Connection',
+            'dsn' => 'mysql:host=127.0.0.1;port=9306;',
+            'username' => 'fbkru_yiishop',
+            'password' => 'E&H2IsyY',
+        ],
     ],
 ];

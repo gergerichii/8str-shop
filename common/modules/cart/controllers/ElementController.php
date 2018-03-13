@@ -24,12 +24,13 @@ class ElementController extends Controller
 
     public function actionDelete()
     {
-        $json = ['result' => 'undefined', 'error' => false];
+        $json = ['action' => 'delete', 'result' => 'undefined', 'error' => false];
         $elementId = yii::$app->request->post('elementId');
 
         $cart = yii::$app->get('cartService');
 
         $elementModel = $cart->getElementById($elementId);
+        $json['elementName'] = $elementModel->getName();
 
         if($cart->deleteElement($elementModel)) {
             $json['result'] = 'success';
@@ -43,7 +44,7 @@ class ElementController extends Controller
 
     public function actionCreate()
     {
-        $json = ['result' => 'undefined', 'error' => false];
+        $json = ['action' => 'create', 'result' => 'undefined', 'error' => false];
 
         /** @var \common\modules\cart\CartService $cartService */
         $cartService = yii::$app->get('cartService');
@@ -67,6 +68,7 @@ class ElementController extends Controller
             }
 
             $json['elementId'] = $elementModel->getId();
+            $json['elementName'] = $elementModel->getName();
             $json['result'] = 'success';
         } else {
             $json['result'] = 'fail';
@@ -78,7 +80,7 @@ class ElementController extends Controller
 
     public function actionUpdate()
     {
-        $json = ['result' => 'undefined', 'error' => false];
+        $json = ['action' => 'update', 'result' => 'undefined', 'error' => false];
 
         $cartService = yii::$app->get('cartService');
         
@@ -97,6 +99,7 @@ class ElementController extends Controller
         
         $json['element_cost'] = yii::$app->formatter->asCurrency($elementModel->getCost(false));
         $json['elementId'] = $elementModel->getId();
+        $json['elementName'] = $elementModel->getName();
         $json['result'] = 'success';
 
         return $this->_cartJson($json);

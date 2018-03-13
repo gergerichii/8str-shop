@@ -172,7 +172,7 @@ $config = [
     ],
 ];
 
-if (YII_DEBUG && !YII_ENV_TEST) {
+if (!YII_ENV_TEST) {
     $allowedIPs = ['127.0.0.1', '::1', '192.168.10.1']; // регулируйте в соответствии со своими нуждами
 
     // configuration adjustments for 'dev' environment

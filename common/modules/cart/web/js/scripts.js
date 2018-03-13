@@ -271,7 +271,7 @@ shop.cart = {
                     message = 'Изменение товаров в корзине';
                     break;
             }
-            $.notify({"icon":"glyphicon glyphicon-fire","id":"w2","message":message},{"placement":{"from":"top","align":"right"},"mouse_over":"pause","type":"success"});
+            $.notify({"icon":"glyphicon glyphicon-fire","id":"w2","message":message},{"placement":{"from":"bottom","align":"right"},"mouse_over":"pause","type":"success"});
         }
 
         jQuery(document).trigger("renderCart", json);

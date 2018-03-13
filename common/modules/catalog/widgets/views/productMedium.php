@@ -65,10 +65,10 @@ $coverItem = isset($coverItem) && $coverItem ? $coverItem : false;
                 ])?>
                     <span class="icon-cart-text">В корзину</span>
                 <?php \common\modules\cart\widgets\BuyButton::end() ?>
-                <div class="item-action-inner">
-                    <a href="#" class="icon-button icon-like">Favourite</a>
-                    <a href="#" class="icon-button icon-compare">Checkout</a>
-                </div><!-- End .item-action-inner -->
+<!--                <div class="item-action-inner">-->
+<!--                    <a href="#" class="icon-button icon-like">Favourite</a>-->
+<!--                    <a href="#" class="icon-button icon-compare">Checkout</a>-->
+<!--                </div><!-- End .item-action-inner -->-->
             </div><!-- End .item-action -->
         </div><!-- End .item-meta-container -->
     </div><!-- End .item -->

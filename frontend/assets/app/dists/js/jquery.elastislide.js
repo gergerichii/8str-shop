@@ -330,7 +330,7 @@
 			}
 			if( this.options.minItems < 1 || this.options.minItems > this.itemsCount ) {
 
-				this.options.minItems = 1;
+				this.options.minItems = this.itemsCount;
 
 			}
 			if( this.options.start < 0 || this.options.start > this.itemsCount - 1 ) {

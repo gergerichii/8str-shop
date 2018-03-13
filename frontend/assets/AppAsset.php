@@ -10,7 +10,7 @@ use yii\web\AssetBundle;
 class AppAsset extends AssetBundle
 {
     public $sourcePath = '@frontend/assets/app/dists';
-//    public $publishOptions = ['forceCopy' => YII_DEBUG];
+    public $publishOptions = ['forceCopy' => YII_DEBUG];
     public $css = [
 //        'css/main.css',
         'css/style.css',

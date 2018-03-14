@@ -1,35 +1,48 @@
 <?php
 namespace common\models\forms;
 
-use yii\base\Model;
+use common\models\entities\UserAddresses;
+use common\services\UserService;
+use elisdn\compositeForm\CompositeForm;
+use common\models\entities\User;
 
 /**
  * Signup form
+ *
+ * @property User user
+ * @property UserAddresses[] addresses
  */
-class SignupForm extends Model
+class SignupForm extends CompositeForm
 {
-    public $username;
-    public $email;
-    public $password;
-
-
+    
+    public function __construct(array $config = []) {
+        $this->user = new User();
+        $this->user->setScenario(User::SCENARIO_REGISTER);
+        
+        $this->userAddresses = new UserAddresses();
+        $this->userAddresses->scenario = UserAddresses::SCENARIO_REGISTER;
+        
+        parent::__construct($config);
+    }
+    
     /**
-     * @inheritdoc
+     * Signs user up.
+     *
+     * @return User|null the saved model or null if saving fails
      */
-    public function rules()
+    public function signup()
     {
-        return [
-            ['username', 'trim'],
-            ['username', 'required'],
-            ['username', 'string', 'min' => 2, 'max' => 255],
-
-            ['email', 'trim'],
-            ['email', 'required'],
-            ['email', 'email'],
-            ['email', 'string', 'max' => 255],
-
-            ['password', 'required'],
-            ['password', 'string', 'min' => 6],
-        ];
+        if (!$this->validate()) {
+            return null;
+        }
+        return UserService::signUp($this) ? $this->user : null;
+    }
+    
+    /**
+     * @return array of internal forms like ['meta', 'values']
+     */
+    protected function internalForms()
+    {
+        return ['user', 'userAddresses'];
     }
 }

@@ -9,7 +9,6 @@
 namespace common\services;
 
 use Yii;
-use common\models\entities\User;
 use common\models\forms\SignupForm;
 
 /**
@@ -19,22 +18,29 @@ use common\models\forms\SignupForm;
 class UserService {
     /**
      * @param SignupForm $form
-     * @return User
-     * @throws Yii\base\Exception
+     *
+     * @return bool
+     * @throws \Yii\base\Exception
      */
-    public function signUp (SignupForm $form) : User {
-        if (User::find()->andWhere(['username' => $form->username])->one()) {
-            throw new \DomainException('Username already exists');
+    public static function signUp (SignupForm $form) : bool {
+        $form->user->setPassword();
+        $form->user->generateAuthKey();
+        try {
+            Yii::$app->db->transaction(function() use ($form) {
+                if(!$form->user->save()) {
+                    throw new \Exception('Ошибка записи пользователя');
+                }
+                $addresses = (is_array($form->userAddresses)) ? $form->userAddresses : [$form->userAddresses];
+                foreach($addresses as $address) {
+                    $form->user->link('addresses', $address);
+                }
+            });
+        } catch(\Exception $e) {
+            throw new \RuntimeException($e->getMessage());
+        } catch(\Throwable $e) {
+            throw new \RuntimeException($e->getMessage());
         }
-        if (User::find()->andWhere(['email' => $form->email])->one()) {
-            throw new \DomainException('Email already exists');
-        }
-
-        $user = User::signUp($form->username, $form->email, $form->password);
-
-        if (!$user->save()) {
-            throw new \RuntimeException('User saving error.');
-        }
-        return  $user;
+    
+        return  true;
     }
 }

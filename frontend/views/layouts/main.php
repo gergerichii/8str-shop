@@ -28,7 +28,7 @@ AppAsset::register($this);
     <?php $this->beginBody() ?>
     <div id="wrapper" class="boxed">
         <?=$this->renderFile('@app/views/layouts/pieces/header.php')?>
-        <section id="content">
+        <section id="content" <?=(Yii::$app->errorHandler->exception) ? 'class = "no-content"' : ''?>>
             <?php if (\yii::$app->request->url !== \yii::$app->homeUrl): ?>
             <div id="breadcrumb-container">
                 <div class="container">

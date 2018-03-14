@@ -31,4 +31,12 @@ class UserAddressesQuery extends \common\base\models\BaseDefaultQuery
     {
         return parent::one($db);
     }
+    
+    /**
+     * Эта функция должна задавать настройки для запроса по умолчанию
+     */
+    protected
+    function _prepareQuery() {
+        // TODO: Implement _prepareQuery() method.
+    }
 }

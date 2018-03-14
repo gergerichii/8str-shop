@@ -5,7 +5,6 @@ use common\base\models\BaseActiveRecord;
 use Yii;
 use yii\base\NotSupportedException;
 use yii\behaviors\TimestampBehavior;
-use yii\helpers\ArrayHelper;
 use yii\web\IdentityInterface;
 
 /**
@@ -39,32 +38,19 @@ class User extends BaseActiveRecord implements IdentityInterface {
     const STATUS_GUEST = 1;
 
     const SCENARIO_REGISTER_CONSOLE = 'register_console';
+    const SCENARIO_REGISTER = 'register';
     
     const ADDRESSES_TEMPLATE = [
         ''
     ];
     
-    /** @var \common\models\entities\UserAddresses[]  */
-    protected $_addresses = [];
-
-    /**
-     * Sign up
-     * @param string $username
-     * @param string $email
-     * @param string $password
-     * @throws Yii\base\Exception
-     * @return User
-     */
-    public static function signUp(string $username, string $email, string $password): User {
-        $user = new static();
-        $user->username = $username;
-        $user->email = $email;
-        $user->setPassword($password);
-        $user->generateAuthKey();
-
-        return $user;
-    }
-
+    /** @var string */
+    public $password;
+    /** @var string */
+    public $password_confirm;
+    /** @var boolean */
+    public $privacy_agree = false;
+    
     /**
      * Is active
      * @return bool
@@ -96,17 +82,13 @@ class User extends BaseActiveRecord implements IdentityInterface {
         $scenarios = parent::scenarios();
         // The scenario for addition admin for migration
         $scenarios[self::SCENARIO_REGISTER_CONSOLE] = [
-            'id',
-            'username',
-            'login',
-            'password_hash',
-            'password_reset_token',
-            'email',
-            'auth_key',
-            'authKey',
-            'status',
-            'created_at',
-            'updated_at',
+            'id', 'username', 'password_hash', 'password_reset_token', 'email', 'company', 'phone_number',
+            'auth_key', 'status', 'created_at', 'updated_at', 'agree_to_news', 'addresses',
+        ];
+        $scenarios[self::SCENARIO_REGISTER] = [
+            'first_name', 'last_name', 'username', 'password', 'password_confirm', 'password_hash', 'email',
+            'company', 'phone_number', 'auth_key', 'status', 'created_at', 'updated_at', 'agree_to_news', 'privacy_agree',
+            'addresses',
         ];
         return $scenarios;
     }
@@ -116,29 +98,48 @@ class User extends BaseActiveRecord implements IdentityInterface {
      */
     public function rules() {
         return [
-            [['login', 'password'], 'safe'],
-            [['username', 'password_hash', 'email'], 'required'],
-            
-            [['first_name', 'last_name'], 'trim'],
-            [['first_name', 'last_name'], 'string', 'min' => 2, 'max' => 255],
+    
+            [['first_name', 'last_name', 'username'], 'trim'],
+            [['first_name', 'last_name', 'username'], 'required'],
+            [['first_name', 'last_name', 'username'], 'string', 'min' => 2, 'max' => 255],
+
+            [
+                'username', 'unique', 'targetClass' => '\common\models\entities\User',
+                'targetAttribute' => 'username',
+                'message' => 'Такой пользователь уже зарегистрирован'
+            ],
+
+            [['password', 'password_confirm'], 'trim'],
+            [['password', 'password_confirm'], 'required'],
+            [['password', 'password_confirm'], 'string', 'min' => 6, 'max' => 255],
+            ['password_confirm', 'compare', 'compareAttribute' => 'password'],
+
+            ['email', 'trim'],
+            ['email', 'required'],
+            ['email', 'email'],
+            ['email', 'string', 'max' => 255],
+            ['email', 'unique', 'message' => 'Такой адрес электронной почты уже зарегистрирован'],
 
             ['phone_number', 'trim'],
+            ['phone_number', 'required'],
             ['phone_number', 'match', 'pattern' => '/^((8|\+7)[\- ]?)?(\(?\d{3}\)?[\- ]?)?[\d\- ]{7,10}$/'],
             ['phone_number', 'string', 'min' => 9],
 
-            ['company', 'trim'],
-            ['company', 'string', 'min' => 3, 'max' => 255],
-            
-            ['agree_to_news', 'boolean'],
-            
+            [['company'], 'trim'],
+            [['company'], 'string', 'min' => 3, 'max' => 255],
+
             [['status', 'created_at', 'updated_at', 'id'], 'integer'],
             [['username', 'password_hash', 'password_reset_token', 'email'], 'string', 'max' => 255],
             [['auth_key'], 'string', 'max' => 32],
-            [['username'], 'unique'],
-            [['email'], 'unique'],
             [['password_reset_token'], 'unique'],
             ['status', 'default', 'value' => self::STATUS_ACTIVE],
             ['status', 'in', 'range' => [self::STATUS_ACTIVE, self::STATUS_DELETED]],
+
+            [['agree_to_news', 'privacy_agree'], 'boolean'],
+            ['agree_to_news', 'default', 'value' => true],
+            ['privacy_agree', 'compare', 'compareValue' => true, 'on' => self::SCENARIO_REGISTER],
+            
+            ['addresses', 'default', 'value' => '[]'],
         ];
     }
 
@@ -153,8 +154,13 @@ class User extends BaseActiveRecord implements IdentityInterface {
             'email' => 'Email',
             'phone_number' => 'Телефон',
             'company' => 'Организация',
-            'password_hash' => 'Пароль',
+            'password' => 'Пароль',
+            'password_confirm' => 'Пароль повтор',
             'agree_to_news' => 'Согласие на новостную рассылку',
+            'privacy_agree' => 'Я осзнакомлен с политикой конфеденциальности и согласен на обработку персональных данных.',
+            'status' => 'Статус',
+            'created_at' => 'Зарегистрирован',
+            'updated_at' => 'Обновлен',
         ];
     }
     
@@ -273,8 +279,11 @@ class User extends BaseActiveRecord implements IdentityInterface {
      *
      * @throws yii\base\Exception
      */
-    public function setPassword($password)
+    public function setPassword($password = null)
     {
+        if(is_null($password)) {
+            $password = $this->password;
+        }
         $this->password_hash = Yii::$app->security->generatePasswordHash($password);
     }
     
@@ -325,43 +334,9 @@ class User extends BaseActiveRecord implements IdentityInterface {
     }
 
     /**
-     * @inheritdoc
-     */
-    public function __get($name) {
-        // TODO Why!!!?????
-        return parent::__get($name); // TODO: Change the autogenerated stub
-    }
-    
-    /**
      * @return \yii\db\ActiveQuery
      */
     public function getAddresses() {
         return $this->hasMany(UserAddresses::class, ['user_id' => 'id']);
-    }
-
-    /**
-     * Set addresses
-     * @param array $addresses
-     * TODO Move it to business logic
-     */
-    public function setAddresses(array $addresses) {
-        foreach($addresses as $address) {
-            $this->addAddress($address);
-        }
-    }
-
-    /**
-     * Add address
-     * @param UserAddresses $address
-     * TODO Move it to business logic
-     */
-    public function addAddress(UserAddresses $address) {
-        if (is_array($address) && ArrayHelper::isAssociative($address)) {
-            $_address = new UserAddresses();
-            $_address->setAttributes($address);
-            $address = $_address;
-        }
-        
-        $this->_addresses[] = $address;
     }
 }

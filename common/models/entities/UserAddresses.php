@@ -18,6 +18,8 @@ use Yii;
  */
 class UserAddresses extends BaseActiveRecord
 {
+    public const SCENARIO_REGISTER = 'register';
+    
     /**
      * {@inheritdoc}
      */
@@ -36,20 +38,28 @@ class UserAddresses extends BaseActiveRecord
             [['user_id'], 'integer'],
             [['region', 'city', 'address'], 'string', 'max' => 255],
             [['user_id'], 'exist', 'skipOnError' => true, 'targetClass' => User::class, 'targetAttribute' => ['user_id' => 'id']],
+            ['city', 'default', 'value' => 'Москва'],
+            ['region', 'default', 'value' => 'Москва'],
         ];
     }
-
+    
+    public function scenarios() {
+        $ret = parent::scenarios();
+        $ret[self::SCENARIO_REGISTER] = ['region', 'city', 'address'];
+        return $ret;
+    }
+    
     /**
      * {@inheritdoc}
      */
     public function attributeLabels()
     {
         return [
-            'id' => Yii::t('app.userAddress', 'ID'),
-            'user_id' => Yii::t('app.userAddress', 'User ID'),
-            'region' => Yii::t('app.userAddress', 'Region'),
-            'city' => Yii::t('app.userAddress', 'City'),
-            'address' => Yii::t('app.userAddress', 'Address'),
+            'id' => Yii::t('app', 'ID'),
+            'user_id' => Yii::t('app', 'User ID'),
+            'region' => Yii::t('app', 'Region'),
+            'city' => Yii::t('app', 'City'),
+            'address' => Yii::t('app', 'Address'),
         ];
     }
 

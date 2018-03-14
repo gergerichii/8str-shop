@@ -31,7 +31,7 @@ class Step1Form extends LoginForm {
     public function scenarios() {
         return [
             'default' => [
-                'orderMode'
+                'orderMode', 'username', 'password', 'rememberMe'
             ],
             'login' => [
                 'orderMode', 'username', 'password', 'rememberMe'

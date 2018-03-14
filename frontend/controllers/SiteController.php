@@ -4,7 +4,7 @@ namespace frontend\controllers;
 use common\modules\catalog\models\ProductQuery;
 use common\modules\catalog\models\ProductTag;
 use Yii;
-use yii\base\InvalidParamException;
+use yii\base\InvalidArgumentException;
 use yii\helpers\ArrayHelper;
 use yii\web\BadRequestHttpException;
 use yii\web\Controller;
@@ -13,7 +13,7 @@ use yii\filters\AccessControl;
 use common\models\forms\LoginForm;
 use frontend\models\PasswordResetRequestForm;
 use frontend\models\ResetPasswordForm;
-use frontend\models\SignupForm;
+use common\models\forms\SignupForm;
 use frontend\models\ContactForm;
 
 /**
@@ -58,9 +58,9 @@ class SiteController extends Controller
     public function actions()
     {
         return [
-            'error' => [
-                'class' => 'yii\web\ErrorAction',
-            ],
+//            'error' => [
+//                'class' => 'yii\web\ErrorAction',
+//            ],
             'captcha' => [
                 'class' => 'yii\captcha\CaptchaAction',
                 'fixedVerifyCode' => YII_ENV_TEST ? 'testme' : null,
@@ -184,7 +184,7 @@ class SiteController extends Controller
      */
     public function actionRequestPasswordReset()
     {
-        $model = new PasswordResetRequestForm();
+        $model = new \common\models\forms\PasswordResetRequestForm();
         if ($model->load(Yii::$app->request->post()) && $model->validate()) {
             if ($model->sendEmail()) {
                 Yii::$app->session->setFlash('success', 'Check your email for further instructions.');
@@ -211,7 +211,7 @@ class SiteController extends Controller
     {
         try {
             $model = new ResetPasswordForm($token);
-        } catch (InvalidParamException $e) {
+        } catch (InvalidArgumentException $e) {
             throw new BadRequestHttpException($e->getMessage());
         }
 
@@ -224,5 +224,17 @@ class SiteController extends Controller
         return $this->render('resetPassword', [
             'model' => $model,
         ]);
+    }
+    
+    public function actionError() {
+        $exception = Yii::$app->errorHandler->exception;
+        $response = Yii::$app->response;
+        if ($exception !== null) {
+            if ($response->statusCode === 403) {
+                $this->goBack('/');
+            } else {
+                return $this->render('error', ['exception' => $exception]);
+            }
+        }
     }
 }

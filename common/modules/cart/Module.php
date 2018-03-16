@@ -37,6 +37,21 @@ class Module extends \yii\base\Module implements BootstrapInterface
                 ],
             ]);
         }
+        
+        
+        Yii::$app->user->on(yii\web\User::EVENT_AFTER_LOGIN, function() {
+            /** @var \common\modules\cart\CartService $cartService */
+            $cartService = Yii::$app->get('cartService');
+            $cartService->init();
+            /** @var \common\modules\cart\models\Cart $guestCart */
+            $guestCart = $cartService->cart->my(Yii::$app->session->get('tmp_user_id'));
+            if (yii::$app->user->id && $guestCart && $guestCart->count) {
+                $cartService->cart->delete();
+                $guestCart->user_id = yii::$app->user->id;
+                $guestCart->tmp_user_id = null;
+                $guestCart->save();
+            }
+        });
 
         $urlManagers = [];
         foreach (array_keys($app->components) as $componentName) {

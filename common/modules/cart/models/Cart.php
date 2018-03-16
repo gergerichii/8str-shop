@@ -31,10 +31,10 @@ class Cart extends BaseActiveRecord implements CartInterface
         $this->element = yii::$container->get('cartElement');
     }
     
-    public function my()
+    public function my($userId = false)
     {
         $query = new tools\CartQuery(get_called_class());
-        return $query->my();
+        return $query->my($userId);
     }
     
     /**

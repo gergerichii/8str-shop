@@ -15,10 +15,12 @@ use yii\db\Connection;
 use yii\db\Exception;
 use yii\db\Expression;
 use yii\db\Query;
+use yii\db\StaleObjectException;
 use yii\helpers\Console;
 use yii\helpers\StringHelper;
 use yii\image\drivers\Image as ImgDriver;
 use yii\helpers\ArrayHelper as ArrayHelper;
+use yii\image\drivers\Image as DriverImage;
 
 /**
  * Действия с базой на сайте 8str.ru
@@ -82,7 +84,7 @@ class OldbaseController extends BaseController
     ];
 
     private $oldSqlDump = '../migrations/files/oldDb.sql';
-    private $imagesPath = '@common/protected/webFiles/catalog/images/';
+    private $imagesPath = '@common/webFiles/products/images/';
     private $oldDbName = 'fbkru_0_8str';
     private $badProductsFile = '../bad_products.csv';
     private $currentPID;
@@ -339,6 +341,19 @@ class OldbaseController extends BaseController
 
         /** @var Module $filesManager */
         $filesManager = Yii::$app->getModule('files');
+        
+        /** @var Image $image */
+        $image = $filesManager->getEntityInstance('products/images');
+
+        $path = \Yii::getAlias($this->imagesPath . '/newImages');
+        if (!is_dir($path)) {
+            $this->error('The path is wrong.');
+            return 0;
+        }
+
+        $CatalogController = new CatalogController('catalog', $this->module);
+        $groups = $CatalogController->findImages($path);
+        
 
         foreach ($query->each(100, $remoteDb) as $src) {
             /* Попытка исправить найденные товары с ошибками */
@@ -350,7 +365,7 @@ class OldbaseController extends BaseController
             $src['name'] = trim(preg_replace('#‑#m', '-', $src['name']));
             /** Проверяем на наличие продукта */
             $product = Product::findOne(['name' => $src['name']]);
-            if ($product) {
+            if ($oldProduct = (bool)$product) {
                 if ($product->old_id != $src['old_id']) {
                     $this->notice("Продукт {$src['old_id']}:{$src['name']} пропущен. Такой уже есть.");
                     if ($this->importCreateBadProductsFile) {
@@ -464,6 +479,37 @@ class OldbaseController extends BaseController
                 }
                 $transaction->commit();
             }
+            
+            $productName = preg_replace('#[/]#', '', $product->name);
+            if (!$oldProduct && array_key_exists($productName, $groups)) {
+                foreach($groups[$productName] as $fileInfo) {
+                    if (false === $product->hasFile($fileInfo['basename'])) {
+                        $product->addFile($fileInfo['basename']);
+        
+                        $image->fileName = $fileInfo['basename'];
+                        if (false === $image->pickFrom($fileInfo['dirname'])) {
+                            $this->error('Product #' . $product->id . ' error: ' . $image->getFirstError('') . '.');
+                        } else {
+                            $image->adaptSize(DriverImage::CROP);
+                        }
+                        if ($image->exists()) {
+                            $image->createThumbs();
+                        }
+                    }
+                }
+                try {
+                    $product->update();
+                } catch(StaleObjectException $e) {
+                    $this->error($e->getMessage());
+                    $product->refresh();
+                } catch(\Exception $e) {
+                    $this->error($e->getMessage());
+                    $product->refresh();
+                } catch(\Throwable $e) {
+                    $this->error($e->getMessage());
+                    $product->refresh();
+                }
+            }
 
             if (false === strpos($src['filename'], 'sertifikat')) {
                 /** Добавляем файлы */
@@ -547,32 +593,35 @@ class OldbaseController extends BaseController
             ->from('{{%taxonomy_term_data}} as {{c}}')
             ->leftJoin('{{%taxonomy_term_hierarchy}} as {{h}}', '{{c}}.[[tid]] = {{h}}.[[tid]]')
             ->leftJoin('{{%taxonomy_term_data}} as {{p}}', '{{h}}.[[parent]] = {{p}}.[[tid]]')
-            ->where(['{{c}}.[[vid]]' => 2])->orderBy('{{p}}.[[tid]]');
+            ->where(['{{c}}.[[vid]]' => 2])->orderBy('{{p}}.[[tid]]')
+            ->indexBy('rubric_id');
 
         $batch = $query->batch(1000, $remoteDb);
         $rubricsPull = [];
         $createdRubrics = [];
         $rubricsOrder = self::RUBRICS_ORDER;
         do {
-            if (empty($rubricsPull) || !empty($rubricsPull[0]['depends_on'])) {
+            if (empty($rubricsPull) || !empty(reset($rubricsPull)['depends_on'])) {
                 $batch->next();
-                $rubricsPull = array_merge((array)$batch->current(), $rubricsPull);
+                $rubricsPull = ArrayHelper::merge($batch->current(), $rubricsPull);
             }
 
             if ((int)key($rubricsOrder) < 0) {
-                $currentRubric = current($rubricsOrder);
+                $currentRubric = reset($rubricsOrder);
                 unset($rubricsOrder[key($rubricsOrder)]);
                 $rubricsOrder = ArrayHelper::merge([$currentRubric['rubric_id'] => null], $rubricsOrder);
             } else {
-                $currentRubric = array_shift($rubricsPull);
+                $currentRubric = reset($rubricsPull);
+                unset($rubricsPull[key($rubricsPull)]);
             }
             if (array_key_exists($currentRubric['rubric_id'], $rubricsOrder)) {
                 /* Если рубрика в списке сортировки, но еще не пришла ее очередь, отложим ее */
                 if ($currentRubric['rubric_id'] != key($rubricsOrder)) {
-                    array_push($rubricsPull, $currentRubric);
+                    $rubricsPull[$currentRubric['rubric_id']] = $currentRubric;
                     continue;
                 }
                 $parentRubricId = $rubricsOrder[$currentRubric['rubric_id']];
+                unset($rubricsOrder[key($rubricsOrder)]);
             } else {
                 $parentRubricId = $currentRubric['parent_rubric_id'];
             }
@@ -602,7 +651,6 @@ class OldbaseController extends BaseController
                     ]);
     
                     $newRubric->appendTo($parentRubric);
-                    unset($rubricsOrder[key($rubricsOrder)]);
                 }
                 /* Если у рубрики нет родителя и эта рубрика еще не записана в базу */
             } elseif (!$newRubric = ProductRubric::findOne(['old_id' => $currentRubric['rubric_id']])) {
@@ -612,7 +660,6 @@ class OldbaseController extends BaseController
                     'name' => $currentRubric['rubric_name']
                 ]);
                 $newRubric->appendTo($rootRubric);
-                unset($rubricsOrder[key($rubricsOrder)]);
             }
 
             $createdRubrics[$newRubric->getAttribute('old_id')] = $newRubric->id;

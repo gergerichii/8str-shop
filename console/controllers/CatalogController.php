@@ -111,7 +111,7 @@ class CatalogController extends BaseController
      * @param string $path
      * @return array
      */
-    private function findImages(string $path) {
+    public function findImages(string $path) {
         $groups = [];
         $files = FileHelper::findFiles($path, ['only' => ['*.jpg']]);
         if (!$files) {

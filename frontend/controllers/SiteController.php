@@ -1,6 +1,8 @@
 <?php
 namespace frontend\controllers;
 
+use common\models\forms\PasswordResetRequestForm;
+use common\models\forms\ResetPasswordForm;
 use common\modules\catalog\models\ProductQuery;
 use common\modules\catalog\models\ProductTag;
 use Yii;
@@ -11,8 +13,6 @@ use yii\web\Controller;
 use yii\filters\VerbFilter;
 use yii\filters\AccessControl;
 use common\models\forms\LoginForm;
-use frontend\models\PasswordResetRequestForm;
-use frontend\models\ResetPasswordForm;
 use common\models\forms\SignupForm;
 use frontend\models\ContactForm;
 
@@ -184,12 +184,12 @@ class SiteController extends Controller
      */
     public function actionRequestPasswordReset()
     {
-        $model = new \common\models\forms\PasswordResetRequestForm();
+        $model = new PasswordResetRequestForm();
         if ($model->load(Yii::$app->request->post()) && $model->validate()) {
             if ($model->sendEmail()) {
                 Yii::$app->session->setFlash('success', 'Check your email for further instructions.');
 
-                return $this->goHome();
+                return $this->goBack();
             } else {
                 Yii::$app->session->setFlash('error', 'Sorry, we are unable to reset password for the provided email address.');
             }
@@ -218,7 +218,7 @@ class SiteController extends Controller
         if ($model->load(Yii::$app->request->post()) && $model->validate() && $model->resetPassword()) {
             Yii::$app->session->setFlash('success', 'New password saved.');
 
-            return $this->goHome();
+            return $this->goBack();
         }
 
         return $this->render('resetPassword', [
@@ -231,10 +231,12 @@ class SiteController extends Controller
         $response = Yii::$app->response;
         if ($exception !== null) {
             if ($response->statusCode === 403) {
-                $this->goBack('/');
+                return $this->goBack('/');
             } else {
                 return $this->render('error', ['exception' => $exception]);
             }
         }
+        
+        return null;
     }
 }

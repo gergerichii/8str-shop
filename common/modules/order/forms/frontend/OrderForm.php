@@ -9,6 +9,8 @@
 namespace common\modules\order\forms\frontend;
 
 use common\models\entities\User;
+use common\models\forms\LoginForm;
+use common\models\forms\SignupForm;
 use common\modules\order\models\Order;
 use elisdn\compositeForm\CompositeForm;
 
@@ -18,19 +20,50 @@ class OrderForm extends CompositeForm {
     public const ORDER_MODE_LOGIN = 'login';
     public const ORDER_MODE_GUEST = 'guest';
     
-    public const SCENARIO_STEP_1 = 'step1';
-    public const SCENARIO_STEP_2 = 'step2';
-    public const SCENARIO_STEP_3 = 'step3';
-    public const SCENARIO_STEP_4 = 'step4';
-    public const SCENARIO_STEP_5 = 'step5';
+    public const SCENARIO_STEPS = [
+        1 => [
+            'name' => 'authorization',
+            'models' => [
+                'loginForm',
+                'signUpForm' => 'guest',
+            ],
+        ],
+        2 => [
+            'name' => 'deliveryInformation',
+            'models' => [
+                'addressForm',
+                'deliveryMethodForm',
+            ],
+        ],
+        3 => [
+            'name' => 'paymentMethod',
+            'models' => [
+                'paymentMethodForm',
+            ],
+        ],
+        4 => [
+            'name' => 'confirmOrder',
+            'models' => [
+                'cartForm',
+            ],
+        ],
+        
+    ];
     
     public $orderMode = self::ORDER_MODE_REGISTER;
+    public $orderStep;
     
     
     public function __construct(array $config = []) {
         
-        $this->user = new User();
-        $this->order = new Order();
+        $this->loginForm = new LoginForm();
+        $this->signupForm = new SignupForm();
+        
+        $this->orderStep = \Yii::$app->session->get(
+            'orderStep',
+            \Yii::$app->user->isGuest ? 1 : 2
+        );
+        $this->scenario = self::SCENARIO_STEPS[$this->orderStep]['name'];
         
         parent::__construct($config);
     }
@@ -40,6 +73,6 @@ class OrderForm extends CompositeForm {
      */
     protected function internalForms()
     {
-        return [];
+        return ['loginForm', 'signupForm'];
     }
 }

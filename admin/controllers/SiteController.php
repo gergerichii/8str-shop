@@ -1,9 +1,7 @@
 <?php
 namespace admin\controllers;
 
-use common\modules\catalog\models\ProductSphinxIndex;
 use common\modules\catalog\models\ProductSphinxSearch;
-use common\modules\catalog\Module;
 use Yii;
 use yii\web\Controller;
 use yii\filters\VerbFilter;
@@ -97,7 +95,7 @@ class SiteController extends Controller
     public function actionLogin()
     {
         if (!Yii::$app->user->isGuest) {
-            return $this->goHome();
+            return $this->goBack();
         }
 
         $model = new LoginForm();
@@ -119,6 +117,6 @@ class SiteController extends Controller
     {
         Yii::$app->user->logout();
 
-        return $this->goHome();
+        return $this->goBack();
     }
 }

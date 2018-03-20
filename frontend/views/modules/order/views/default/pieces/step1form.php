@@ -109,8 +109,8 @@
 <script>
     $(function() {
         function setLoginVisible() {
-            show = $('input[name="Step1Form[orderMode]"]:checked').val() === 'login';
-            formContainer = $('#loginFormContainer');
+            show = $('input[name="Step1Form[orderMode]"]:checked').val();
+            formContainer = $('#' + show + 'FormContainer');
             $(formContainer).toggle(show);
             $(formContainer).find('input').prop( "disabled", !show);
         }

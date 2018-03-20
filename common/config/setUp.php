@@ -8,14 +8,13 @@
 
 namespace common\config;
 
-use common\modules\catalog\Module;
 use common\widgets\Yii2modAlert;
 use yii\base\BootstrapInterface;
-use Yii;
 use yii\mail\MailerInterface;
+use yii\web\Application as WebApplication;
+use yii\web\Controller;
 use yii\web\Response;
 use yii\web\View;
-use yii2mod\notify\BootstrapNotify;
 
 class setUp implements BootstrapInterface
 {
@@ -23,12 +22,19 @@ class setUp implements BootstrapInterface
     
     public function bootstrap($app)
     {
-        $container = Yii::$container;
+        $container = \Yii::$container;
         $container->setSingleton(MailerInterface::class, function () use ($app) {
             return $app->mailer;
         });
         
-        if ($app instanceof yii\web\Application) {
+        if ($app instanceof WebApplication) {
+            \Yii::$app->on(Controller::EVENT_AFTER_ACTION, function() {
+                $request = \Yii::$app->getRequest();
+                if (!($request->getIsAjax() || $request->getIsPatch() || preg_match('#login|logout|signup|/debug/|/captcha#', $request->getUrl()))) {
+                    \Yii::$app->getUser()->setReturnUrl($request->getUrl());
+                }
+            });
+            
             $app->view->on(View::EVENT_BEGIN_BODY, function (){
                 if (!$this->notifyIsAdded) {
                     echo $this->getNotifyWidget();
@@ -36,7 +42,7 @@ class setUp implements BootstrapInterface
                 }
             });
             $app->response->on(Response::EVENT_BEFORE_SEND, function ($event) use($app) {
-                if (!$app->request->isAjax) {
+                if (!$app->request->isAjax && !$this->notifyIsAdded) {
                     $app->response->content = $this->getNotifyWidget() . $app->response->content;
                 }
             });

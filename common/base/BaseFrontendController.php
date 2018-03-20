@@ -18,7 +18,10 @@ class BaseFrontendController extends Controller {
         }
         array_push($this->view->params['breadcrumbs'], $bc);
     }
-
+    
+    /**
+     * @param array $breadcrumbs
+     */
     protected function addBreadcrumbs(array $breadcrumbs){
         foreach ($breadcrumbs as $bc) {
             if (isset($bc['label'])) {

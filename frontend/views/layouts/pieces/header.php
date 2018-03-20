@@ -33,10 +33,10 @@ $count = $cartService->getCount();
 <!--                            <li><a href="#" title="Избранные товары"><span class="top-icon top-icon-pencil"></span><span class="hide-for-xs">Избранные товары</span></a></li>-->
 <!--                            <li><a href="#" title="Мой аккаунт"><span class="top-icon top-icon-user"></span><span class="hide-for-xs">Мой аккаунт</span></a></li>-->
                             <li>
-                                <a href="<?=Url::toRoute('cart/default/index')?>" title="Корзина"><span class="top-icon top-icon-cart"></span><span  class="hide-for-xs">Корзина</span></a>
+                                <a href="<?=Url::toRoute('/cart/default/index')?>" title="Корзина"><span  class="top-icon top-icon-cart"></span><span  class="hide-for-xs">Корзина</span></a>
                             </li>
                             <li style="display: <?= ($count) ? 'initial' : 'none' ?>;" class="shop-cart-checkout-btn">
-                                <a href="<?=Url::toRoute('order/default/index')?>" title="Оформить заказ"><span class="top-icon top-icon-check"></span><span class="hide-for-xs">Оформить заказ</span></a>
+                                <a href="<?=Url::toRoute('/order/default/index')?>" title="Оформить заказ"><span class="top-icon top-icon-check"></span><span class="hide-for-xs">Оформить заказ</span></a>
                             </li>
                         </ul>
                     </div><!-- End .header-top-left -->

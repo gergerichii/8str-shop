@@ -155,20 +155,19 @@ class SiteController extends Controller
     {
         return $this->render('about');
     }
-
+    
     /**
      * Signs user up.
      *
      * @return mixed
+     * @throws \Yii\base\Exception
      */
     public function actionSignup()
     {
         $model = new SignupForm();
         if ($model->load(Yii::$app->request->post())) {
-            if ($user = $model->signup()) {
-                if (Yii::$app->getUser()->login($user)) {
-                    return $this->goBack('/');
-                }
+            if ($model->signup()) {
+                return $this->goBack('/');
             }
         }
 

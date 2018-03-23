@@ -1000,7 +1000,7 @@
                 $('.selectbox').selectbox({
                     effect: "fade",
                     onChange: function (value, inst) {
-
+                        inst.input.trigger('change');
                     }
                 });
             }

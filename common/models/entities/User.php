@@ -4,6 +4,7 @@ namespace common\models\entities;
 use common\base\models\BaseActiveRecord;
 use Yii;
 use yii\base\NotSupportedException;
+use yii\base\Security;
 use yii\behaviors\TimestampBehavior;
 use yii\web\IdentityInterface;
 
@@ -39,6 +40,7 @@ class User extends BaseActiveRecord implements IdentityInterface {
 
     const SCENARIO_REGISTER_CONSOLE = 'register_console';
     const SCENARIO_REGISTER = 'register';
+    const SCENARIO_REGISTER_GUEST = 'guest';
     
     const ADDRESSES_TEMPLATE = [
         ''
@@ -90,6 +92,10 @@ class User extends BaseActiveRecord implements IdentityInterface {
             'company', 'phone_number', 'auth_key', 'status', 'created_at', 'updated_at', 'agree_to_news', 'privacy_agree',
             'addresses',
         ];
+        $scenarios[self::SCENARIO_REGISTER_GUEST] = [
+            'first_name', 'last_name', 'password_hash', 'email',
+            'phone_number', 'auth_key', 'status', 'created_at', 'updated_at', 'agree_to_news', 'privacy_agree', 'addresses',
+        ];
         return $scenarios;
     }
 
@@ -118,7 +124,7 @@ class User extends BaseActiveRecord implements IdentityInterface {
             ['email', 'required'],
             ['email', 'email'],
             ['email', 'string', 'max' => 255],
-            ['email', 'unique', 'message' => 'Такой адрес электронной почты уже зарегистрирован'],
+            ['email', 'validateEmail','on' => [self::SCENARIO_REGISTER, self::SCENARIO_REGISTER_GUEST]],
 
             ['phone_number', 'trim'],
             ['phone_number', 'required'],
@@ -137,7 +143,7 @@ class User extends BaseActiveRecord implements IdentityInterface {
 
             [['agree_to_news', 'privacy_agree'], 'boolean'],
             ['agree_to_news', 'default', 'value' => true],
-            ['privacy_agree', 'compare', 'compareValue' => true, 'on' => self::SCENARIO_REGISTER],
+            ['privacy_agree', 'compare', 'compareValue' => true, 'on' => [self::SCENARIO_REGISTER, self::SCENARIO_REGISTER_GUEST]],
             
             ['addresses', 'default', 'value' => '[]'],
         ];
@@ -162,6 +168,20 @@ class User extends BaseActiveRecord implements IdentityInterface {
             'created_at' => 'Зарегистрирован',
             'updated_at' => 'Обновлен',
         ];
+    }
+    
+    public function validateEmail() {
+        $existsUser = self::findByEmail($this->email);
+        if ($existsUser) {
+            if ($this->scenario === self::SCENARIO_REGISTER_GUEST && $existsUser->status === self::STATUS_GUEST) {
+                return true;
+            } else {
+                $this->addError('email', 'Пользователь с таким Email адресом уже зарегистрирован.');
+                return false;
+            }
+        }
+        
+        return true;
     }
     
     /**
@@ -189,17 +209,19 @@ class User extends BaseActiveRecord implements IdentityInterface {
     {
         return static::findOne(['username' => $username, 'status' => self::STATUS_ACTIVE]);
     }
-
+    
     /**
      * Finds user by email
      *
      * @param string $email
      *
+     * @param int    $status
+     *
      * @return static|null
      */
-    public static function findByEmail($email)
+    public static function findByEmail($email, $status = self::STATUS_ACTIVE)
     {
-        return static::findOne(['email' => $email, 'status' => self::STATUS_ACTIVE]);
+        return static::findOne(['email' => $email, 'status' => $status]);
     }
 
     /**
@@ -271,7 +293,7 @@ class User extends BaseActiveRecord implements IdentityInterface {
     {
         return Yii::$app->security->validatePassword($password, $this->password_hash);
     }
-
+    
     /**
      * Generates password hash from password and sets it to the model
      *
@@ -282,7 +304,9 @@ class User extends BaseActiveRecord implements IdentityInterface {
     public function setPassword($password = null)
     {
         if(is_null($password)) {
-            $password = $this->password;
+            $password = ($this->scenario === self::SCENARIO_REGISTER_GUEST) ?
+                Yii::$app->security->generateRandomString() :
+                $this->password;
         }
         $this->password_hash = Yii::$app->security->generatePasswordHash($password);
     }

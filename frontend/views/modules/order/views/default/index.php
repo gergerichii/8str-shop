@@ -1,28 +1,15 @@
 <?php
-/* @var $this yii\web\View */
 
-$forms = [
-    [
-        'name' => 'СПОСОБ АВТОРИЗАЦИИ',
-        'template' => 'authorization',
-        'forms' => ['signup', 'login'],
-    ],
-    [
-        'name' => 'Информация по доставке',
-        'template' => 'deliveryInformation',
-        'forms' => [],
-    ],
-    [
-        'name' => 'Способ оплаты',
-        'template' => 'paymentMethod',
-        'forms' => [],
-    ],
-    [
-        'name' => 'Подтверждение заказа',
-        'template' => 'confirmOrder',
-        'forms' => [],
-    ],
-];
+use \common\modules\order\forms\frontend\OrderForm;
+
+/* @var $this yii\web\View */
+/* @var OrderForm $orderForm*/
+
+$step = $orderForm->orderStep;
+/** @var \common\models\forms\LoginForm $loginForm */
+$loginForm = $orderForm->loginForm;
+/** @var \common\models\forms\SignupForm $signupForm */
+$signupForm = $orderForm->signupForm;
 
 ?>
 <div class="container">
@@ -34,32 +21,24 @@ $forms = [
             </header>
             <div class="xs-margin"></div><!-- space -->
             <div class="panel-group custom-accordion" id="checkout">
-                <div class="panel" data-step="1">
+                <?php foreach(OrderForm::SCENARIO_STEPS as $formStep => $formData): ?>
+                <div class="panel" data-step="<?=$formStep?>">
                     <div class="accordion-header">
-                        <div class="accordion-title">1 Шаг: <span>Способ авторизации</span></div>
+                        <div class="accordion-title"><?=$formStep?> Шаг: <span><?=$formData['title']?></span></div>
                         <!-- End .accordion-title -->
-                        <a class="accordion-btn <?= $step == 1 ? 'opened' : '' ?>" data-toggle="collapse" data-parent="#checkout" data-target="#checkout-option"></a>
+                        <a class="accordion-btn <?= $step == $formStep ? 'opened' : '' ?>" data-toggle="collapse" data-parent="#checkout" data-target="#<?=$formData['name']?>"></a>
                     </div><!-- End .accordion-header -->
 
-                    <div id="checkout-option" class="collapse <?= $step == 1 ? 'in' : '' ?>">
+                    <div id="<?=$formData['name']?>" class="collapse <?= $step == $formStep ? 'in' : '' ?>">
                         <div class="panel-body">
-                            <?php \yii\widgets\Pjax::begin(['id' => 'step1']); ?>
-                                <?php if (!yii::$app->getUser()->getIsGuest()): ?>
-                                    <p>
-                                        Вы уже авторизованы как <b><?= yii::$app->getUser()->identity->username ?> </b>
-                                    </p>
-                                    <p>
-                                        <a href="#" class="btn btn-custom-2" role="button" data-action="next-step">Продолжить</a>
-                                    </p>
-                                <?php else: ?>
-                                    <?php echo $this->render('pieces/step1form', compact('step1form')); ?>
-                                <?php endif; ?>
+                            <?php \yii\widgets\Pjax::begin(['id' => 'step' . $formStep]); ?>
+                            <?php echo $this->render("pieces/{$formData['name']}", compact('orderForm')); ?>
                             <?php \yii\widgets\Pjax::end(); ?>
                         </div><!-- End .panel-body -->
                     </div><!-- End .panel-collapse -->
 
                 </div><!-- End .panel -->
-
+                <?php endforeach; ?>
             </div><!-- End .panel-group #checkout -->
             <div class="xlg-margin"></div><!-- space -->
         </div><!-- End .col-md-12 -->

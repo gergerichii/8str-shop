@@ -10,32 +10,48 @@ use common\models\entities\User;
  * Signup form
  *
  * @property User user
- * @property UserAddresses[] addresses
+ * @property UserAddresses[] userAddresses
  */
 class SignupForm extends CompositeForm
 {
+    
+    public const SCENARIO_GUEST = 'guest';
     
     public function __construct(array $config = []) {
         $this->user = new User();
         $this->user->setScenario(User::SCENARIO_REGISTER);
         
-        $this->userAddresses = new UserAddresses();
-        $this->userAddresses->scenario = UserAddresses::SCENARIO_REGISTER;
+        $addresses = new UserAddresses();
+        $addresses->scenario = UserAddresses::SCENARIO_REGISTER;
+        $this->userAddresses = [$addresses];
         
         parent::__construct($config);
+    }
+    
+    public function setScenario($value) {
+        parent::setScenario($value);
+        if ($value === self::SCENARIO_GUEST) {
+            $this->user->setScenario(User::SCENARIO_REGISTER_GUEST);
+        } else {
+            $this->user->setScenario(User::SCENARIO_REGISTER);
+        }
+    }
+    
+    public function scenarios() {
+        return [self::SCENARIO_DEFAULT => [], self::SCENARIO_GUEST => []];
     }
     
     /**
      * Signs user up.
      *
+     * @param bool $validate
+     *
      * @return User|null the saved model or null if saving fails
+     * @throws \Yii\base\Exception
      */
-    public function signup()
+    public function signup($validate = true)
     {
-        if (!$this->validate()) {
-            return null;
-        }
-        return UserService::signUp($this) ? $this->user : null;
+        return UserService::signUp($this, $validate) ? $this->user : null;
     }
     
     /**

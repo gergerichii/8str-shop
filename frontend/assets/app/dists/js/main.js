@@ -1284,6 +1284,7 @@
 
     });
 
+    $.venedor = Venedor;
 
 })(jQuery);
 

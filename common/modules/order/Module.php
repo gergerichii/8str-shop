@@ -1,7 +1,10 @@
 <?php
 namespace common\modules\order;
 
+use common\models\entities\User;
+use common\models\entities\UserAddresses;
 use common\modules\order\behaviors\ShippingCost;
+use common\modules\order\forms\frontend\OrderForm;
 use yii;
 
 class Module extends \yii\base\Module
@@ -140,5 +143,78 @@ class Module extends \yii\base\Module
         }
 
         return [];
+    }
+    
+    /**
+     * @param \common\modules\order\forms\frontend\OrderForm $form
+     *
+     * @return bool
+     * @throws \yii\base\Exception
+     */
+    public function processOrder(OrderForm &$form) {
+        $result = false;
+        $newAddress = new UserAddresses(['scenario' => UserAddresses::SCENARIO_REGISTER]);
+        switch($form->orderStep) {
+            case 1:
+                if ($form->orderMode === OrderForm::ORDER_MODE_GUEST) {
+                    $user = $form->signupForm->signup(false);
+                    $form->user = $user;
+                    if ($user->userAddresses) {
+                        $addresses = $user->userAddresses;
+                        $form->userAddresses = yii\helpers\ArrayHelper::merge([$newAddress], $addresses);
+                    } else {
+                        $form->userAddresses = [$newAddress];
+                    }
+                    $form->orderStep = 2;
+                    $result = true;
+                } elseif ($form->orderMode === OrderForm::ORDER_MODE_LOGIN) {
+                    $result = $form->loginForm->login();
+                    /** @var \common\models\entities\User $user */
+                    $user = Yii::$app->user->identity;
+                    $form->user = $user;
+                    if ($user->userAddresses) {
+                        $form->userAddresses = $user->userAddresses;
+                    } else {
+                        $form->userAddresses = [$newAddress];
+                    }
+                    $form->orderStep = 2;
+                }
+                break;
+            case 2:
+                if ($form->deliveryMethod !== $form::DELIVERY_METHOD_SELF) {
+                    if ((int)$form->deliveryAddressId === 0) {
+                        try{
+                            $userAddress = $form->userAddresses[0];
+                            $form->user->link('userAddresses', $userAddress);
+                            $form->userAddresses = array_merge([$newAddress], $form->user->userAddresses);
+                            foreach($form->userAddresses as $i => $ua) {
+                                if ($ua->id === $userAddress->id) {
+                                    $form->deliveryAddressId = $i;
+                                    break;
+                                }
+                            }
+                            $result = true;
+                        } catch(\Exception $e) {
+                            $form->addError('userAddresses', $e->getMessage());
+                        }
+                    } else {
+                        /** @var UserAddresses $address */
+                        $address = $form->userAddresses[$form->deliveryAddressId];
+                        $result = $address->save(false);
+                    }
+                    if ($result) $form->orderStep = 3;
+                } else {
+                    $form->orderStep = 3;
+                }
+                break;
+            case 3:
+                break;
+            case 4:
+                break;
+            default:
+                throw new yii\base\Exception('Нет такого шага');
+        }
+        
+        return (bool) $result;
     }
 }

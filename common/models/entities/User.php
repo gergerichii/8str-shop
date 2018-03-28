@@ -10,6 +10,7 @@ use yii\web\IdentityInterface;
 
 /**
  * Class User
+ *
  * @package common\models\entities
  *
  * User model
@@ -30,8 +31,9 @@ use yii\web\IdentityInterface;
  * @property integer $status
  * @property integer $created_at
  * @property integer $updated_at
- * @property UserAddresses[] $addresses
+ * @property UserAddresses[] $userAddresses
  * @property-write string $password write-only password
+ * @property string       $addresses [json]
  */
 class User extends BaseActiveRecord implements IdentityInterface {
     const STATUS_DELETED = 0;
@@ -139,7 +141,7 @@ class User extends BaseActiveRecord implements IdentityInterface {
             [['auth_key'], 'string', 'max' => 32],
             [['password_reset_token'], 'unique'],
             ['status', 'default', 'value' => self::STATUS_ACTIVE],
-            ['status', 'in', 'range' => [self::STATUS_ACTIVE, self::STATUS_DELETED]],
+            ['status', 'in', 'range' => [self::STATUS_ACTIVE, self::STATUS_DELETED], 'on' => [self::SCENARIO_REGISTER]],
 
             [['agree_to_news', 'privacy_agree'], 'boolean'],
             ['agree_to_news', 'default', 'value' => true],
@@ -360,7 +362,16 @@ class User extends BaseActiveRecord implements IdentityInterface {
     /**
      * @return \yii\db\ActiveQuery
      */
-    public function getAddresses() {
+    public function getUserAddresses() {
         return $this->hasMany(UserAddresses::class, ['user_id' => 'id']);
+    }
+    
+    public function afterFind() {
+        parent::afterFind();
+        $this->privacy_agree = true;
+    }
+    
+    public function __wakeup() {
+        $this->refresh();
     }
 }

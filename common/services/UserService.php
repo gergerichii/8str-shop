@@ -8,10 +8,9 @@
 
 namespace common\services;
 
-use common\models\entities\User;
 use Yii;
+use common\models\entities\User;
 use common\models\forms\SignupForm;
-use yii\base\Exception;
 
 /**
  * Class UserService
@@ -26,7 +25,7 @@ class UserService {
      * @return bool
      * @throws \Yii\base\Exception
      */
-    public static function signUp (SignupForm $form, $validate = true) {
+    public static function signUp (SignupForm &$form, $validate = true) {
         /** @var \common\models\entities\User $user */
         $user = $form->user;
         /** @var \common\models\entities\User $existsUser */
@@ -45,6 +44,7 @@ class UserService {
             }
             $existsUser->scenario = $user->scenario;
             $user = $existsUser;
+            $form->user = $user;
         } else {
             $user->setPassword();
             $user->generateAuthKey();
@@ -54,21 +54,28 @@ class UserService {
                 if(!$user->save($validate)) {
                     throw new \Exception('Ошибка записи пользователя');
                 }
-                /** @var \common\models\entities\UserAddresses[] $addresses */
-                $addresses = (is_array($form->userAddresses)) ? $form->userAddresses : [$form->userAddresses];
-                foreach($addresses as $address) {
-                    if ($validate && !$address->validate()) {
-                        return false;
+                if ($user->scenario !== User::SCENARIO_REGISTER_GUEST) {
+                    /** @var \common\models\entities\UserAddresses[] $addresses */
+                    $addresses = (is_array($form->userAddresses)) ? $form->userAddresses : [$form->userAddresses];
+                    foreach($addresses as $address) {
+                        if ($address->isNewRecord && empty($address->oldAttributes)) {
+                            continue;
+                        }
+                        if ($validate && !$address->validate()) {
+                            return false;
+                        }
+                        $user->link('userAddresses', $address);
                     }
-                    $user->link('addresses', $address);
+                    $form->userAddresses = $user->userAddresses;
                 }
+                return true;
             });
         } catch(\Exception $e) {
             throw new \RuntimeException($e->getMessage());
         } catch(\Throwable $e) {
             throw new \RuntimeException($e->getMessage());
         }
-    
+        
         return Yii::$app->getUser()->login($user);
     }
 }

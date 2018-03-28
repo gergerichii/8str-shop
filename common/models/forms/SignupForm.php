@@ -3,7 +3,7 @@ namespace common\models\forms;
 
 use common\models\entities\UserAddresses;
 use common\services\UserService;
-use elisdn\compositeForm\CompositeForm;
+use common\base\forms\CompositeForm;
 use common\models\entities\User;
 
 /**
@@ -18,27 +18,35 @@ class SignupForm extends CompositeForm
     public const SCENARIO_GUEST = 'guest';
     
     public function __construct(array $config = []) {
-        $this->user = new User();
-        $this->user->setScenario(User::SCENARIO_REGISTER);
-        
-        $addresses = new UserAddresses();
-        $addresses->scenario = UserAddresses::SCENARIO_REGISTER;
-        $this->userAddresses = [$addresses];
-        
         parent::__construct($config);
+        
+        if ($this->scenario !== self::SCENARIO_GUEST) {
+            $this->userAddresses = new UserAddresses(['scenario' => UserAddresses::SCENARIO_REGISTER]);
+            $userScenario = User::SCENARIO_REGISTER;
+        } else {
+            $userScenario = User::SCENARIO_REGISTER_GUEST;
+        }
+        $this->user = new User(['scenario' => $userScenario]);
     }
     
     public function setScenario($value) {
         parent::setScenario($value);
-        if ($value === self::SCENARIO_GUEST) {
-            $this->user->setScenario(User::SCENARIO_REGISTER_GUEST);
-        } else {
-            $this->user->setScenario(User::SCENARIO_REGISTER);
+        if (isset($this->user)) {
+            if ($value === self::SCENARIO_GUEST) {
+                $this->user->setScenario(User::SCENARIO_REGISTER_GUEST);
+                $this->enabledForms = array_diff($this->includedForms(), ['userAddress']);
+            } else {
+                $this->user->setScenario(User::SCENARIO_REGISTER);
+                $this->enabledForms = null;
+            }
         }
     }
     
+    /**
+     * @return array
+     */
     public function scenarios() {
-        return [self::SCENARIO_DEFAULT => [], self::SCENARIO_GUEST => []];
+        return array_merge(parent::scenarios(), [self::SCENARIO_GUEST => []]);
     }
     
     /**
@@ -54,11 +62,7 @@ class SignupForm extends CompositeForm
         return UserService::signUp($this, $validate) ? $this->user : null;
     }
     
-    /**
-     * @return array of internal forms like ['meta', 'values']
-     */
-    protected function internalForms()
-    {
+    public function includedForms() {
         return ['user', 'userAddresses'];
     }
 }

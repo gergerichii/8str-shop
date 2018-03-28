@@ -21,18 +21,19 @@ $signupForm = $orderForm->signupForm;
             </header>
             <div class="xs-margin"></div><!-- space -->
             <div class="panel-group custom-accordion" id="checkout">
-                <?php foreach(OrderForm::SCENARIO_STEPS as $formStep => $formData): ?>
+                <?php foreach($orderForm->scenarioSteps as $formStep => $formData): ?>
                 <div class="panel" data-step="<?=$formStep?>">
                     <div class="accordion-header">
                         <div class="accordion-title"><?=$formStep?> Шаг: <span><?=$formData['title']?></span></div>
                         <!-- End .accordion-title -->
-                        <a class="accordion-btn <?= $step == $formStep ? 'opened' : '' ?>" data-toggle="collapse" data-parent="#checkout" data-target="#<?=$formData['name']?>"></a>
+                        <?php $disabled = ($formStep > $orderForm->orderStep) ? 'style="display:none;"' : '';?>
+                        <a <?=$disabled?> class="accordion-btn <?= $step == $formStep ? 'opened' : '' ?>" data-toggle="collapse" data-parent="#checkout" data-target="#<?=$formData['name']?>"></a>
                     </div><!-- End .accordion-header -->
 
                     <div id="<?=$formData['name']?>" class="collapse <?= $step == $formStep ? 'in' : '' ?>">
                         <div class="panel-body">
                             <?php \yii\widgets\Pjax::begin(['id' => 'step' . $formStep]); ?>
-                            <?php echo $this->render("pieces/{$formData['name']}", compact('orderForm')); ?>
+                            <?php if(!$disabled) echo $this->render("pieces/{$formData['name']}", compact('orderForm')); ?>
                             <?php \yii\widgets\Pjax::end(); ?>
                         </div><!-- End .panel-body -->
                     </div><!-- End .panel-collapse -->
@@ -55,14 +56,15 @@ $signupForm = $orderForm->signupForm;
     });
     $(document).delegate('[data-action=next-step]', 'click', function(){
         panel = $(this).parents('.panel');
-        nextStep = $(panel).data('step') + 1;
-        nextPanel = $(panel).siblings('.panel[data-step=' + nextStep + ']');
-        pjaxContainer = $(this).parents('[data-pjax-container]');
+        var nextStep = $(panel).data('step') + 1;
+        var nextPanel = $(panel).siblings('.panel[data-step=' + nextStep + ']');
+        var pjaxContainer = $(this).parents('[data-pjax-container]');
+        var nextPjaxContainerId = false;
         if($(nextPanel).find('[data-pjax-container]').length) {
             nextPjaxContainerId = '#' + $(nextPanel).find('[data-pjax-container]').attr('id');
-        } else {
-            nextPjaxContainerId = false;
         }
+        
+        /* Если */
         if (pjaxContainer.length && $(this).attr('href') !== '#') {
             $(pjaxContainer).one('pjax:success', function(a,b,c,d){
                 if (d.status == 200) {
@@ -70,6 +72,7 @@ $signupForm = $orderForm->signupForm;
                         $.pjax.reload({container: nextPjaxContainerId, "timeout" : 10000});
                         $(nextPjaxContainerId).one('pjax:success', function(a,b,c,d){
                             if (d.status == 200) {
+                                $(nextPanel).find('a.accordion-btn').toggle(true);
                                 scrollToNext();
                             }
                         });

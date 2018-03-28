@@ -62,7 +62,7 @@ class UserAddresses extends BaseActiveRecord
             'address' => Yii::t('app', 'Address'),
         ];
     }
-
+    
     /**
      * @return \yii\db\ActiveQuery
      */

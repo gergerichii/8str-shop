@@ -96,4 +96,14 @@ class BaseActiveRecord extends ActiveRecord
 
         return $attributes;
     }
+    
+//    public function validate($attributeNames = NULL, $clearErrors = TRUE) {
+//        if ($this->isNewRecord && is_null($attributeNames) && empty($this->oldAttributes)) {
+//            if ($clearErrors) {
+//                $this->clearErrors();
+//            }
+//            return true;
+//        }
+//        return parent::validate($attributeNames, $clearErrors);
+//    }
 }

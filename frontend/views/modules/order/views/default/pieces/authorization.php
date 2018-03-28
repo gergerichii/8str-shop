@@ -32,8 +32,11 @@ $user = yii::$app->getUser();
                 'type' => 'stepForm',
                 'pjax' => 'true',
             ],
+            'id' => 'authorizationForm'
         ],
     ]); ?>
+
+    <?=$form->field($orderForm, 'orderStep', ['inputOptions' => ['value' => 1, 'id' => false]])->hiddenInput()->label(false)?>
     
     <div class="row">
         <div class="col-md-6 col-sm-6 col-xs-12">
@@ -84,7 +87,8 @@ $user = yii::$app->getUser();
     
         </div><!-- End .col-md-6 -->
     
-        <div class="col-md-6 col-sm-6 col-xs-12 authorizationFormContainer" id="loginFormContainer" style="display: none">
+        <?php $hide = ($orderForm->orderMode !== OrderForm::ORDER_MODE_LOGIN) ? 'style="display: none"' : ''; ?>
+        <div class="col-md-6 col-sm-6 col-xs-12 authorizationFormContainer" id="loginFormContainer" <?=$hide?>>
             <h2 class="checkout-title">Уже зарегистрированы?</h2>
             <p>Войдите под своим аккаунтом, и... Добро пожаловать к нам вновь!</p>
             <div class="xs-margin"></div>
@@ -99,6 +103,7 @@ $user = yii::$app->getUser();
                 <?= $form->field($loginForm, 'username')->textInput([
                     'class' => 'form-control input-lg',
                     'placeholder' => 'Ваш ' . $loginForm->getAttributeLabel('username'),
+                    'disabled' => (bool)$hide,
                 ])->label(false) ?>
             </div><!-- End .input-group -->
             <div class="input-group xs-margin">
@@ -109,6 +114,7 @@ $user = yii::$app->getUser();
                 <?= $form->field($loginForm, 'password')->passwordInput([
                     'class' => 'form-control input-lg',
                     'placeholder' => 'Ваш ' . $loginForm->getAttributeLabel('password'),
+                    'disabled' => (bool)$hide,
                 ])->label(false) ?>
             </div><!-- End .input-group -->
             <span class="help-block text-right">
@@ -121,15 +127,17 @@ $user = yii::$app->getUser();
                         <i class="fa fa-check"></i>
                     </span>'
                         . $loginForm->getAttributeLabel('rememberMe'),
+                    'disabled' => (bool)$hide,
                 ]) ?>
             </div><!-- End .input-group -->
         </div><!-- End .col-md-6 -->
-        <div class="col-md-6 col-sm-6 col-xs-12 authorizationFormContainer" id="guestFormContainer" style="display: none">
+        <?php $hide = ($orderForm->orderMode !== OrderForm::ORDER_MODE_GUEST) ? 'style="display: none"' : ''; ?>
+        <div class="col-md-6 col-sm-6 col-xs-12 authorizationFormContainer" id="guestFormContainer" <?=$hide?>>
             <h2 class="checkout-title">Не хотите регистрироваться?</h2>
             <p>Заполните минимальные сведения о себе чтобы мы могли Вам оформить заказ.</p>
             <div class="xs-margin"></div>
     
-            <?= $this->render('signup', ['model' => $signupForm, 'form' => $form]) ?>
+            <?= $this->render('signup', ['model' => $signupForm, 'form' => $form, 'disabled' => (bool)$hide]) ?>
     
         </div><!-- End .col-md-6 -->
     </div><!-- End.row -->
@@ -137,24 +145,27 @@ $user = yii::$app->getUser();
     
     <?php kartik\form\ActiveForm::end(); ?>
     
-    <?php common\helpers\ViewHelper::startRegisterScript($this); ?>
-    <script>
-        $(function() {
-            function setFormVisible() {
-                var forms =$('.authorizationFormContainer');
-                forms.toggle(false);
-                forms.find('input').prop( "disabled", true);
-                var form = $('input[name="OrderForm[orderMode]"]:checked').val();
-                var formContainer = $('#' + form + 'FormContainer');
-                var formShow = form !== 'register';
-                $(formContainer).toggle(formShow);
-                $(formContainer).find('input').prop( "disabled", !formShow);
-            }
-            setFormVisible();
-            $(document).delegate('input[name="OrderForm[orderMode]"]', 'click', function () {
-                setFormVisible()
+    <?php if(!Yii::$app->request->isPjax): ?>
+        <?php common\helpers\ViewHelper::startRegisterScript($this); ?>
+        <script>
+            $(function() {
+                function setFormVisible() {
+                    var subForms =$('.authorizationFormContainer');
+                    subForms.toggle(false);
+                    subForms.find('input').prop( "disabled", true);
+                    var subForm = $('input[name="OrderForm[orderMode]"]:checked').val();
+                    var subFormContainer = $('#' + subForm + 'FormContainer');
+                    if (subForm !== 'register') {
+                        $(subFormContainer).find('input').prop( "disabled", false);
+                        $(subFormContainer).find('.checkbox.disabled').removeClass( "disabled" );
+                        $(subFormContainer).toggle(true);
+                    }
+                }
+                $(document).delegate('input[name="OrderForm[orderMode]"]', 'click', function () {
+                    setFormVisible()
+                });
             });
-        });
-    </script>
-    <?php common\helpers\ViewHelper::endRegisterScript(); ?>
+        </script>
+        <?php common\helpers\ViewHelper::endRegisterScript(); ?>
+    <?php endif; ?>
 <?php endif; ?>

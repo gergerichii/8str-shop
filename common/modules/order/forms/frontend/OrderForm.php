@@ -9,25 +9,40 @@
 namespace common\modules\order\forms\frontend;
 
 use common\models\entities\User;
+use common\models\entities\UserAddresses;
 use common\models\forms\LoginForm;
 use common\models\forms\SignupForm;
-use common\modules\order\models\Order;
-use elisdn\compositeForm\CompositeForm;
+use common\base\forms\CompositeForm;
 
 /**
  * Class OrderForm
  *
  * @package common\modules\order\forms\frontend
  *
- * @property LoginForm $loginForm
+ * @property LoginForm  $loginForm
  * @property SignupForm $signupForm
+ * @property User       $user
+ * @property UserAddresses[] $userAddresses
+ * @property array      $scenarioSteps
+ * @property int        $orderStep
+ * @property string     $orderMode
  *
  */
 class OrderForm extends CompositeForm {
-    
+
     public const ORDER_MODE_REGISTER = 'register';
     public const ORDER_MODE_LOGIN = 'login';
     public const ORDER_MODE_GUEST = 'guest';
+    
+    public const DELIVERY_METHOD_MKAD = 'mkad';
+    public const DELIVERY_METHOD_OVER_MKAD = 'over_mkad';
+    public const DELIVERY_METHOD_SELF = 'self';
+    
+    public const DELIVERY_METHODS = [
+        self::DELIVERY_METHOD_MKAD,
+        self::DELIVERY_METHOD_OVER_MKAD,
+        self::DELIVERY_METHOD_SELF,
+    ];
     
     public const SCENARIO_STEPS = [
         1 => [
@@ -38,94 +53,165 @@ class OrderForm extends CompositeForm {
             'name' => 'deliveryInformation',
             'title' => 'Информация по доставке',
         ],
-//        3 => [
-//            'name' => 'paymentMethod',
-//            'title' => 'Способ оплаты',
-//            'models' => [
-//                'paymentMethodForm',
-//            ],
-//        ],
-//        4 => [
-//            'name' => 'confirmOrder',
-//            'title' => 'Подтверждение заказа',
-//            'models' => [
-//                'cartForm',
-//            ],
-//        ],
-//
+        3 => [
+            'name' => 'paymentMethod',
+            'title' => 'Способ оплаты',
+        ],
+        4 => [
+            'name' => 'confirmOrder',
+            'title' => 'Подтверждение заказа',
+        ],
     ];
     
+    /** @var int */
+    public $orderStep = 1;
+    /** @var string  */
     public $orderMode = self::ORDER_MODE_REGISTER;
-    public $orderStep;
+    /** @var string  */
+    public $deliveryMethod = self::DELIVERY_METHOD_SELF;
+    /** @var int  */
+    public $deliveryAddressId = 0;
     
-    protected $__forms = [];
     
+    /**
+     * OrderForm constructor.
+     *
+     * @param array $config
+     */
     public function __construct(array $config = []) {
         
-        $this->loginForm = new LoginForm();
-        $this->signupForm = new SignupForm();
-        $this->signupForm->setScenario(SignupForm::SCENARIO_GUEST);
-        
-        $this->orderStep = \Yii::$app->session->get(
-            'orderStep',
-            \Yii::$app->user->isGuest ? 1 : 2
-        );
-@        $this->scenario = self::SCENARIO_STEPS[$this->orderStep]['name'];
-        
         parent::__construct($config);
+        
+        $this->loginForm = new LoginForm();
+        $this->signupForm = new SignupForm(['scenario' => SignupForm::SCENARIO_GUEST]);
+        if (\Yii::$app->user->isGuest) {
+            $this->user = new User(['scenario' => User::SCENARIO_REGISTER_GUEST]);
+        } else {
+            $this->user = \Yii::$app->user->identity;
+        }
+        
+        if ($this->orderMode === self::ORDER_MODE_LOGIN) {
+            $this->enabledForms = ['loginForm'];
+        } elseif ($this->orderMode === self::ORDER_MODE_GUEST) {
+            $this->enabledForms = ['signupForm'];
+        }
+        if (\Yii::$app->user->isGuest) {
+            $this->orderStep = 1;
+            $this->userAddresses = [new UserAddresses()];
+        } else {
+            $this->orderStep = 2;
+            $this->enabledForms = array_merge($this->enabledForms, ['userAddresses']);
+            /** @var \common\models\entities\User $user */
+            $user = \Yii::$app->user->identity;
+            $this->userAddresses = $user->userAddresses;
+        }
+        
     }
     
+    /**
+     * @return array
+     */
     public function rules() {
         return [
             ['orderMode', 'in', 'range' => [self::ORDER_MODE_REGISTER, self::ORDER_MODE_LOGIN, self::ORDER_MODE_GUEST]],
+            ['orderStep', 'integer'],
+            ['orderStep', 'checkOrderStep'],
+            [['orderMode', 'orderStep',], 'required'],
+            ['deliveryMethod', 'in', 'range' => self::DELIVERY_METHODS],
+            ['deliveryAddressId', 'checkDeliveryAddressId']
         ];
     }
     
-    public function scenarios() {
-        return [
-            'default' => ['orderMode'],
-            self::SCENARIO_STEPS[1]['name'] => ['orderMode'],
-            self::SCENARIO_STEPS[2]['name'] => ['orderMode'],
-//            self::SCENARIO_STEPS[3]['name'] => ['orderMode'],
-//            self::SCENARIO_STEPS[4]['name'] => ['orderMode'],
-        ];
+    public function checkDeliveryAddressId($attr) {
+        $this->$attr = intval($this->$attr);
+        $res = array_key_exists($this->$attr, (array)$this->userAddresses);
+        
+        if (!$res) {
+            $this->addError($attr, 'Не правильно выбран адрес.');
+        }
+        return $res;
     }
     
-    public function validate($attributeNames = NULL, $clearErrors = TRUE) {
-        $this->__forms = $this->_forms;
-        switch ($this->orderMode) {
-            case self::ORDER_MODE_LOGIN:
-                $this->_forms = [
-                    'loginForm' => $this->__forms['loginForm'],
-                ];
+    public function checkOrderStep($step): int {
+        switch ($step) {
+            case 2:
+                if (\Yii::$app->user->isGuest) {
+                    $this->addError('orderStep', 'Не пройдена авторизация для перехода к следующему шану');
+                    return false;
+                }
                 break;
-            case self::ORDER_MODE_GUEST:
-                $this->_forms = [
-                    'signupForm' => $this->__forms['signupForm'],
-                ];
+            case 3:
+                if ($this->deliveryMethod !== 'self' && empty($this->deliveryAddressId)) {
+                    $this->addError('orderStep', 'Не указан адрес доставки для перехода к следующему шагу');
+                    return false;
+                }
                 break;
             default:
-                $this->_forms = [];
+                return true;
         }
-
-        $ret =  parent::validate($attributeNames, $clearErrors);
         
-        $this->_forms = $this->__forms;
+        return true;
+    }
+    
+    public function load($data, $formName = NULL) {
+        $this->enabledForms = null;
+        return parent::load($data, $formName);
+    }
+    
+    public function beforeValidate() {
+        if ($this->orderMode === self::ORDER_MODE_LOGIN) {
+            $this->enabledForms = array_diff($this->includedForms(), ['signupForm']);
+        } elseif ($this->orderMode === self::ORDER_MODE_GUEST) {
+            $this->enabledForms = array_diff($this->includedForms(), ['loginForm']);
+        } else {
+            $this->enabledForms = array_diff($this->includedForms(), ['loginForm', 'signupForm']);
+        }
+        if ($this->orderStep < 3) {
+            $this->enabledForms = array_diff($this->enabledForms, ['paymentForm']);
+        }
+        if ($this->orderStep < 2) {
+            $this->enabledForms = array_diff($this->enabledForms, ['userAddresses', 'user']);
+        }
+        return true;
+    }
+    
+    /**
+     * @param null $attributeNames
+     * @param bool $clearErrors
+     *
+     * @return bool
+     */
+    public function validate($attributeNames = NULL, $clearErrors = TRUE) {
+        $newAddresses = $this->userAddresses;
+        if ($flag = ($newAddresses[0]->isNewRecord && empty($attributeNames) && empty($newAddresses[0]->oldAttributes))) {
+            $userAddress = $newAddresses[0];
+            unset($newAddresses[0]);
+            $this->userAddresses = $newAddresses;
+        }
+        
+        $ret = parent::validate($attributeNames, $clearErrors);
+        /** @noinspection PhpUndefinedVariableInspection */
+        if ($flag) {
+            /** @noinspection PhpUndefinedVariableInspection */
+            $newAddresses[0] = $userAddress;
+            $this->userAddresses = $newAddresses;
+        }
         
         return $ret;
     }
     
-    public function setScenario($value) {
-        parent::setScenario($value);
-    }
-    
-    
-    
     /**
      * @return array of internal forms like ['meta', 'values']
      */
-    protected function internalForms()
+    public function includedForms()
     {
-        return ['loginForm', 'signupForm'];
+        return ['loginForm', 'signupForm', 'user', 'userAddresses', 'paymentForm'];
+    }
+    
+    /**
+     * @return array
+     */
+    public function getScenarioSteps() {
+        return self::SCENARIO_STEPS;
     }
 }

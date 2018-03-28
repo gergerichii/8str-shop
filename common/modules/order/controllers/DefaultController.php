@@ -31,26 +31,24 @@ class DefaultController extends Controller
         $request = \Yii::$app->request;
         $session = \Yii::$app->session;
         $orderForm = ($session->has('orderForm')) ? unserialize($session->get('orderForm')) : new OrderForm();
+        /** @var \common\modules\order\Module $orderModule */
+        $orderModule = \Yii::$app->getModule('order');
         
         if ($orderForm->load($request->post()) && $orderForm->validate()) {
-            switch ($orderForm->orderStep) {
-                case 1:
-                    if ($orderForm->orderMode === OrderForm::ORDER_MODE_REGISTER) {
-                        $url = Url::toRoute(['/site/signup']);
-                        return $this->redirect($url);
-                    } elseif ($orderForm->orderMode === OrderForm::ORDER_MODE_GUEST) {
-                        $result = $orderForm->signupForm->signup(false);
-                        $orderForm->orderStep = 2;
-                    } elseif ($orderForm->orderMode === OrderForm::ORDER_MODE_LOGIN) {
-                        $result = $orderForm->loginForm->login();
-                        $orderForm->orderStep = 2;
-                    }
-                    break;
-                case 2:
-                
+            if (intval($orderForm->orderStep) === 1 && $orderForm->orderMode === OrderForm::ORDER_MODE_REGISTER) {
+                $url = Url::toRoute(['/site/signup']);
+                return $this->redirect($url);
+            } else {
+                $orderModule->processOrder($orderForm);
             }
         } else {
             $errors = $orderForm->getErrorSummary(true);
+            if ($errors) {
+                \Yii::$app->session->setFlash('modelErrors', $errors);
+                \Yii::$app->response->on(Response::EVENT_BEFORE_SEND, function(){
+                    \Yii::$app->response->setStatusCode(207, 'error');
+                });
+            }
         }
         
         $ser = serialize($orderForm);

@@ -4,14 +4,21 @@
 /* @var $model \common\models\forms\SignupForm */
 /* @var $formFields array */
 /* @var $subform string */
+/* @var $disabled bool */
 
 /* @var $form \kartik\widgets\ActiveForm */
 
-$model = $model->$subform;
+if (!isset($disabled)) {
+    $disabled = false;
+}
+
+if (!empty($subform)) {
+    $model = $model->$subform;
+}
 $prefix = '';
 if (is_array($model)) {
+    $prefix = '[' . key($model) . ']';
     $model = reset($model);
-    $prefix = '[0]';
 }
 ?>
 
@@ -30,6 +37,7 @@ if (is_array($model)) {
             <?= $form->field($model, $prefix.$field)->input($matches['type'],[
                 'class' => 'form-control input-lg',
                 'placeholder' => 'Заполните ' . $model->getAttributeLabel($field),
+                'disabled' => $disabled,
             ])->label(false); ?>
         </div><!-- End .input-group -->
     <?php elseif(in_array($matches['type'], ['checkbox', 'radio'])): ?>
@@ -40,6 +48,7 @@ if (is_array($model)) {
                     <i class="fa fa-check"></i>
                 </span>'
                     . $model->getAttributeLabel($field),
+                'disabled' => $disabled,
             ])->error(false) ?>
 
         </div><!-- End .input-group -->

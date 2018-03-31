@@ -43,7 +43,7 @@ return [
         ],
         
         'mailer' => [
-            'useFileTransport' => true,
+            'useFileTransport' => false,
             'view' => $viewConfig,
             'transport' => [
                 'class' => 'Swift_SmtpTransport',

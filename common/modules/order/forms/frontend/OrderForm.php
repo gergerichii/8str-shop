@@ -152,8 +152,10 @@ class OrderForm extends CompositeForm {
     
     public function checkDeliveryAddressId($attr) {
         $this->$attr = intval($this->$attr);
-        $res = ($this->$attr === 0 && $this->deliveryMethod === self::DELIVERY_METHOD_SELF)
-            || array_key_exists($this->$attr, (array)$this->userAddresses);
+        $res = intval($this->orderStep) < 2;
+        $res |= $this->deliveryMethod === self::DELIVERY_METHOD_SELF;
+        $res |= array_key_exists(intval($this->$attr), (array)
+            $this->userAddresses);
         
         if (!$res) {
             $this->addError($attr, 'Не правильно выбран адрес доставки.');
@@ -215,7 +217,9 @@ class OrderForm extends CompositeForm {
      */
     public function validate($attributeNames = NULL, $clearErrors = TRUE) {
         $newAddresses = $this->userAddresses;
-        if ($flag = ($newAddresses[0]->isNewRecord && empty($attributeNames) && empty($newAddresses[0]->oldAttributes))) {
+        $flag = intval($this->orderStep) < 2;
+        $flag |= $this->deliveryMethod === self::DELIVERY_METHOD_SELF || intval($this->deliveryAddressId) !== 0;
+        if ($flag) {
             $userAddress = $newAddresses[0];
             unset($newAddresses[0]);
             $this->userAddresses = $newAddresses;

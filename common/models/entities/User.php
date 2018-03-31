@@ -32,7 +32,7 @@ use yii\web\IdentityInterface;
  * @property integer $created_at
  * @property integer $updated_at
  * @property UserAddresses[] $userAddresses
- * @property-write string $password write-only password
+ * @property string $password password
  * @property string       $addresses [json]
  */
 class User extends BaseActiveRecord implements IdentityInterface {

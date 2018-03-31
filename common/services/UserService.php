@@ -45,6 +45,8 @@ class UserService {
                 }
             }
             $existsUser->scenario = $user->scenario;
+            $existsUser->password = $user->password;
+            $existsUser->password_confirm = $user->password_confirm;
             $user = $existsUser;
             $form->user = $user;
         } else {

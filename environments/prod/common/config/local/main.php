@@ -17,10 +17,8 @@ return [
             'tablePrefix' => 'pdx',
         ],
         'mailer' => [
-            'mailer' => [
-                'transport' => [
-                    'port' => '2525',
-                ],
+            'transport' => [
+                'port' => '2525',
             ],
         ],
         'sphinx' => [

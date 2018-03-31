@@ -17,8 +17,11 @@ return [
             'tablePrefix' => 'pdx',
         ],
         'mailer' => [
-            'class' => 'yii\swiftmailer\Mailer',
-            'viewPath' => '@common/mail',
+            'mailer' => [
+                'transport' => [
+                    'port' => '2525',
+                ],
+            ],
         ],
         'sphinx' => [
             'class' => 'yii\sphinx\Connection',

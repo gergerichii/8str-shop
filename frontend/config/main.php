@@ -43,16 +43,7 @@ return [
         ],
         
         'mailer' => [
-            'useFileTransport' => false,
             'view' => $viewConfig,
-            'transport' => [
-                'class' => 'Swift_SmtpTransport',
-                'host' => 'smtp.beget.ru',
-                'username' => 'support@8str.ru',
-                'password' => 'Volga2015',
-                'port' => '25',
-                'encryption' => 'tls',
-            ],
         ],
         
     ],

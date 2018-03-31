@@ -41,6 +41,19 @@ $config = [
             'db' => 'db',  // ID компонента для взаимодействия с БД. По умолчанию 'db'.
             'sessionTable' => 'session', // название таблицы для хранения данных сессии. По умолчанию 'session'.
         ],
+        'mailer' => [
+            'class' => 'yii\swiftmailer\Mailer',
+            'useFileTransport' => defined('YII_DEBUG') && YII_DEBUG,
+            'view' => '@common/mail',
+            'transport' => [
+                'class' => 'Swift_SmtpTransport',
+                'host' => 'smtp.beget.ru',
+                'username' => 'support@8str.ru',
+                'password' => 'Volga2015',
+                'port' => '2525',
+                'encryption' => 'tls',
+            ],
+        ],
     ],
     'modules' => [
         'files' => [

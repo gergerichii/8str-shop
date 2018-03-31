@@ -45,7 +45,7 @@ class Module extends \yii\base\Module implements BootstrapInterface
             $cartService->init();
             /** @var \common\modules\cart\models\Cart $guestCart */
             $guestCart = $cartService->cart->my(Yii::$app->session->get('tmp_user_id'));
-            if (yii::$app->user->id && $guestCart && $guestCart->count) {
+            if (yii::$app->user->id && yii::$app->user->identity->isActive() && $guestCart && $guestCart->count) {
                 $cartService->cart->delete();
                 $guestCart->user_id = yii::$app->user->id;
                 $guestCart->tmp_user_id = null;

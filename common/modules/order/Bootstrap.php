@@ -37,7 +37,7 @@ class Bootstrap implements BootstrapInterface
         ];
         $beRules = [
             'order' => '/order/default/index',
-            'order/<_c:[\w]+>' => '/order/<_c>/index',
+            'order/<_a:[\w]+>' => '/order/default/<_a>',
             'order/<_c:[\w]+>/<_a:[\w]+>' => '/order/<_c>/<_a>',
         ];
         if (count($urlManagers)) {

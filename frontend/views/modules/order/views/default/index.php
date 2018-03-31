@@ -11,7 +11,20 @@ $loginForm = $orderForm->loginForm;
 /** @var \common\models\forms\SignupForm $signupForm */
 $signupForm = $orderForm->signupForm;
 
+$csrfName = \Yii::$app->request->csrfParam;
+$token = \Yii::$app->request->csrfToken;
 ?>
+
+<?php common\helpers\ViewHelper::startRegisterScript($this); ?>
+<script>
+    csrf_name = '<?=$csrfName?>';
+    csrf_value = '<?=$token?>';
+    
+    $('input[name=' + csrf_name +']').val(csrf_value);
+    $('meta[name=csrf-token]').attr('content', csrf_value)
+</script>
+<?php common\helpers\ViewHelper::endRegisterScript(); ?>
+
 <div class="container">
     <div class="row">
         <div class="col-md-12">
@@ -26,7 +39,7 @@ $signupForm = $orderForm->signupForm;
                     <div class="accordion-header">
                         <div class="accordion-title"><?=$formStep?> Шаг: <span><?=$formData['title']?></span></div>
                         <!-- End .accordion-title -->
-                        <?php $disabled = ($formStep > $orderForm->orderStep) ? 'style="display:none;"' : '';?>
+                        <?php $disabled = ($formStep > intval($orderForm->orderStep)) ? 'style="display:none;"' : '';?>
                         <a <?=$disabled?> class="accordion-btn <?= $step == $formStep ? 'opened' : '' ?>" data-toggle="collapse" data-parent="#checkout" data-target="#<?=$formData['name']?>"></a>
                     </div><!-- End .accordion-header -->
 
@@ -41,13 +54,23 @@ $signupForm = $orderForm->signupForm;
                 </div><!-- End .panel -->
                 <?php endforeach; ?>
             </div><!-- End .panel-group #checkout -->
-            <div class="xlg-margin"></div><!-- space -->
         </div><!-- End .col-md-12 -->
     </div><!-- End .row -->
 </div><!-- End .container -->
 
+<?php
+$csrfName = \Yii::$app->request->csrfParam;
+$token = \Yii::$app->request->csrfToken;
+?>
+
 <?php common\helpers\ViewHelper::startRegisterScript($this); ?>
 <script>
+    csrf_name = '<?=$csrfName?>';
+    csrf_value = '<?=$token?>';
+    
+    $('input[name=' + csrf_name +']').val(csrf_value);
+    $('meta[name=csrf-token]').attr('content', csrf_value)
+    
     $(document).ready(function() {
         setTimeout(function () {
             $('html, body').animate({scrollTop: $('.panel[data-step=<?=$step?>]').offset().top-70}, 1000);

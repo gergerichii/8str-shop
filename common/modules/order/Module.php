@@ -3,8 +3,11 @@ namespace common\modules\order;
 
 use common\models\entities\User;
 use common\models\entities\UserAddresses;
+use common\modules\files\models\File;
 use common\modules\order\behaviors\ShippingCost;
 use common\modules\order\forms\frontend\OrderForm;
+use common\modules\order\models\TemporaryOrder;
+use Mpdf\Gif\ImageHeader;
 use yii;
 
 class Module extends \yii\base\Module
@@ -208,13 +211,105 @@ class Module extends \yii\base\Module
                 }
                 break;
             case 3:
+                $form->cartElements = \Yii::$app->get('cartService')->elements;
+                $form->orderStep = 4;
+                $result = true;
                 break;
             case 4:
+                $result = $this->checkOut($form);
                 break;
             default:
                 throw new yii\base\Exception('Нет такого шага');
         }
         
         return (bool) $result;
+    }
+    
+    /**
+     * @param OrderForm $form
+     *
+     * @return bool
+     * @throws \yii\base\Exception
+     * @throws \yii\base\InvalidConfigException
+     */
+    protected function checkOut(&$form) {
+        if (!$form->orderModel) {
+            $form->orderModel = new TemporaryOrder();
+        }
+        $order = &$form->orderModel;
+        $order->user_id = $form->user->id;
+        $userAddresses = $form->userAddresses;
+        $order->user_address_id = $userAddresses[$form->deliveryAddressId]->id;
+        if ($form->deliveryMethod === $form::DELIVERY_METHOD_SELF) {
+            $address = Yii::$app->params['contacts']['Адрес'];
+        } else {
+            $address = $userAddresses[$form->deliveryAddressId];
+            $address = $address->region . ', ' . $address->city . ', ' . $address->address;
+        }
+        $order->delivery_options = [
+            'method' => $form->deliveryMethod,
+            'methodName' => $form::DELIVERY_METHODS[$form->deliveryMethod],
+            'methodPrice' => $form::DELIVERY_METHODS_PRICES[$form->deliveryMethod],
+            'address' => $address,
+            'contact' => $form->user->first_name . ' ' . $form->user->last_name,
+            'email' => $form->user->email,
+            'phone' => $form->user->phone_number,
+            'comment' => $form->deliveryComment,
+        ];
+        $order->payment_method = [
+            'method' => $form->paymentForm->methodId,
+            'methodName' => $form->paymentForm::PAYMENT_METHODS[$form->paymentForm->methodId],
+            'requisites' => $form->paymentForm->requisites,
+        ];
+        
+        if ($cartElements = $form->cartElements) {
+            /** @var \common\modules\cart\models\Cart $cart */
+            $cart = reset($cartElements)->cart;
+    
+    
+            $orderData = [
+                'count' => $cart->getCount(),
+                'cost' => $cart->getCost(),
+                'products' => [],
+            ];
+            /** @var \common\modules\cart\models\CartElement $element */
+            foreach($cartElements as $i => $element) {
+                $dataItem = [];
+                /** @var \common\modules\catalog\models\Product $product */
+                $product = $element->getModel();
+                $productPrice = $element->getPrice();
+                $productCost = $element->getCost();
+                $productCount = $element->getCount();
+        
+                $dataItem['name'] = $product->name;
+                $dataItem['code'] = $product->id + 10000000;
+                $dataItem['price'] = $productPrice;
+                $dataItem['count'] = $productCount;
+                $dataItem['cost'] = $productCost;
+        
+                /** @var \common\modules\files\Module $fileManager */
+                $fileManager = Yii::$app->getModule('files');
+                if (count($product->images)) {
+                    $image = $product->images[0];
+                    $filePath = $fileManager->getFilePath('products/images/little', $image, null, true, true);
+                    $dataItem['imageMIME'] = yii\helpers\FileHelper::getMimeType($filePath);
+                    $dataItem['imageName'] = pathinfo($filePath)['basename'];
+                    $imageContent = file_get_contents($filePath);
+                    $dataItem['image'] = base64_encode($imageContent);
+                }
+        
+                $orderData['products'][] = $dataItem;
+            }
+    
+            $order->order_data = $orderData;
+        } else {
+            $order->order_data = [];
+        }
+        $ret = $order->validate() && $order->save();
+        
+        if ($ret)
+            $order->notifyEveryone();
+        
+        return $ret;
     }
 }

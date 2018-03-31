@@ -181,7 +181,7 @@ class Order extends \common\base\models\BaseActiveRecord implements OrderInterfa
     {
         $userModel = yii::$app->getModule('order')->userModel;
         if($userModel && class_exists($userModel)) {
-            return $this->hasOne($userModel::class, ['id' => 'seller_user_id']);
+            return $this->hasOne(get_class($userModel), ['id' => 'seller_user_id']);
         }
         
         return null;
@@ -196,7 +196,7 @@ class Order extends \common\base\models\BaseActiveRecord implements OrderInterfa
     {
         $userModel = yii::$app->getModule('order')->sellerModel;
         if($userModel && class_exists($userModel)) {
-            return $this->hasOne($userModel::class, ['id' => 'seller_user_id']);
+            return $this->hasOne(get_class($userModel), ['id' => 'seller_user_id']);
         }
         
         return null;

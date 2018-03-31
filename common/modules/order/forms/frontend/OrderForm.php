@@ -13,6 +13,7 @@ use common\models\entities\UserAddresses;
 use common\models\forms\LoginForm;
 use common\models\forms\SignupForm;
 use common\base\forms\CompositeForm;
+use common\modules\cart\models\Cart;
 
 /**
  * Class OrderForm
@@ -23,6 +24,8 @@ use common\base\forms\CompositeForm;
  * @property SignupForm $signupForm
  * @property User       $user
  * @property UserAddresses[] $userAddresses
+ * @property PaymentMethodForm $paymentForm
+ * @property Cart[] $cartElements
  * @property array      $scenarioSteps
  * @property int        $orderStep
  * @property string     $orderMode
@@ -37,11 +40,20 @@ class OrderForm extends CompositeForm {
     public const DELIVERY_METHOD_MKAD = 'mkad';
     public const DELIVERY_METHOD_OVER_MKAD = 'over_mkad';
     public const DELIVERY_METHOD_SELF = 'self';
+    public const DELIVERY_METHOD_TK = 'tk';
     
     public const DELIVERY_METHODS = [
-        self::DELIVERY_METHOD_MKAD,
-        self::DELIVERY_METHOD_OVER_MKAD,
-        self::DELIVERY_METHOD_SELF,
+        self::DELIVERY_METHOD_MKAD => 'Доставка в пределах МКАД',
+        self::DELIVERY_METHOD_OVER_MKAD => 'Доставка за пределы МКАД',
+        self::DELIVERY_METHOD_SELF => 'Самовывоз из шоурума на Комсомольской площади',
+        self::DELIVERY_METHOD_TK => 'Доставка до терминала транспортной компании',
+    ];
+    
+    public const DELIVERY_METHODS_PRICES = [
+        self::DELIVERY_METHOD_MKAD => 350,
+        self::DELIVERY_METHOD_OVER_MKAD => 600,
+        self::DELIVERY_METHOD_TK => 350,
+        self::DELIVERY_METHOD_SELF => 0,
     ];
     
     public const SCENARIO_STEPS = [
@@ -69,8 +81,12 @@ class OrderForm extends CompositeForm {
     public $orderMode = self::ORDER_MODE_REGISTER;
     /** @var string  */
     public $deliveryMethod = self::DELIVERY_METHOD_SELF;
+    /** @var string  */
+    public $deliveryComment = '';
     /** @var int  */
     public $deliveryAddressId = 0;
+    /** @var \common\modules\order\models\TemporaryOrder */
+    public $orderModel;
     
     
     /**
@@ -106,6 +122,8 @@ class OrderForm extends CompositeForm {
             $this->userAddresses = $user->userAddresses;
         }
         
+        $this->paymentForm = new PaymentMethodForm();
+        $this->cartElements = \Yii::$app->get('cartService')->elements;
     }
     
     /**
@@ -117,17 +135,28 @@ class OrderForm extends CompositeForm {
             ['orderStep', 'integer'],
             ['orderStep', 'checkOrderStep'],
             [['orderMode', 'orderStep',], 'required'],
-            ['deliveryMethod', 'in', 'range' => self::DELIVERY_METHODS],
-            ['deliveryAddressId', 'checkDeliveryAddressId']
+            ['deliveryMethod', 'in', 'range' => array_keys(self::DELIVERY_METHODS)],
+            ['deliveryAddressId', 'checkDeliveryAddressId'],
+            ['deliveryComment', 'safe'],
         ];
+    }
+    
+    public function scenarios() {
+        $ret = parent::scenarios();
+        if ($this->orderStep < 2) {
+            $ret['default'] = array_diff($ret['default'], ['deliveryMethod', 'deliveryAddressId']);
+        }
+        
+        return $ret;
     }
     
     public function checkDeliveryAddressId($attr) {
         $this->$attr = intval($this->$attr);
-        $res = array_key_exists($this->$attr, (array)$this->userAddresses);
+        $res = ($this->$attr === 0 && $this->deliveryMethod === self::DELIVERY_METHOD_SELF)
+            || array_key_exists($this->$attr, (array)$this->userAddresses);
         
         if (!$res) {
-            $this->addError($attr, 'Не правильно выбран адрес.');
+            $this->addError($attr, 'Не правильно выбран адрес доставки.');
         }
         return $res;
     }
@@ -165,6 +194,9 @@ class OrderForm extends CompositeForm {
             $this->enabledForms = array_diff($this->includedForms(), ['loginForm']);
         } else {
             $this->enabledForms = array_diff($this->includedForms(), ['loginForm', 'signupForm']);
+        }
+        if ($this->orderStep < 4) {
+            $this->enabledForms = array_diff($this->enabledForms, ['cartElements']);
         }
         if ($this->orderStep < 3) {
             $this->enabledForms = array_diff($this->enabledForms, ['paymentForm']);
@@ -205,7 +237,7 @@ class OrderForm extends CompositeForm {
      */
     public function includedForms()
     {
-        return ['loginForm', 'signupForm', 'user', 'userAddresses', 'paymentForm'];
+        return ['loginForm', 'signupForm', 'user', 'userAddresses', 'paymentForm', 'cartElements'];
     }
     
     /**

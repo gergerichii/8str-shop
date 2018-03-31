@@ -32,7 +32,7 @@ use common\modules\order\forms\frontend\OrderForm;
         
         <div class="input-group">
             <span class="input-group-addon"><span
-                class="input-icon input-icon-country"></span><span class="input-text">Доставка*</span></span>
+                class="input-icon input-icon-country"></span><span class="input-text">Способ доставки*</span></span>
             <div class="large-selectbox clearfix">
                 <select id="delivery-method-select" name="OrderForm[deliveryMethod]" class="selectbox">
                     <!-- TODO: переделать в цикл -->
@@ -59,7 +59,7 @@ use common\modules\order\forms\frontend\OrderForm;
     
             <div class="input-group">
             <span class="input-group-addon"><span
-                    class="input-icon input-icon-country"></span><span class="input-text">Доставка*</span></span>
+                    class="input-icon input-icon-address"></span><span class="input-text">Адрес доставки*</span></span>
                 <div class="large-selectbox clearfix">
                     <select id="delivery-address-select" name="OrderForm[deliveryAddressId]" class="selectbox">
                         <option value=0>-- Указать новый адрес --</option>
@@ -93,6 +93,15 @@ use common\modules\order\forms\frontend\OrderForm;
                 <?= $this->render('signupFormGenerate', compact('model', 'form', 'formFields', 'subform', 'disabled')) ?>
             </span>
         <?php endforeach; ?>
+    </div><!-- End .col-md-6 -->
+    <div class="col-md-6 col-sm-6 col-xs-12">
+        <h2 class="checkout-title">Комментарий</h2>
+        <p>Оставьте комментарий к доставке</p>
+        <div class="xs-margin"></div>
+        <?=$form->field($orderForm, 'deliveryComment')->textarea([
+            'placeholder' => 'Оставьте комментарий',
+            'rows' => 5,
+        ])->label(false)?>
     </div><!-- End .col-md-6 -->
 
 </div><!-- End .row -->

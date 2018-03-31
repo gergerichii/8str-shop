@@ -20,8 +20,13 @@ use yii\db\ActiveRecord;
  */
 class BaseActiveRecord extends ActiveRecord
 {
-    protected $_jsonAttributes = [];
-    
+    /**
+     * @return array
+     */
+    protected function jsonAttributes() {
+        return [];
+    }
+ 
     /**
      * Переводит значение имени атрибута из camelCaseStyle в lower_case_style
      *
@@ -48,6 +53,13 @@ class BaseActiveRecord extends ActiveRecord
                 $name = $newName;
             }
         }
+        
+        if (in_array($name, $this->jsonAttributes())) {
+            $options = JSON_FORCE_OBJECT && JSON_NUMERIC_CHECK
+                && JSON_PARTIAL_OUTPUT_ON_ERROR && JSON_PRESERVE_ZERO_FRACTION;
+            $value = json_encode($value, $options);
+        }
+        
         parent::__set($name, $value);
     }
     
@@ -65,7 +77,14 @@ class BaseActiveRecord extends ActiveRecord
                 $name = $newName;
             }
         }
-        return parent::__get($name);
+        
+        $value =  parent::__get($name);
+
+        if (in_array($name, $this->jsonAttributes())) {
+            $value = json_decode($value, true);
+        }
+        
+        return $value;
     }
     
     /**
@@ -96,14 +115,4 @@ class BaseActiveRecord extends ActiveRecord
 
         return $attributes;
     }
-    
-//    public function validate($attributeNames = NULL, $clearErrors = TRUE) {
-//        if ($this->isNewRecord && is_null($attributeNames) && empty($this->oldAttributes)) {
-//            if ($clearErrors) {
-//                $this->clearErrors();
-//            }
-//            return true;
-//        }
-//        return parent::validate($attributeNames, $clearErrors);
-//    }
 }

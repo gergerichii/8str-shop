@@ -35,25 +35,30 @@ class setUp implements BootstrapInterface
                 }
             });
             
-            $app->view->on(View::EVENT_BEGIN_BODY, function (){
+            $csrfName = \Yii::$app->request->csrfParam;
+            $token = \Yii::$app->request->csrfToken;
+            $script = "
+                csrf_name = '{$csrfName}';
+                csrf_value = '{$token}';
+                
+                $('input[name=' + csrf_name +']').val(csrf_value);
+                $('meta[name=csrf-token]').attr('content', csrf_value)
+            ";
+            
+            $app->view->on(View::EVENT_BEGIN_BODY, function () use ($script){
                 if (!$this->notifyIsAdded) {
-                    echo $this->getNotifyWidget();
+                    Yii2modAlert::widget();
                     $this->notifyIsAdded = true;
+                    \Yii::$app->view->registerJs($script);
                 }
             });
-            $app->response->on(Response::EVENT_BEFORE_SEND, function ($event) use($app) {
-                if (!$app->request->isAjax && !$this->notifyIsAdded) {
-                    $app->response->content = $this->getNotifyWidget() . $app->response->content;
-                }
-            });
+//            $app->response->on(Response::EVENT_BEFORE_SEND, function ($event) use($app, $script) {
+//                if (!$app->request->isAjax && !$this->notifyIsAdded) {
+//                    Yii2modAlert::widget();
+//                    $app->response->content .= $script;
+//                }
+//            });
+
         }
-    }
-    
-    /**
-     * @return string
-     * @throws \Exception
-     */
-    public function getNotifyWidget() {
-        return Yii2modAlert::widget();
     }
 }

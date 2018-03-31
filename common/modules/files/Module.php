@@ -109,12 +109,15 @@ class Module extends \yii\base\Module implements BootstrapInterface
      * @param bool   $isProtected
      * @param bool   $allowDefault
      *
+     * @param bool   $checkExists
+     *
      * @return string
      * @throws \yii\base\InvalidConfigException
      */
-    public function getFilePath(string $entityType, string $fileName, $isProtected = false, $allowDefault = false, $checkExists = false) {
+    public function getFilePath(string $entityType, string $fileName = null, $isProtected = false, $allowDefault = false, $checkExists = false) {
         $entity = $this->getEntityInstance($entityType);
-        $entity->fileName = $fileName;
+        if ($fileName !== null)
+            $entity->fileName = $fileName;
         $entity->isProtected = $isProtected;
         return $entity->getFilePath($allowDefault, $checkExists);
     }

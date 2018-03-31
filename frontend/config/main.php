@@ -1,5 +1,19 @@
 <?php
+
+$viewConfig = [
+    'theme' => [
+        'basePath' => '@app', //@themeRoot Генерится в бутстрап конфиге
+        'baseUrl' => '@web',
+        'pathMap' => [
+            '@common/modules' => '@app/views/modules',
+            '@common/widgets' => '@app/views/widgets',
+            '@common/mail' => '@app/mail',
+        ],
+    ],
+];
+
 return [
+    'name' => 'Интернет магазин систем видеонаблюдения и безопасности "Восьмой страж"',
     'id' => '',/* Если не указан, то генерится КонфигМенеджером из имени папки приложения */
     'basePath' => dirname(__DIR__),
     'controllerNamespace' => 'frontend\controllers',
@@ -21,21 +35,26 @@ return [
         ],
     ],
     'components' => [
-        'view' => [
-            'theme' => [
-                'basePath' => '@app', //@themeRoot Генерится в бутстрап конфиге
-                'baseUrl' => '@web',
-                'pathMap' => [
-                    '@common/modules' => '@app/views/modules',
-                    '@common/widgets' => '@app/views/widgets',
-                ],
-            ],
-        ],
+        'view' => $viewConfig,
         'urlManager' => [
             'rules' => [
                 '/data/<_a:(search)>.json' => '/data/<_a>'
             ]
-        ]
+        ],
+        
+        'mailer' => [
+            'useFileTransport' => true,
+            'view' => $viewConfig,
+            'transport' => [
+                'class' => 'Swift_SmtpTransport',
+                'host' => 'smtp.beget.ru',
+                'username' => 'support@8str.ru',
+                'password' => 'Volga2015',
+                'port' => '25',
+                'encryption' => 'tls',
+            ],
+        ],
+        
     ],
     'params' => [], /* Автоматически цепляется КонфигМенеджером */
 ];

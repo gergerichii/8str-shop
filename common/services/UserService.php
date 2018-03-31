@@ -29,12 +29,14 @@ class UserService {
         /** @var \common\models\entities\User $user */
         $user = $form->user;
         /** @var \common\models\entities\User $existsUser */
-        $existsUser = null;
+        $existsUser = $existsUser = User::findByEmail($user->email, User::STATUS_GUEST);
         if ($user->scenario === User::SCENARIO_REGISTER_GUEST) {
-            if (!$existsUser = User::findByEmail($user->email, User::STATUS_GUEST)) {
+            if (!$existsUser) {
                 $user->status = User::STATUS_GUEST;
                 $user->username = 'Guest_' . Yii::$app->security->generateRandomString();
             }
+        } elseif($existsUser) {
+            $existsUser->status = User::STATUS_ACTIVE;
         }
         if ($existsUser) {
             foreach ($user->getAttributes(null, ['status']) as $attributeName => $attribute) {

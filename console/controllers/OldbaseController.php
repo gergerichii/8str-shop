@@ -437,6 +437,12 @@ class OldbaseController extends BaseController
                     }
                 }
                 $transaction->commit();
+                $localProducts[$src['name']] = [
+                    'old_id' => $src['old_id'],
+                    'name' => $src['name'],
+                    'id' => $product->id,
+                    'processed' => true,
+                ];
             }
             
             /** Назначаем цены, если они не были назначины */

@@ -62,20 +62,6 @@ class OldbaseController extends BaseController
         ],
     ];
     
-    private const RUBRICS_ORDER = [
-        1 => NULL, 13 => 1, 230 => 1, 231 => 230, 232 => 230, 200 => 1, 238 => 200, 236 => 200, 237 => 200, 20 => 1,
-        19 => 1, 73 => 1, 60 => 1, 74 => 1, 53 => 1, 54 => 1, 24 => 1, 225 => 1, 55 => 1,
-        -1 => [
-            'rubric_name' => 'Видеонаблюдение',
-            'rubric_id' => 10000,
-        ],
-        26 => 10000, 239 => 26, 4 => 26, 216 => 4, 217 => 4, 148 => 4, 218 => 4, 147 => 4, 51 => 26, 155 => 26, 235 => 155,
-        157 => 26, 102 => 10000, 198 => 102, 196 => 102, 197 => 102, 3 => 10000, 96 => 3, 80 => 3, 62 => 3, 2 => 3,
-        5 => NULL, 122 => 5, 112 => 5, 114 => 5, 111 => 5, 224 => 5, 110 => 5, 113 => 5, 115 => 5, 109 => 5, 123 => 5,
-        52 => NULL, 12 => NULL, 107 => 12, 118 => 12, 108 => 12, 15 => NULL, 79 => NULL, 168 => 79, 170 => 79,
-        206 => 79, 169 => 79, 25 => NULL, 57 => 25, 56 => 25, 18 => NULL,
-    ];
-    
     private const CHANGE_PRODUCT_FIELDS = [
         1505 => [
             'field' => 'name',
@@ -339,6 +325,14 @@ class OldbaseController extends BaseController
             ->andWhere(['IS NOT', '`f`.`uri`', null])
             ->orderBy(['`n`.`changed`' => SORT_DESC]);
 
+        $rootRubric = ProductRubric::treeFind()->where(['name' => 'Каталог', 'level' => '0'])->one();
+        $rootRubricId = $rootRubric->id;
+        unset($rootRubric);
+        
+        $localProducts = Product::find()
+            ->select(['id', 'old_id', 'name'])
+            ->indexBy('name')->asArray()->all();
+        
         /** @var Module $filesManager */
         $filesManager = Yii::$app->getModule('files');
         
@@ -350,10 +344,8 @@ class OldbaseController extends BaseController
             $this->error('The path is wrong.');
             return 0;
         }
-
         $CatalogController = new CatalogController('catalog', $this->module);
         $groups = $CatalogController->findImages($path);
-        
 
         foreach ($query->each(100, $remoteDb) as $src) {
             /* Попытка исправить найденные товары с ошибками */
@@ -363,21 +355,33 @@ class OldbaseController extends BaseController
             }
             /* Исправляем не правильный дефис и удаляем пробелы по краям */
             $src['name'] = trim(preg_replace('#‑#m', '-', $src['name']));
+            $src['market_upload'] = intval($src['market_upload']);
             /** Проверяем на наличие продукта */
-            $product = Product::findOne(['name' => $src['name']]);
-            if ($oldProduct = (bool)$product) {
-                if ($product->old_id != $src['old_id']) {
+            $productIsExists = isset($localProducts[$src['name']]);
+            if ($productIsExists) {
+                if ($localProducts[$src['name']]['old_id'] != $src['old_id']) {
                     $this->notice("Продукт {$src['old_id']}:{$src['name']} пропущен. Такой уже есть.");
                     if ($this->importCreateBadProductsFile) {
                         $badProducts = [
                             'Тип ошибки' => 'Дубль товара',
                             'Номер товара' => $src['old_id'],
                             'Название продукта' => $src['name'],
-                            'Номер дубля' => $product->old_id,
-                            'Название дубля' => $product->name,
+                            'Номер дубля' => $localProducts[$src['name']]['old_id'],
+                            'Название дубля' => $src['name'],
                         ];
                     }
+                } else {
+                    /** Обновляем продукт */
+                    $product = Product::findOne($localProducts[$src['name']]['id']);
+                    if (empty($localProducts[$src['name']]['processed'])) {
+                        $product->setAttributes($src);
+                        if (!$product->save()) {
+                            $this->error("Продукт {$src['old_id']}:{$src['name']} не обновлен", $product->errors);
+                            continue;
+                        }
+                    }
                 }
+                $localProducts[$src['name']]['processed'] = true;
             } else {
                 $transaction = Yii::$app->db->beginTransaction();
                 /** Если продукта нет, то и брэнда (производителя) может не быть */
@@ -402,7 +406,6 @@ class OldbaseController extends BaseController
                 /** Создаем продукт */
                 /** @var Product $product */
                 $product = new Product();
-                $src['market_upload'] = (integer)(boolean)$src['market_upload'];
                 $product->setAttributes($src);
                 $product->brand_id = ($brand) ? $brand->id : null;
 
@@ -418,8 +421,10 @@ class OldbaseController extends BaseController
                     $product->main_rubric_id = $rubric->id;
                     $product->save();
                 } else {
+                    $product->main_rubric_id = $rootRubricId;
+                    $product->save();
                     $this->error(
-                        "Не импортирована рубрика {$src['rubric_name']} для товара {$src['old_id']}:{$src['name']}. Продукт без рубрики"
+                        "Не импортирована рубрика {$src['rubric_name']} для товара {$src['old_id']}:{$src['name']}. Продукт в корневой рубрике"
                     );
                     if ($this->importCreateBadProductsFile) {
                         $badProducts = [
@@ -431,57 +436,56 @@ class OldbaseController extends BaseController
                         ];
                     }
                 }
-
-                /** Назначаем цены, если они не были назначины */
-                $domains = yii::$app->params['domains'];
-                $mainDomain = '8str';
-                foreach (array_keys($domains) as $domain) {
-                    $field = "{$domain}_price";
-                    $priceValue = isset($src[$field]) ? $src[$field] :  $src["{$mainDomain}_price"];
-                    $priceValue = round((float)$priceValue, 2);
-
-                    $priceParams = [
-                        'value' => $priceValue,
-                        'product_id' => $product->id,
-                        'domain_name' => Yii::$app->params['domains'][$domain],
-                    ];
-                    if (!ProductPrice::find()->onlyActive()->andWhere($priceParams)->one()) {
-                        if (!$catalog->insertNewPrice($product, $priceValue, $domain)) {
-                            $this->error(
-                                "Цена для товара {$src['old_id']}:{$src['name']} и домена $domain не установлена. Откат добавления товара",
-                                $product->errors
-                            );
-                            $transaction->rollBack();
-                            continue;
-                        }
-                    }
-                }
-
-                $tags = [
-                    'new' => 'is_new',
-                    'bestseller' => 'bestseller',
-                    'promo' => 'is_promo',
-                ];
-                /** Если продукт имеет метку, то добавляем ее к нему */
-                foreach ($tags as $tag => $srcTag) {
-                    if (empty($src[$srcTag])) continue;
-                    $tag = $this->getTag($tag);
-                    try {
-                        $product->link('tags', $tag);
-                    } catch(\Exception $e) {
-                        $this->error(
-                            "Ошибка при добавлении к товару {$product->id}:{$product->name} метки {$tag->name}. Отка добавления продукта",
-                            $e->getMessage()
-                        );
-                        $transaction->rollBack();
-                        continue;
-                    }
-                }
                 $transaction->commit();
             }
             
+            /** Назначаем цены, если они не были назначины */
+            $domains = yii::$app->params['domains'];
+            $mainDomain = '8str';
+            foreach (array_keys($domains) as $domain) {
+                $field = "{$domain}_price";
+                $priceValue = isset($src[$field]) ? $src[$field] :  $src["{$mainDomain}_price"];
+                $priceValue = round((float)$priceValue, 2);
+
+                $priceParams = [
+                    'value' => $priceValue,
+                    'product_id' => $product->id,
+                    'domain_name' => Yii::$app->params['domains'][$domain],
+                ];
+                if (!ProductPrice::find()->onlyActive()->andWhere($priceParams)->one()) {
+                    if (!$catalog->insertNewPrice($product, $priceValue, $domain)) {
+                        $this->error(
+                            "Цена для товара {$src['old_id']}:{$src['name']} и домена $domain не установлена",
+                            $product->errors
+                        );
+                        continue;
+                    }
+                }
+            }
+
+            $tags = [
+                'new' => 'is_new',
+                'bestseller' => 'bestseller',
+                'promo' => 'is_promo',
+            ];
+            /** Если продукт имеет метку, то добавляем ее к нему */
+            foreach ($tags as $tag => $srcTag) {
+                if (empty($src[$srcTag])) continue;
+                $tag = $this->getTag($tag);
+                try {
+                    $product->link('tags', $tag);
+                } catch(\Exception $e) {
+                    $this->error(
+                        "Ошибка при добавлении к товару {$product->id}:{$product->name} метки {$tag->name}",
+                        $e->getMessage()
+                    );
+                    continue;
+                }
+            }
+            
+            /** Добавляем картинки */
             $productName = preg_replace('#[/]#', '', $product->name);
-            if (!$oldProduct && array_key_exists($productName, $groups)) {
+            if (!$productIsExists && array_key_exists($productName, $groups)) {
                 foreach($groups[$productName] as $fileInfo) {
                     if (false === $product->hasFile($fileInfo['basename'])) {
                         $product->addFile($fileInfo['basename']);
@@ -552,6 +556,17 @@ class OldbaseController extends BaseController
             /** @noinspection PhpUndefinedVariableInspection */
             fclose($badProdFile);
         }
+        
+        $deletedProducts = [];
+        foreach ($localProducts as $product) {
+            if (empty($product['processed'])) {
+                $deletedProducts[] = $product['id'];
+            }
+        }
+        if (!empty($deletedProducts)) {
+            Product::updateAll(['status' => Product::STATUS['DELETED']], ['in', 'id', $deletedProducts]);
+        }
+        
         return 0;
     }
 
@@ -567,6 +582,21 @@ class OldbaseController extends BaseController
 
         return $ret[$name];
     }
+    
+    /** Новая структура рубрикаторов */
+    private const RUBRICS_ORDER = [
+        1 => NULL, 13 => 1, 230 => 1, 231 => 230, 232 => 230, 200 => 1, 238 => 200, 236 => 200, 237 => 200, 20 => 1,
+        19 => 1, 73 => 1, 60 => 1, 74 => 1, 53 => 1, 54 => 1, 24 => 1, 225 => 1, 55 => 1,
+        -1 => [
+            'rubric_name' => 'Видеонаблюдение',
+            'rubric_id' => 10000,
+        ],
+        26 => 10000, 239 => 26, 4 => 26, 216 => 4, 217 => 4, 148 => 4, 218 => 4, 147 => 4, 51 => 26, 155 => 26, 235 => 155,
+        157 => 26, 102 => 10000, 198 => 102, 196 => 102, 197 => 102, 3 => 10000, 96 => 3, 80 => 3, 62 => 3, 2 => 3,
+        5 => NULL, 122 => 5, 112 => 5, 114 => 5, 111 => 5, 224 => 5, 110 => 5, 113 => 5, 115 => 5, 109 => 5, 123 => 5,
+        52 => NULL, 12 => NULL, 107 => 12, 118 => 12, 108 => 12, 15 => NULL, 79 => NULL, 168 => 79, 170 => 79,
+        206 => 79, 169 => 79, 25 => NULL, 57 => 25, 56 => 25, 18 => NULL,
+    ];
 
     /**
      * Export rubrics
@@ -596,33 +626,44 @@ class OldbaseController extends BaseController
             ->where(['{{c}}.[[vid]]' => 2])->orderBy('{{p}}.[[tid]]')
             ->indexBy('rubric_id');
 
-        $batch = $query->batch(1000, $remoteDb);
+        $batch = $query->batch(100, $remoteDb);
         $rubricsPull = [];
-        $createdRubrics = [];
+        $createdRubrics = ProductRubric::find()->select(['id', 'old_id'])->indexBy('old_id')->asArray()->all();
+        $createdRubrics = ArrayHelper::map($createdRubrics, 'old_id', 'id');
+        
         $rubricsOrder = self::RUBRICS_ORDER;
         do {
+            /** Есил Пулл рубрик пуст или в нем остались только азвисимые рубрики, чьи зависимости не удовлетворены */
             if (empty($rubricsPull) || !empty(reset($rubricsPull)['depends_on'])) {
+                // Читаем новую партию старых рубрик
                 $batch->next();
+                // Пулл зависимых рубрик оставляем в конце
                 $rubricsPull = ArrayHelper::merge($batch->current(), $rubricsPull);
             }
 
+            /** Если текущая в очереди новой структуры рубрика имеет отрицательный индекс */
             if ((int)key($rubricsOrder) < 0) {
+                /** Значит это рубрика которую нужно создать искусственно */
                 $currentRubric = reset($rubricsOrder);
                 unset($rubricsOrder[key($rubricsOrder)]);
                 $rubricsOrder = ArrayHelper::merge([$currentRubric['rubric_id'] => null], $rubricsOrder);
             } else {
+                /** Иначе берем текущую импортируемую рубрику */
                 $currentRubric = reset($rubricsPull);
                 unset($rubricsPull[key($rubricsPull)]);
             }
+            /** Проверяем что импорируемая рубрика предусмотрена в новой структуре рубрик */
             if (array_key_exists($currentRubric['rubric_id'], $rubricsOrder)) {
                 /* Если рубрика в списке сортировки, но еще не пришла ее очередь, отложим ее */
                 if ($currentRubric['rubric_id'] != key($rubricsOrder)) {
                     $rubricsPull[$currentRubric['rubric_id']] = $currentRubric;
                     continue;
                 }
+                /** Зависимости бирем из новой структуры рубрик */
                 $parentRubricId = $rubricsOrder[$currentRubric['rubric_id']];
                 unset($rubricsOrder[key($rubricsOrder)]);
             } else {
+                /** Иначе берем зависимость из старой базы */
                 $parentRubricId = $currentRubric['parent_rubric_id'];
             }
             /* Если у рубрики есть родитель */
@@ -651,6 +692,15 @@ class OldbaseController extends BaseController
                     ]);
     
                     $newRubric->appendTo($parentRubric);
+                } else {
+                    /** Иначе, обновим рубрику */
+                    $this->notice("Обновление рубрики {$currentRubric['rubric_name']}");
+                    $newRubric->name = $currentRubric['rubric_name'];
+                    $newRubric->old_id = $currentRubric['rubric_id'];
+                    $newRubric->old_parent_id = $parentRubricId;
+                    if (!$newRubric->save()) {
+                        $this->error("Ошибка обновления рубрики {{$currentRubric['rubric_name']}}", $newRubric->getErrorSummary(TRUE));
+                    }
                 }
                 /* Если у рубрики нет родителя и эта рубрика еще не записана в базу */
             } elseif (!$newRubric = ProductRubric::findOne(['old_id' => $currentRubric['rubric_id']])) {
@@ -660,6 +710,14 @@ class OldbaseController extends BaseController
                     'name' => $currentRubric['rubric_name']
                 ]);
                 $newRubric->appendTo($rootRubric);
+            } elseif ($newRubric) {
+                /** Иначе, обновим рубрику */
+                $newRubric->name = $currentRubric['rubric_name'];
+                $newRubric->old_id = $currentRubric['rubric_id'];
+                $newRubric->old_parent_id = $parentRubricId;
+                if (!$newRubric->save()) {
+                    $this->error("Ошибка обновления рубрики {{$currentRubric['rubric_name']}}", $newRubric->getErrorSummary(TRUE));
+                }
             }
 
             $createdRubrics[$newRubric->getAttribute('old_id')] = $newRubric->id;

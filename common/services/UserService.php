@@ -49,10 +49,10 @@ class UserService {
             $existsUser->password_confirm = $user->password_confirm;
             $user = $existsUser;
             $form->user = $user;
-        } else {
-            $user->setPassword();
-            $user->generateAuthKey();
         }
+        $user->setPassword();
+        $user->generateAuthKey();
+        
         try {
             Yii::$app->db->transaction(function() use ($form, $validate, $user) {
                 if(!$user->save($validate)) {

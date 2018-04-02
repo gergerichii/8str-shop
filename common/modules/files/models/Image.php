@@ -126,7 +126,7 @@ class Image extends BaseFile
      *
      * @see \yii\image\drivers\Image
      */
-    public function adaptSize($master, $saveAs = null, $force = false) {
+    public function adoptSize($master, $saveAs = null, $force = false) {
         $this->clearErrors();
         /** @var ImageDriver $imageComponent */
         $imageComponent = \Yii::$app->get('image');

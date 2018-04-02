@@ -491,20 +491,18 @@ class OldbaseController extends BaseController
             
             /** Добавляем картинки */
             $productName = preg_replace('#[/]#', '', $product->name);
-            if (!$productIsExists && array_key_exists($productName, $groups)) {
+            if (array_key_exists($productName, $groups)) {
                 foreach($groups[$productName] as $fileInfo) {
-                    if (false === $product->hasFile($fileInfo['basename'])) {
-                        $product->addFile($fileInfo['basename']);
-        
-                        $image->fileName = $fileInfo['basename'];
-                        if (false === $image->pickFrom($fileInfo['dirname'])) {
-                            $this->error('Product #' . $product->id . ' error: ' . $image->getFirstError('') . '.');
-                        } else {
-                            $image->adaptSize(DriverImage::CROP);
-                        }
-                        if ($image->exists()) {
-                            $image->createThumbs();
-                        }
+                    $product->addFile($fileInfo['basename']);
+    
+                    $image->fileName = $fileInfo['basename'];
+                    if (false === $image->pickFrom($fileInfo['dirname'], false)) {
+                        $this->error('Product #' . $product->id . ' error: ' . $image->getFirstError('') . '.');
+                    } else {
+                        $image->adoptSize(DriverImage::CROP);
+                    }
+                    if ($image->exists()) {
+                        $image->createThumbs();
                     }
                 }
                 try {
@@ -524,14 +522,14 @@ class OldbaseController extends BaseController
             if (false === strpos($src['filename'], 'sertifikat')) {
                 /** Добавляем файлы */
                 $filePath = $filesManager->getFilePath('products/images', 'old/' . $src['filename'], false, false, true);
+                $filePath or $filePath = "https://8str.ru/sites/default/files/styles/product_full/public/product/{$src['filename']}";
                 if ($filePath) {
                     try {
                         $image = $filesManager->createEntity('products/images', $src['filename']);
-                        $image->pickFrom(dirname($filePath));
-                        $newName = preg_replace('#\.\w{3,4}$#', '.png', basename($filePath));
-                        if (!$product->hasFile($newName)) {
+                        if ($image->pickFrom(dirname($filePath), false)) {
+                            $newName = preg_replace('#\.\w{3,4}$#', '.png', basename($filePath));
                             /** @var Image $image */
-                            $image->adaptSize(ImgDriver::ADAPT, $newName);
+                            $image->adoptSize(ImgDriver::ADAPT, $newName);
                             $image->createThumbs();
                             if (!$product->addFile($image->getBasename())->save()) {
                                 $this->error(
@@ -539,6 +537,8 @@ class OldbaseController extends BaseController
                                     $product->errors
                                 );
                             }
+                        } else {
+                            $this->error('Product #' . $product->id . ' error: ' . $image->getFirstError('') . '.');
                         }
                     } catch (\Exception $e) {
                         $this->error(

@@ -81,7 +81,7 @@ class CatalogController extends BaseController
                         if (false === $image->pickFrom($fileInfo['dirname'])) {
                             $this->error('Product #' . $product->id . ' error: ' . $image->getFirstError('') . '.');
                         } else {
-                            $image->adaptSize(DriverImage::CROP);
+                            $image->adoptSize(DriverImage::CROP);
                         }
                     }
     

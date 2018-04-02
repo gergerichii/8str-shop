@@ -40,7 +40,8 @@ $filesManager = \Yii::$app->getModule('files');
 
     <div id="product-image-container">
         <?php
-        $realImage = $filesManager->getFileUri('products/images', $product->images[0], true);
+        $image = isset($product->images[0]) ? $product->images[0] : '';
+        $realImage = $filesManager->getFileUri('products/images', $image, true);
         ?>
 
         <figure>

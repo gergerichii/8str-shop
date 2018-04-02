@@ -157,13 +157,19 @@ abstract class BaseFile extends Model
             unlink($this->getFilePath());
         }
     }
-
+    
     /**
      * Pick the file from path
+     *
      * @param string $path
+     * @param bool   $returnExistsError
+     *
      * @return bool
      */
-    public function pickFrom($path) {
+    public function pickFrom($path, $returnExistsError = true) {
+        if(strpos($path, 'http') === 0) {
+            return $this->pickFromRemote($path . '/' . $this->fileName, $returnExistsError);
+        }
         $oldName = $path . DIRECTORY_SEPARATOR . $this->fileName;
         if (!file_exists($oldName)) {
             $this->addError('', 'No file to move.');
@@ -171,8 +177,12 @@ abstract class BaseFile extends Model
         }
 
         if ($this->exists()) {
-            $this->addError('', 'The file ' . $this->getFilePath() . ' already exists.');
-            return false;
+            if ($returnExistsError) {
+                $this->addError('', 'The file ' . $this->getFilePath() . ' already exists.');
+                return false;
+            } else {
+                return true;
+            }
         }
 
         $this->createDirectory();
@@ -185,16 +195,23 @@ abstract class BaseFile extends Model
 
         return true;
     }
-
+    
     /**
      * Pick the image from remote url
+     *
      * @param string $url
+     * @param        $returnExistsError
+     *
      * @return bool
      */
-    public function pickFromRemote($url) {
+    public function pickFromRemote($url, $returnExistsError = true) {
         if ($this->exists()) {
-            $this->addError('', 'The file ' . $this->getFilePath() . ' already exists.');
-            return false;
+            if ($returnExistsError) {
+                $this->addError('', 'The file ' . $this->getFilePath() . ' already exists.');
+                return false;
+            } else {
+                return true;
+            }
         }
 
         $this->createDirectory();

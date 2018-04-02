@@ -522,7 +522,7 @@ class OldbaseController extends BaseController
             if (false === strpos($src['filename'], 'sertifikat')) {
                 /** Добавляем файлы */
                 $filePath = $filesManager->getFilePath('products/images', 'old/' . $src['filename'], false, false, true);
-                $filePath or $filePath = "https://8str.ru/sites/default/files/styles/product_full/public/product/{$src['filename']}";
+                $filePath or $filePath = "https://8str.ru/sites/default/files/product/{$src['filename']}";
                 if ($filePath) {
                     try {
                         $image = $filesManager->createEntity('products/images', $src['filename']);

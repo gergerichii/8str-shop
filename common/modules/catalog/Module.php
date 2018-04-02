@@ -449,8 +449,7 @@ class Module extends \yii\base\Module implements BootstrapInterface
      */
     public function getBrandMenuStructure() {
         $module = $this;
-        /** TODO: Удалить лимит когда будет сделано нормальное меню по брэндам */
-        $brands = ProductBrand::find()->orderBy('name')->limit(8)->all();
+        $brands = ProductBrand::find()->orderBy('name')->all();
         $menuItems = array_map(function ($brand) use ($module) {
             /** @var ProductBrand $brand */
             return [

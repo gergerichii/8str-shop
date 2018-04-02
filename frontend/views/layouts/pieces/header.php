@@ -159,7 +159,7 @@ $count = $cartService->getCount();
                                     </li>
 
                                     <li class="mega-menu-container">
-                                        <a href="#">Каталог</a>
+                                        <a href="<?=Url::toRoute('/catalog/default/index')?>">Каталог</a>
                                         <?= TopMenu::widget(); ?>
                                     </li>
 

@@ -22,7 +22,7 @@ $count = 0;
             <div class="panel">
                 <div class="accordion-header">
                     <div class="accordion-title">
-                        <span>Category</span>
+                        <span>Подкатегории</span>
                     </div><!-- End .accordion-title -->
                     <a class="accordion-btn opened" data-toggle="collapse" data-target="#category-list-1"></a>
                 </div><!-- End .accordion-header -->
@@ -45,7 +45,7 @@ $count = 0;
             <div class="panel">
                 <div class="accordion-header">
                     <div class="accordion-title">
-                        <span>Brand</span>
+                        <span>Производитель</span>
                     </div><!-- End .accordion-title -->
                     <a class="accordion-btn opened" data-toggle="collapse" data-target="#category-list-2"></a>
                 </div><!-- End .accordion-header -->
@@ -63,11 +63,11 @@ $count = 0;
                 </div><!-- #collapse -->
             </div><!-- End .panel -->
         <?php } ?>
-
+        <?php if ($priceRangeMin < $priceRangeMax): ?>
         <div class="panel">
             <div class="accordion-header">
                 <div class="accordion-title">
-                    <span>Price</span>
+                    <span>Цена</span>
                 </div><!-- End .accordion-title -->
                 <a class="accordion-btn opened" data-toggle="collapse" data-target="#category-list-3"></a>
             </div><!-- End .accordion-header -->
@@ -79,19 +79,20 @@ $count = 0;
 
                         </div><!-- End #price-range -->
                         <div id="price-range-details">
-                            <span class="sm-separator">from</span>
+                            <span class="sm-separator">От</span>
                             <input name="from" type="text" value="<?= $filterForm->from; ?>" id="price-range-low" class="separator">
-                            <span class="sm-separator">to</span>
+                            <span class="sm-separator">До</span>
                             <input name="to" type="text" value="<?= $filterForm->to; ?>" id="price-range-high">
                         </div>
 
                         <div id="price-range-btns">
-                            <button type="submit" class="btn btn-custom-2 btn-sm">Ok</button>
-                            <a href="#" class="btn btn-custom-2 btn-sm">Clear</a>
+                            <button type="submit" class="btn btn-custom-2 btn-sm">Ок</button>
+                            <a href="#" class="btn btn-custom-2 btn-sm">Очистить</a>
                         </div>
                     </form>
                 </div><!-- End .panel-body -->
             </div><!-- #collapse -->
         </div><!-- End .panel -->
+        <?php endif; ?>
     </div><!-- .panel-group -->
 </div><!-- End .widget -->

@@ -225,11 +225,11 @@ $activeTab = 'new';
                         </div><!-- End #products-tabs-content -->
                     </div><!-- End .main-tab-container -->
 
-                    <div class="md-margin2x"></div><!-- space -->
+<!--                    <div class="md-margin2x"></div><!-- space -->
 
-                    <?= ProductBrandsWidget::widget(); ?>
+                    <?//= ProductBrandsWidget::widget(); ?>
 
-                    <div class="md-margin2x"></div><!-- space -->
+<!--                    <div class="md-margin2x"></div><!-- space -->
 
                     <?= LatestNewsWidgets::widget(); ?>
                 </div><!-- End .col-md-9 -->

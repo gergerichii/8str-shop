@@ -417,7 +417,7 @@ class Product extends BaseActiveRecord implements CartElement
      * @return string
      */
     public function __toString() {
-        return (isset($this->title)) ? $this->title : $this->name;
+        return (!empty($this->title)) ? $this->title : $this->name;
     }
 
     /** ---------------------------------------- Связи и связанные таблицы -------------------------------------------*/
@@ -804,7 +804,7 @@ class Product extends BaseActiveRecord implements CartElement
      * @throws \Throwable
      */
     public function updateFieldForFuturePrice($fieldForFuturePrice) {
-        if (array_key_exists('future', $fieldForFuturePrice)) {
+        if (array_key_exists('future', $fieldForFuturePrice) && !empty(intval($fieldForFuturePrice['future']['value']))) {
             /** @var Module $catalog */
             $catalog = Yii::$app->getModule('catalog');
             $catalog->updateFuturePrice($this, $this->fieldForFuturePrice['future']['value'], $fieldForFuturePrice['future']['active_from']);

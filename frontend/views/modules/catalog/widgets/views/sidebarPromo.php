@@ -14,7 +14,7 @@ $index = key($products);
         <li>
             <?php do { ?>
                 <?php
-                $encodedProductName = Html::encode($product);
+                $encodedProductName = Html::encode((string)$product);
                 $productUrl = $catalog->getCatalogUri(NULL, $product);
                 /** @var \common\modules\catalog\models\Product $product */
                 $mainImage = $product->mainImage;

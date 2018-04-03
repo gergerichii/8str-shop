@@ -160,9 +160,16 @@ class ProductFilterForm extends Model
             ->one();
 
         // Filter by price
-        $productQuery->leftJoin(ProductPrice::tableName() . ' as price', 'price.product_id = product.id');
-        $productQuery->andWhere(['<=', 'price.active_from', new Expression('NOW()')])
-            ->andWhere('price.status="active"');
+        $productQuery->leftJoin(
+            ['price' => ProductPrice::tableName()],
+            [
+                'and',
+                '[[price]].[[product_id]] = [[product]].[[id]]',
+                ['<=', '[[price]].[[active_from]]', new Expression('NOW()')],
+                ['[[price]].[[status]]' => 'active'],
+                ['[[price]].[[domain_name]]' => \Yii::$app->params['domain']],
+            ]
+        );
         $productQuery->andFilterWhere(['between', 'price.value', $this->from, $this->to]);
 
         // Find all children of the rubric

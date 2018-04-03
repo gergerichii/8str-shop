@@ -44,7 +44,7 @@ $catalog = \Yii::$app->getModule('catalog');
     </div>
 
     <div class="widget popular">
-        <h3>Популярные товары</h3>
+        <h3>Популярное</h3>
 
         <div class="related-slider flexslider sidebarslider">
             <?= ProductTagWidget::widget([
@@ -54,15 +54,6 @@ $catalog = \Yii::$app->getModule('catalog');
             ]); ?>
         </div><!-- End .related-slider -->
     </div>
-    <div class="widget banner-slider-container">
-        <div class="banner-slider flexslider">
-            <ul class="banner-slider-list clearfix">
-                <li><a href="#"><img src="/images/banner1.jpg" alt="Banner 1"></a></li>
-                <li><a href="#"><img src="/images/banner2.jpg" alt="Banner 2"></a></li>
-                <li><a href="#"><img src="/images/banner3.jpg" alt="Banner 3"></a></li>
-            </ul>
-        </div>
-    </div><!-- End .widget -->
 
 </div><!-- End .col-md-3 -->
 

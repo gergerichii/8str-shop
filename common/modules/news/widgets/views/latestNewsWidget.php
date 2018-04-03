@@ -15,7 +15,7 @@ $image = $filesModule->getEntityInstance('news/images');
 <div id="latestnews-slider-container" class="carousel-wrapper">
     <header class="content-title">
         <div class="title-bg">
-            <h2 class="title">Latest News</h2>
+            <h2 class="title">Последние новости</h2>
         </div><!-- End .title-bg -->
     </header>
 

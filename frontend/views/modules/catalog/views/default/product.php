@@ -9,6 +9,21 @@
 /** @var \yii\web\View $this */
 /** @var \common\modules\catalog\models\Product $productModel */
 ?>
+
+<?php common\helpers\ViewHelper::startRegisterCss($this); ?>
+<style>
+    .custom-quantity-input input[type=number]::-webkit-inner-spin-button,
+    .custom-quantity-input input[type=number]::-webkit-outer-spin-button {
+      -webkit-appearance: none;
+      margin: 0;
+    }
+    .custom-quantity-input input[type='number'] {
+        -moz-appearance: textfield;
+    }
+</style>
+<?php common\helpers\ViewHelper::endRegisterCss(); ?>
+
+
 <div class="container">
     <div class="row">
         <div class="col-md-12">
@@ -29,11 +44,16 @@
                     <hr>
                     <div class="product-add clearfix">
                         <div class="custom-quantity-input">
-                            <input type="text" name="quantity" value="1">
-                            <a href="#" onclick="return false;" class="quantity-btn quantity-input-up"><i class="fa fa-angle-up"></i></a>
-                            <a href="#" onclick="return false;" class="quantity-btn quantity-input-down"><i class="fa fa-angle-down"></i></a>
+                            <input type="number" name="quantity" value="1" class="product-change-count" data-id="<?=$productModel->id?>" step="1" min="1">
+                            <span class="quantity-btn quantity-input-up"><i class="fa fa-angle-up"></i></span>
+                            <span href="" class="quantity-btn quantity-input-down"><i class="fa fa-angle-down"></i></span>
                         </div>
-                        <button class="btn btn-custom-2">ADD TO CART</button>
+                        <?php \common\modules\cart\widgets\BuyButton::begin([
+                                'model' => $productModel,
+                                'cssClass' => 'btn btn-custom-2 ',
+                        ])?>
+                            В корзину
+                        <?php \common\modules\cart\widgets\BuyButton::end() ?>
                     </div><!-- .product-add -->
                     <div class="md-margin"></div><!-- Space -->
                     <div class="product-extra clearfix">
@@ -63,3 +83,25 @@
     </div><!-- End .row -->
 </div><!-- End .container -->
 
+<?php common\helpers\ViewHelper::startRegisterScript($this); ?>
+<script>
+    $(function() {
+        $(document).delegate('input.product-change-count', 'change', function() {
+            var id = $(this).data('id');
+            $('a.shop-cart-buy-button[data-id="'+ id + '"]').data('count', $(this).val());
+        });
+        
+        $(document).delegate('.product-add .quantity-btn', 'click', function(){
+            var input = $(this).siblings('.product-change-count').get(0);
+            if ($(this).hasClass('quantity-input-up')) {
+                $(input).val(1 + $(input).val() * 1);
+            } else if ($(this).hasClass('quantity-input-down') && ($(input).val() * 1) !== 1) {
+                $(input).val($(input).val() - 1);
+            }
+            var id = $(input).data('id');
+            $('a.shop-cart-buy-button[data-id="'+ id + '"]').data('count', $(input).val());
+            return false;
+        });
+    });
+</script>
+<?php common\helpers\ViewHelper::endRegisterScript(); ?>

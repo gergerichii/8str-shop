@@ -4070,7 +4070,6 @@ parent's font-size:0
     margin-bottom: 30px;
     padding: 20px;
     border: 1px solid #e8e8e8;
-    min-height: 400px;
     background-color: #fbfbfb;
     box-shadow: 2px 2px 4px 2px rgba(218, 218, 218, 0.88);
     -webkit-box-shadow: 2px 2px 4px 2px rgba(218, 218, 218, 0.88);
@@ -4079,6 +4078,7 @@ parent's font-size:0
 
 .item.item-hover {
     border: 1px solid transparent;
+    min-height: 400px;
 }
 
 /* cut left/right padding for carousel items */
@@ -4355,6 +4355,7 @@ parent's font-size:0
 
 .item.item-hover .item-meta-container {
     text-align: center;
+    min-height: 126px;
 }
 
 .item.item-list .item-meta-container {
@@ -4425,9 +4426,8 @@ parent's font-size:0
 
 .item-meta-container > .item-name:hover {
     position: relative;
-    z-index: 100;
-    width: 350px;
-    left: -65px;
+    width: 300px;
+    left: -39px;
     background-color: rgba(251, 251, 251, 0.90);
     border: 1px solid #e8e8e8;
 

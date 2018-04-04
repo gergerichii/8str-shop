@@ -45,7 +45,7 @@ $count = 0;
             <div class="panel">
                 <div class="accordion-header">
                     <div class="accordion-title">
-                        <span>Производитель</span>
+                        <span>Производители</span>
                     </div><!-- End .accordion-title -->
                     <a class="accordion-btn opened" data-toggle="collapse" data-target="#category-list-2"></a>
                 </div><!-- End .accordion-header -->

@@ -10,7 +10,7 @@ $index = key($products);
 ?>
 
 <div class="widget featured">
-    <h3>Featured</h3>
+    <h3>Рекомендуемое</h3>
 
     <div class="featured-slider flexslider sidebarslider">
         <ul class="featured-list clearfix">

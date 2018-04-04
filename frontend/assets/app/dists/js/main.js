@@ -25,7 +25,7 @@
             this.menuHover();
             this.responsiveMenu();
             this.itemHoverAnimation();
-            this.searchInput();
+            // this.searchInput();
             this.itemSizeFix();
             this.filterColorBg();
             this.productZoomImage();

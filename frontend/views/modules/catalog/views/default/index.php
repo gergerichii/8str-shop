@@ -30,41 +30,10 @@ $pager = new \yii\widgets\LinkPager([
                     <div class="category-toolbar clearfix">
                         <div class="toolbox-filter clearfix">
 
-                            <div class="sort-box">
-                                <span class="separator">sort by:</span>
-                                <div class="btn-group select-dropdown">
-                                    <button type="button" class="btn select-btn">Position</button>
-                                    <button type="button" class="btn dropdown-toggle" data-toggle="dropdown">
-                                        <i class="fa fa-angle-down"></i>
-                                    </button>
-                                    <ul class="dropdown-menu" role="menu">
-                                        <li><a href="#">Date</a></li>
-                                        <li><a href="#">Name</a></li>
-                                    </ul>
-                                </div>
-                            </div>
-
-                            <div class="view-box">
-                                <a href="category.html" class="active icon-button icon-grid"><i class="fa fa-th-large"></i></a>
-                                <a href="category-list.html" class="icon-button icon-list"><i class="fa fa-th-list"></i></a>
-                            </div><!-- End .view-box -->
 
                         </div><!-- End .toolbox-filter -->
                         <div class="toolbox-pagination clearfix">
                             <?=$pager->run()?>
-                            <div class="view-count-box">
-                                <span class="separator">view:</span>
-                                <div class="btn-group select-dropdown">
-                                    <button type="button" class="btn select-btn">10</button>
-                                    <button type="button" class="btn dropdown-toggle" data-toggle="dropdown">
-                                        <i class="fa fa-angle-down"></i>
-                                    </button>
-                                    <ul class="dropdown-menu" role="menu">
-                                        <li><a href="#">15</a></li>
-                                        <li><a href="#">30</a></li>
-                                    </ul>
-                                </div>
-                            </div><!-- End .view-count-box -->
 
                         </div><!-- End .toolbox-pagination -->
 
@@ -122,15 +91,6 @@ $pager = new \yii\widgets\LinkPager([
                         'viewName' => 'sidebarCatalog'
                     ]); ?>
 
-                    <div class="widget banner-slider-container">
-                        <div class="banner-slider flexslider">
-                            <ul class="banner-slider-list clearfix">
-                                <li><a href="#"><img src="/images/banner1.jpg" alt="Banner 1"></a></li>
-                                <li><a href="#"><img src="/images/banner2.jpg" alt="Banner 2"></a></li>
-                                <li><a href="#"><img src="/images/banner3.jpg" alt="Banner 3"></a></li>
-                            </ul>
-                        </div>
-                    </div><!-- End .widget -->
 
                 </aside><!-- End .col-md-3 -->
             </div><!-- End .row -->

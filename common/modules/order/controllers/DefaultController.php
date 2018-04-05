@@ -49,7 +49,12 @@ class DefaultController extends Controller
                 $result = $orderModule->processOrder($orderForm);
             }
         } else {
-            if ($newForm && intval($orderForm->orderStep) !== 1) {
+            if ($newForm
+                && (
+                    (\Yii::$app->user->isGuest && intval($orderForm->orderStep) > 1)
+                    || (!\Yii::$app->user->isGuest && intval($orderForm->orderStep) > 2)
+                )
+            ) {
                 return $this->refresh();
             }
             $errors = $orderForm->getErrorSummary(true);

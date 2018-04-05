@@ -100,26 +100,22 @@ class OrderForm extends CompositeForm {
         
         $this->loginForm = new LoginForm();
         $this->signupForm = new SignupForm(['scenario' => SignupForm::SCENARIO_GUEST]);
-        if (\Yii::$app->user->isGuest) {
-            $this->user = new User(['scenario' => User::SCENARIO_REGISTER_GUEST]);
-        } else {
-            $this->user = \Yii::$app->user->identity;
-        }
-        
+
         if ($this->orderMode === self::ORDER_MODE_LOGIN) {
             $this->enabledForms = ['loginForm'];
         } elseif ($this->orderMode === self::ORDER_MODE_GUEST) {
             $this->enabledForms = ['signupForm'];
         }
+        
+        $this->userAddresses = [new UserAddresses(['scenario' => UserAddresses::SCENARIO_REGISTER])];
         if (\Yii::$app->user->isGuest) {
             $this->orderStep = 1;
-            $this->userAddresses = [new UserAddresses()];
+            $this->user = new User(['scenario' => User::SCENARIO_REGISTER_GUEST]);
         } else {
+            $this->user = \Yii::$app->user->identity;
             $this->orderStep = 2;
-            $this->enabledForms = array_merge($this->enabledForms, ['userAddresses']);
-            /** @var \common\models\entities\User $user */
-            $user = \Yii::$app->user->identity;
-            $this->userAddresses = $user->userAddresses;
+            $this->enabledForms = array_merge((array)$this->enabledForms, ['userAddresses']);
+            $this->userAddresses = array_merge($this->userAddresses, $this->user->userAddresses);
         }
         
         $this->paymentForm = new PaymentMethodForm();
@@ -197,6 +193,7 @@ class OrderForm extends CompositeForm {
         } else {
             $this->enabledForms = array_diff($this->includedForms(), ['loginForm', 'signupForm']);
         }
+        
         if ($this->orderStep < 4) {
             $this->enabledForms = array_diff($this->enabledForms, ['cartElements']);
         }
@@ -205,6 +202,10 @@ class OrderForm extends CompositeForm {
         }
         if ($this->orderStep < 2) {
             $this->enabledForms = array_diff($this->enabledForms, ['userAddresses', 'user']);
+        }
+        
+        if (! \Yii::$app->user->isGuest) {
+            $this->enabledForms = array_diff($this->enabledForms, ['user']);
         }
         return true;
     }

@@ -115,41 +115,37 @@ $activeTab = 'new';
 
                                 <li data-transition="random" data-saveperformance="on" data-title="The Next Big Thing">
                                     <img src="images/revslider/dummy.png" alt="slidebg2"
-                                         data-lazyload="images/homeslider/slide2.jpg" data-bgposition="center center"
+                                         data-lazyload="images/homeslider/slide2.jpg?1" data-bgposition="center center"
                                          data-bgfit="cover" data-bgrepeat="no-repeat">
 
-                                    <div class="tp-caption customin customout rev-price randomrotate randomrotateout"
-                                         data-x="118" data-y="35"
-                                         data-customin="x:0;y:0;z:0;rotationX:0;rotationY:0;rotationZ:0;scaleX:0;scaleY:0;skewX:0;skewY:0;opacity:0;transformPerspective:600;transformOrigin:50% 50%;"
-                                         data-customout="x:0;y:0;z:0;rotationX:0;rotationY:0;rotationZ:0;scaleX:0.75;scaleY:0.75;skewX:0;skewY:0;opacity:0;transformPerspective:600;transformOrigin:50% 50%;"
-                                         data-speed="800" data-start="1500" data-endspeed="400">
-                                        $1150
-                                    </div>
-
-                                    <div class="tp-caption lfr ltr" data-x="-140" data-y="30" data-speed="1200"
+                                    <div class="tp-caption lfr ltr" data-x="580" data-y="30" data-speed="1200"
                                          data-start="600" data-easing="Expo.easeOut">
-                                        <a href="#"><img src="images/homeslider/slide2_2.png" alt="slide1_1"></a>
+                                        <a href="#"><img src="images/homeslider/cartina.png" alt="slide1_1"></a>
                                     </div>
 
-                                    <div class="tp-caption lfl ltl" data-x="220" data-y="40" data-speed="1200"
+                                    <div class="tp-caption lfl ltl" data-x="310" data-y="140" data-speed="1200"
                                          data-start="600" data-easing="Expo.easeOut">
-                                        <a href="#"><img src="images/homeslider/slide2_1.png" alt="slide1_1"></a>
+                                        <a href="#"><img src="images/homeslider/domofon1.png" alt="slide1_1"></a>
                                     </div>
 
-                                    <div class="tp-caption rev-title2 skewfromleft stt" data-x="530" data-y="170"
+                                    <div class="tp-caption rev-title2 skewfromleft stt" data-x="280" data-y="240"
                                          data-speed="800" data-start="900"
-                                         data-easing="Power3.easeIn" data-endspeed="300">The next big Thing...
+                                         data-easing="Power3.easeIn" data-endspeed="300">Монтируем </br>
+                                        &nbsp;&nbsp;&nbsp; видеодомофоны
                                     </div>
 
-                                    <div class="tp-caption rev-text sfl stl" data-x="530" data-y="215" data-speed="800"
+                                    <div class="tp-caption rev-text sfl stl" data-x="285" data-y="310" data-speed="800"
                                          data-start="1300" data-easing="Power3.easeIn"
-                                         data-endspeed="300">Take, view and share photos with<br> the 13MP camera and
-                                        stunning <br> 5" display.
+                                         data-endspeed="300">При заказе монтажа - доставка бесплатно<br>
+                                        - Установим вызывную панель</br>
+                                        - Подключим дополнительную камеру.</br>
+                                        - Подключим к подъездному <br> &nbsp; домофону
                                     </div>
 
-                                    <div class="tp-caption sfb stb" data-x="530" data-y="315" data-speed="900"
+                                    <div class="tp-caption sfb stb" data-x="275" data-y="465" data-speed="900"
                                          data-start="1600" data-easing="Power3.easeIn" data-endspeed="300">
-                                        <a href="#" class="btn btn-sm btn-custom-2">Learn More</a>
+                                        <a href="http://montage.8str.ru" class="btn btn-sm btn-custom-2">Заказать
+                                            монтаж</a>
                                     </div>
                                 </li>
 

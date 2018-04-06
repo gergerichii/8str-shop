@@ -36,6 +36,10 @@ return [
             'admin/web/assets',
             'frontend/runtime',
             'frontend/web/assets',
+            'shop_8str/runtime',
+            'shop_8str/web/assets',
+            'sputnik/runtime',
+            'sputnik/web/assets',
         ],
         'setExecutable' => [
             'yii',
@@ -51,6 +55,8 @@ return [
             'frontend/web/files' => 'common/webFiles',
             'shop_8str/web/files' => 'common/webFiles',
             'shop_8str/web/images' => 'frontend/web/images',
+            'sputnik/web/files' => 'common/webFiles',
+            'sputnik/web/images' => 'frontend/web/images',
         ]
     ],
     'Production' => [
@@ -60,6 +66,10 @@ return [
             'admin/web/assets',
             'frontend/runtime',
             'frontend/web/assets',
+            'shop_8str/runtime',
+            'shop_8str/web/assets',
+            'sputnik/runtime',
+            'sputnik/web/assets',
         ],
         'setExecutable' => [
             'yii',
@@ -71,13 +81,18 @@ return [
             'admin/web/files' => 'common/webFiles',
             'frontend/web/files' => 'common/webFiles',
             'shop_8str/web/files' => 'common/webFiles',
+            'sputnik/web/files' => 'common/webFiles',
+            '../sputnikvideo.ru/public_html' => 'sputnik/web',
             '../8str.8str.ru/public_html' => 'shop_8str/web',
             '../test.8str.ru/public_html' => 'frontend/web',
             '../admin.8str.ru/public_html' => 'admin/web',
+            '../admin.sputnikvideo.ru/public_html' => 'admin/web',
             'admin/web/.htaccess' => 'environments/htaccess',
             'frontend/web/.htaccess' => 'environments/htaccess',
             'shop_8str/web/.htaccess' => 'environments/htaccess',
+            'sputnik/web/.htaccess' => 'environments/htaccess',
             'shop_8str/web/images' => 'frontend/web/images',
+            'sputnik/web/images' => 'frontend/web/images',
         ]
     ],
 ];

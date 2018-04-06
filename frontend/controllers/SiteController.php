@@ -145,6 +145,16 @@ class SiteController extends Controller
             ]);
         }
     }
+    
+    /**
+     * Displays contact page.
+     *
+     * @return mixed
+     */
+    public function actionContacts()
+    {
+        return $this->render('contacts');
+    }
 
     /**
      * Displays about page.

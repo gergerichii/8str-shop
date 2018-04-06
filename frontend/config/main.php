@@ -38,7 +38,8 @@ return [
         'view' => $viewConfig,
         'urlManager' => [
             'rules' => [
-                '/data/<_a:(search)>.json' => '/data/<_a>'
+                '/data/<_a:(search)>.json' => '/data/<_a>',
+                '/contacts' => '/site/contacts',
             ]
         ],
         

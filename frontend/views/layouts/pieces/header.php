@@ -164,7 +164,7 @@ $count = $cartService->getCount();
                                         <?= TopMenu::widget(); ?>
                                     </li>
 
-                                    <li><a href="https://montage.8str.ru"><?= Yii::t('app.common', 'Монтаж');?></a></li>
+                                    <li><a href="http://montage.8str.ru"><?= Yii::t('app.common', 'Монтаж');?></a></li>
                                     <li><a href="http://montage.8str.ru/#cases"><?= Yii::t('app.common', 'Наши работы'); ?></a></li>
                                     <li><a href="<?= Url::to(['/site/default/contacts']);
                                     ?>"><?= Yii::t('app.common', 'Контакты'); ?></a></li>

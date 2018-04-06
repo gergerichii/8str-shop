@@ -39,7 +39,7 @@ return [
         'urlManager' => [
             'rules' => [
                 '/data/<_a:(search)>.json' => '/data/<_a>',
-                '/contacts' => '/site/default/contacts',
+                '/contacts' => '/site/contacts',
             ]
         ],
         

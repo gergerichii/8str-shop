@@ -65,12 +65,13 @@ $count = $cartService->getCount();
     <div id="inner-header" style="padding-top: 0px">
         <div class="container">
             <div class="row">
-                                        <!-- TODO: Перенести стиль в css-->
-                <div class="col-md-3 col-sm-3 col-xs-12 logo-container" style="margin-bottom: 0px">
+                <div class="col-md-3 col-sm-3 col-xs-12 logo-container">
                     <h1 class="logo clearfix">
                         <span>Responsive eCommerce Template</span>
-                                                                                                                    <!-- TODO: Перенести стиль в css-->
-                        <a href="/" title="Venedor eCommerce Template"><img src="/images/logo.jpg" alt="Venedor Commerce Template" style="width: 260px; margin-left: 7px"></a>
+                        <!-- TODO: Перенести стиль в css-->
+                        <a href="/" title="<?=Yii::$app->name?>">
+                            <img src="<?=Yii::getAlias('@web/images/logo8@2x.png')?>" alt="<?=Yii::$app->name?>" style="width: 260px; margin-left: 7px">
+                        </a>
                     </h1>
                 </div><!-- End .col-md-3 -->
                 <!-- TODO: Перенести стиль в css-->

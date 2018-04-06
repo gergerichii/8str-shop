@@ -2297,10 +2297,10 @@ select.input-lg {
     padding-top: 45px;
 }
 
-#inner-header .logo-container,
-#inner-header .header-inner-right {
-    margin-bottom: 10px;
-}
+/*#inner-header .logo-container,*/
+/*#inner-header .header-inner-right {*/
+    /*margin-bottom: 10px;*/
+/*}*/
 
 .header3 #inner-header .logo-container,
 .header3 #inner-header .header-inner-right {
@@ -2325,10 +2325,10 @@ select.input-lg {
     margin-top: -9px;
 }
 
-.header6 #inner-header .logo-container,
-.header6 #inner-header .header-inner-right {
-    margin-bottom: 26px;
-}
+/*.header6 #inner-header .logo-container,*/
+/*.header6 #inner-header .header-inner-right {*/
+    /*margin-bottom: 26px;*/
+/*}*/
 
 .header7 #inner-header .logo-container,
 .header7 #inner-header .header-inner-right {
@@ -2345,9 +2345,7 @@ select.input-lg {
 }
 
 .logo {
-    position: relative;
-    margin: 0;
-
+    margin: 20px 0;
 }
 
 .logo > span {
@@ -2357,7 +2355,6 @@ select.input-lg {
 }
 
 .logo > a {
-    margin-left: -22px;
     display: inline-block;
 }
 

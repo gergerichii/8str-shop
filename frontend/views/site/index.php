@@ -120,12 +120,12 @@ $activeTab = 'new';
 
                                     <div class="tp-caption lfr ltr" data-x="580" data-y="30" data-speed="1200"
                                          data-start="600" data-easing="Expo.easeOut">
-                                        <a href="#"><img src="images/homeslider/cartina.png" alt="slide1_1"></a>
+                                        <img src="images/homeslider/cartina.png" alt="slide1_1">
                                     </div>
 
                                     <div class="tp-caption lfl ltl" data-x="310" data-y="140" data-speed="1200"
                                          data-start="600" data-easing="Expo.easeOut">
-                                        <a href="#"><img src="images/homeslider/domofon1.png" alt="slide1_1"></a>
+                                        <img src="images/homeslider/domofon1.png" alt="slide1_1">
                                     </div>
 
                                     <div class="tp-caption rev-title2 skewfromleft stt" data-x="280" data-y="240"
@@ -152,10 +152,14 @@ $activeTab = 'new';
                                 <li data-transition="random" data-saveperformance="on" data-title="Powerful Template">
 
                                     <img src="images/revslider/dummy.png" alt="slidebg3"
-                                         data-lazyload="images/homeslider/slide3.jpg" data-bgposition="center center"
+                                         data-lazyload="images/homeslider/slide3.jpg?1" data-bgposition="center center"
                                          data-bgfit="cover" data-bgrepeat="no-repeat">
+                                    <div class="tp-caption lfl ltl" data-x="30" data-y="130" data-speed="1200"
+                                         data-start="600" data-easing="Expo.easeOut">
+                                        <img src="images/homeslider/Plitka3.png" alt="slide1_1">
+                                    </div>
                                     <div class="tp-caption rev-title lfl ltl" data-x="40" data-y="140" data-speed="800"
-                                         data-start="300" data-endspeed="350">Venedor Extremely <br>Powerful Template
+                                         data-start="300" data-endspeed="350">Не беспокойтесь <br>за свое поместье
                                     </div>
 
                                     <div class="tp-caption sfr stl" data-x="40" data-y="240" data-speed="1000"
@@ -166,7 +170,7 @@ $activeTab = 'new';
                                     <div class="tp-caption rev-list sfr stl" data-x="85" data-y="236" data-speed="1000"
                                          data-start="650"
                                          data-endspeed="150">
-                                        9 Homepage Layout
+                                        Охватим периметр участка
                                     </div>
 
                                     <div class="tp-caption sfr stl" data-x="40" data-y="282" data-speed="1000"
@@ -177,7 +181,7 @@ $activeTab = 'new';
                                     <div class="tp-caption rev-list sfr stl" data-x="85" data-y="278" data-speed="1000"
                                          data-start="900"
                                          data-endspeed="230">
-                                        Revolution Slider
+                                        Настроим круглосуточную запись
                                     </div>
 
                                     <div class="tp-caption sfr stl" data-x="40" data-y="324" data-speed="1000"
@@ -188,7 +192,7 @@ $activeTab = 'new';
                                     <div class="tp-caption rev-list sfr stl" data-x="85" data-y="320" data-speed="1000"
                                          data-start="1150"
                                          data-endspeed="290">
-                                        Isotope Plugin
+                                        Обеспечим удаленный просмотр
                                     </div>
 
                                     <div class="tp-caption sfr stl" data-x="40" data-y="366" data-speed="1000"
@@ -199,7 +203,14 @@ $activeTab = 'new';
                                     <div class="tp-caption rev-list sfr stl" data-x="85" data-y="362" data-speed="1000"
                                          data-start="1400"
                                          data-endspeed="350">
-                                        Unlimited Colors &amp; Fonts
+                                        Оборудуем видеодомофонию
+                                    </div>
+                                    <div class="tp-caption rev-list sfr stl" data-x="80" data-y="405" data-speed="1000"
+                                         data-start="1650"
+                                         data-endspeed="350">
+                                        <a href="http://montage.8str.ru" class="btn btn-sm btn-custom-2">
+                                            Заказать бесплатный осмотр
+                                        </a>
                                     </div>
                                 </li>
 

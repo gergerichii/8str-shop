@@ -31,7 +31,6 @@ $tagLabels = [
     'bestseller' => 'Хит продаж',
     'sale' => 'Распродажа',
     'promo' => 'Спецпредложение',
-    'popular' => 'Популярное',
 ];
 $activeTab = 'new';
 /** --------------------------------------------Карусель с товарами------------------------------------------------- */
@@ -225,7 +224,7 @@ $activeTab = 'new';
                         <ul id="products-tabs-list" class="tab-style-2 clearfix">
                             
                             <?php foreach($topModels as $tag => $products): ?>
-                                <?php if(!count($products))
+                                <?php if(!count($products) || empty($tagLabels[$tag]))
                                     continue; ?>
                                 <li class="<?=($tag == $activeTab) ? 'active' : ''?>">
                                     <a href="#<?=$tag?>" data-toggle="tab"><?=$tagLabels[$tag]?></a>

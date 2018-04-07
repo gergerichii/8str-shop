@@ -11,4 +11,4 @@ php_flag display_errors 1
 php_flag display_startup_errors 1
 php_value error_reporting 2047
 php_flag log_errors 1
-php_value error_log /home/f/fbkru/8str.8str.ru/php_error.log
+php_value error_log /home/f/fbkru/sputnikvideo.ru/php_error.log

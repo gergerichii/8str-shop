@@ -15,8 +15,6 @@ $this->title = 'Доставка и оплата';
 <div class="row">
     <div class="col-md-12">
         <div class="row slider-position">
-            <div class="md-margin"></div><!-- space -->
-            
             <?=$this->render('@app/views/pieces/sidebar');?>
 
             <div class="col-md-9 col-sm-8 col-xs-12 main-content ">

@@ -33,7 +33,8 @@ AppAsset::register($this);
             <div id="breadcrumb-container">
                 <div class="container">
                     <?= \common\widgets\Breadcrumbs::widget([
-                        'links' => !empty($this->params['breadcrumbs']) ? $this->params['breadcrumbs'] : [$this->title],
+                        'links' => !empty($this->params['breadcrumbs']) ? $this->params['breadcrumbs'] :
+                            (!empty($this->title)) ? [$this->title] : [],
                     ]); ?>
                 </div>
             </div>

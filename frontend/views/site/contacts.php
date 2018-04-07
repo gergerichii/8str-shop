@@ -15,7 +15,6 @@ $this->title = 'Контакты';
 <div class="row">
     <div class="col-md-12">
         <div class="row slider-position">
-            <div class="md-margin"></div><!-- space -->
             
             <?=$this->render('@app/views/pieces/sidebar');?>
 

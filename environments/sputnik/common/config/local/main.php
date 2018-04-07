@@ -4,8 +4,8 @@ return [
         'db' => [
             'class' => 'yii\db\Connection',
             'dsn' => 'mysql:host=localhost;dbname=fbkru_yiishop',
-            'username' => 'fbkru_yiishopdev',
-            'password' => '1*sHn0pd',
+            'username' => 'fbkru_yiishop',
+            'password' => 'E&H2IsyY',
             'charset' => 'utf8',
         ],
         'old_db' => [

@@ -166,8 +166,8 @@ $count = $cartService->getCount();
 
                                     <li><a href="http://montage.8str.ru"><?= Yii::t('app.common', 'Монтаж');?></a></li>
                                     <li><a href="http://montage.8str.ru/#cases"><?= Yii::t('app.common', 'Наши работы'); ?></a></li>
-                                    <li><a href="<?= Url::to(['/site/contacts']);
-                                    ?>"><?= Yii::t('app.common', 'Контакты'); ?></a></li>
+                                    <li><a href="<?= Url::to(['/site/contacts']);?>"><?= Yii::t('app.common', 'Контакты'); ?></a></li>
+                                    <li><a href="<?= Url::to(['/site/delivery-and-payments']);?>"><?= Yii::t('app.common', 'Доставка и оплата');?></a></li>
                                     <li><a href="<?= Url::to(['/news']); ?>"><?= Yii::t('app.common', 'Новости'); ?></a></li>
                                 </ul>
                             </div>

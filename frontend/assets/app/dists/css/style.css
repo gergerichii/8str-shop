@@ -4653,7 +4653,7 @@ Bootstrap Breadcrumb style overwrite
 
 #breadcrumb-container {
     background: #6dbcdb;
-    margin-bottom: 50px;
+    /*margin-bottom: 50px;*/
 }
 
 #breadcrumb-container.light {

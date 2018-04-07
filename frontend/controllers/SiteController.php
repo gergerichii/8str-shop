@@ -155,6 +155,16 @@ class SiteController extends Controller
     {
         return $this->render('contacts');
     }
+    
+    /**
+     * Displays contact page.
+     *
+     * @return mixed
+     */
+    public function actionDeliveryAndPayments()
+    {
+        return $this->render('delivery');
+    }
 
     /**
      * Displays about page.

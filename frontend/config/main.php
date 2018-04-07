@@ -40,6 +40,7 @@ return [
             'rules' => [
                 '/data/<_a:(search)>.json' => '/data/<_a>',
                 '/contacts' => '/site/contacts',
+                '/delivery-and-payments' => '/site/delivery-and-payments',
             ]
         ],
         

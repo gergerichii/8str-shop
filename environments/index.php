@@ -107,12 +107,11 @@ return [
             'common/config/web/local/main.php',
         ],
         'createSymlink' => [
+            'public_html' => 'sputnik/web',
+            '../admin.sputnikvideo.ru/public_html' => 'admin/web',
             'admin/web/files' => 'common/webFiles',
             'sputnik/web/files' => 'common/webFiles',
-            '../sputnikvideo.ru/public_html' => 'sputnik/web',
-            '../admin.sputnikvideo.ru/public_html' => 'admin/web',
             'admin/web/.htaccess' => 'environments/htaccess',
-            'sputnik/web/.htaccess' => 'environments/htaccess',
             'admin/web/images' => 'frontend/web/images',
             'sputnik/web/images' => 'frontend/web/images',
         ]

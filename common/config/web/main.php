@@ -2,6 +2,7 @@
 
 $config = [
     'bootstrap' => [
+        'common\modules\counters\CountersBootstrap',
         'log',
         'cart',
         'common\modules\order\Bootstrap',
@@ -27,6 +28,9 @@ $config = [
         ],
     ],
     'components' => [
+        'view' => [
+            'as countersBehaviour' => \common\modules\counters\behaviours\CountersViewBehaviour::class,
+        ],
         'i18n' => [
             'translations' => [
                 'traits' => [
@@ -83,6 +87,9 @@ $config = [
         ],
     ],
     'modules' => [
+        'counters' => [
+            'class' => 'common\modules\counters\CountersModule',
+        ],
         'files' => [
         ],
         'cart' => [

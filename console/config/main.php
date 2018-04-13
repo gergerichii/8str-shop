@@ -17,7 +17,7 @@ return [
                 '@common/modules/order/migrations',
                 '@yii/web/migrations',
                 '@common/modules/treeManager/migrations',
-//                '@yii/rbac/migrations',
+                '@common/modules/counters/migrations',
                 '@yii/rbac/migrations',
                 '@vendor/cinghie/yii2-articles/migrations',
 //                '@yii/log/migrations',

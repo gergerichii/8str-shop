@@ -20,6 +20,35 @@ use yii\db\ActiveRecord;
  */
 class BaseActiveRecord extends ActiveRecord
 {
+    private $_loadDefaults = false;
+    
+    /**
+     * BaseActiveRecord constructor.
+     *
+     * @param array|boolean $config если $config == false то значения по умолчанию не будут заполняться автоматически
+     */
+    public function __construct($config = []) {
+        if ((!is_bool($config) && is_array($config) && empty($config['loadDefaults'])) || $config !== false) {
+            $this->_loadDefaults = true;
+        }
+        if (is_array($config)) {
+            unset($config['loadDefaults']);
+        } elseif (is_bool($config)) {
+            $config = [];
+        }
+        parent::__construct($config);
+    }
+    
+    /**
+     *
+     */
+    public function init() {
+        parent::init();
+        if ($this->_loadDefaults) {
+            $this->loadDefaultValues();
+        }
+    }
+    
     /**
      * @return array
      */

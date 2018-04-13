@@ -93,6 +93,9 @@ class CountersViewBehaviour extends Behavior {
         $currentDomain = $request->hostName;
         $currentPage = substr($request->url, 1);
         
+        if ($request->remoteIP === '195.19.215.184')
+            return false;
+        
         if (!empty($counter->included_pages)) {
             foreach(explode(';', $counter->included_pages) as $page) {
                 $page = trim($page);

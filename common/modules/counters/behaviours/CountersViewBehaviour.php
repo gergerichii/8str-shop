@@ -104,6 +104,8 @@ class CountersViewBehaviour extends Behavior {
                 
                 $ret |= $this->checkShow($currentDomain, $domain) && $this->checkShow($currentPage, $page);
             }
+        } else {
+            $ret = true;
         }
         if (!empty($counter->excluded_pages)) {
             foreach(explode(';', $counter->excluded_pages) as $page) {

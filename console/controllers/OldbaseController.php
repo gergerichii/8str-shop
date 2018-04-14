@@ -154,7 +154,7 @@ class OldbaseController extends BaseController
             $command = "mysqldump -h127.0.0.1 -P3307 -u{$config['username']} -p{$config['password']} fbkru_0_8str > $this->oldSqlDump";
             return shell_exec($command);
         } elseif ($db = Yii::$app->get('old_db', false)) {
-            $config['username'] = $db->ussername;
+            $config['username'] = $db->username;
             $config['password'] = $db->password;
 
             $command = "mysqldump -h127.0.0.1 -P3307 -u{$config['username']} -p{$config['password']} fbkru_0_8str > $this->oldSqlDump";

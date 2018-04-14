@@ -414,6 +414,7 @@ class OldbaseController extends BaseController
                             $transaction->rollBack();
                             return 1;
                         }
+                        $localBrands[$src['old_brand_id']] = $brand->id;
                     } else {
                         $brand = $localBrands[$src['old_brand_id']];
                     }

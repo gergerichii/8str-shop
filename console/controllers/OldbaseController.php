@@ -157,7 +157,7 @@ class OldbaseController extends BaseController
             $config['username'] = $db->username;
             $config['password'] = $db->password;
 
-            $command = "mysqldump -h127.0.0.1 -P3307 -u{$config['username']} -p{$config['password']} fbkru_0_8str > $this->oldSqlDump";
+            $command = "mysqldump -h127.0.0.1 -P3306 -u{$config['username']} -p{$config['password']} fbkru_0_8str > $this->oldSqlDump";
             return shell_exec($command);
         } else {
             $this->error('Необходим файл настройки db2.php. За подробностями обратиться к разработчику');

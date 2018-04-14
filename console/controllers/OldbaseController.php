@@ -334,11 +334,18 @@ class OldbaseController extends BaseController
         $rootRubric = ProductRubric::treeFind()->where(['name' => 'Каталог', 'level' => '0'])->one();
         $rootRubricId = $rootRubric->id;
         unset($rootRubric);
+        $rubrics = ProductRubric::find()
+            ->select(['id', 'old_id'])
+            ->indexBy('old_id')->asArray()->all();
         
         $localProducts = Product::find()
             ->select(['id', 'old_id', 'name'])
+            ->where('[[old_id]]')
             ->indexBy('name')->asArray()->all();
-        
+
+        $localBrands = ProductBrand::find()
+            ->indexBy('old_id')->all();
+
         /** @var Module $filesManager */
         $filesManager = Yii::$app->getModule('files');
         
@@ -376,7 +383,8 @@ class OldbaseController extends BaseController
                             'Название дубля' => $src['name'],
                         ];
                     }
-                } else {
+                    continue;
+                } elseif(empty($localProducts[$src['name']]['processed'])) {
                     /** Обновляем продукт */
                     $product = Product::findOne($localProducts[$src['name']]['id']);
                     if (empty($localProducts[$src['name']]['processed'])) {
@@ -386,13 +394,15 @@ class OldbaseController extends BaseController
                             continue;
                         }
                     }
+                    $localProducts[$src['name']]['processed'] = true;
+                } elseif (!isset($product) || !is_object($product) || $product->id !== $localProducts[$src['name']]['id']) {
+                    $product = Product::findOne($localProducts[$src['name']]['id']);
                 }
-                $localProducts[$src['name']]['processed'] = true;
             } else {
                 $transaction = Yii::$app->db->beginTransaction();
                 /** Если продукта нет, то и брэнда (производителя) может не быть */
                 if ($src['old_brand_id']) {
-                    if (!$brand = ProductBrand::findOne(['old_id' => $src['old_brand_id']])) {
+                    if(empty($localBrands[$src['old_brand_id']])) {
                         /** @noinspection MissedFieldInspection */
                         $brand = new ProductBrand([
                             'name' => $src['brand_name'],
@@ -404,6 +414,8 @@ class OldbaseController extends BaseController
                             $transaction->rollBack();
                             return 1;
                         }
+                    } else {
+                        $brand = $localBrands[$src['old_brand_id']];
                     }
                 } else {
                     $brand = null;
@@ -413,7 +425,7 @@ class OldbaseController extends BaseController
                 /** @var Product $product */
                 $product = new Product();
                 $product->setAttributes($src);
-                $product->brand_id = ($brand) ? $brand->id : null;
+                $product->brand_id = $brand ? $brand->id : null;
 
                 if (!$product->save()) {
                     $this->error("Продукт {$src['old_id']}:{$src['name']} не сохранен", $product->errors);
@@ -422,9 +434,8 @@ class OldbaseController extends BaseController
                 }
 
                 /** Если есть рубрика для продукта, то присоединяем продукт к ней */
-                /** @var ProductRubric $rubric */
-                if ($rubric = ProductRubric::findOne(['old_id' => $src['old_rubric_id']])) {
-                    $product->main_rubric_id = $rubric->id;
+                if (!empty($src['old_rubric_id']) && isset($rubrics[$src['old_rubric_id']])) {
+                    $product->main_rubric_id = $rubrics[$src['old_rubric_id']];
                     $product->save();
                 } else {
                     $product->main_rubric_id = $rootRubricId;
@@ -456,13 +467,13 @@ class OldbaseController extends BaseController
             $mainDomain = '8str';
             foreach (array_keys($domains) as $domain) {
                 $field = "{$domain}_price";
-                $priceValue = isset($src[$field]) ? $src[$field] :  $src["{$mainDomain}_price"];
+                $priceValue = isset($src[$field]) ? $src[$field] : $src["{$mainDomain}_price"];
                 $priceValue = round((float)$priceValue, 2);
 
                 $priceParams = [
                     'value' => $priceValue,
                     'product_id' => $product->id,
-                    'domain_name' => Yii::$app->params['domains'][$domain],
+                    'domain_name' => $domain,
                 ];
                 if (!ProductPrice::find()->onlyActive()->andWhere($priceParams)->one()) {
                     if (!$catalog->insertNewPrice($product, $priceValue, $domain)) {
@@ -497,54 +508,37 @@ class OldbaseController extends BaseController
             
             /** Добавляем картинки */
             $productName = preg_replace('#[/]#', '', $product->name);
-            if (array_key_exists($productName, $groups)) {
+            if (array_key_exists($productName, $groups) && empty($localProducts[$src['name']]['new_images_processed'])) {
                 foreach($groups[$productName] as $fileInfo) {
                     $product->addFile($fileInfo['basename']);
     
                     $image->fileName = $fileInfo['basename'];
-                    if (false === $image->pickFrom($fileInfo['dirname'], false)) {
-                        $this->error('Product #' . $product->id . ' error: ' . $image->getFirstError('') . '.');
-                    } else {
-                        $image->adoptSize(DriverImage::CROP);
-                    }
+                    $image->pickFrom($fileInfo['dirname']) and $image->adaptSize(DriverImage::CROP);
                     if ($image->exists()) {
                         $image->createThumbs();
                     }
                 }
-                try {
-                    $product->update();
-                } catch(StaleObjectException $e) {
-                    $this->error($e->getMessage());
-                    $product->refresh();
-                } catch(\Exception $e) {
-                    $this->error($e->getMessage());
-                    $product->refresh();
-                } catch(\Throwable $e) {
-                    $this->error($e->getMessage());
-                    $product->refresh();
-                }
+                $localProducts[$src['name']]['new_images_processed'] = true;
             }
 
             if (false === strpos($src['filename'], 'sertifikat')) {
                 /** Добавляем файлы */
-                $filePath = $filesManager->getFilePath('products/images', 'old/' . $src['filename'], false, false, true);
-                $filePath or $filePath = "https://8str.ru/sites/default/files/product/{$src['filename']}";
+                $filePath = $filesManager->getFilePath(
+                    'products/images',
+                    'old/' . $src['filename'],
+                    false,
+                    false,
+                    true
+                ) or $filePath = "https://8str.ru/sites/default/files/product/{$src['filename']}";
                 if ($filePath) {
                     try {
                         $image = $filesManager->createEntity('products/images', $src['filename']);
-                        if ($image->pickFrom(dirname($filePath), false)) {
+                        if ($image->pickFrom(dirname($filePath))) {
                             $newName = preg_replace('#\.\w{3,4}$#', '.png', basename($filePath));
                             /** @var Image $image */
-                            $image->adoptSize(ImgDriver::ADAPT, $newName);
+                            $image->adaptSize(ImgDriver::ADAPT, $newName);
                             $image->createThumbs();
-                            if (!$product->addFile($image->getBasename())->save()) {
-                                $this->error(
-                                    "Картинка {$src['filename']} для продукта {$src['old_id']}:{$src['name']} не добавлена",
-                                    $product->errors
-                                );
-                            }
-                        } else {
-                            $this->error('Product #' . $product->id . ' error: ' . $image->getFirstError('') . '.');
+                            $product->addFile($image->getBasename());
                         }
                     } catch (\Exception $e) {
                         $this->error(
@@ -553,6 +547,19 @@ class OldbaseController extends BaseController
                         );
                     }
                 }
+            }
+            
+            try {
+                $product->update();
+            } catch(StaleObjectException $e) {
+                $this->error($e->getMessage());
+                $product->refresh();
+            } catch(\Exception $e) {
+                $this->error($e->getMessage());
+                $product->refresh();
+            } catch(\Throwable $e) {
+                $this->error($e->getMessage());
+                $product->refresh();
             }
     
             $msg = $this->ansiFormat('.', Console::FG_GREEN);

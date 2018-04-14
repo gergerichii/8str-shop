@@ -66,21 +66,23 @@ class Image extends BaseFile
      * Create thumbs
      *
      * @param bool $save
-     * @param int $master
+     * @param int  $master
+     *
+     * @param bool $force
      *
      * @throws \yii\base\ErrorException
-     * @throws \yii\base\Exception
      * @throws \yii\base\InvalidConfigException
      */
-    public function createThumbs($save = true, $master = null) {
+    public function createThumbs($save = true, $master = null, $force = false) {
         $this->_thumbs = [];
+        /** @var Module $filesManagers */
+        $filesManagers = \Yii::$app->getModule('files');
         foreach ($this->thumbsOptions as $thumbName => $entityType) {
-            /** @var Module $filesManagers */
-            $filesManagers = \Yii::$app->getModule('files');
             $thumb = $filesManagers->createEntity($entityType, $this->fileName);
 
-            if ($save && !$thumb->exists()) {
-                $this->saveThumb($thumb, $master);
+            if ($save) {
+                if (!$thumb->exists() || $force)
+                    $this->saveThumb($thumb, $master);
             }
 
             $this->_thumbs[$thumbName] = $thumb;
@@ -126,10 +128,14 @@ class Image extends BaseFile
      *
      * @see \yii\image\drivers\Image
      */
-    public function adoptSize($master, $saveAs = null, $force = false) {
+    public function adaptSize($master, $saveAs = null, $force = false) {
         $this->clearErrors();
         /** @var ImageDriver $imageComponent */
         $imageComponent = \Yii::$app->get('image');
+        if (!$force && $saveAs && file_exists(dirname($this->getFilePath()) . DIRECTORY_SEPARATOR . $saveAs)) {
+            $this->addError('', "File {$saveAs} already exists.");
+            return false;
+        }
         /** @var Image_GD $image */
         $image = $imageComponent->load($this->getFilePath());
         if ($force || ($image->width !== $this->width || $image->height !== $this->height)) {

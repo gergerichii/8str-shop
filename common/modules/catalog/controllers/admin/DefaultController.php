@@ -477,7 +477,7 @@ class DefaultController extends Controller
 
             $uploadedFile->saveAs($image->getFilePath());
 
-            $image->adoptSize(DriverImage::CROP);
+            $image->adaptSize(DriverImage::CROP);
             $image->createThumbs();
             $product->addFile($image->fileName);
 

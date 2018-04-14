@@ -312,30 +312,32 @@ class Product extends BaseActiveRecord implements CartElement
     /**
      * Add file
      * @param string $file
-     * @return Product
+     * @return bool
      */
     public function addFile(string $file) {
         $part = ProductHelper::getFileStorePart($file);
-        if (!in_array($file, $this->_files[$part])){
+        if ($ret = !in_array($file, $this->_files[$part])){
             $this->_files[$part][] = $file;
         }
 
-        return $this;
+        return $ret;
     }
 
     /**
      * Delete file
      * @param string $file
-     * @return $this
+     * @return bool
      */
     public function deleteFile(string $file) {
         $part = ProductHelper::getFileStorePart($file);
+        $ret = false;
         if (false !== ($index = array_search($file, $this->_files[$part]))) {
             unset($this->_files[$part][$index]);
             $this->_files[$part] = array_values($this->_files[$part]);
+            $ret = true;
         }
 
-        return $this;
+        return $ret;
     }
     
     /**

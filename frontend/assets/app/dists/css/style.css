@@ -2297,6 +2297,144 @@ select.input-lg {
     padding-top: 45px;
 }
 
+/* main search */
+
+.header6 #inner-header .header-inner-right .row {
+    padding: 7px 15px 6px 0;
+}
+
+.header6 #inner-header .main-search-left,
+.header6 #inner-header .main-search-right,
+.header6 #inner-header .main-search-fill {
+    min-height: 36px;
+    position: relative;
+}
+
+.header6 #inner-header .main-search-left {
+    float: left;
+    box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    -webkit-box-sizing: border-box;
+    width: auto;
+    display: inline-block;
+}
+
+.header6 #inner-header .main-search-right {
+    min-width: 0;
+    box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    -webkit-box-sizing: border-box;
+    float: right;
+    width: auto;
+    display: inline-block;
+}
+
+.header6 #inner-header .main-search-fill {
+    zoom: 1;
+    box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    -webkit-box-sizing: border-box;
+    width: auto;
+    white-space: nowrap;
+    overflow: hidden;
+}
+
+.header6 .main-search-fill .main-search-field {
+    border: none;
+    border-top: 1px solid transparent;
+    position: relative;
+    height: 35px;
+    background: #fff;
+    border-style: solid;
+    border-color: #e0e0e0;
+    border-top-width: 1px;
+    border-right-width: 1px;
+    border-bottom-width: 1px;
+    border-left-width: 1px;
+}
+
+.header6 .search-input {
+    position: absolute;
+    top: 0;
+    left: 0;
+    display: block;
+    width: 100%;
+    line-height: 15px;
+    padding: 6px 10px 6px 0;
+    margin: 0;
+    border: 0;
+    color: #888888;
+    height: 33px;
+    font-family: arial,sans-serif;
+    font-size: 15px;
+    background: 0 0;
+    outline: 0;
+    -webkit-appearance: none;
+    box-shadow: none;
+    text-indent: 8px;
+    vertical-align: middle;
+}
+
+.main-search-left select.form-control,
+.main-search-left .select2-container--krajee .select2-selection--single {
+    height: 35px;
+    padding: 6px 50px 6px 12px;
+}
+
+.main-search-left select.form-control,
+.main-search-left .select2-container--krajee .select2-selection {
+    border-left: 1px solid #e0e0e0;
+    border-right: 0;
+    border-top: 1px solid #e0e0e0;
+    border-bottom: 1px solid #e0e0e0;
+    border-radius: 0;
+    -webkit-box-shadow: none;
+    box-shadow: none;
+    background-color: #fff;
+    color: #555555;
+    font-size: 14px;
+    outline: 0;
+}
+
+.main-search-left .select2-container--krajee .select2-selection--single .select2-selection__arrow {
+    border-left: 1px solid #e0e0e0;
+    height: 33px;
+}
+
+.main-search-left .select2-container--krajee.select2-container--open .select2-selection,
+.main-search-left .select2-container--krajee .select2-selection:focus {
+    -webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075), 0 0 6px rgba(224, 224, 224, 0.6);
+    box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075), 0 0 6px rgba(224, 224, 224, 0.6);
+    -webkit-transition: border-color ease-in-out 0.15s, box-shadow ease-in-out 0.15s;
+    -o-transition: border-color ease-in-out 0.15s, box-shadow ease-in-out 0.15s;
+    transition: border-color ease-in-out 0.15s, box-shadow ease-in-out 0.15s;
+    border-color: #e0e0e0;
+}
+
+.select2-container--krajee .select2-dropdown {
+    border-color: #e0e0e0 !important;
+    margin-top: 0 !important;
+}
+
+.tt-menu {
+    top: auto !important;
+}
+
+.tt-menu,
+.tt-menu.tt-empty,
+.tt-menu.tt-open.tt-empty {
+    position: absolute;
+    left: 0;
+    z-index: 100000;
+    display: none;
+}
+
+.tt-menu.tt-open {
+    display: block;
+}
+
+/* end main search */
+
 /*#inner-header .logo-container,*/
 /*#inner-header .header-inner-right {*/
     /*margin-bottom: 10px;*/
@@ -2321,9 +2459,9 @@ select.input-lg {
     margin: 0;
 }
 
-.header6 #inner-header .header-inner-right {
-    margin-top: -9px;
-}
+/*.header6 #inner-header .header-inner-right {*/
+    /*margin-top: -9px;*/
+/*}*/
 
 /*.header6 #inner-header .logo-container,*/
 /*.header6 #inner-header .header-inner-right {*/
@@ -3058,6 +3196,7 @@ select.input-lg {
     float: right;
     position: relative;
     margin-top: 1.5px;
+    width: 100%;
 }
 
 #main-nav-container.fixed #quick-access {
@@ -3223,9 +3362,9 @@ select.input-lg {
     background-position: -1px -117px;
 }
 
-.header6 #quick-search {
-    margin-top: 7px;
-}
+/*.header6 #quick-search {*/
+    /*margin-top: 7px;*/
+/*}*/
 
 .header7 #quick-search {
     margin-top: 7.5px;

@@ -7,6 +7,7 @@ use common\modules\catalog\models\ProductBrand;
 use common\modules\catalog\models\ProductRubric;
 use common\modules\catalog\models\ProductSphinxIndex;
 use yii\data\BaseDataProvider;
+use yii\db\Expression;
 
 /**
  * Class FrontendSearchProvider
@@ -128,7 +129,10 @@ class FrontendSearchProvider extends BaseDataProvider
 
         // Search for products
         $this->_products = [];
-        $productIndexQuery = ProductSphinxIndex::find()->match('*' . $this->q . '*')->select('id');
+        $this->q = trim($this->q);
+        $productIndexQuery = ProductSphinxIndex::find()
+            ->match(new Expression(':match', ['match' => '@(name) ' . \Yii::$app->sphinx->escapeMatchValue($this->q)]))
+            ->select('id');
 
         if ($this->_top) {
             $productIndexQuery->limit(5);

@@ -10,6 +10,12 @@ namespace common\i18n;
 use yii\helpers\ArrayHelper;
 
 class PhpMessageSource extends \yii\i18n\PhpMessageSource {
+    /**
+     * @param string $category
+     * @param string $language
+     *
+     * @return array|string
+     */
     public function getMessageFilePath($category, $language) {
         $ret = [];
         foreach ((array) $this->basePath as $path) {
@@ -24,6 +30,11 @@ class PhpMessageSource extends \yii\i18n\PhpMessageSource {
         return $ret;
     }
     
+    /**
+     * @param string $messageFiles
+     *
+     * @return array|null
+     */
     public function loadMessagesFromFile($messageFiles) {
         $ret = [];
         foreach ((array) $messageFiles as $messageFile) {

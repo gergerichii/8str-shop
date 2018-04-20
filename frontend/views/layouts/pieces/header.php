@@ -74,70 +74,74 @@ $count = $cartService->getCount();
                         </a>
                     </h1>
                 </div><!-- End .col-md-3 -->
-                <!-- TODO: Перенести стиль в css-->
-                <div class="col-md-9 col-sm-9 col-xs-12 header-inner-right" style="margin-top: 35px">
-                    <div class="header-inner-right-wrapper clearfix">
-                        <?php if(yii::$app->getModule('cart', false)): ?>
-                            <div class="dropdown-cart-menu-container pull-right">
-                            <div class="btn-group dropdown-cart">
-                                <?php CartInformer::begin(); ?>
-                                    <a href="{link}" type="button" class="btn dropdown-toggle">
-                                        <span class="cart-menu-icon"></span>
-                                        {c} шт. <span class="drop-price">- {p}</span>
-                                    </a>
-                                <?php CartInformer::end(); ?>
-
-                                <div class="dropdown-menu dropdown-cart-menu pull-right clearfix" role="menu">
-                                    <p class="dropdown-cart-description">Добавленные товары</p>
-                                    
-                                    <ul class="dropdown-cart-product-list">
-                                        <?= ElementsList::widget([
-                                            'elementView' => '//layouts/pieces/headerCartElement',
-                                            'listOnly' => true,
-                                            'showCountArrows' => false,
-                                        ]) ?>
-                                    </ul>
-
-                                    <ul class="dropdown-cart-total">
+                <div class="col-md-9 col-sm-9 col-xs-12 header-inner-right">
+                    <div class="row">
+                        <!-- TODO: Перенести стиль в css-->
+                        <div class="col-12 header-inner-right">
+                            <div class="header-inner-right-wrapper clearfix">
+                                <?php if(yii::$app->getModule('cart', false)): ?>
+                                    <div class="dropdown-cart-menu-container pull-right">
+                                    <div class="btn-group dropdown-cart">
                                         <?php CartInformer::begin(); ?>
-                                            <li>
-                                                <span class="dropdown-cart-total-title">Всего:</span>{p}
-                                            </li>
+                                            <a href="{link}" type="button" class="btn dropdown-toggle">
+                                                <span class="cart-menu-icon"></span>
+                                                {c} шт. <span class="drop-price">- {p}</span>
+                                            </a>
                                         <?php CartInformer::end(); ?>
-                                    </ul><!-- .dropdown-cart-total -->
-                                    <div class="dropdown-cart-action">
-                                        <p><a href="<?= Url::toRoute('/cart/default/index') ?>" class="btn btn-custom-2 btn-block">Корзина</a></p>
-                                        <?php /** @var \common\modules\cart\CartService $cartService */ ?>
-                                        <p style="display: <?= ($count) ? 'initial' : 'none' ?>;" class="shop-cart-checkout-btn">
-                                            <a href="<?=Url::toRoute('/order/default/index') ?>" class="btn btn-custom btn-block">Оформить</a>
-                                        </p>
-                                    </div><!-- End .dropdown-cart-action -->
-                                </div><!-- End .dropdown-cart -->
-                            </div><!-- End .btn-group -->
-                        </div><!-- End .dropdown-cart-menu-container -->
-                        <?php endif; ?>
-
-<!--                        <div id="quick-access">-->
-<!--                            --><?//= MainSearchWidget::widget(); ?>
-<!--                        </div><!-- End #quick-access -->
-
-                        <div class="header-box contact-infos pull-right">
-                            <ul>
-                                <li><span class="header-box-icon header-box-icon-skype"></span>8th_strazh</li>
-                                <li><span class="header-box-icon header-box-icon-email"></span><a href="mailto:712700@bk.ru">712700@bk.ru</a></li>
-                            </ul>
-                        </div><!-- End .contact-infos -->
-
-                        <div class="header-box contact-phones pull-right clearfix">
-                            <span class="header-box-icon header-box-icon-earphones"></span>
-                            <ul class="pull-left">
-                                <li>+7 (495) 604-59-59</li>
-                                <li>+7 (903) 712-70-00</li>
-                            </ul>
-                        </div><!-- End .contact-phones -->
-
-                    </div><!-- End .header-inner-right-wrapper -->
-                </div><!-- End .col-md-7 -->
+        
+                                        <div class="dropdown-menu dropdown-cart-menu pull-right clearfix" role="menu">
+                                            <p class="dropdown-cart-description">Добавленные товары</p>
+                                            
+                                            <ul class="dropdown-cart-product-list">
+                                                <?= ElementsList::widget([
+                                                    'elementView' => '//layouts/pieces/headerCartElement',
+                                                    'listOnly' => true,
+                                                    'showCountArrows' => false,
+                                                ]) ?>
+                                            </ul>
+        
+                                            <ul class="dropdown-cart-total">
+                                                <?php CartInformer::begin(); ?>
+                                                    <li>
+                                                        <span class="dropdown-cart-total-title">Всего:</span>{p}
+                                                    </li>
+                                                <?php CartInformer::end(); ?>
+                                            </ul><!-- .dropdown-cart-total -->
+                                            <div class="dropdown-cart-action">
+                                                <p><a href="<?= Url::toRoute('/cart/default/index') ?>" class="btn btn-custom-2 btn-block">Корзина</a></p>
+                                                <?php /** @var \common\modules\cart\CartService $cartService */ ?>
+                                                <p style="display: <?= ($count) ? 'initial' : 'none' ?>;" class="shop-cart-checkout-btn">
+                                                    <a href="<?=Url::toRoute('/order/default/index') ?>" class="btn btn-custom btn-block">Оформить</a>
+                                                </p>
+                                            </div><!-- End .dropdown-cart-action -->
+                                        </div><!-- End .dropdown-cart -->
+                                    </div><!-- End .btn-group -->
+                                </div><!-- End .dropdown-cart-menu-container -->
+                                <?php endif; ?>
+        
+                                <div class="header-box contact-infos pull-right">
+                                    <ul>
+                                        <li><span class="header-box-icon header-box-icon-skype"></span>8th_strazh</li>
+                                        <li><span class="header-box-icon header-box-icon-email"></span><a href="mailto:712700@bk.ru">712700@bk.ru</a></li>
+                                    </ul>
+                                </div><!-- End .contact-infos -->
+        
+                                <div class="header-box contact-phones pull-right clearfix">
+                                    <span class="header-box-icon header-box-icon-earphones"></span>
+                                    <ul class="pull-left">
+                                        <li>+7 (495) 604-59-59</li>
+                                        <li>+7 (903) 712-70-00</li>
+                                    </ul>
+                                </div><!-- End .contact-phones -->
+        
+                            </div><!-- End .header-inner-right-wrapper -->
+                        </div><!-- End .col-md-7 -->
+                        
+                    </div><!-- End .row -->
+                    <div class="row">
+                        <?=\common\modules\search\widgets\SearchWidget::widget()?>
+                    </div><!-- End .row -->
+                </div><!-- End .col-md-9 -->
             </div><!-- End .row -->
         </div><!-- End .container -->
 

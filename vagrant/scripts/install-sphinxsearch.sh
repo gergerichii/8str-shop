@@ -23,6 +23,6 @@ sudo sed -i "s/START=no/START=yes/" /etc/default/sphinxsearch
 # Start Sphinxsearch on boot
 sudo update-rc.d sphinxsearch defaults 95 10
 
-# Start Elasticsearch
+# Start Sphinxsearch
 sudo service sphinxsearch restart
 sudo -u sphinxsearch indexer --all

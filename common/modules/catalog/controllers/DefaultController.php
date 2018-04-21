@@ -68,7 +68,7 @@ class DefaultController extends BaseFrontendController
     /**
      * Search
      */
-    public function actionSearch() {
+    public function actionSearch($q = null, $r = null) {
         $search = new FrontendSearchProvider();
         $search->q = \Yii::$app->getRequest()->get('q');
         $search->rubric = \Yii::$app->getRequest()->get('rubric');

@@ -31,6 +31,7 @@ class SearchBootstrap extends BaseModuleBootstrap {
 
         $feRules = [
             'search' => '/search/default/index',
+            'search/<_a:\w+>' => '/search/default/<_a>',
         ];
         $beRules = [
             'search' => '/search/default/index',

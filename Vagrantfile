@@ -76,6 +76,14 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
         config.vm.provision "shell", path: AlwaysNoneRootScriptPath, run: 'always', privileged: false
     end
 
+    # Install Sphinxsearch If Necessary
+    if settings.has_key?("sphinxsearch") && settings["sphinxsearch"]
+        config.vm.provision "shell" do |s|
+            s.path = confDir + '/scripts/install-sphinxsearch.sh'
+        end
+    end
+
+
     #if defined? VagrantPlugins::Hostsupdater
     #    config.hostsupdater.aliases = settings['sites'].map { |site| site['map'] }
     #end

@@ -239,13 +239,6 @@ class Configure
             end
         end
 
-        # Install Sphinxsearch If Necessary
-        if settings.has_key?("sphinxsearch") && settings["sphinxsearch"]
-            config.vm.provision "shell" do |s|
-                s.path = scriptDir + "/install-sphinxsearch.sh"
-            end
-        end
-
         # Configure All Of The Configured Databases
         if settings.has_key?("databases")
             settings["databases"].each do |db|

@@ -100,32 +100,27 @@ class FrontendSearchProvider extends BaseDataProvider
         if (!$root) {
             return [];
         }
-
-        /** TODO: Вынести пятерку в настройки */
-        $rubricQuery = $root->children(5)
+        
+        $rubricQuery = $root->children()
             ->andFilterWhere(['like', 'name', $this->q]);
-
-        $this->_amountOfRubrics = $rubricQuery->count();
 
         if ($this->_top) {
             $rubricQuery->limit(5);
         }
 
         $this->_rubrics = $rubricQuery->all();
-
+        $this->_amountOfRubrics = count($this->_rubrics);
 
         // Search for brands
         $brandQuery = ProductBrand::find()->select("`id`, `name`, 'brand' as `type`")
             ->andFilterWhere(['like', 'name', $this->q]);
 
-        $this->_amountOfBrands = $brandQuery->count();
-
         if ($this->_top) {
-            $brandQuery->limit(3);
+            $brandQuery->limit(5);
         }
 
         $this->_brands = $brandQuery->all();
-
+        $this->_amountOfBrands = count($this->_brands);
 
         // Search for products
         $this->_products = [];
@@ -134,6 +129,12 @@ class FrontendSearchProvider extends BaseDataProvider
         $productIndexQuery = ProductSphinxIndex::find()
             ->match(new Expression(':match', ['match' => "@(name) {$this->q} | @(description) {$this->q}"]))
             ->select('id');
+        
+        $allChildRubrics = $root->children()->select('id')->asArray()->column();
+        array_unshift($allChildRubrics, $root->id);
+        if (!empty($this->rubric)) {
+            $productIndexQuery->where(['rubric_id' => $allChildRubrics]);
+        }
 
         if ($this->_top) {
             $productIndexQuery->limit(5);
@@ -141,26 +142,15 @@ class FrontendSearchProvider extends BaseDataProvider
 
         $productsIndexes = $productIndexQuery->column();
         if ($productsIndexes) {
-            $rubricIds = $root->children()
-                ->select('id')
-                ->column();
-
-            $productQuery = Product::find()->alias('p')
-                ->joinWith('rubrics')
-                ->andFilterWhere([
-                    'or',
-                    ['in', 'p.main_rubric_id', $rubricIds],
-                    ['in', 'product_rubric.id', $rubricIds]
-                ])
-                ->andFilterWhere(['in', 'p.id', $productsIndexes]);
-
-            $this->_amountOfProducts = $productQuery->count();
+            $productQuery = Product::find()
+                ->andFilterWhere(['in', 'id', $productsIndexes]);
 
             if ($this->_top) {
-                $productQuery->limit(3);
+                $productQuery->limit(5);
             }
 
             $this->_products = $productQuery->all();
+            $this->_amountOfProducts = count($this->_products);
         }
 
         $models = array_merge($this->_rubrics, $this->_brands, $this->_products);

@@ -117,7 +117,7 @@ class Module extends \yii\base\Module implements BootstrapInterface
             if ($rubric instanceof ProductRubric) {
                 $rubricPath = $this->getRubricPath($rubric, false);
             }
-            if ($product && ($rubricPath || !$this->productHasRubric($product, $rubricPath))) {
+            if ($product && $product->main_rubric_id && ($rubricPath || !$this->productHasRubric($product, $rubricPath))) {
                 $rubricPath = $this->getRubricPath($product->mainRubric, false);
             }
             $uriParams['catalogPath'] = $rubricPath;
@@ -157,7 +157,7 @@ class Module extends \yii\base\Module implements BootstrapInterface
      * @return bool
      */
     public function productHasRubric(Product $product, string $rubricPath) {
-        if ($product->mainRubric->material_path == $rubricPath) return true;
+        if (!empty($product->main_rubric_id) && $product->mainRubric->material_path == $rubricPath) return true;
         foreach ($product->rubrics as $rubric) {
             if ($rubric->material_path == $rubricPath) return true;
         }
@@ -311,11 +311,17 @@ class Module extends \yii\base\Module implements BootstrapInterface
     /**
      * Gets the path to the rubric
      *
-     * @param ProductRubric $rubric
+     * @param ProductRubric|int $rubric
      * @param bool $asArray
      * @return array|string
      */
-    public function getRubricPath(ProductRubric $rubric, $asArray = true) {
+    public function getRubricPath($rubric, $asArray = true) {
+        if (is_int($rubric)) {
+            $rubric = ProductRubric::findOne($rubric);
+        }
+        if (empty($rubric)) {
+            return false;
+        }
         if (empty($rubric->material_path)) {
             $path = [];
             foreach ($rubric->parents()->each() as $pRubric) {
@@ -408,9 +414,9 @@ class Module extends \yii\base\Module implements BootstrapInterface
         $cache = Yii::$app->getCache();
 //        $cache->flush();
         $data = $cache->get($cacheKey);
-        if (false !== $data) {
-            return $data;
-        }
+//        if (false !== $data) {
+//            return $data;
+//        }
 
         /** @var ProductRubric $root */
         $root = ProductRubric::find()->roots()->one();

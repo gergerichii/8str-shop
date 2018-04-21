@@ -2,7 +2,10 @@
 
 namespace common\modules\search\controllers;
 
+use common\modules\catalog\models\Product;
+use common\modules\catalog\models\ProductRubric;
 use common\modules\catalog\providers\FrontendSearchProvider;
+use yii\helpers\Url;
 use yii\web\Controller;
 use yii\web\Response;
 
@@ -80,5 +83,42 @@ class DefaultController extends Controller
 
         // Merging the results
         return ['products' => $productsItems, 'brands' => $brandsItems, 'rubrics' => $rubricsItems];
+    }
+    
+    /**
+     * @param null $sc
+     * @param null $sk
+     *
+     * @throws \yii\base\ErrorException
+     */
+    public function actionProcess($sc = null, $sk = null) {
+        $productQuery = Product::find()->where([
+            'or',
+            ['[[product]].[[title]]' => $sk],
+            ['[[product]].[[name]]' => $sk],
+        ]);
+        $catalogPath = '';
+        /** @var \common\modules\catalog\Module $catalog */
+        $catalog = \Yii::$app->getModule('catalog');
+        if ($sc && $rubric = ProductRubric::findOne($sc)) {
+            $rubrics = $rubric->children()->select('id')->asArray()->column();
+            array_unshift($rubrics, $rubric->id);
+            $productQuery->joinWith('rubrics')
+                ->andWhere([
+                    'or',
+                    ['[[product]].[[main_rubric_id]]' => $rubrics],
+                    ['[[product_rubric]].[[id]]' => $rubrics]
+                ]);
+            $catalogPath = $catalog->getRubricPath($rubric, false);
+        }
+        
+        $products = $productQuery->all();
+        if (count($products) === 1) {
+            $this->redirect($catalog->getCatalogUri(null, $products[0]));
+        } else {
+            $params = compact('catalogPath', 'sc', 'sk');
+            array_unshift($params, '/catalog/default/index');
+            $this->redirect(Url::toRoute($params));
+        }
     }
 }

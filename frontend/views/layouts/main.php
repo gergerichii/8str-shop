@@ -2,9 +2,9 @@
 /* @var $this \yii\web\View */
 /* @var $content string */
 
+use common\widgets\Breadcrumbs;
 use yii\helpers\Html;
 use frontend\assets\AppAsset;
-use common\widgets\Alert;
 
 AppAsset::register($this);
 ?>
@@ -32,9 +32,9 @@ AppAsset::register($this);
             <?php if (\yii::$app->request->url !== \yii::$app->homeUrl): ?>
             <div id="breadcrumb-container">
                 <div class="container">
-                    <?= \common\widgets\Breadcrumbs::widget([
-                        'links' => !empty($this->params['breadcrumbs']) ? $this->params['breadcrumbs'] :
-                            (!empty($this->title)) ? [$this->title] : [],
+                    <?= Breadcrumbs::widget([
+                        'links' => (!empty($this->params['breadcrumbs'])) ? $this->params['breadcrumbs'] :
+                            ((!empty($this->title)) ? [$this->title] : []),
                     ]); ?>
                 </div>
             </div>

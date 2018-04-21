@@ -5,7 +5,8 @@
  * Date: 18.04.2018
  * Time: 15:34
  */
-
+/* @var $rubrics array */
+/* @var $this \yii\web\View */
 ?>
 
 <?php \common\helpers\ViewHelper::startRegisterScript($this, \yii\web\View::POS_READY); ?>
@@ -33,7 +34,7 @@
 <?php \common\helpers\ViewHelper::endRegisterScript(); ?>
 
 <?php $form = \kartik\widgets\ActiveForm::begin([
-    'action' => \yii\helpers\Url::toRoute('/catalog/default/index'),
+    'action' => \yii\helpers\Url::toRoute('/search/default/process'),
     'method' => 'GET'
 ]) ?>
 

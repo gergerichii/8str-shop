@@ -360,6 +360,9 @@ class OldbaseController extends BaseController
         $CatalogController = new CatalogController('catalog', $this->module);
         $groups = $CatalogController->findImages($path);
 
+        $domains = yii::$app->params['domains'];
+        $mainDomain = '8str';
+
         foreach ($query->each(100, $remoteDb) as $src) {
             /* Попытка исправить найденные товары с ошибками */
             if (isset(self::CHANGE_PRODUCT_FIELDS[$src['old_id']])) {
@@ -389,6 +392,12 @@ class OldbaseController extends BaseController
                     $product = Product::findOne($localProducts[$src['name']]['id']);
                     if (empty($localProducts[$src['name']]['processed'])) {
                         $product->setAttributes($src);
+                        /** Если есть рубрика для продукта, то присоединяем продукт к ней */
+                        if (!empty($src['old_rubric_id']) && isset($rubrics[$src['old_rubric_id']])) {
+                            $product->main_rubric_id = $rubrics[$src['old_rubric_id']]['id'];
+                        } else {
+                            $product->main_rubric_id = $rootRubricId;
+                        }
                         if (!$product->save()) {
                             $this->error("Продукт {$src['old_id']}:{$src['name']} не обновлен", $product->errors);
                             continue;
@@ -436,7 +445,7 @@ class OldbaseController extends BaseController
 
                 /** Если есть рубрика для продукта, то присоединяем продукт к ней */
                 if (!empty($src['old_rubric_id']) && isset($rubrics[$src['old_rubric_id']])) {
-                    $product->main_rubric_id = $rubrics[$src['old_rubric_id']];
+                    $product->main_rubric_id = $rubrics[$src['old_rubric_id']]['id'];
                     $product->save();
                 } else {
                     $product->main_rubric_id = $rootRubricId;
@@ -464,8 +473,6 @@ class OldbaseController extends BaseController
             }
             
             /** Назначаем цены, если они не были назначины */
-            $domains = yii::$app->params['domains'];
-            $mainDomain = '8str';
             foreach (array_keys($domains) as $domain) {
                 $field = "{$domain}_price";
                 $priceValue = isset($src[$field]) ? $src[$field] : $src["{$mainDomain}_price"];

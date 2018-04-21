@@ -85,4 +85,3 @@ else
     "
     echo "$block" > "/home/vagrant/.config/mc/panels.ini"
 fi
-

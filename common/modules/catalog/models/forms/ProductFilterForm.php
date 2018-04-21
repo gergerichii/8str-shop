@@ -9,6 +9,7 @@ use common\modules\catalog\models\ProductBrandQuery;
 use common\modules\catalog\models\ProductPrice;
 use common\modules\catalog\models\ProductPriceDiscountQuery;
 use common\modules\catalog\models\ProductRubric;
+use common\modules\catalog\models\ProductSphinxIndex;
 use common\modules\catalog\models\ProductTagQuery;
 use common\modules\catalog\Module;
 use yii\base\Model;
@@ -22,6 +23,13 @@ use yii\web\NotFoundHttpException;
  */
 class ProductFilterForm extends Model
 {
+    /**
+     * Product name query string
+     *
+     * @var string|null $nameQuery
+     */
+    public $nameQuery;
+    
     /**
      * Catalog path
      *
@@ -76,7 +84,7 @@ class ProductFilterForm extends Model
      */
     public function rules() {
         return [
-            [['catalogPath', 'brand'], 'safe'],
+            [['nameQuery', 'catalogPath', 'brand'], 'safe'],
             [['from', 'to'], 'double']
         ];
     }
@@ -88,6 +96,39 @@ class ProductFilterForm extends Model
      * @throws NotFoundHttpException
      */
     public function makeProductsProvider() {
+        
+        // Search for rubrics
+//        /** @var ProductRubric $root */
+//        $root = null;
+//        if ($this->rubric) {
+//            $root = ProductRubric::find()->where(['id' => $this->rubric])->one();
+//        }
+//
+//        if (!$root) {
+//            /** @var ProductRubric $root */
+//            $root = ProductRubric::find()->roots()->one();
+//        }
+//
+//        $this->q = \Yii::$app->sphinx->escapeMatchValue(trim($this->q));
+//
+//        $productIndexQuery = ProductSphinxIndex::find()
+//            ->match(new Expression(':match', ['match' => "@(name) {$this->q} | @(description) {$this->q}"]))
+//            ->select('id');
+//
+//        $allChildRubrics = $root->children()->select('id')->asArray()->column();
+//        array_unshift($allChildRubrics, $root->id);
+//        if (!empty($this->rubric)) {
+//            $productIndexQuery->where(['rubric_id' => $allChildRubrics]);
+//        }
+//
+//        if ($this->_top) {
+//            $productIndexQuery->limit(5);
+//        }
+//
+//        $productsIndexes = $productIndexQuery->column();
+        
+        //-----------------------------
+        
         /** @var Module $catalog */
         $catalog = \Yii::$app->getModule('catalog');
 
@@ -106,9 +147,7 @@ class ProductFilterForm extends Model
         ]);
 
         // Only active products
-        $productQuery->andWhere([
-            'product.status' => Product::STATUS['ACTIVE'],
-        ]);
+        $productQuery->active();
 
         // Filters by the rubric
         if ($this->catalogPath) {
@@ -122,7 +161,7 @@ class ProductFilterForm extends Model
             $rubricsIds = $rubric->children()->select('id')->indexBy('id')->asArray()->column();
 
             // Appends the rubric
-            $rubricsIds[$rubric->id] = $rubric->id;
+            array_unshift($rubricsIds, $rubric->id);
 
             // Selects all products
             $productQuery->select('product.*')

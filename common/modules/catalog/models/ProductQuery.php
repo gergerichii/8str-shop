@@ -14,7 +14,7 @@ class ProductQuery extends BaseDefaultQuery
 {
     public function active() {
         return $this->andWhere([
-            'status' => Product::STATUS['ACTIVE'],
+            'product.status' => Product::STATUS['ACTIVE'],
         ]);
     }
 

@@ -19,8 +19,6 @@ use yii\db\Expression;
 /**
  * Class MyNestedSetsActiveRecord
  * @package common\components
- *
- * @property string $slug
  */
 class NSActiveRecord extends BaseActiveRecord {
 
@@ -356,6 +354,9 @@ class NSActiveRecord extends BaseActiveRecord {
     protected function setCurrentPath() {
         $path = [];
         switch ($this->_operation) {
+            case self::OPERATION_MAKE_ROOT:
+                $path[] = '';
+                break;
             case self::OPERATION_INSERT_BEFORE:
             case self::OPERATION_INSERT_AFTER:
             case self::OPERATION_APPEND_TO:
@@ -364,7 +365,14 @@ class NSActiveRecord extends BaseActiveRecord {
                 /** @var NSActiveRecord[] $parentParents */
                 $parentParents = $this->_node->parents()
                     ->orderBy($this->depthAttribute)->all();
-
+            default:
+                if (empty($parentParents)) {
+                    /** @var NSActiveRecord[] $parentParents */
+                    $parentParents = $this->parents()
+                        ->orderBy($this->depthAttribute)->all();
+                }
+                array_shift($parentParents);
+                
                 foreach ($parentParents as $parent) {
                     $path[] = $parent->slug;
                 }
@@ -372,11 +380,9 @@ class NSActiveRecord extends BaseActiveRecord {
                 if (in_array($this->_operation, [self::OPERATION_PREPEND_TO, self::OPERATION_APPEND_TO])){
                     $path[] = $this->_node->slug;
                 }
-            case self::OPERATION_MAKE_ROOT:
                 $path[] = $this->slug;
-                $path = implode('/', $path);
-                $this->setAttribute($this->pathAttribute, $path);
         }
+        $this->setAttribute($this->pathAttribute, implode('/', $path));
     }
 
     /**

@@ -222,7 +222,11 @@ class Module extends \yii\base\Module implements BootstrapInterface
     public function discountOf(Product $product, $format = true) {
         $discount = $this->_applyDiscounts($product)['discount'];
         if ($discount && $format) {
-            $discount = $this->_formatPercent($discount);
+            if ($discount < 0) {
+                $discount = $this->_formatPercent((1+$discount) * -1);
+            } else {
+                $discount = $this->_formatPercent(1-$discount);
+            }
         }
         return $discount;
     }

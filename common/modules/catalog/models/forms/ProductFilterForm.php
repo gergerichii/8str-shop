@@ -112,22 +112,25 @@ class ProductFilterForm extends Model
             /** @var ProductRubric $root */
             $root = ProductRubric::find()->roots()->one();
         }
-    
-        $allChildRubrics = $root->children()->select('id')->asArray()->column();
-        $allChildRubrics = array_map(function ($v) {return intval($v);}, $allChildRubrics);
-        array_unshift($allChildRubrics, $root->id);
-        $productIndexQuery = ProductSphinxIndex::find()
-            ->select('id')
-            ->where(['rubric_id' => $allChildRubrics]);
-        if ($sk = \Yii::$app->request->get('sk')) {
-            $sk = \Yii::$app->sphinx->escapeMatchValue(trim($sk));
-            $productIndexQuery->match(new Expression(':match', ['match' => "@(name) {$sk} | @(description) {$sk}"]));
-        }
-
-        $productsIds = $productIndexQuery->column();
-
+        
         // Creates the query of products
-        $productQuery = Product::find()->where(['[[product]].[[id]]' => $productsIds]);
+        $productQuery = Product::find();
+    
+        if (!empty($sk)) {
+            $allChildRubrics = $root->children()->select('id')->asArray()->column();
+            $allChildRubrics = array_map(function ($v) {return intval($v);}, $allChildRubrics);
+            array_unshift($allChildRubrics, $root->id);
+            $productIndexQuery = ProductSphinxIndex::find()
+                ->select('id')
+                ->where(['rubric_id' => $allChildRubrics]);
+            if ($sk = \Yii::$app->request->get('sk')) {
+                $sk = \Yii::$app->sphinx->escapeMatchValue(trim($sk));
+                $productIndexQuery->match(new Expression(':match', ['match' => "@(name) {$sk} | @(description) {$sk}"]));
+            }
+    
+            $productsIds = $productIndexQuery->limit(20000)->column();
+            $productQuery->where(['[[product]].[[id]]' => $productsIds]);
+        }
 
         // Specifies the relations
         $productQuery->with([
@@ -144,31 +147,35 @@ class ProductFilterForm extends Model
         $productQuery->active();
 
         // Filters by the rubric
-//        if ($this->catalogPath) {
-//            // Defines the rubric
-//            $rubric = $catalog->getRubricByPath($this->catalogPath);
-//            if (!$rubric) {
-//                throw new NotFoundHttpException('Путь не найден');
-//            }
-//
-//            // Collects rubric identifiers
-//            $rubricsIds = $rubric->children()->select('id')->indexBy('id')->asArray()->column();
-//
-//            // Appends the rubric
-//            array_unshift($rubricsIds, $rubric->id);
-//
-//            // Selects all products
-//            $productQuery->select('product.*')
-//                ->joinWith('rubrics r', false)
-//                ->joinWith('mainRubric mr', false)
-//                ->andWhere(['or',
-//                    ['in', 'r.id', $rubricsIds],
-//                    ['in', 'mr.id', $rubricsIds],
-//                ])
-//                ->groupBy('product.id');
-//        } else {
-//            $rubric = ProductRubric::find()->roots()->one();
-//        }
+        if ($this->catalogPath) {
+            // Defines the rubric
+            $rubric = $catalog->getRubricByPath($this->catalogPath);
+            if (!$rubric) {
+                throw new NotFoundHttpException('Путь не найден');
+            }
+
+            // Collects rubric identifiers
+            $rubricsIds = $rubric->children()->select('id')->indexBy('id')->asArray()->column();
+
+            // Appends the rubric
+            array_unshift($rubricsIds, $rubric->id);
+
+            // Selects all products
+            $productQuery->select('product.*')
+                ->joinWith('rubrics r', false)
+                ->joinWith('mainRubric mr', false)
+                ->andWhere(['or',
+                    ['in', 'r.id', $rubricsIds],
+                    ['in', 'mr.id', $rubricsIds],
+                ])
+                ->groupBy('product.id');
+        } else {
+            $rubric = ProductRubric::find()->roots()->one();
+        }
+        
+        if ($this->brand && $brand = ProductBrand::findOne(['name' => $this->brand])) {
+            $this->brand = $brand->alias;
+        }
 
         // Filters products by alias of the brand
         if (isset($this->brand)) {

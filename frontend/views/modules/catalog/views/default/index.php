@@ -53,7 +53,8 @@ $pager = new \yii\widgets\LinkPager([
                             'viewParams' => [
                                 'coverItem' => true,
                             ],
-                            'options' => ['class' => 'row']
+                            'options' => ['class' => 'row'],
+                            'emptyTextOptions' => ['class' => 'col-12 col-md-12 col-xl-12 col-sm-12']
                         ]); ?><!-- End .row -->
                     </div><!-- End .category-item-container -->
 
@@ -61,20 +62,6 @@ $pager = new \yii\widgets\LinkPager([
                         <div class="pull-right">
                             <?=$pager->run()?>
                         </div><!-- End .pull-right -->
-
-                        <div class="pull-right view-count-box hidden-xs">
-                            <span class="separator">view:</span>
-                            <div class="btn-group select-dropdown">
-                                <button type="button" class="btn select-btn">10</button>
-                                <button type="button" class="btn dropdown-toggle" data-toggle="dropdown">
-                                    <i class="fa fa-angle-down"></i>
-                                </button>
-                                <ul class="dropdown-menu" role="menu">
-                                    <li><a href="#">15</a></li>
-                                    <li><a href="#">30</a></li>
-                                </ul>
-                            </div>
-                        </div>
                     </div><!-- End pagination-container -->
 
 

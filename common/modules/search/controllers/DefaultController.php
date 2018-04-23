@@ -115,7 +115,7 @@ class DefaultController extends Controller
         $products = $productQuery->all();
         $params = [];
         if (count($products) === 1) {
-            $this->redirect($catalog->getCatalogUri(NULL, $products[0]));
+            return $this->redirect($catalog->getCatalogUri(NULL, $products[0]));
         } elseif(intval(ProductBrand::find()->where(['[[name]]' => $sk])->count()) === 1) {
             $params['brand'] = $sk;
             $sk = '';

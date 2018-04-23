@@ -124,10 +124,10 @@ class FrontendSearchProvider extends BaseDataProvider
 
         // Search for products
         $this->_products = [];
-        $this->q = \Yii::$app->sphinx->escapeMatchValue(trim($this->q));
+        $this->q = trim($this->q);
         
         $productIndexQuery = ProductSphinxIndex::find()
-            ->match(new Expression(':match', ['match' => "@(name) {$this->q} | @(description) {$this->q}"]))
+            ->match(new Expression(':match', ['match' => "$this->q"]))
             ->select('id');
         
         $allChildRubrics = $root->children()->select('id')->asArray()->column();

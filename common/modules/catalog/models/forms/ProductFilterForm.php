@@ -116,17 +116,15 @@ class ProductFilterForm extends Model
         // Creates the query of products
         $productQuery = Product::find();
     
-        if (!empty($sk)) {
+        if (!empty($sk = \Yii::$app->request->get('sk'))) {
             $allChildRubrics = $root->children()->select('id')->asArray()->column();
             $allChildRubrics = array_map(function ($v) {return intval($v);}, $allChildRubrics);
             array_unshift($allChildRubrics, $root->id);
             $productIndexQuery = ProductSphinxIndex::find()
                 ->select('id')
                 ->where(['rubric_id' => $allChildRubrics]);
-            if ($sk = \Yii::$app->request->get('sk')) {
-                $sk = \Yii::$app->sphinx->escapeMatchValue(trim($sk));
-                $productIndexQuery->match(new Expression(':match', ['match' => "@(name) {$sk} | @(description) {$sk}"]));
-            }
+            $sk = trim($sk);
+            $productIndexQuery->match(new Expression(':match', ['match' => "{$sk}"]));
     
             $productsIds = $productIndexQuery->limit(20000)->column();
             $productQuery->where(['[[product]].[[id]]' => $productsIds]);

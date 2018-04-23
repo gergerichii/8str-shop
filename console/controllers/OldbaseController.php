@@ -472,9 +472,6 @@ class OldbaseController extends BaseController
                 ];
             }
             
-            if ($src['name'] == 'Внутренняя IP-камера Hikvision DS-2CD2442FWD-IW (2.8mm)') {
-                xdebug_break();
-            }
             /** Назначаем цены, если они не были назначины */
             foreach (array_keys($domains) as $domain) {
                 $field = "{$domain}_price";

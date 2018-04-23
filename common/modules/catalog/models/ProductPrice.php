@@ -133,11 +133,11 @@ class ProductPrice extends BaseActiveRecord implements ProductPriceInterface
      * @return bool
      * @throws \yii\base\ErrorException
      */
-    public function beforeSave($insert){
-         if ($this->isNewRecord) {
-             return parent::beforeSave($insert);
-         } else {
-             throw new ErrorException('Price is read only. Create a new price record for update current product price');
-         }
-     }
+//    public function beforeSave($insert){
+//         if ($this->isNewRecord) {
+//             return parent::beforeSave($insert);
+//         } else {
+//             throw new ErrorException('Price is read only. Create a new price record for update current product price');
+//         }
+//     }
 }

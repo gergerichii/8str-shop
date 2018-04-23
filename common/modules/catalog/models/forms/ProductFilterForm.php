@@ -96,44 +96,38 @@ class ProductFilterForm extends Model
      * @throws NotFoundHttpException
      */
     public function makeProductsProvider() {
-        
-        // Search for rubrics
-//        /** @var ProductRubric $root */
-//        $root = null;
-//        if ($this->rubric) {
-//            $root = ProductRubric::find()->where(['id' => $this->rubric])->one();
-//        }
-//
-//        if (!$root) {
-//            /** @var ProductRubric $root */
-//            $root = ProductRubric::find()->roots()->one();
-//        }
-//
-//        $this->q = \Yii::$app->sphinx->escapeMatchValue(trim($this->q));
-//
-//        $productIndexQuery = ProductSphinxIndex::find()
-//            ->match(new Expression(':match', ['match' => "@(name) {$this->q} | @(description) {$this->q}"]))
-//            ->select('id');
-//
-//        $allChildRubrics = $root->children()->select('id')->asArray()->column();
-//        array_unshift($allChildRubrics, $root->id);
-//        if (!empty($this->rubric)) {
-//            $productIndexQuery->where(['rubric_id' => $allChildRubrics]);
-//        }
-//
-//        if ($this->_top) {
-//            $productIndexQuery->limit(5);
-//        }
-//
-//        $productsIndexes = $productIndexQuery->column();
-        
-        //-----------------------------
-        
         /** @var Module $catalog */
         $catalog = \Yii::$app->getModule('catalog');
+        
+        // Search for rubrics
+        /** @var ProductRubric $root */
+        $root = null;
+        if ($sc = \Yii::$app->request->get('sc')) {
+            $root = ProductRubric::find()->where(['id' => $sc])->one();
+        } elseif ($this->catalogPath) {
+            // Defines the rubric
+            $root = $catalog->getRubricByPath($this->catalogPath);
+        }
+        if (!$root) {
+            /** @var ProductRubric $root */
+            $root = ProductRubric::find()->roots()->one();
+        }
+    
+        $allChildRubrics = $root->children()->select('id')->asArray()->column();
+        $allChildRubrics = array_map(function ($v) {return intval($v);}, $allChildRubrics);
+        array_unshift($allChildRubrics, $root->id);
+        $productIndexQuery = ProductSphinxIndex::find()
+            ->select('id')
+            ->where(['rubric_id' => $allChildRubrics]);
+        if ($sk = \Yii::$app->request->get('sk')) {
+            $sk = \Yii::$app->sphinx->escapeMatchValue(trim($sk));
+            $productIndexQuery->match(new Expression(':match', ['match' => "@(name) {$sk} | @(description) {$sk}"]));
+        }
+
+        $productsIds = $productIndexQuery->column();
 
         // Creates the query of products
-        $productQuery = Product::find();
+        $productQuery = Product::find()->where(['[[product]].[[id]]' => $productsIds]);
 
         // Specifies the relations
         $productQuery->with([
@@ -150,31 +144,31 @@ class ProductFilterForm extends Model
         $productQuery->active();
 
         // Filters by the rubric
-        if ($this->catalogPath) {
-            // Defines the rubric
-            $rubric = $catalog->getRubricByPath($this->catalogPath);
-            if (!$rubric) {
-                throw new NotFoundHttpException('Путь не найден');
-            }
-
-            // Collects rubric identifiers
-            $rubricsIds = $rubric->children()->select('id')->indexBy('id')->asArray()->column();
-
-            // Appends the rubric
-            array_unshift($rubricsIds, $rubric->id);
-
-            // Selects all products
-            $productQuery->select('product.*')
-                ->joinWith('rubrics r', false)
-                ->joinWith('mainRubric mr', false)
-                ->andWhere(['or',
-                    ['in', 'r.id', $rubricsIds],
-                    ['in', 'mr.id', $rubricsIds],
-                ])
-                ->groupBy('product.id');
-        } else {
-            $rubric = ProductRubric::find()->roots()->one();
-        }
+//        if ($this->catalogPath) {
+//            // Defines the rubric
+//            $rubric = $catalog->getRubricByPath($this->catalogPath);
+//            if (!$rubric) {
+//                throw new NotFoundHttpException('Путь не найден');
+//            }
+//
+//            // Collects rubric identifiers
+//            $rubricsIds = $rubric->children()->select('id')->indexBy('id')->asArray()->column();
+//
+//            // Appends the rubric
+//            array_unshift($rubricsIds, $rubric->id);
+//
+//            // Selects all products
+//            $productQuery->select('product.*')
+//                ->joinWith('rubrics r', false)
+//                ->joinWith('mainRubric mr', false)
+//                ->andWhere(['or',
+//                    ['in', 'r.id', $rubricsIds],
+//                    ['in', 'mr.id', $rubricsIds],
+//                ])
+//                ->groupBy('product.id');
+//        } else {
+//            $rubric = ProductRubric::find()->roots()->one();
+//        }
 
         // Filters products by alias of the brand
         if (isset($this->brand)) {
@@ -212,7 +206,7 @@ class ProductFilterForm extends Model
         $productQuery->andFilterWhere(['between', 'price.value', $this->from, $this->to]);
 
         // Find all children of the rubric
-        $this->rubrics = $rubric->find()
+        $this->rubrics = $root->find()
             ->from([
                 ProductRubric::tableName() . ' as rubric',
                 ProductRubric::tableName() . ' as parentRubric',
@@ -221,8 +215,8 @@ class ProductFilterForm extends Model
             // Children
             ->andWhere([
                 'and',
-                ['>', 'rubric.left_key', $rubric->left_key],
-                ['<', 'rubric.right_key', $rubric->right_key],
+                ['>', 'rubric.left_key', $root->left_key],
+                ['<', 'rubric.right_key', $root->right_key],
             ])
             ->select('parentRubric.*')
             // Calculate the quantity
@@ -236,8 +230,8 @@ class ProductFilterForm extends Model
                     'rubric.id = product.main_rubric_id'
                 ],
                 'rubric.left_key BETWEEN parentRubric.left_key AND parentRubric.right_key',
-                ['>', 'parentRubric.left_key', $rubric->left_key],
-                ['<', 'parentRubric.right_key', $rubric->right_key],
+                ['>', 'parentRubric.left_key', $root->left_key],
+                ['<', 'parentRubric.right_key', $root->right_key],
             ])
             ->groupBy('parentRubric.id')
             ->all();
@@ -324,7 +318,11 @@ class ProductFilterForm extends Model
      * @return string
      */
     public function makeBrandUri(ProductBrand $brand) {
-        return Url::to(['/catalog/default/index', 'brand' => $brand->alias, 'catalogPath' => $this->catalogPath]);
+        $params = \Yii::$app->request->get();
+        $params['brand'] = $brand->alias;
+        $params['catalogPath'] = $this->catalogPath;
+        array_unshift($params, '/catalog/default/index');
+        return Url::toRoute($params);
     }
 
     /**
@@ -334,6 +332,10 @@ class ProductFilterForm extends Model
      * @return string
      */
     public function makeRubricUri(ProductRubric $rubric) {
-        return Url::to(['/catalog/default/index', 'brand' => $this->brand, 'catalogPath' => $rubric->material_path]);
+        $params = \Yii::$app->request->get();
+        $params['brand'] = $this->brand;
+        $params['catalogPath'] = $rubric->material_path;
+        array_unshift($params, '/catalog/default/index');
+        return Url::toRoute($params);
     }
 }

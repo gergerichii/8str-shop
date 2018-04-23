@@ -3,8 +3,10 @@
 namespace common\modules\search\controllers;
 
 use common\modules\catalog\models\Product;
+use common\modules\catalog\models\ProductBrand;
 use common\modules\catalog\models\ProductRubric;
 use common\modules\catalog\providers\FrontendSearchProvider;
+use yii\helpers\ArrayHelper;
 use yii\helpers\Url;
 use yii\web\Controller;
 use yii\web\Response;
@@ -92,11 +94,9 @@ class DefaultController extends Controller
      * @throws \yii\base\ErrorException
      */
     public function actionProcess($sc = null, $sk = null) {
-        $productQuery = Product::find()->where([
-            'or',
-            ['[[product]].[[title]]' => $sk],
-            ['[[product]].[[name]]' => $sk],
-        ]);
+        $sc = (int) $sc;
+        $sk = trim($sk);
+        $productQuery = Product::find()->where(['[[product]].[[name]]' => $sk]);
         $catalogPath = '';
         /** @var \common\modules\catalog\Module $catalog */
         $catalog = \Yii::$app->getModule('catalog');
@@ -113,12 +113,18 @@ class DefaultController extends Controller
         }
         
         $products = $productQuery->all();
+        $params = [];
         if (count($products) === 1) {
-            $this->redirect($catalog->getCatalogUri(null, $products[0]));
-        } else {
-            $params = compact('catalogPath', 'sc', 'sk');
-            array_unshift($params, '/catalog/default/index');
-            $this->redirect(Url::toRoute($params));
+            $this->redirect($catalog->getCatalogUri(NULL, $products[0]));
+        } elseif(intval(ProductBrand::find()->where(['[[name]]' => $sk])->count()) === 1) {
+            $params['brand'] = $sk;
+            $sk = '';
+        } elseif(($rubric = ProductRubric::find()->where(['[[name]]' => $sk])->all()) && count($rubric) === 1) {
+            $catalogPath = $catalog->getRubricPath($rubric[0], false);
+            $sk = '';
         }
+        $params = ArrayHelper::merge($params, compact('catalogPath', 'sc', 'sk'));
+        array_unshift($params, '/catalog/default/index');
+        $this->redirect(Url::toRoute($params));
     }
 }

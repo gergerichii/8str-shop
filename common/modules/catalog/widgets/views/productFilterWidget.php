@@ -75,6 +75,10 @@ $count = 0;
             <div id="category-list-3" class="collapse in">
                 <div class="panel-body">
                     <form>
+                        <?php foreach(Yii::$app->request->get() as $param => $value): ?>
+                            <?php if ($param === 'catalogPath') continue; ?>
+                            <?=Html::input('hidden', $param, $value)?>
+                        <?php endforeach; ?>
                         <div id="price-range" data-range-min="<?= $priceRangeMin; ?>" data-range-max="<?= $priceRangeMax; ?>" data-start-min="<?= $priceStartMin; ?>" data-start-max="<?= $priceStartMax; ?>">
 
                         </div><!-- End #price-range -->

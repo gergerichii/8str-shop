@@ -517,7 +517,7 @@
             /* Price Filter Slider / Category pages */
             if ($.fn.noUiSlider) {
                 var $priceRange = $('#price-range');
-                if (1 === $priceRange.length && $priceRange.data('rangeMin') < $priceRange.data('rangeMax')) {
+                if ((1 === $priceRange.length) && (parseInt($priceRange.data('rangeMin')) < parseInt($priceRange.data('rangeMax')))) {
                     $priceRange.noUiSlider({
                         range: [$priceRange.data('rangeMin'), $priceRange.data('rangeMax')],
                         start: [$priceRange.data('startMin'), $priceRange.data('startMax')],

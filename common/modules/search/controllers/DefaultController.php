@@ -116,8 +116,8 @@ class DefaultController extends Controller
         $params = [];
         if (count($products) === 1) {
             return $this->redirect($catalog->getCatalogUri(NULL, $products[0]));
-        } elseif(intval(ProductBrand::find()->where(['[[name]]' => $sk])->count()) === 1) {
-            $params['brand'] = $sk;
+        } elseif(($brand = ProductBrand::find()->where(['[[name]]' => $sk])->count()) && count($brand) === 1) {
+            $params['brand'] = $brand[0]->alias;
             $sk = '';
         } elseif(($rubric = ProductRubric::find()->where(['[[name]]' => $sk])->all()) && count($rubric) === 1) {
             $catalogPath = $catalog->getRubricPath($rubric[0], false);

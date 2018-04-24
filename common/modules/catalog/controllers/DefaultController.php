@@ -29,6 +29,7 @@ class DefaultController extends BaseFrontendController
 
         $filterForm = new ProductFilterForm();
         $filterForm->load($request->get(), '');
+        $filterForm->validate();
 
         $productsDataProvider = $filterForm->makeProductsProvider();
 

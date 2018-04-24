@@ -57,6 +57,9 @@ class ProductFilterForm extends Model
      * @var int|null $to
      */
     public $to;
+    
+    public $order_param;
+    public $sort;
 
     /**
      * Rubrics
@@ -85,6 +88,20 @@ class ProductFilterForm extends Model
     public function rules() {
         return [
             [['nameQuery', 'catalogPath', 'brand'], 'safe'],
+            ['order_param', 'in', 'range' => ['default', 'price', 'name'], 'skipOnEmpty' => true],
+            ['order_param', 'default', 'value' => 'default', 'when' => function(Model $m){
+                if ($m->hasErrors('order_param')) {
+                    $m->order_param = '';
+                }
+                return true;
+            }, 'skipOnError' => false],
+            ['sort', 'in', 'range' => ['asc', 'desc'], 'skipOnEmpty' => true],
+            ['sort', 'default', 'value' => 'asc', 'when' => function(Model $m){
+                if ($m->hasErrors('sort')) {
+                    $m->sort = '';
+                }
+                return true;
+            }, 'skipOnError' => false],
             [['from', 'to'], 'double']
         ];
     }
@@ -262,7 +279,17 @@ class ProductFilterForm extends Model
             ->all();
 
         // Ordering
-        $productQuery->orderBy(['product.on_list_top' => SORT_ASC, 'product.main_rubric_id' => SORT_ASC]);
+        $sort = ($this->sort === 'desc') ? SORT_DESC : SORT_ASC;
+        switch($this->order_param) {
+            case 'name':
+                $productQuery->orderBy(['[[product]].[[name]]' => $sort]);
+                break;
+            case 'price':
+                $productQuery->orderBy(['[[price]].[[value]]' => $sort]);
+                break;
+            default:
+                $productQuery->orderBy(['[[product]].[[on_list_top]]' => SORT_ASC, '[[product]].[[main_rubric_id]]' => SORT_ASC]);
+        }
 
         return new ActiveDataProvider([
             'query' => $productQuery,

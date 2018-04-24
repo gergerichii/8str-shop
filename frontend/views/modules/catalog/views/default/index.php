@@ -29,8 +29,7 @@ $pager = new \yii\widgets\LinkPager([
 
                     <div class="category-toolbar clearfix">
                         <div class="toolbox-filter clearfix">
-
-
+                            <?=$this->render('catalog-filter-sort')?>
                         </div><!-- End .toolbox-filter -->
                         <div class="toolbox-pagination clearfix">
                             <?=$pager->run()?>

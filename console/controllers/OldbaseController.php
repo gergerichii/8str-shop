@@ -340,6 +340,7 @@ class OldbaseController extends BaseController
         
         $localProducts = Product::find()
             ->select(['id', 'old_id', 'name'])
+            ->active()
             ->where('[[old_id]]')
             ->indexBy('name')->asArray()->all();
 
@@ -591,7 +592,7 @@ class OldbaseController extends BaseController
             }
         }
         if (!empty($deletedProducts)) {
-            Product::updateAll(['status' => Product::STATUS['DELETED']], ['in', 'id', $deletedProducts]);
+            Product::updateAll(['status' => Product::STATUS['DELETED']], ['id'=>$deletedProducts]);
         }
         
         return 0;

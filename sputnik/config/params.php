@@ -1,5 +1,5 @@
 <?php
 return [
     'siteDesc' => 'Продажа и сервисное обслуживание систем безопасности и видеонаблюдения',
-    'domain' => 'sputnicvideo',
+    'domain' => 'sputnikvideo',
 ];

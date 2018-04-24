@@ -2,10 +2,10 @@
 return [
     'components' => [
         'urlManager' => [
-            'hostInfo' => 'https://admin.8str.ru'
+            'hostInfo' => 'https://admin.sputnikvideo.ru'
         ],
         'user' => [
-            'identityCookie' => ['name' => '_identity8str', 'httpOnly' => true, 'domain' => '.8str.ru'],
+            'identityCookie' => ['name' => '_identitysputnikvideo', 'httpOnly' => true, 'domain' => '.sputnikvideo.ru'],
         ],
     ],
 ];

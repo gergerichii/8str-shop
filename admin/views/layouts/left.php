@@ -29,7 +29,8 @@
             </div>
         </form>
         <!-- /.search form -->
-
+        <?php $mainSiteUrlManager = (isset(\Yii::$app->params['mainSite'])) ? \Yii::$app->params['mainSite'] : 'shop_8str' ?>
+        <?php $mainSiteUrlManager = \Yii::$app->get("{$mainSiteUrlManager}UrlManager") ?>
         <?= dmstr\widgets\Menu::widget(
             [
                 'options' => ['class' => 'sidebar-menu tree', 'data-widget' => 'tree'],
@@ -60,7 +61,7 @@
                     ['label' => 'Счетчики', 'icon' => 'square' , 'template' => '<a href="' .
                         \yii\helpers\Url::toRoute('/counters/admin/default/index') . '">{icon} {label}</a>'],
                     ['label' => 'Login', 'url' => ['site/login'], 'visible' => Yii::$app->user->isGuest],
-                    ['label' => 'Site', 'icon' => 'square' , 'template' => '<a href="' . Yii::$app->shop_8strUrlManager->createAbsoluteUrl('/site/index') . '">{icon} {label}</a>'],
+                    ['label' => 'Site', 'icon' => 'square' , 'template' => '<a href="' . $mainSiteUrlManager->createAbsoluteUrl('/site/index') . '">{icon} {label}</a>'],
                 ],
             ]
         ); ?>

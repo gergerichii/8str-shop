@@ -13,8 +13,8 @@ $writer = new XMLWriter();
 $writer->openUri('php://output');
 
 $writer->startDocument('1.0', 'UTF-8');
-$writer->startDtd('yml_catalog SYSTEM "shops.dtd"');
-$writer->endDtd();
+//$writer->startDtd('yml_catalog SYSTEM "shops.dtd"');
+//$writer->endDtd();
 
 $writer->startElement('yml_catalog');
 $writer->writeAttribute('date', date('Y-m-d H:i'));

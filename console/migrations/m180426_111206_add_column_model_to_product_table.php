@@ -16,7 +16,7 @@ class m180426_111206_add_column_model_to_product_table extends Migration
         $this->addColumn('{{%product}}', '[[vendor_code]]', $this->string(150));
         $this->addColumn('{{%product}}', '[[barcode]]', $this->string(150));
         $this->addColumn('{{%product}}', '[[warranty]]', $this->string(30));
-        $this->addColumn('{{%product}}', '[[delivery_days]]', $this->integer());
+        $this->addColumn('{{%product}}', '[[delivery_days]]', $this->string(5));
     }
 
     /**

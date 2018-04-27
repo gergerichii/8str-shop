@@ -22,8 +22,8 @@
                     <h1 class="product-name"><?=$productModel?></h1>
                     <ul class="product-list">
                         <li><span>Наличие:</span>
-                            <?=($productModel->count) ? 'В наличии' : "В наличии на складе. Доставка до {$productModel->delivery_days}"?>
-                            <?=Yii::$app->i18n->format('{n, plural, =0{дней} =1{деня} one{дня} other{дней}}.', ['n' => $productModel->delivery_days], 'ru_RU')?>
+                            <?=($productModel->count) ? 'В наличии' : "В наличии на складе. Доставка до {$productModel->delivery_time}"?>
+                            <?=Yii::$app->i18n->format('{n, plural, =0{дней} =1{деня} one{дня} other{дней}}.', ['n' => $productModel->delivery_time], 'ru_RU')?>
                         </li>
                         <li><span>Торговая марка:</span><?=$productModel->brand?></li>
                     </ul>

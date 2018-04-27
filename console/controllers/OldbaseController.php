@@ -371,7 +371,8 @@ class OldbaseController extends BaseController
         $mainDomain = '8str';
 
         foreach ($query->each(100, $remoteDb) as $src) {
-            $src['delivery_days'] = preg_replace('#.*(\d+)$#', '$1', $src['delivery_days']);
+            $src['delivery_time'] = preg_replace('#.*(\d+)$#', '$1', $src['delivery_days']);
+            $src['delivery_time'] or $src['delivery_time'] = 0;
             /* Попытка исправить найденные товары с ошибками */
             if (isset(self::CHANGE_PRODUCT_FIELDS[$src['old_id']])) {
                 $ch = self::CHANGE_PRODUCT_FIELDS[$src['old_id']];

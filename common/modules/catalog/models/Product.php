@@ -89,7 +89,7 @@ use yii\helpers\ArrayHelper;
  * @property string                   $vendor_code [varchar(150)]
  * @property string                   $barcode     [varchar(150)]
  * @property string                   $warranty    [varchar(30)]
- * @property int                      $delivery_days [int(11)]
+ * @property int                      $delivery_days [varchar(5)]
  *
  * TODO: Добавить основную рубрику
  *
@@ -292,9 +292,10 @@ class Product extends BaseActiveRecord implements CartElement
 
             [['name', 'ext_attributes', 'files', '1c_data', 'creator_id', 'modifier_id', 'model'], 'required'],
             [['desc', 'model', 'vendor_code', 'barcode', 'warranty'], 'string'],
-            [['status', 'count', 'delivery_time', 'delivery_days', 'show_on_home', 'on_list_top', 'market_upload',
+            [['status', 'count', 'delivery_time', 'show_on_home', 'on_list_top', 'market_upload',
                 'creator_id', 'modifier_id', 'product_type_id', 'brand_id', 'main_rubric_id'], 'integer'],
             [['created_at', 'modified_at'], 'safe'],
+            [['delivery_days'], 'string', 'max' => 5],
             [['name'], 'string', 'max' => 150],
             [['title'], 'string', 'max' => 255],
             [['name'], 'unique'],

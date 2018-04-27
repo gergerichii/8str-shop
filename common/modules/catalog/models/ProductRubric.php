@@ -143,7 +143,9 @@ class ProductRubric extends NSActiveRecord
                 $parentId = null;
                 if ($model->material_path) {
                     $parentPath = preg_replace('#(?:(.+)/)?[^/]+$#', '\1', $model->material_path);
-                    $parentId = $ymlModels[$parentPath]->id;
+                    if(isset($ymlModels[$parentPath])) {
+                        $parentId = $ymlModels[$parentPath]->id;
+                    }
                 }
                 return [
                     'id' => $model->id,

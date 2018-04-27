@@ -64,7 +64,7 @@ class ProductSearch extends Product
 
         $brandName = $this->brandName;
         $query->joinWith(['brand' => function ($query) use ($brandName) {
-            /** @var ProductBrandQuery $query */
+            /** @var \common\modules\catalog\models\queries\ProductBrandQuery $query */
             $query->andFilterWhere(['like', 'brand.name', $brandName]);
             $query->alias('brand');
         }]);

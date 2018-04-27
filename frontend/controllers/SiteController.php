@@ -3,7 +3,7 @@ namespace frontend\controllers;
 
 use common\models\forms\PasswordResetRequestForm;
 use common\models\forms\ResetPasswordForm;
-use common\modules\catalog\models\ProductQuery;
+use common\modules\catalog\models\queries\ProductQuery;
 use common\modules\catalog\models\ProductTag;
 use Yii;
 use yii\base\InvalidArgumentException;

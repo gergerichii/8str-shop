@@ -17,6 +17,7 @@ use yii\db\ActiveRecord;
  * псевдонимам и псевдонимы будут в массиве safeAttributes
  *
  * @package common\base\models
+ * @property int $id [int(11)]
  */
 class BaseActiveRecord extends ActiveRecord
 {

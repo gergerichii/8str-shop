@@ -4,7 +4,7 @@ namespace common\modules\catalog\models\forms;
 
 use common\modules\catalog\models\Product;
 use common\modules\catalog\models\ProductPrice;
-use common\modules\catalog\models\ProductPriceQuery;
+use common\modules\catalog\models\queries\ProductPriceQuery;
 use common\modules\catalog\Module;
 use common\traits\ErrorsForMultipleInput;
 use yii\base\Model;

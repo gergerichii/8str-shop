@@ -3,8 +3,8 @@
 namespace common\modules\catalog\models;
 
 use common\models\entities\User;
+use common\modules\catalog\models\queries\ProductPriceQuery;
 use Yii;
-use yii\base\ErrorException;
 use yii\behaviors\BlameableBehavior;
 use common\base\models\BaseActiveRecord;
 use yii\db\Expression;
@@ -111,7 +111,7 @@ class ProductPrice extends BaseActiveRecord implements ProductPriceInterface
 
     /**
      * @inheritdoc
-     * @return \common\modules\catalog\models\ProductPriceQuery the active query used by this AR class.
+     * @return \common\modules\catalog\models\queries\ProductPriceQuery the active query used by this AR class.
      */
     public static function find() {
         return new ProductPriceQuery(get_called_class());

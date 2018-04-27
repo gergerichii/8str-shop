@@ -2,6 +2,8 @@
 
 namespace common\modules\catalog\models;
 
+use common\models\Country;
+use common\modules\catalog\models\queries\ProductBrandQuery;
 use Yii;
 use yii\behaviors\SluggableBehavior;
 use common\base\models\BaseActiveRecord;
@@ -17,7 +19,10 @@ use common\base\models\BaseActiveRecord;
  * @property int $product_quantity
  *
  * @property Product[] $products
+ * @property \common\models\Country $country
  * @property ProductPriceDiscount[] $productPriceDiscounts
+ * @property int                    $old_id     [int(11)]
+ * @property int                    $country_id [int(11)]
  */
 class ProductBrand extends BaseActiveRecord
 {
@@ -51,6 +56,8 @@ class ProductBrand extends BaseActiveRecord
             [['desc', 'alias'], 'string'],
             [['name', 'logo', 'alias'], 'string', 'max' => 150],
             [['name'], 'unique'],
+            [['country_id'], 'integer'],
+            [['country_id'], 'exist', 'skipOnError' => true, 'targetClass' => ProductBrand::class, 'targetAttribute' => ['brand_id' => 'id']],
             [['old_id'], 'integer'], //TODO: Закоментировать, когда не нужно
         ];
     }
@@ -76,6 +83,10 @@ class ProductBrand extends BaseActiveRecord
     public function __toString() {
         return $this->name;
     }
+    
+    public function getCountry() {
+        return $this->hasOne(Country::class, ['id' => 'country_id']);
+    }
 
     /**
      * Get products
@@ -100,7 +111,7 @@ class ProductBrand extends BaseActiveRecord
      *
      * @inheritdoc
      *
-     * @return ProductBrandQuery the active query used by this AR class.
+     * @return \common\modules\catalog\models\queries\ProductBrandQuery the active query used by this AR class.
      */
     public static function find() {
         return new ProductBrandQuery(get_called_class());

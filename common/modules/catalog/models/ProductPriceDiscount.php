@@ -3,6 +3,7 @@
 namespace common\modules\catalog\models;
 
 use common\models\entities\User;
+use common\modules\catalog\models\queries\ProductPriceDiscountQuery;
 use Yii;
 use common\base\models\BaseActiveRecord;
 
@@ -23,7 +24,7 @@ use common\base\models\BaseActiveRecord;
  *
  * @property \common\models\entities\User       $author
  * @property bool       $isActive
- * @property \ProductTag $productTag
+ * @property \common\modules\catalog\models\ProductTag $productTag
  */
 class ProductPriceDiscount extends BaseActiveRecord
 {
@@ -104,7 +105,7 @@ class ProductPriceDiscount extends BaseActiveRecord
 
     /**
      * @inheritdoc
-     * @return ProductPriceDiscountQuery the active query used by this AR class.
+     * @return \common\modules\catalog\models\queries\ProductPriceDiscountQuery the active query used by this AR class.
      */
     public static function find()
     {

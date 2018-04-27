@@ -9,8 +9,6 @@ use yii\sphinx\ActiveRecord;
  *
  * @author Andriy Ivanchenko <ivanchenko.andriy@gmail.com>
  *
- * @property int $id
- * @property string $name
  */
 class ProductSphinxIndex extends ActiveRecord
 {

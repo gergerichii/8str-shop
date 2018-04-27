@@ -3,6 +3,7 @@
 namespace common\modules\catalog\models;
 
 use common\base\models\BaseActiveRecord;
+use common\modules\catalog\models\queries\RelatedProduct2productQuery;
 use Yii;
 
 /**
@@ -68,7 +69,7 @@ class RelatedProduct2product extends BaseActiveRecord
 
     /**
      * @inheritdoc
-     * @return RelatedProduct2productQuery the active query used by this AR class.
+     * @return \common\modules\catalog\models\queries\RelatedProduct2productQuery the active query used by this AR class.
      */
     public static function find()
     {

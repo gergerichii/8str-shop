@@ -3,6 +3,7 @@
 namespace common\modules\catalog\models;
 
 use common\base\models\BaseActiveRecord;
+use common\modules\catalog\models\queries\ProductTypeQuery;
 use Yii;
 
 /**
@@ -17,6 +18,8 @@ use Yii;
  */
 class ProductType extends BaseActiveRecord
 {
+    
+    
     /**
      * @inheritdoc
      */
@@ -47,7 +50,7 @@ class ProductType extends BaseActiveRecord
             'id' => Yii::t('app', 'ID'),
             'name' => Yii::t('app', 'Name'),
             'desc' => Yii::t('app', 'Desc'),
-            'template' => Yii::t('app', 'Template'),
+            'template' => Yii::t('app', 'Шаблон поля fields'),
         ];
     }
 
@@ -61,7 +64,7 @@ class ProductType extends BaseActiveRecord
 
     /**
      * @inheritdoc
-     * @return ProductTypeQuery the active query used by this AR class.
+     * @return \common\modules\catalog\models\queries\ProductTypeQuery the active query used by this AR class.
      */
     public static function find()
     {

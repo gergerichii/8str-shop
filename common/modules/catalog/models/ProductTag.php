@@ -2,6 +2,7 @@
 
 namespace common\modules\catalog\models;
 
+use common\modules\catalog\models\queries\ProductTagQuery;
 use Yii;
 use yii\behaviors\AttributeBehavior;
 use common\base\models\BaseActiveRecord;
@@ -141,7 +142,7 @@ class ProductTag extends BaseActiveRecord
 
     /**
      * @inheritdoc
-     * @return ProductTagQuery the active query used by this AR class.
+     * @return \common\modules\catalog\models\queries\ProductTagQuery the active query used by this AR class.
      */
     public static function find()
     {

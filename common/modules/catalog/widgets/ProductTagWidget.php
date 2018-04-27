@@ -3,7 +3,7 @@
 namespace common\modules\catalog\widgets;
 
 use common\modules\catalog\models\Product;
-use common\modules\catalog\models\ProductTagQuery;
+use common\modules\catalog\models\queries\ProductTagQuery;
 use yii\base\Widget;
 use common\behaviors\CacheableWidgetBehavior;
 use yii\caching\ChainedDependency;

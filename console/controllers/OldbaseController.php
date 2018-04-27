@@ -135,12 +135,13 @@ class OldbaseController extends BaseController
     public function actionDeleteAuxFields() {
         return $this->deleteAuxFields();
     }
-
+    
     /**
      * Копирует удаленную базу с сайта 8str.ru в локальный дамп.
      * Необходим файл с настройками доступа к удаленному серверу db2.php
      *
      * @return int
+     * @throws \yii\base\InvalidConfigException
      */
     public function actionDumpRemoteBase() {
         chdir(dirname(__FILE__));
@@ -186,10 +187,12 @@ class OldbaseController extends BaseController
 
         return 0;
     }
-
+    
     /**
      * Get connection to the old database
+     *
      * @return Connection
+     * @throws \yii\base\InvalidConfigException
      */
     private function getOldDb() {
         /** @var Connection $remoteDb */
@@ -311,7 +314,9 @@ class OldbaseController extends BaseController
             '`man2`.`name` as `brand_name`',
             '`man2`.`description` as `brand_desc`',
             '`cat2`.`tid` as `old_rubric_id`',
-            '`cat2`.`name` as `rubric_name`'
+            '`cat2`.`name` as `rubric_name`',
+            'if (`md`.`field_market_days_value` = 0, 1, 0) as count',
+            '`md`.`field_market_days_value` as delivery_days',
         ])->from('{{%node}} as `n`')
             ->leftJoin('{{%field_data_uc_product_image}} as `im`', '`n`.`nid` = `im`.`entity_id`')
             ->leftJoin('{{%file_managed}} as `f`', '`im`.`uc_product_image_fid` = `f`.`fid`')
@@ -320,6 +325,7 @@ class OldbaseController extends BaseController
             ->leftJoin('{{%field_data_field_hit}} as `hit`', '`hit`.`entity_id` = `n`.`nid`')
             ->leftJoin('{{%field_data_field_action}} as `a`', '`a`.`entity_id` = `n`.`nid`')
             ->leftJoin('{{%field_data_field_new}} as `ne`', '`ne`.`entity_id` = `n`.`nid`')
+            ->leftJoin('{{%field_data_field_market_days}} as `md`', '`md`.`entity_id` = `n`.`nid`')
             ->leftJoin('{{%field_data_field__price_vigsec}} as `vsp`', '`vsp`.`entity_id` = `n`.`nid`')
             ->leftJoin('{{%field_data_body}} as `bod`', '`bod`.`entity_id` = `n`.`nid`')
             ->leftJoin('{{%field_data_field_manufacturer}} as `man`', '`man`.`entity_id` = `n`.`nid`')
@@ -365,6 +371,7 @@ class OldbaseController extends BaseController
         $mainDomain = '8str';
 
         foreach ($query->each(100, $remoteDb) as $src) {
+            $src['delivery_days'] = preg_replace('#.*(\d+)$#', '$1', $src['delivery_days']);
             /* Попытка исправить найденные товары с ошибками */
             if (isset(self::CHANGE_PRODUCT_FIELDS[$src['old_id']])) {
                 $ch = self::CHANGE_PRODUCT_FIELDS[$src['old_id']];
@@ -391,6 +398,7 @@ class OldbaseController extends BaseController
                 } elseif(empty($localProducts[$src['name']]['processed'])) {
                     /** Обновляем продукт */
                     $product = Product::findOne($localProducts[$src['name']]['id']);
+                    $product->scenario = 'oldbase';
                     if (empty($localProducts[$src['name']]['processed'])) {
                         $product->setAttributes($src);
                         /** Если есть рубрика для продукта, то присоединяем продукт к ней */
@@ -434,7 +442,7 @@ class OldbaseController extends BaseController
 
                 /** Создаем продукт */
                 /** @var Product $product */
-                $product = new Product();
+                $product = new Product(['scenario' => 'oldbase']);
                 $product->setAttributes($src);
                 $product->brand_id = $brand ? $brand->id : null;
 
@@ -866,9 +874,12 @@ class OldbaseController extends BaseController
         $msg = $this->ansiFormat($msg, Console::FG_YELLOW);
         $this->stdout($msg . "\n");
     }
-
+    
     /**
      * Export news
+     *
+     * @throws \yii\base\ErrorException
+     * @throws \yii\base\InvalidConfigException
      */
     public function actionExportNews() {
         $oldDb = $this->getOldDb();

@@ -5,8 +5,6 @@ $viewConfig = [
         'basePath' => '@app', //@themeRoot Генерится в бутстрап конфиге
         'baseUrl' => '@web',
         'pathMap' => [
-            '@common/modules' => '@app/views/modules',
-            '@common/widgets' => '@app/views/widgets',
             '@common/mail' => '@app/mail',
         ],
     ],

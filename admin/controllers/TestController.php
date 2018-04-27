@@ -2,14 +2,8 @@
 
 namespace admin\controllers;
 
-use common\modules\catalog\models\Product;
-use common\modules\catalog\models\ProductQuery;
+use common\modules\catalog\models\queries\ProductQuery;
 use common\modules\catalog\models\ProductTag;
-use common\modules\catalog\models\ProductTagQuery;
-use common\helpers\PriceHelper;
-use common\helpers\ProductHelper;
-use yii\db\ActiveQuery;
-use yii\helpers\ArrayHelper;
 
 class TestController extends \yii\web\Controller
 {
@@ -20,6 +14,11 @@ class TestController extends \yii\web\Controller
                     $q->showOnHome();
             }])->usedAsGroup()->indexBy('name')->all();
         return $this->render('index');
+    }
+    
+    public function actionGrid() {
+        
+        return $this->render('grid');
     }
 
 }

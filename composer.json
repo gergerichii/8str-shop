@@ -37,7 +37,8 @@
         "elisdn/yii2-composite-form": "dev-master",
         "kartik-v/yii2-mpdf": "@dev",
         "nex/yii2-datepicker": "@dev",
-        "kartik-v/yii2-grid": "@dev"
+        "kartik-v/yii2-grid": "@dev",
+        "corpsepk/yii2-yandex-market-yml": "~0.3"
     },
     "require-dev": {
         "yiisoft/yii2-debug": "~2.0.0",

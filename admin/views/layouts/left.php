@@ -62,6 +62,7 @@
                         \yii\helpers\Url::toRoute('/counters/admin/default/index') . '">{icon} {label}</a>'],
                     ['label' => 'Login', 'url' => ['site/login'], 'visible' => Yii::$app->user->isGuest],
                     ['label' => 'Site', 'icon' => 'square' , 'template' => '<a href="' . $mainSiteUrlManager->createAbsoluteUrl('/site/index') . '">{icon} {label}</a>'],
+                    ['label' => 'Flexbox песочница', 'icon' => 'square' , 'template' => '<a href="' . \yii\helpers\Url::to('/flexbox-playground/dist/') . '">{icon} {label}</a>'],
                 ],
             ]
         ); ?>

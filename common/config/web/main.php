@@ -31,6 +31,13 @@ $config = [
     'components' => [
         'view' => [
             'as countersBehaviour' => \common\modules\counters\behaviours\CountersViewBehaviour::class,
+            'theme' => [
+                'pathMap' => [
+                    '@common/modules' => '@app/views/modules',
+                    '@common/widgets' => '@app/views/widgets',
+                    '@vendor' => '@app/views/vendor',
+                ],
+            ],
         ],
         'i18n' => [
             'translations' => [
@@ -68,6 +75,7 @@ $config = [
                 '/error' => '/site/error',
                 '/request-password-reset' => '/site/request-password-reset',
                 '/reset-password' => '/site/reset-password',
+                ['pattern' => 'market', 'route' => 'YandexMarketYml/default/index', 'suffix' => '.yml'],
             ],
         ],
         'authManager' => [
@@ -114,6 +122,28 @@ $config = [
                 'depthAttribute' => 'level',
             ]
         ],
+        'YandexMarketYml' => [
+            'class' => 'corpsepk\yml\YandexMarketYml',
+            'enableGzip' => true, // default is false
+            'cacheExpire' => 1, // 1 second. Default is 24 hours
+            'categoryModel' => 'common\modules\catalog\models\ProductRubric',
+            'shopOptions' => [
+                'name' => 'shop8str',
+                'company' => 'Интернет магазин Восьмой Страж',
+                'url' => 'https://8str.ru',
+                'currencies' => [
+                    [
+                        'id' => 'RUR',
+                        'rate' => 1
+                    ]
+                ],
+            ],
+            'offerModels' => [
+                ['class' => 'common\modules\catalog\models\Product'],
+            ],
+            'viewPath' => '@common/views/market_yml/',
+        ],
+        
         'news' => '\common\modules\news\Module',
 //        'articles' => [
 //            'class' => 'cinghie\articles\Articles',

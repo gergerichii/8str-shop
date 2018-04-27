@@ -3,6 +3,7 @@
 namespace common\modules\catalog\models;
 
 use common\base\models\BaseActiveRecord;
+use common\modules\catalog\models\queries\Product2ProductRubricQuery;
 use Yii;
 
 /**
@@ -68,7 +69,7 @@ class Product2ProductRubric extends BaseActiveRecord
 
     /**
      * @inheritdoc
-     * @return Product2ProductRubricQuery the active query used by this AR class.
+     * @return \common\modules\catalog\models\queries\Product2ProductRubricQuery the active query used by this AR class.
      */
     public static function find()
     {

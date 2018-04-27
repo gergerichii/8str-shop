@@ -4,6 +4,7 @@ namespace common\modules\catalog\models;
 
 use common\base\models\nestedSets\NSActiveRecord;
 use common\modules\treeManager\models\TreeTrait;
+use corpsepk\yml\behaviors\YmlCategoryBehavior;
 use yii\behaviors\TimestampBehavior;
 use yii\db\Expression;
 
@@ -29,6 +30,22 @@ use yii\db\Expression;
  * @property Product2productRubric[] $product2productRubrics
  * @property Product[] $products
  * @property ProductPriceDiscount[] $productPriceDiscounts
+ * @property int                    $root          [int(11)]
+ * @property int                    $icon_type     [smallint(1)]
+ * @property bool                   $active        [tinyint(1)]
+ * @property bool                   $selected      [tinyint(1)]
+ * @property bool                   $disabled      [tinyint(1)]
+ * @property bool                   $readonly      [tinyint(1)]
+ * @property bool                   $visible       [tinyint(1)]
+ * @property bool                   $collapsed     [tinyint(1)]
+ * @property bool                   $movable_u     [tinyint(1)]
+ * @property bool                   $movable_d     [tinyint(1)]
+ * @property bool                   $movable_l     [tinyint(1)]
+ * @property bool                   $movable_r     [tinyint(1)]
+ * @property bool                   $removable     [tinyint(1)]
+ * @property bool                   $removable_all [tinyint(1)]
+ * @property int                    $old_id        [int(11)]
+ * @property int                    $old_parent_id [int(11)]
  *
  * TODO: Добавить связи getParents и getChildren
  */
@@ -111,6 +128,29 @@ class ProductRubric extends NSActiveRecord
             'createdAtAttribute' => 'created_at',
             'updatedAtAttribute' => 'modified_at',
             'value' => new Expression('NOW()'),
+        ];
+        
+        /** @var self[] $ymlModels */
+        static $ymlModels = [];
+        $behaviors['ymlCategory'] = [
+            'class' => YmlCategoryBehavior::class,
+            'scope' => function ($model) use (&$ymlModels) {
+                /** @var \common\modules\catalog\models\queries\ProductQuery $model */
+                $ymlModels = $model->select(['id', 'name', 'material_path'])->where(['active' => 1])->indexBy('material_path')->all();
+            },
+            'dataClosure' => function ($model) use (&$ymlModels) {
+                /** @var self $model */
+                $parentId = null;
+                if ($model->material_path) {
+                    $parentPath = preg_replace('#(?:(.+)/)?[^/]+$#', '\1', $model->material_path);
+                    $parentId = $ymlModels[$parentPath]->id;
+                }
+                return [
+                    'id' => $model->id,
+                    'name' => $model->name,
+                    'parentId' => $parentId,
+                ];
+            }
         ];
 
         return $behaviors;

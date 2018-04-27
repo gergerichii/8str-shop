@@ -124,7 +124,7 @@ class Module extends \yii\base\Module implements BootstrapInterface
         } else {
             throw new ErrorException('$rubric must be string or instance of common\modules\catalog\models\ProductRubric');
         }
-        return str_replace('%2F', urldecode('%2F'), Url::to($uriParams));
+        return str_replace('%2F', urldecode('%2F'), Url::toRoute($uriParams));
     }
 
     /**
@@ -498,6 +498,32 @@ class Module extends \yii\base\Module implements BootstrapInterface
 
         if (!$entity->exists(true)) {
             $entity = $filesManager->getEntityInstance('defaults');
+        }
+
+        return $entity->getUri(false, true);
+    }
+    
+    /**
+     * @param      $imageName
+     * @param bool $allowDefault
+     *
+     * @return null|string
+     * @throws \yii\base\InvalidConfigException
+     */
+    public function getProductImageUri($imageName, $allowDefault = true) {
+        /** @var \common\modules\files\Module $filesManager */
+        $filesManager = Yii::$app->getModule('files');
+        /** @var Image $entity */
+        $entity = $filesManager->getEntityInstance('products/images');
+        $entity->fileName = $imageName;
+
+        if (!$entity->exists($allowDefault)) {
+            if ($allowDefault) {
+                $entity = $filesManager->getEntityInstance('defaults');
+    
+            } else {
+                return null;
+            }
         }
 
         return $entity->getUri(false, true);

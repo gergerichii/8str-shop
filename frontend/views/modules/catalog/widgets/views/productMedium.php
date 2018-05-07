@@ -39,10 +39,12 @@ $coverItem = isset($coverItem) && $coverItem ? $coverItem : false;
                 </a>
             </figure>
             <div class="item-price-container">
-                <?php if ($catalog->oldPriceOf($model, false)): ?>
-                    <span class="old-price"><?= $catalog->oldPriceOf($model) ?></span>
+                <?php $oldPrice = $catalog->oldPriceOf($model, false); ?>
+                <?php $price = $catalog->priceOf($model, false); ?>
+                <?php if ($oldPrice && $oldPrice > $price): ?>
+                    <span class="old-price"><?= $oldPrice ?></span>
                 <?php endif; ?>
-                <span class="item-price"><?= $catalog->priceOf($model) ?></span>
+                <span class="item-price"><?= $price ?></span>
             </div><!-- End .item-price-container -->
             <!--TODO: Сделать цикл по меткам -->
             <?php if ($catalog->productHasTag($model, 'new')):?>

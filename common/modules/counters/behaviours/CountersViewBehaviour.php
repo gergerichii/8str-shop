@@ -97,30 +97,85 @@ class CountersViewBehaviour extends Behavior {
             return false;
         
         if (!empty($counter->included_pages)) {
-            foreach(explode(';', $counter->included_pages) as $page) {
-                $page = trim($page);
-                if(strpos($page, ':')) {
-                    list($domain, $page) = explode(':', $page);
-                } else {
-                    $domain = '*';
-                }
-                
-                $ret |= $this->checkShow($currentDomain, $domain) && $this->checkShow($currentPage, $page);
+            foreach($this->parseRules($counter->included_pages) as $patterns) {
+                list($domainPattern, $pagePattern) = $patterns;
+                $ret |= ($this->checkShow($currentDomain, $domainPattern) && $this->checkShow($currentPage, $pagePattern));
             }
         } else {
             $ret = true;
         }
         if (!empty($counter->excluded_pages)) {
-            foreach(explode(';', $counter->excluded_pages) as $page) {
-                $page = trim($page);
-                if(strpos($page, ':')) {
-                    list($domain, $page) = explode(':', $page);
-                } else {
-                    $domain = '*';
-                }
-                
-                $ret &= !($this->checkShow($currentDomain, $domain) && $this->checkShow($currentPage, $page));
+            foreach($this->parseRules($counter->excluded_pages) as $patterns) {
+                list($domainPattern, $pagePattern) = $patterns;
+                $ret |= ($this->checkShow($currentDomain, $domainPattern) && $this->checkShow($currentPage, $pagePattern));
             }
+        }
+        
+        return (bool) $ret;
+    }
+    
+    /**
+     * @param string $rules
+     *
+     * @return array
+     */
+    public function parseRules(string $rules): array {
+        $ret = [];
+        
+        foreach(explode(';', $rules) as $page) {
+            $page = trim($page);
+            if(strpos($page, ':')) {
+                list($domain, $page) = explode(':', $page);
+            } else {
+                $domain = '*.*.*';
+            }
+            
+            /** подготовка шаблона для домена */
+            $prefix = '';
+            if ($domain[0] === '*') {
+                $prefix = '.*?';
+                $domain = substr($domain, 1);
+                if ($domain[0] === '.') {
+                    $prefix = "^(?:{$prefix}\.)?";
+                    $domain = substr($domain, 1);
+                }
+            }
+            preg_match('#(?:(?:(?P<d3>.*?)\.)?(?P<d2>[^\.]+)\.)?(?P<d1>[^\.]+)$#', $domain, $m1);
+            $domain = '';
+            $predEmpty = true;
+            foreach($m1 as $name => $pattern) {
+                if (preg_match('#^d(?P<n>\d)$#', $name, $m2)) {
+                    /* точка в конце не ставится у домена первого уровня */
+                    if (empty($pattern) || $pattern == '*') {
+                        if (intval($m2['n']) > 1) {
+                            if ($predEmpty) {
+                                $domain = "(?:{$domain}[^\.]+\.)?";
+                            } else {
+                                $domain .= '[^\.]+\.';
+                            }
+                        } else {
+                            $domain .= '.*';
+                        }
+                    } else {
+                        $predEmpty = false;
+                        $d = ($m2['n'] !== '1') ? '\.' : '';
+                        $pattern = str_replace('.', '\.', $pattern);
+                        $domain .= str_replace('*', '[^\.]+', $pattern) . $d;
+                    }
+                }
+            }
+            $domain = "#{$prefix}{$domain}$#";
+            
+            /** Подготовка шаблона для страницы */
+            if (empty($page) || $page === '*') {
+                $page = '.*';
+            } else {
+                $page = str_replace('.', '\.', $page);
+                $page = str_replace('*', '.*', $page);
+            }
+            $page = "#^{$page}$#";
+            
+            $ret[] = [$domain, $page];
         }
         
         return $ret;

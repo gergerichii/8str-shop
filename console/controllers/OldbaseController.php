@@ -360,9 +360,13 @@ class OldbaseController extends BaseController
         $image = $filesManager->getEntityInstance('products/images');
 
         $path = \Yii::getAlias($this->imagesPath . '/newImages');
-        if (!is_dir($path)) {
-            $this->error('The path is wrong.');
-            return 0;
+        if (file_exists($path)) {
+            if (!is_dir($path)) {
+                $this->error('The path is wrong.');
+                return 0;
+            }
+        } else {
+            mkdir($path, 0755, true);
         }
         $CatalogController = new CatalogController('catalog', $this->module);
         $groups = $CatalogController->findImages($path);

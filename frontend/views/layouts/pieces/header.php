@@ -6,6 +6,7 @@
  * Time: 19:11
  */
 
+use Yii;
 use yii\helpers\Url;
 use frontend\widgets\TopMenu;
 use common\modules\cart\widgets\CartInformer;
@@ -70,7 +71,8 @@ $count = $cartService->getCount();
                         <span>Responsive eCommerce Template</span>
                         <!-- TODO: Перенести стиль в css-->
                         <a href="/" title="<?=Yii::$app->name?>">
-                            <img src="<?=Yii::getAlias('@web/images/logo8@2x.png')?>" alt="<?=Yii::$app->name?>" style="width: 260px; margin-left: 7px">
+                            <?php $logo = (isset(Yii::$app->params['logo'])) ? Yii::$app->params['logo'] : 'logo8@2x.png';?>
+                            <img src="<?=Yii::getAlias("@web/images/{$logo}")?>" alt="<?=Yii::$app->name?>" style="width: 260px; margin-left: 7px">
                         </a>
                     </h1>
                 </div><!-- End .col-md-3 -->

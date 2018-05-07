@@ -6,7 +6,6 @@
  * Time: 19:11
  */
 
-use Yii;
 use yii\helpers\Url;
 use frontend\widgets\TopMenu;
 use common\modules\cart\widgets\CartInformer;

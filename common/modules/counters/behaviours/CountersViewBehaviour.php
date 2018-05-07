@@ -99,15 +99,15 @@ class CountersViewBehaviour extends Behavior {
         if (!empty($counter->included_pages)) {
             foreach($this->parseRules($counter->included_pages) as $patterns) {
                 list($domainPattern, $pagePattern) = $patterns;
-                $ret |= (preg_match($domainPattern, $currentDomain) && preg_match($pagePattern, $currentPage));
+                $ret = $ret || (preg_match($domainPattern, $currentDomain) && preg_match($pagePattern, $currentPage));
             }
         } else {
             $ret = true;
         }
-        if (!empty($counter->excluded_pages)) {
+        if ($ret && !empty($counter->excluded_pages)) {
             foreach($this->parseRules($counter->excluded_pages) as $patterns) {
                 list($domainPattern, $pagePattern) = $patterns;
-                $ret |= (preg_match($domainPattern, $currentDomain) && preg_match($pagePattern, $currentPage));
+                $ret = $ret && !(preg_match($domainPattern, $currentDomain) && preg_match($pagePattern, $currentPage));
             }
         }
         

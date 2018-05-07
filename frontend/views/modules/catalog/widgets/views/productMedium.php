@@ -50,7 +50,7 @@ $coverItem = isset($coverItem) && $coverItem ? $coverItem : false;
             <?php if ($catalog->productHasTag($model, 'new')):?>
                 <span class="new-rect">New</span>
             <?php endif; ?>
-            <?php if ($catalog->discountOf($model)):?>
+            <?php if ($catalog->discountOf($model, false) > 0):?>
                 <span class="discount-rect"><?= $catalog->discountOf($model) ?></span>
             <?php endif; ?>
         </div><!-- End .item-image-wrapper -->

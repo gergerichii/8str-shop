@@ -99,7 +99,7 @@ class CountersViewBehaviour extends Behavior {
         if (!empty($counter->included_pages)) {
             foreach($this->parseRules($counter->included_pages) as $patterns) {
                 list($domainPattern, $pagePattern) = $patterns;
-                $ret |= ($this->checkShow($currentDomain, $domainPattern) && $this->checkShow($currentPage, $pagePattern));
+                $ret |= (preg_match($domainPattern, $currentDomain) && preg_match($pagePattern, $currentPage));
             }
         } else {
             $ret = true;
@@ -107,7 +107,7 @@ class CountersViewBehaviour extends Behavior {
         if (!empty($counter->excluded_pages)) {
             foreach($this->parseRules($counter->excluded_pages) as $patterns) {
                 list($domainPattern, $pagePattern) = $patterns;
-                $ret |= ($this->checkShow($currentDomain, $domainPattern) && $this->checkShow($currentPage, $pagePattern));
+                $ret |= (preg_match($domainPattern, $currentDomain) && preg_match($pagePattern, $currentPage));
             }
         }
         
@@ -176,33 +176,6 @@ class CountersViewBehaviour extends Behavior {
             $page = "#^{$page}$#";
             
             $ret[] = [$domain, $page];
-        }
-        
-        return $ret;
-    }
-    
-    /**
-     * @param $source
-     * @param $mask
-     *
-     * @return bool
-     */
-    protected function checkShow($source, $mask) {
-        if($mask[0] === '*') {
-            $mask = substr($mask, 1);
-            if (empty($mask)) {
-                $ret = true;
-            } elseif ($mask[-1] === '*') {
-                $mask = substr($mask, 0, -1);
-                $ret = strpos($source, $mask) !== false;
-            } else {
-                $ret = substr($source, strlen($source) - strlen($mask) - 1) === $mask;
-            }
-        } elseif ($mask[-1] === '*') {
-            $mask = substr($mask, 0, -1);
-            $ret = substr($source, 0, strlen($mask)) === $mask;
-        } else {
-            $ret = $source === $mask;
         }
         
         return $ret;

@@ -115,5 +115,29 @@ return [
             'admin/web/images' => 'frontend/web/images',
             'sputnik/web/images' => 'frontend/web/images',
         ]
+    ],
+    'vigsec.ru' => [
+        'path' => 'vigsec',
+        'setWritable' => [
+            'admin/runtime',
+            'admin/web/assets',
+            'vigsec/runtime',
+            'vigsec/web/assets',
+        ],
+        'setExecutable' => [
+            'yii',
+        ],
+        'setCookieValidationKey' => [
+            'common/config/web/local/main.php',
+        ],
+        'createSymlink' => [
+            'public_html' => 'vigsec/web',
+            '../admin.vigsec.ru/public_html' => 'admin/web',
+            'admin/web/files' => 'common/webFiles',
+            'vigsec/web/files' => 'common/webFiles',
+            'admin/web/.htaccess' => 'environments/vigsec/htaccess',
+            'admin/web/images' => 'frontend/web/images',
+            'vigsec/web/images' => 'frontend/web/images',
+        ]
     ]
 ];

@@ -4,6 +4,7 @@ $config = [
     'bootstrap' => [
         'common\modules\counters\CountersBootstrap',
         'log',
+        'common\modules\catalog\CatalogBootstrap',
         'cart',
         'common\modules\order\Bootstrap',
         'files',
@@ -101,6 +102,9 @@ $config = [
         ],
         'counters' => [
             'class' => 'common\modules\counters\CountersModule',
+        ],
+        'catalog' => [
+            'class' => 'common\modules\catalog\Module',
         ],
         'files' => [
         ],

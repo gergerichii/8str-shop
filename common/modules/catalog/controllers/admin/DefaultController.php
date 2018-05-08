@@ -430,7 +430,7 @@ class DefaultController extends Controller
         }
 
         if ($isLodaded && !$model->hasErrors()) {
-            return $this->redirect(['catalog/default/index']);
+            return $this->redirect(['catalog/admin/default/index']);
         }
 
         return $this->render('prices', [
@@ -485,7 +485,7 @@ class DefaultController extends Controller
             $initialPreviewConfig[] = [
                 'caption' => $image->fileName,
                 'width' => '120px',
-                'url' => Url::to(['/catalog/default/delete-image']),
+                'url' => Url::to(['/catalog/admin/default/delete-image']),
                 'key' => $product->id,
                 'extra' => [
                     'id' => $product->id,

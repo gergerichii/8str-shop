@@ -17,14 +17,10 @@ return [
     'controllerNamespace' => 'frontend\controllers',
     'bootstrap' => [
         'common\modules\order\Bootstrap',
-        'catalog',
         'cart',
         '\common\modules\news\NewsBootstrap',
     ],
     'modules' => [
-        'catalog' => [
-            'class' => 'common\modules\catalog\Module',
-        ],
         'order' => [
             'class' => common\modules\order\Module::class,
         ],

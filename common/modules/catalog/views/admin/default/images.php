@@ -29,7 +29,7 @@ NumberControl::$autoIdPrefix = 'numberControl';
             'entityType' => 'products/images',
             'options' => ['multiple' => true],
             'pluginOptions' => [
-                'uploadUrl' => \yii\helpers\Url::to(['/catalog/default/upload-image']),
+                'uploadUrl' => \yii\helpers\Url::to(['/catalog/admin/default/upload-image']),
                 'uploadExtraData' => [
                     'id' => $model->id
                 ],

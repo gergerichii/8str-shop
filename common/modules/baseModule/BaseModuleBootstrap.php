@@ -8,9 +8,10 @@
 
 namespace common\modules\baseModule;
 
+use yii\base\BaseObject;
 use yii\base\BootstrapInterface;
 
-abstract class BaseModuleBootstrap implements BootstrapInterface {
+abstract class BaseModuleBootstrap extends BaseObject implements BootstrapInterface {
     
     const URL_RULES_TYPE_FRONTEND = 0;
     const URL_RULES_TYPE_BACKEND = 1;
@@ -22,6 +23,7 @@ abstract class BaseModuleBootstrap implements BootstrapInterface {
      * Возвращает все Url менеджеры системы
      *
      * @return \yii\web\UrlManager[]
+     * @throws \yii\base\InvalidConfigException
      */
     static function getUrlManagers(): array {
         if (empty(static::$urlManagers)) {
@@ -40,8 +42,10 @@ abstract class BaseModuleBootstrap implements BootstrapInterface {
     /**
      * Добавляет правила маршрутизации в систему в соответствующие по типу Url менеджеры
      *
-     * @param int $type [[self::URL_RULES_TYPE_FRONTEND]] or [[self::URL_RULES_TYPE_BACKEND]]
+     * @param int   $type [[self::URL_RULES_TYPE_FRONTEND]] or [[self::URL_RULES_TYPE_BACKEND]]
      * @param array $rules
+     *
+     * @throws \yii\base\InvalidConfigException
      */
     static function addUrlRules($type, $rules) {
         $urlManagers = self::getUrlManagers();

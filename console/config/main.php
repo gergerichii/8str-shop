@@ -20,6 +20,7 @@ return [
                 '@common/modules/counters/migrations',
                 '@yii/rbac/migrations',
                 '@vendor/cinghie/yii2-articles/migrations',
+                '@vendor/kartik-v/yii2-dynagrid/migrations',
 //                '@yii/log/migrations',
 //                '@yii/i18n/migrations',
 //                '@yii/caching/migrations',

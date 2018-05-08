@@ -9,8 +9,6 @@ use common\modules\catalog\models\ProductRubric;
 use common\modules\catalog\models\ProductRubricMenuItems;
 use common\modules\files\models\Image;
 use Yii;
-use yii\base\Application;
-use yii\base\BootstrapInterface;
 use yii\base\ErrorException;
 use yii\base\InvalidConfigException;
 use yii\caching\DbDependency;
@@ -19,8 +17,10 @@ use yii\helpers\Url;
 
 /**
  * catalog module definition class
+ *
+ * @property mixed $brandMenuStructure
  */
-class Module extends \yii\base\Module implements BootstrapInterface
+class Module extends \yii\base\Module
 {
     protected $productActionId = 'product';
 
@@ -40,50 +40,7 @@ class Module extends \yii\base\Module implements BootstrapInterface
 
         // custom initialization code goes here
     }
-
-    /**
-     * Bootstrap method to be called during application bootstrap stage.
-     * @param Application $app the application currently running
-     */
-    public function bootstrap($app) {
-        $urlManagers = [];
-        foreach (array_keys($app->components) as $componentName) {
-            if (strPos($componentName, 'UrlManager') > 0)
-                $urlManagers[] = $componentName;
-        }
-
-        $rules = [
-            [
-                'pattern' => 'catalog/<catalogPath:[\w\-\.,/_]*?/[^\d]*$|[\w\-\.,_]+>',
-                'route' => '/catalog/default/index',
-                'defaults' => [
-                    'catalogPath' => ''
-                ],
-                'encodeParams' => false,
-            ],
-            [
-                'pattern' => 'catalog/<catalogPath:[\w\-\.,/_]+?>/<productId:\d+>',
-                'route' => '/catalog/default/product',
-                'defaults' => [
-                    'catalogPath' => '',
-                    'productId' => '',
-                ],
-                'encodeParams' => false,
-            ],
-            'catalog/seacrh' => '/catalog/default/search',
-            'catalog' => 'catalog/default/index/',
-        ];
-        if (count($urlManagers)) {
-            foreach ($urlManagers as $urlManager) {
-                /** @var \yii\web\UrlManager $urlManager */
-                $urlManager = $app->get($urlManager);
-                $urlManager->addRules($rules);
-            }
-        } else {
-            $app->urlManager->addRules($rules);
-        }
-    }
-
+    
     /**
      * @param ProductRubric|string|null $rubric
      * @param Product|int|null $product
@@ -417,7 +374,7 @@ class Module extends \yii\base\Module implements BootstrapInterface
         $cacheKey = __CLASS__ . '::' . __FUNCTION__ . '::' . $depth . '::' . $showHidden;
         $cache = Yii::$app->getCache();
 //        $cache->flush();
-        $data = $cache->get($cacheKey);
+//        $data = $cache->get($cacheKey);
 //        if (false !== $data) {
 //            return $data;
 //        }
@@ -448,7 +405,7 @@ class Module extends \yii\base\Module implements BootstrapInterface
         });
 
         $data = $menuItems->render();
-
+        /** @noinspection SqlResolve */
         $cache->set($cacheKey, $data, null, new DbDependency(['sql' => 'SELECT MAX(modified_at) FROM ' . ProductRubric::tableName()]));
 
         return $data;
@@ -599,11 +556,6 @@ class Module extends \yii\base\Module implements BootstrapInterface
                 $futurePrice->addError('value', $error);
                 return $futurePrice;
             }
-        } catch (\ErrorException $exception) {
-            $error = 'An error occurred while setting a new price: "' . $exception->getMessage() . '".';
-            $product->addError('futurePrice', $error);
-            $futurePrice->addError('value', $error);
-            return $futurePrice;
         } catch (\Exception $exception) {
             Yii::error($exception->getMessage());
             $error = 'Unknown error occurred while setting a new price.';
@@ -658,10 +610,6 @@ class Module extends \yii\base\Module implements BootstrapInterface
             }
 
             $transaction->commit();
-        } catch (\ErrorException $exception) {
-            $price->addError('value', 'An error occurred while setting a new price: "' . $exception->getMessage() . '".');
-            $transaction->rollBack();
-            return $price;
         } catch (\Exception $exception) {
             Yii::error($exception->getMessage());
             $price->addError('price', 'Unknown error occurred while setting a new price: "' . $exception->getMessage() . '".');

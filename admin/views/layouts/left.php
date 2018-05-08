@@ -54,8 +54,8 @@
                         'url' => '#',
                         'items' => [
                             ['label' => 'Products', 'icon' => 'gift', 'url' => ['/catalog']],
-                            ['label' => 'Rubrics', 'icon' => 'folder', 'url' => ['/catalog/default/rubrics']],
-                            ['label' => 'Create', 'icon' => 'plus', 'url' => ['/catalog/default/create']],
+                            ['label' => 'Rubrics', 'icon' => 'folder', 'url' => ['/catalog/admin/default/rubrics']],
+                            ['label' => 'Create', 'icon' => 'plus', 'url' => ['/catalog/admin/default/create']],
                         ]
                     ],
                     ['label' => 'Счетчики', 'icon' => 'square' , 'template' => '<a href="' .

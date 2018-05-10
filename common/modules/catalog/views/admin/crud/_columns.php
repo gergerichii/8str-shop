@@ -2,6 +2,7 @@
 
 use yii\helpers\Url;
 ?>
+
 <?php \common\helpers\ViewHelper::startRegisterScript($this); ?>
 <script>
     function prepareMainSearchRequest(query, settings) {
@@ -11,14 +12,11 @@ use yii\helpers\Url;
     function transform1(suggestions) {
         return suggestions.products;
     }
-    function transform2(suggestions) {
-        return suggestions.brands;
-    }
-    function transform3(suggestions) {
-        return suggestions.rubrics;
+    function correctSearchMenu() {
+        console.log('correct');
     }
     
-    function correctSearchMenu() {
+    function createSearchMenu() {
     
     }
 </script>
@@ -71,12 +69,12 @@ return [
             'pluginOptions' => [
                 'highlight' => true,
                 'hint' => true,
-                'menu' => new \yii\web\JsExpression("\$('#main-search-tt-menu.tt-menu')"),
+                'menu' => new \yii\web\JsExpression("createSearchMenu"),
                 'minLength' => 2,
             ],
             'container' => ['class' => 'main-search-field'],
             'pluginEvents' => [
-                'typeahead:open' => 'function(){console.log("");}',
+                'typeahead:open' => 'correctSearchMenu',
             ],
         ],
     ],

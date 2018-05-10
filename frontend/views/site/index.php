@@ -48,8 +48,23 @@ $activeTab = 'new';
                     <div id="slider-rev-container">
                         <div id="slider-rev">
                             <ul>
-                                <li data-transition="random" data-saveperformance="on"
-                                    data-title="Производим монтажные работы">
+                                <li data-transition="random" data-saveperformance="on" data-title="Наши партнеры">
+                                    <img src="/images/revslider/dummy.png" alt="slidebg4"
+                                         data-lazyload="/images/homeslider/slide4.png" data-bgposition="center center"
+                                         data-bgfit="cover" data-bgrepeat="no-repeat">
+
+                                    <div class="tp-caption lfr ltr" data-x="240" data-y="175" data-speed="1200"
+                                         data-start="600" data-easing="Expo.easeOut">
+                                        <img src="/images/homeslider/slide4_1.png" alt="slide1_1">
+                                    </div>
+
+                                    <div class="tp-caption lfl ltl" data-x="293" data-y="308" data-speed="1200"
+                                         data-start="600" data-easing="Expo.easeOut">
+                                        <img src="/images/homeslider/slide4_2.png" alt="slide1_1">
+                                    </div>
+                                </li>
+
+                                <li data-transition="random" data-saveperformance="on" data-title="Производим монтаж видеонаблюдения">
                                     <img src="images/revslider/dummy.png" alt="slidebg1"
                                          data-lazyload="images/homeslider/slide1.jpg" data-bgposition="center center"
                                          data-bgfit="cover" data-bgrepeat="no-repeat">
@@ -113,7 +128,7 @@ $activeTab = 'new';
                                     </div>
                                 </li>
 
-                                <li data-transition="random" data-saveperformance="on" data-title="The Next Big Thing">
+                                <li data-transition="random" data-saveperformance="on" data-title="Монтируем видеодомофоны">
                                     <img src="images/revslider/dummy.png" alt="slidebg2"
                                          data-lazyload="images/homeslider/slide2.jpg?1" data-bgposition="center center"
                                          data-bgfit="cover" data-bgrepeat="no-repeat">
@@ -149,7 +164,7 @@ $activeTab = 'new';
                                     </div>
                                 </li>
 
-                                <li data-transition="random" data-saveperformance="on" data-title="Powerful Template">
+                                <li data-transition="random" data-saveperformance="on" data-title="Закрываем периметр под ключ">
 
                                     <img src="images/revslider/dummy.png" alt="slidebg3"
                                          data-lazyload="images/homeslider/slide3.jpg?1" data-bgposition="center center"

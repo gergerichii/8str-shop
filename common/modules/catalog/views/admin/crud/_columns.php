@@ -1,9 +1,29 @@
 <?php
 
+use common\modules\catalog\models\ProductBrand;
+use yii\helpers\ArrayHelper;
 use yii\helpers\Url;
 ?>
 
-<?php \common\helpers\ViewHelper::startRegisterScript($this); ?>
+<?php \common\helpers\ViewHelper::startRegisterCss($this) ?>
+<style>
+    .tt-menu,
+    .tt-menu.tt-empty,
+    .tt-menu.tt-open.tt-empty {
+        z-index: 809;
+        top: auto;
+        left: auto;
+        width: 800px;
+        display: none;
+    }
+    
+    .tt-menu.tt-open {
+        display: block;
+    }
+</style>
+<?php \common\helpers\ViewHelper::endRegisterCss() ?>
+
+<?php \common\helpers\ViewHelper::startRegisterScript($this, \yii\web\View::POS_END); ?>
 <script>
     function prepareMainSearchRequest(query, settings) {
         settings.url += '?q=' + query;
@@ -13,15 +33,35 @@ use yii\helpers\Url;
         return suggestions.products;
     }
     function correctSearchMenu() {
-        console.log('correct');
+        var input = $('#product-quick-search-input');
+        if (input.length !== 0) {
+            var inputPos = $(input).offset();
+            var panel = $('#search-dropdown-menu');
+            
+            $(panel).offset(function() {
+                var pos = {};
+                pos.left = inputPos.left;
+                pos.top = inputPos.top + $(input).outerHeight()+6;
+                return pos;
+            });
+            // var table = $(input).parents('table')[0];
+            // var width = $(table).outerWidth() - (inputPos.left - $(table).offset().left) * 2;
+            // $(panel).outerWidth(width);
+        }
     }
     
     function createSearchMenu() {
-    
+        var panel = $('#search-dropdown-menu');
+        if (panel.length === 0) {
+            panel = $('<div id="search-dropdown-menu" class="tt-menu"></div>');
+            $('.kv-grid-wrapper').prepend(panel);
+        }
+        return panel;
     }
+    
+    $('body').delegate("#product-quick-search-input", 'typeahead:open', correctSearchMenu);
 </script>
 <?php \common\helpers\ViewHelper::endRegisterScript(); ?>
-
 
 <?php
 return [
@@ -29,18 +69,21 @@ return [
         'class' => 'kartik\grid\CheckboxColumn',
         'width' => '20px',
     ],
-    [
-        'class' => 'kartik\grid\SerialColumn',
-        'width' => '30px',
-    ],
-    // [
-    // 'class'=>'\kartik\grid\DataColumn',
-    // 'attribute'=>'id',
-    // ],
+//    [
+//        'class' => 'kartik\grid\SerialColumn',
+//        'width' => '30px',
+//    ],
+     [
+     'class'=>'\kartik\grid\DataColumn',
+     'attribute'=>'id',
+     ],
     [
         'class' => '\kartik\grid\DataColumn',
         'attribute' => 'name',
         'filterType' => '\kartik\widgets\Typeahead',
+        'filterInputOptions' => [
+            'class' => 'search-input',
+        ],
         'filterWidgetOptions' => [
             'name' => 'sk',
             'id' => 'search-keywords',
@@ -50,8 +93,8 @@ return [
                 'placeholder' => 'Поиск по каталогу...',
                 'dir' => 'auto',
                 'tabindex' => 19,
-                'class' => 'search-input',
                 'autocomplete' => 'off',
+                'id' => 'product-quick-search-input'
             ],
             'dataset' => [
                 [
@@ -69,38 +112,81 @@ return [
             'pluginOptions' => [
                 'highlight' => true,
                 'hint' => true,
-                'menu' => new \yii\web\JsExpression("createSearchMenu"),
+                'menu' => new \yii\web\JsExpression("createSearchMenu()"),
                 'minLength' => 2,
             ],
             'container' => ['class' => 'main-search-field'],
-            'pluginEvents' => [
-                'typeahead:open' => 'correctSearchMenu',
-            ],
         ],
     ],
     [
-        'class' => '\kartik\grid\DataColumn',
-        'attribute' => 'title',
-    ],
-    [
-        'class' => '\kartik\grid\DataColumn',
         'attribute' => 'status',
+        'value' => function ($model, $key, $index, $widget) {
+            $statuses = [
+                \common\modules\catalog\models\Product::STATUS['ACTIVE'] => 'Активный',
+                \common\modules\catalog\models\Product::STATUS['DELETED'] => 'Удален',
+                \common\modules\catalog\models\Product::STATUS['HIDDEN'] => 'Скрыт',
+            ];
+            return $statuses[$model->status];
+        },
+        'filterType' => '\kartik\widgets\Select2',
+        'filterWidgetOptions' => [
+            'data' => [
+                '' => 'Все',
+                \common\modules\catalog\models\Product::STATUS['ACTIVE'] => 'Активные',
+                \common\modules\catalog\models\Product::STATUS['DELETED'] => 'Удаленные',
+                \common\modules\catalog\models\Product::STATUS['HIDDEN'] => 'Скрытые',
+            ],
+            'hideSearch' => true,
+        ],
     ],
     [
         'class' => '\kartik\grid\DataColumn',
         'attribute' => 'count',
     ],
     [
-        'class' => '\kartik\grid\DataColumn',
         'attribute' => 'show_on_home',
+        'class' => 'kartik\grid\BooleanColumn',
+        'trueLabel' => 'Да',
+        'falseLabel' => 'Нет',
+        'filterType' => '\kartik\widgets\Select2',
+        'filterWidgetOptions' => [
+            'data' => [
+                '' => 'Все',
+                true => 'Да',
+                false => 'Нет',
+            ],
+            'hideSearch' => true,
+        ],
     ],
     [
-        'class' => '\kartik\grid\DataColumn',
         'attribute' => 'on_list_top',
+        'class' => 'kartik\grid\BooleanColumn',
+        'trueLabel' => 'Да',
+        'falseLabel' => 'Нет',
+        'filterType' => '\kartik\widgets\Select2',
+        'filterWidgetOptions' => [
+            'data' => [
+                '' => 'Все',
+                true => 'Да',
+                false => 'Нет',
+            ],
+            'hideSearch' => true,
+        ],
     ],
     [
-        'class' => '\kartik\grid\DataColumn',
         'attribute' => 'market_upload',
+        'class' => 'kartik\grid\BooleanColumn',
+        'trueLabel' => 'Да',
+        'falseLabel' => 'Нет',
+        'filterType' => '\kartik\widgets\Select2',
+        'filterWidgetOptions' => [
+            'data' => [
+                '' => 'Все',
+                true => 'Да',
+                false => 'Нет',
+            ],
+            'hideSearch' => true,
+        ],
     ],
     [
         'class' => '\kartik\grid\DataColumn',
@@ -132,7 +218,20 @@ return [
     ],
     [
         'class' => '\kartik\grid\DataColumn',
-        'attribute' => 'brand_id',
+        'attribute' => 'brandName',
+        'value' => function ($model) {
+            return "{$model->brandName} [{$model->brand_id}]";
+        },
+        'filterType' => '\kartik\widgets\Select2',
+        'filterWidgetOptions' => [
+            'data' => ArrayHelper::merge(
+                ['' => 'Любой'],
+                ArrayHelper::map(
+                    ProductBrand::find()->select(['name', 'id'])->asArray()->indexBy('id')->all(),
+                    'name', 'name'
+                )
+            ),
+        ],
     ],
     [
         'class' => '\kartik\grid\DataColumn',

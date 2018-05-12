@@ -7,8 +7,7 @@ use johnitvn\ajaxcrud\CrudAsset;
 use johnitvn\ajaxcrud\BulkButtonWidget;
 
 /* @var $this yii\web\View */
-/* @var $dataProvider yii\data\ActiveDataProvider */
-/* @var $filter \yii\data\ActiveDataFilter */
+/* @var $searchModel \common\modules\catalog\models\search\ProductSearch */
 
 $this->title = 'Продукты';
 $this->params['breadcrumbs'][] = $this->title;
@@ -25,8 +24,7 @@ CrudAsset::register($this);
                 'id' => 'crud-datatable',
             ],
             'gridOptions' => [
-                'dataProvider' => $dataProvider,
-                'filterModel' => $filter->searchModel,
+                'filterModel' => $searchModel,
                 'pjax'=>true,
                 'striped' => true,
                 'condensed' => true,
@@ -46,7 +44,7 @@ CrudAsset::register($this);
                     ],
                 ],
                 'panel' => [
-                    'type' => 'primary',
+//                    'type' => 'primary',
                     'heading' => '<i class="glyphicon glyphicon-list"></i> Каталог продуктов',
                     'before' => 'test panel',
                     'after'=>BulkButtonWidget::widget([

@@ -140,7 +140,8 @@ class ProductFilterForm extends Model
             $productIndexQuery = ProductSphinxIndex::find()
                 ->select('id')
                 ->where(['rubric_id' => $allChildRubrics]);
-            $sk = trim($sk);
+            $sk = Yii::$app->sphinx->quoteValue(trim($sk));
+            $sk = str_replace('/', '\/', $sk);
             $productIndexQuery->match(new Expression(':match', ['match' => "{$sk}"]));
     
             $productsIds = $productIndexQuery->limit(20000)->column();

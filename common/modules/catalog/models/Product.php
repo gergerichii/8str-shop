@@ -275,6 +275,18 @@ class Product extends BaseActiveRecord implements CartElement
                 'modifier_id', 'product_type_id', 'brand_id',
                 'old_id', 'old_rubric_id'  //TODO: Удалить, когда запустится сайт
             ],
+            'search' => [
+                'id', 'name', 'title', 'desc', 'status', 'count',
+                'show_on_home', 'on_list_top', 'market_upload', 'files',
+                'delivery_time', 'delivery_days', 'created_at', 'modified_at', 'creator_id',
+                'main_rubric_id', 'warranty',
+                'listOfRubrics', // Uses for a custom field
+                'tagCollection', // Uses for a custom field
+                'fieldForFuturePrice', //  Uses for a custom field
+                'priceValue', // Uses for a custom field
+                'modifier_id', 'product_type_id', 'brand_id',
+                'old_id', 'old_rubric_id'  //TODO: Удалить, когда запустится сайт
+            ],
         );
     }
 
@@ -283,14 +295,15 @@ class Product extends BaseActiveRecord implements CartElement
      */
     public function rules() {
         return [
-            [['creator_id', 'modifier_id'], 'default', 'value' => Yii::$app->user->id],
-            [['files'], 'default', 'value' => $this->getDefaultFilesJson()],
-            [['product_type_id'], 'default', 'value' => self::DEFAULT_PRODUCT_TYPE_ID],
-            [['status'], 'default', 'value' => self::STATUS['ACTIVE']],
-            ['warranty', 'default', 'value' => '1 год'],
+            [['id'], 'integer'],
+            [['creator_id', 'modifier_id'], 'default', 'value' => Yii::$app->user->id, 'except' => 'search'],
+            [['files'], 'default', 'value' => $this->getDefaultFilesJson(), 'except' => 'search'],
+            [['product_type_id'], 'default', 'value' => self::DEFAULT_PRODUCT_TYPE_ID, 'except' => 'search'],
+            [['status'], 'default', 'value' => self::STATUS['ACTIVE'], 'except' => 'search'],
+            ['warranty', 'default', 'value' => '1 год', 'except' => 'search'],
             [['name'], 'trim'],
 
-            [['name', 'ext_attributes', 'files', '1c_data', 'creator_id', 'modifier_id', 'model'], 'required'],
+            [['name', 'ext_attributes', 'files', '1c_data', 'creator_id', 'modifier_id', 'model'], 'required', 'except' => 'search'],
             [['desc', 'model', 'vendor_code', 'barcode', 'warranty'], 'string'],
             [['status', 'count', 'delivery_time', 'show_on_home', 'on_list_top', 'market_upload',
                 'creator_id', 'modifier_id', 'product_type_id', 'brand_id', 'main_rubric_id'], 'integer'],
@@ -298,12 +311,12 @@ class Product extends BaseActiveRecord implements CartElement
             [['delivery_days'], 'string', 'max' => 5],
             [['name'], 'string', 'max' => 150],
             [['title'], 'string', 'max' => 255],
-            [['name'], 'unique'],
-            [['brand_id'], 'exist', 'skipOnError' => true, 'targetClass' => ProductBrand::class, 'targetAttribute' => ['brand_id' => 'id']],
-            [['creator_id'], 'exist', 'skipOnError' => true, 'targetClass' => User::class, 'targetAttribute' => ['creator_id' => 'id']],
-            [['modifier_id'], 'exist', 'skipOnError' => true, 'targetClass' => User::class, 'targetAttribute' => ['modifier_id' => 'id']],
-            [['product_type_id'], 'exist', 'skipOnError' => true, 'targetClass' => ProductType::class, 'targetAttribute' => ['product_type_id' => 'id']],
-            [['main_rubric_id'], 'exist', 'skipOnError' => true, 'targetClass' => ProductRubric::class, 'targetAttribute' => ['main_rubric_id' => 'id']],
+            [['name'], 'unique', 'except' => 'search'],
+            [['brand_id'], 'exist', 'skipOnError' => true, 'targetClass' => ProductBrand::class, 'targetAttribute' => ['brand_id' => 'id'], 'except' => 'search'],
+            [['creator_id'], 'exist', 'skipOnError' => true, 'targetClass' => User::class, 'targetAttribute' => ['creator_id' => 'id'], 'except' => 'search'],
+            [['modifier_id'], 'exist', 'skipOnError' => true, 'targetClass' => User::class, 'targetAttribute' => ['modifier_id' => 'id'], 'except' => 'search'],
+            [['product_type_id'], 'exist', 'skipOnError' => true, 'targetClass' => ProductType::class, 'targetAttribute' => ['product_type_id' => 'id'], 'except' => 'search'],
+            [['main_rubric_id'], 'exist', 'skipOnError' => true, 'targetClass' => ProductRubric::class, 'targetAttribute' => ['main_rubric_id' => 'id'], 'except' => 'search'],
             [['listOfRubrics', 'tagCollection', 'fieldForFuturePrice'], 'safe'],
             [['priceValue'], 'number', 'min' => 0],
 

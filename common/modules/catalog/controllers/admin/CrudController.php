@@ -5,8 +5,6 @@ namespace common\modules\catalog\controllers\admin;
 use Yii;
 use common\modules\catalog\models\Product;
 use common\modules\catalog\models\search\ProductSearch;
-use yii\data\ActiveDataFilter;
-use yii\data\ActiveDataProvider;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
@@ -38,29 +36,13 @@ class CrudController extends Controller
      * Lists all Product models.
      *
      * @return mixed
-     * @throws \yii\base\InvalidConfigException
      */
     public function actionIndex()
     {    
         $searchModel = new ProductSearch();
-        $filter = new ActiveDataFilter([
-            'searchModel' => $searchModel,
-            'filterAttributeName' => $searchModel->formName(),
-        ]);
-        $filter->load(Yii::$app->request->queryParams);
-        $query = $searchModel::find();
         
-        if ($filterConditions = $filter->build()) {
-            $query->andFilterWhere($filterConditions);
-        }
-        
-        $dataProvider = new ActiveDataProvider([
-            'query' => $query,
-        ]);
-
         return $this->render('index', [
-            'dataProvider' => $dataProvider,
-            'filter' => $filter,
+            'searchModel' => $searchModel,
         ]);
     }
     

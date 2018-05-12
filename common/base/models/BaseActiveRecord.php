@@ -29,7 +29,7 @@ class BaseActiveRecord extends ActiveRecord
      * @param array|boolean $config если $config == false то значения по умолчанию не будут заполняться автоматически
      */
     public function __construct($config = []) {
-        if ((!is_bool($config) && is_array($config) && empty($config['loadDefaults'])) || $config !== false) {
+        if ((!is_bool($config) && is_array($config) && !isset($config['loadDefaults'])) || (is_bool($config) && $config !== false)) {
             $this->_loadDefaults = true;
         }
         if (is_array($config)) {

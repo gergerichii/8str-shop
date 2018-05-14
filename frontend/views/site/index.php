@@ -49,6 +49,17 @@ $activeTab = 'new';
                         <div id="slider-rev">
                             <ul>
                                 <li data-transition="random" data-saveperformance="on" data-title="Наши партнеры">
+                                    <img src="/images/revslider/dummy.png" alt="slidebg5"
+                                         data-lazyload="/images/homeslider/slide5.png" data-bgposition="center center"
+                                         data-bgfit="cover" data-bgrepeat="no-repeat">
+
+                                    <div class="tp-caption sfb stb" data-x="300" data-y="350" data-speed="900"
+                                         data-start="400" data-easing="Power3.easeIn" data-endspeed="300">
+                                        <a href="http://ffcl.eu/ru/" class="btn btn-sm btn-custom-2">Перейти на сайт парнтера</a>
+                                    </div>
+                                </li>
+                                
+                                <li data-transition="random" data-saveperformance="on" data-title="Наши партнеры">
                                     <img src="/images/revslider/dummy.png" alt="slidebg4"
                                          data-lazyload="/images/homeslider/slide4.png" data-bgposition="center center"
                                          data-bgfit="cover" data-bgrepeat="no-repeat">

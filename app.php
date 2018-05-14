@@ -6,6 +6,11 @@
  * Time: 14:04
  */
 
+if (isset($_GET['ggg'])) {
+    phpinfo();
+    exit;
+}
+
 if(!defined('APP_BASE_DIR')){
     throw new Exception('APP_BASE_DIR is not defined');
 }

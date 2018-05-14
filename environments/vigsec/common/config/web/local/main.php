@@ -12,5 +12,6 @@ $config = [
 ];
 
 $config['modules']['debug']['allowedIPs'][] = '195.19.215.184';
+$config['modules']['debug']['allowedIPs'][] = '10.93.129.178';
 
 return $config;

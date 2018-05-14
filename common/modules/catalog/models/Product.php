@@ -939,4 +939,28 @@ class Product extends BaseActiveRecord implements CartElement
     public function setPriceValue($value) {
         $this->_price = $value;
     }
+    
+    /**
+     * @param string|\common\modules\catalog\models\ProductTag $tag
+     *
+     * @return bool
+     */
+    public function hasTag($tag) {
+        if ($this->isNewRecord) {
+            $ret = false;
+        } elseif (is_string($tag)) {
+            $ret = (bool) ProductTag::find()
+                ->joinWith('productTag2products as p')
+                ->andWhere(['name' => $tag, 'p.product_id' => $this->id])
+                ->count();
+        } elseif ($tag instanceof ProductTag) {
+            $ret = (bool) ProductTag2product::find()
+                ->andWhere(['product_tag_id' => $tag->id, 'product_id' => $this->id])
+                ->count();
+        } else {
+            $ret = false;
+        }
+        
+        return $ret;
+    }
 }

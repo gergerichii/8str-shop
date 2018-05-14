@@ -515,7 +515,8 @@ class OldbaseController extends BaseController
             ];
             /** Если продукт имеет метку, то добавляем ее к нему */
             foreach ($tags as $tag => $srcTag) {
-                if (empty($src[$srcTag])) continue;
+                if (empty($src[$srcTag]) || $product->hasTag($tag))
+                    continue;
                 $tag = $this->getTag($tag);
                 try {
                     $product->link('tags', $tag);

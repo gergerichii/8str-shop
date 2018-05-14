@@ -2,14 +2,20 @@ Options +FollowSymLinks
 IndexIgnore */*
 RewriteEngine on
 
+RewriteCond %{ENV:URL} \w+\.yml [NC,OR]
+RewriteCond %{REDIRECT_URL} \w+\.yml [NC,OR]
+RewriteCond %{REQUEST_URI} \w+\.yml.* [NC,OR]
+RewriteRule . - [S=2]
+
+RewriteRule \w+\.yml.* - [S,NC]
+
 RewriteCond %{HTTP:X-Forwarded-Proto} !https
 RewriteCond %{HTTP_HTTPS} !on
-RewriteRule ^ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301,NE]
+RewriteRule . https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301,NE]
 
 RewriteCond %{REQUEST_FILENAME} !-f
 RewriteCond %{REQUEST_FILENAME} !-d
-
-RewriteRule . index.php
+RewriteRule ^.*$ index.php [L]
 
 php_flag display_errors 1
 php_flag display_startup_errors 1

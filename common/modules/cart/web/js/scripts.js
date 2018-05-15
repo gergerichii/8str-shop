@@ -272,6 +272,7 @@ shop.cart = {
                     break;
             }
             $.notify({"icon":"glyphicon glyphicon-fire","id":"w2","message":message},{"placement":{"from":"bottom","align":"right"},"mouse_over":"pause","type":"success"});
+            $(document).trigger('addToCart');
         }
 
         jQuery(document).trigger("renderCart", json);

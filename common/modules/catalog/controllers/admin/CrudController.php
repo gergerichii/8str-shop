@@ -2,9 +2,11 @@
 
 namespace common\modules\catalog\controllers\admin;
 
+use kartik\grid\EditableColumnAction;
 use Yii;
 use common\modules\catalog\models\Product;
 use common\modules\catalog\models\search\ProductSearch;
+use yii\helpers\ArrayHelper;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
@@ -30,6 +32,28 @@ class CrudController extends Controller
                 ],
             ],
         ];
+    }
+    
+    public function actions() {
+        return ArrayHelper::merge(
+            parent::actions(),
+            [
+                'edit-grid-product' => [                                       // identifier for your editable column action
+                    'class' => EditableColumnAction::class,     // action class name
+                    'modelClass' => Product::class,                // the model for the record being edited
+                    'formName' => 'ProductSearch',
+//                    'outputMessage' => function() {
+//                         return 'ok';                                  // any custom error to return after model save
+//                    },
+                    'showModelErrors' => true,                        // show model validation errors after save
+                    'errorOptions' => ['header' => 'Ошибки']                // error summary HTML options
+                    // 'postOnly' => true,
+                    // 'ajaxOnly' => true,
+                    // 'findModel' => function($id, $action) {},
+                    // 'checkAccess' => function($action, $model) {}
+                ]
+            ]
+        );
     }
     
     /**

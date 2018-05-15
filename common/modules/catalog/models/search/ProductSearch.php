@@ -10,7 +10,6 @@ use yii\data\ActiveDataProvider;
 use common\modules\catalog\models\Product;
 use yii\db\Expression;
 use yii\helpers\ArrayHelper;
-use yii\validators\DefaultValueValidator;
 
 /**
  * ProductSearch represents the model behind the search form about `common\modules\catalog\models\Product`.
@@ -47,7 +46,7 @@ class ProductSearch extends Product
         return ArrayHelper::merge(
             parent::rules(),
             [
-                [['brandName'], 'safe'],
+                [['brandName', 'rubricName'], 'safe'],
             ]
         );
 //        return [
@@ -64,7 +63,7 @@ class ProductSearch extends Product
         return ArrayHelper::merge(
             parent::attributes(),
             [
-                'brandName'
+                'brandName', 'rubricName'
             ]
         );
     }
@@ -75,6 +74,7 @@ class ProductSearch extends Product
             parent::attributeLabels(),
             [
                 'brandName' => 'Производитель',
+                'rubricName' => 'Основная рубрика',
             ]
         );
     }
@@ -99,8 +99,10 @@ class ProductSearch extends Product
     public function search($params)
     {
         $query = self::find()
-            ->select(['product.*', 'pb.name brandName'])
-            ->joinWith(['brand pb'])->with('brand');
+            ->indexBy('id')
+            ->select(['product.*', 'pb.name brandName', 'mr.name rubricName'])
+            ->joinWith(['brand pb'])->with('brand')
+            ->joinWith(['mainRubric mr'])->with('mainRubric');
         
         $excludeFilter = [];
         
@@ -133,6 +135,7 @@ class ProductSearch extends Product
         if ($filterConditions = $filter->build()) {
             $replaces = [
                 'brandName' => 'pb.name',
+                'rubricName' => 'mr.name',
             ];
             $filterConditions = $this->prepareFilterCondition($filterConditions, $excludeFilter, $replaces);
             $query->andFilterWhere($filterConditions);

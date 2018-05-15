@@ -1,6 +1,9 @@
 <?php
 
+use common\modules\catalog\models\Product;
 use common\modules\catalog\models\ProductBrand;
+use common\modules\catalog\models\ProductRubric;
+use kartik\grid\GridView;
 use yii\helpers\ArrayHelper;
 use yii\helpers\Url;
 ?>
@@ -69,17 +72,48 @@ return [
         'class' => 'kartik\grid\CheckboxColumn',
         'width' => '20px',
     ],
+    [
+        'class' => 'kartik\grid\RadioColumn',
+        'width' => '36px',
+        'headerOptions' => ['class' => 'kartik-sheet-style'],
+    ],
+    [
+        'class' => 'kartik\grid\ExpandRowColumn',
+        'width' => '50px',
+        'value' => function () {
+            return GridView::ROW_COLLAPSED;
+        },
+        'detail' => function ($model) {
+            return Yii::$app->controller->renderPartial('_expand-row-details', ['model' => $model]);
+        },
+        'headerOptions' => ['class' => 'kartik-sheet-style'],
+        'expandOneOnly' => true,
+    ],
+    
 //    [
 //        'class' => 'kartik\grid\SerialColumn',
 //        'width' => '30px',
 //    ],
-     [
-     'class'=>'\kartik\grid\DataColumn',
-     'attribute'=>'id',
-     ],
     [
-        'class' => '\kartik\grid\DataColumn',
+        'class'=>'\kartik\grid\DataColumn',
+        'attribute'=>'id',
+    ],
+    [
+        'class' => 'kartik\grid\EditableColumn',
         'attribute' => 'name',
+        'vAlign' => 'middle',
+        'editableOptions' => function ($model, $key, $index) {
+            return [
+                'header' => 'Название',
+                'size' => 'md',
+                'formOptions'=>['action' => ['edit-grid-product']],
+                'afterInput' => function($form, $widget) use ($model, $key, $index) {
+                    echo $form->field($model, "[{$index}]model");
+                },
+            ];
+        },
+            
+        'refreshGrid' => true,
         'filterType' => '\kartik\widgets\Typeahead',
         'filterInputOptions' => [
             'class' => 'search-input',
@@ -122,9 +156,9 @@ return [
         'attribute' => 'status',
         'value' => function ($model, $key, $index, $widget) {
             $statuses = [
-                \common\modules\catalog\models\Product::STATUS['ACTIVE'] => 'Активный',
-                \common\modules\catalog\models\Product::STATUS['DELETED'] => 'Удален',
-                \common\modules\catalog\models\Product::STATUS['HIDDEN'] => 'Скрыт',
+                Product::STATUS['ACTIVE'] => 'Активный',
+                Product::STATUS['DELETED'] => 'Удален',
+                Product::STATUS['HIDDEN'] => 'Скрыт',
             ];
             return $statuses[$model->status];
         },
@@ -132,9 +166,9 @@ return [
         'filterWidgetOptions' => [
             'data' => [
                 '' => 'Все',
-                \common\modules\catalog\models\Product::STATUS['ACTIVE'] => 'Активные',
-                \common\modules\catalog\models\Product::STATUS['DELETED'] => 'Удаленные',
-                \common\modules\catalog\models\Product::STATUS['HIDDEN'] => 'Скрытые',
+                Product::STATUS['ACTIVE'] => 'Активные',
+                Product::STATUS['DELETED'] => 'Удаленные',
+                Product::STATUS['HIDDEN'] => 'Скрытые',
             ],
             'hideSearch' => true,
         ],
@@ -227,7 +261,7 @@ return [
             'data' => ArrayHelper::merge(
                 ['' => 'Любой'],
                 ArrayHelper::map(
-                    ProductBrand::find()->select(['name', 'id'])->asArray()->indexBy('id')->all(),
+                    ProductBrand::find()->select(['name', 'id'])->orderBy('name')->asArray()->indexBy('id')->all(),
                     'name', 'name'
                 )
             ),
@@ -235,7 +269,20 @@ return [
     ],
     [
         'class' => '\kartik\grid\DataColumn',
-        'attribute' => 'main_rubric_id',
+        'attribute' => 'rubricName',
+        'value' => function($model) {
+            return "{$model->rubricName} [{$model->main_rubric_id}]";
+        },
+        'filterType' => '\kartik\widgets\Select2',
+        'filterWidgetOptions' => [
+            'data' => ArrayHelper::merge(
+                ['' => 'Любая'],
+                ArrayHelper::map(
+                    ProductRubric::find()->select(['name', 'id'])->orderBy('name')->asArray()->indexBy('id')->all(),
+                    'name', 'name'
+                )
+            ),
+        ],
     ],
     [
         'class' => '\kartik\grid\DataColumn',
@@ -264,6 +311,20 @@ return [
     [
         'class' => '\kartik\grid\DataColumn',
         'attribute' => 'delivery_days',
+        'filterType' => '\kartik\widgets\Select2',
+        'filterWidgetOptions' => [
+            'data' => ArrayHelper::merge(
+                ArrayHelper::map(
+                    Product::find()->select('delivery_days')
+                        ->distinct()
+                        ->groupBy('delivery_days')
+                        ->orderBy('delivery_days')
+                        ->asArray()
+                        ->all(),
+                    'delivery_days', 'delivery_days'
+                ), ['' => 'Любой']
+            ),
+        ],
     ],
     [
         'class' => 'kartik\grid\ActionColumn',

@@ -53,6 +53,7 @@
                         'icon' => 'list',
                         'url' => '#',
                         'items' => [
+                            ['label' => 'Продукты', 'icon' => 'gift', 'url' => ['/catalog/crud']],
                             ['label' => 'Products', 'icon' => 'gift', 'url' => ['/catalog']],
                             ['label' => 'Rubrics', 'icon' => 'folder', 'url' => ['/catalog/admin/default/rubrics']],
                             ['label' => 'Create', 'icon' => 'plus', 'url' => ['/catalog/admin/default/create']],

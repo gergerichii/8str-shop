@@ -63,6 +63,8 @@ use yii\helpers\Url;
     }
     
     $('body').delegate("#product-quick-search-input", 'typeahead:open', correctSearchMenu);
+    
+    // $('#main_rubric_tree_filter').parent().parent().delegate('');
 </script>
 <?php \common\helpers\ViewHelper::endRegisterScript(); ?>
 
@@ -282,6 +284,27 @@ return [
                     'name', 'name'
                 )
             ),
+        ],
+    ],
+    [
+        'class' => '\kartik\grid\DataColumn',
+        'attribute' => 'main_rubric_id',
+        'value' => function($model) {
+            return "{$model->rubricName} [{$model->main_rubric_id}]";
+        },
+        'filterType' => '\kartik\tree\TreeViewInput',
+        'filterWidgetOptions' => [
+            'query' => ProductRubric::find()->addOrderBy('tree, left_key'),
+            'headingOptions' => ['label' => 'Каталог'],
+            'rootOptions' => ['label'=>'<i class="fa fa-tree text-success"></i>'],
+            'fontAwesome' => true,
+            'asDropdown' => true,
+            'multiple' => false,
+            'id' => 'main_rubric_tree_filter',
+            'showToolbar' => true,
+            'options' => [
+                'disabled' => false,
+            ],
         ],
     ],
     [

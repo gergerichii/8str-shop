@@ -3,7 +3,8 @@
 namespace common\modules\catalog\models;
 
 use common\base\models\nestedSets\NSActiveRecord;
-use common\modules\treeManager\models\TreeTrait;
+//use common\modules\treeManager\models\TreeTrait;
+use kartik\tree\models\TreeTrait;
 use corpsepk\yml\behaviors\YmlCategoryBehavior;
 use yii\behaviors\TimestampBehavior;
 use yii\db\Expression;

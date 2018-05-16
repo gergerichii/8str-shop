@@ -118,7 +118,7 @@ $config = [
             'class' => 'common\modules\rbac\Module',
         ],
         'treemanager' => [
-            'class' => '\common\modules\treeManager\Module',
+            'class' => '\kartik\tree\Module',
             'treeStructure' => [
                 'treeAttribute' => 'tree',
                 'leftAttribute' => 'left_key',

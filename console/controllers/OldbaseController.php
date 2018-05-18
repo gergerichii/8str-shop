@@ -293,12 +293,13 @@ class OldbaseController extends BaseController
         }
 
         $stActive = Product::STATUS['ACTIVE'];
-        $stHidden = Product::STATUS['HIDDEN'];
+//        $stHidden = Product::STATUS['HIDDEN'];
         /* Читаме продукты */
         $query = new Query();
         $query->select([
             '`n`.`nid` as `old_id`',
-            "if (`cat2`.`tid`, {$stActive}, {$stHidden}) as `status`",
+            "{$stActive} as `status`",
+//            "if (`cat2`.`tid`, {$stActive}, {$stHidden}) as `status`",
             '`n`.`title` as `name`',
             'CONCAT (`bod`.`body_value`, `bod`.`body_summary`) as `desc`',
             '`prod`.`sell_price` as `8str_price`',
@@ -388,22 +389,27 @@ class OldbaseController extends BaseController
             /** Проверяем на наличие продукта */
             $productIsExists = isset($localProducts[$src['name']]);
             if ($productIsExists) {
-                if ($localProducts[$src['name']]['old_id'] != $src['old_id']) {
-                    $this->notice("Продукт {$src['old_id']}:{$src['name']} пропущен. Такой уже есть.");
-                    if ($this->importCreateBadProductsFile) {
-                        $badProducts = [
-                            'Тип ошибки' => 'Дубль товара',
-                            'Номер товара' => $src['old_id'],
-                            'Название продукта' => $src['name'],
-                            'Номер дубля' => $localProducts[$src['name']]['old_id'],
-                            'Название дубля' => $src['name'],
-                        ];
-                    }
-                    continue;
-                } elseif(empty($localProducts[$src['name']]['processed'])) {
+                if(empty($localProducts[$src['name']]['processed'])) {
                     /** Обновляем продукт */
                     $product = Product::findOne($localProducts[$src['name']]['id']);
                     $product->scenario = 'oldbase';
+                    if ($localProducts[$src['name']]['old_id'] != $src['old_id']) {
+                        $this->notice("Продукт {$src['old_id']}:{$src['name']}. Такой уже есть. обновляем старый id");
+                        if ($this->importCreateBadProductsFile) {
+                            $badProducts = [
+                                'Тип ошибки' => 'Дубль товара',
+                                'Номер товара' => $src['old_id'],
+                                'Название продукта' => $src['name'],
+                                'Номер дубля' => $localProducts[$src['name']]['old_id'],
+                                'Название дубля' => $src['name'],
+                            ];
+                        }
+                        $product->old_id = $src['old_id'];
+                        if (!$product->save()) {
+                            $this->error("Продукт {$src['old_id']}:{$src['name']} не обновлен", $product->errors);
+                            continue;
+                        }
+                    }
                     if (empty($localProducts[$src['name']]['processed'])) {
                         $product->setAttributes($src);
                         /** Если есть рубрика для продукта, то присоединяем продукт к ней */

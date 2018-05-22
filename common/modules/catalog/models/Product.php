@@ -362,7 +362,7 @@ class Product extends BaseActiveRecord implements CartElement
             'market_upload' => 'Выгружать на маркет',
             'files' => 'Файлы',
             'delivery_time' => 'Срок доставки',
-            'delivery_days' => 'Срок доставки',
+            'delivery_days' => 'Срок доставки (яндекс)',
             'created_at' => 'Создан',
             'modified_at' => 'Отредактирован',
             'creator_id' => 'Создатель',

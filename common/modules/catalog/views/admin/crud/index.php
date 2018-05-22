@@ -27,12 +27,21 @@ CrudAsset::register($this);
                 'filterModel' => $searchModel,
                 'pjax'=>true,
                 'striped' => true,
-                'condensed' => true,
+                'bordered' => true,
+                'condensed' => false,
                 'responsive' => true,
-                'floatHeader' => true,
-                'perfectScrollbar' => true,
+                'responsiveWrap' => true,
+//                'floatHeader' => false,
+//                'perfectScrollbar' => false,
+                'resizableColumns' => false,
+//                'persistResize' => true,
                 'hover'=>true,
-                'containerOptions' => ['style' => ['height' => '510px']],
+//                'containerOptions' => ['style' => ['height' => '510px']],
+                'tableOptions' => [
+                    'style' => [
+                        'table-layout' => 'fixed',
+                    ]
+                ],
                 'toolbar'=> [
                     ['content'=>
                         Html::a('<i class="glyphicon glyphicon-plus"></i>', ['Добавить продукт'],
@@ -44,7 +53,6 @@ CrudAsset::register($this);
                     ],
                 ],
                 'panel' => [
-//                    'type' => 'primary',
                     'heading' => '<i class="glyphicon glyphicon-list"></i> Каталог продуктов',
                     'before' => 'test panel',
                     'after'=>BulkButtonWidget::widget([

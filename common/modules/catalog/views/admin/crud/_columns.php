@@ -23,6 +23,10 @@ use yii\helpers\Url;
     .tt-menu.tt-open {
         display: block;
     }
+    
+    .grid-view td {
+         white-space: normal;
+    }
 </style>
 <?php \common\helpers\ViewHelper::endRegisterCss() ?>
 
@@ -62,7 +66,36 @@ use yii\helpers\Url;
         return panel;
     }
     
-    $('body').delegate("#product-quick-search-input", 'typeahead:open', correctSearchMenu);
+    // let body = $('body');
+//    body.delegate("#product-quick-search-input", 'typeahead:open', correctSearchMenu);
+    
+    
+    // body.on('shown.bs.dropdown', function(e) {
+        // let found = e.relatedTarget.id.match(/^(?<name>.*?)-tree-input$/);
+        // if (found.length) {
+        //     let input = $('#' + found.groups.name + '-tree-input');
+        //     let menu = $('#' + found.groups.name + '-tree-input-menu');
+        //     let head = $(input).parents('div.floatThead-wrapper');
+        //     if (menu.parent()[0] !== head[0]) {
+        //         $(head).append(menu);
+        //     }
+        //     let inputOffset = $(input).offset();
+        //     $(menu).css({display: 'block', width: '500px'})
+        //         .offset(function() {
+        //             let pos = {};
+        //             pos.left = inputOffset.left;
+        //             pos.top = inputOffset.top + $(input).outerHeight() + 6;
+        //             return pos;
+        //         });
+        // }
+    // });
+    // body.on('hidden.bs.dropdown', function(e) {
+        // let found = e.relatedTarget.id.match(/^(?<name>.*?)-tree-input$/);
+        // if (found.length) {
+        //     let menu = $('#' + found.groups.name + '-tree-input-menu');
+        //     $(menu).css({display: 'none'});
+        // }
+    // });
     
     // $('#main_rubric_tree_filter').parent().parent().delegate('');
 </script>
@@ -71,13 +104,42 @@ use yii\helpers\Url;
 <?php
 return [
     [
-        'class' => 'kartik\grid\CheckboxColumn',
-        'width' => '20px',
+        'class' => 'kartik\grid\ActionColumn',
+        'dropdown' => false,
+        'vAlign' => 'middle',
+        'urlCreator' => function($action, $model, $key, $index) {
+            return Url::to([$action, 'id' => $key]);
+        },
+        'viewOptions' => ['role' => 'modal-remote', 'title' => 'View', 'data-toggle' => 'tooltip'],
+        'updateOptions' => ['role' => 'modal-remote', 'title' => 'Update', 'data-toggle' => 'tooltip'],
+        'deleteOptions' => [
+            'role' => 'modal-remote', 'title' => 'Delete',
+            'data-confirm' => FALSE, 'data-method' => FALSE,// for overide yii data api
+            'data-request-method' => 'post',
+            'data-toggle' => 'tooltip',
+            'data-confirm-title' => 'Are you sure?',
+            'data-confirm-message' => 'Are you sure want to delete this item'
+        ],
     ],
     [
-        'class' => 'kartik\grid\RadioColumn',
-        'width' => '36px',
-        'headerOptions' => ['class' => 'kartik-sheet-style'],
+        'class' => 'kartik\grid\SerialColumn',
+        'width' => '30px',
+    ],
+//    [
+//        'class' => 'kartik\grid\RadioColumn',
+//        'width' => '36px',
+//        'headerOptions' => ['class' => 'kartik-sheet-style'],
+//    ],
+    [
+        'class' => 'kartik\grid\CheckboxColumn',
+        'width' => '28px',
+    ],
+    [
+        'class'=>'\kartik\grid\DataColumn',
+        'attribute'=>'id',
+        'width' => '83px',
+        'vAlign' => 'middle',
+        'hAlign' => 'center',
     ],
     [
         'class' => 'kartik\grid\ExpandRowColumn',
@@ -91,19 +153,12 @@ return [
         'headerOptions' => ['class' => 'kartik-sheet-style'],
         'expandOneOnly' => true,
     ],
-    
-//    [
-//        'class' => 'kartik\grid\SerialColumn',
-//        'width' => '30px',
-//    ],
-    [
-        'class'=>'\kartik\grid\DataColumn',
-        'attribute'=>'id',
-    ],
     [
         'class' => 'kartik\grid\EditableColumn',
         'attribute' => 'name',
+        'width' => '500px',
         'vAlign' => 'middle',
+        'hAlign' => 'center',
         'editableOptions' => function ($model, $key, $index) {
             return [
                 'header' => 'Название',
@@ -148,14 +203,76 @@ return [
             'pluginOptions' => [
                 'highlight' => true,
                 'hint' => true,
-                'menu' => new \yii\web\JsExpression("createSearchMenu()"),
+//                'menu' => new \yii\web\JsExpression("createSearchMenu()"),
                 'minLength' => 2,
             ],
             'container' => ['class' => 'main-search-field'],
         ],
     ],
     [
+        'class' => '\kartik\grid\DataColumn',
+        'attribute' => 'model',
+        'width' => '200px',
+        'vAlign' => 'middle',
+        'hAlign' => 'center',
+    ],
+    [
+        'class' => '\kartik\grid\DataColumn',
+        'attribute' => 'brandName',
+        'width' => '180px',
+        'vAlign' => 'middle',
+        'hAlign' => 'center',
+        'value' => function ($model) {
+            return "[{$model->brand_id}] {$model->brandName}";
+        },
+        'filterType' => '\kartik\widgets\Select2',
+        'filterWidgetOptions' => [
+            'data' => ArrayHelper::merge(
+                ['' => 'Любой'],
+                ArrayHelper::map(
+                    ProductBrand::find()->select(['name', 'id'])->orderBy('name')->asArray()->indexBy('id')->all(),
+                    'name', 'name'
+                )
+            ),
+        ],
+    ],
+    [
+        'class' => '\kartik\grid\DataColumn',
+        'attribute' => 'main_rubric_id',
+        'width' => '200px',
+        'vAlign' => 'middle',
+        'hAlign' => 'center',
+        'value' => function($model) {
+            $productCounts = ProductRubric::getProductsCounts();
+            $count = isset($productCounts[$model->mainRubric->id]) ? $productCounts[$model->mainRubric->id] : '-';
+            return "[{$model->main_rubric_id}] {$model->rubricName} ({$count})";
+        },
+        'filterType' => '\kartik\tree\TreeViewInput',
+        'filterWidgetOptions' => [
+            'query' => ProductRubric::find()->addOrderBy('tree, left_key')->withProductsCountsInName(),
+            'headingOptions' => ['label' => 'Каталог'],
+            'rootOptions' => ['label'=>'<i class="fa fa-tree text-success"></i>'],
+            'fontAwesome' => true,
+            'asDropdown' => true,
+            'multiple' => false,
+            'showToolbar' => false,
+            'options' => [
+                'disabled' => false,
+            ],
+            'dropdownConfig' => [
+                'dropdown' => [
+                    'style' => [
+                        'width' => '430px',
+                    ],
+                ],
+            ],
+        ],
+    ],
+    [
         'attribute' => 'status',
+        'width' => '140px',
+        'vAlign' => 'middle',
+        'hAlign' => 'center',
         'value' => function ($model, $key, $index, $widget) {
             $statuses = [
                 Product::STATUS['ACTIVE'] => 'Активный',
@@ -178,10 +295,14 @@ return [
     [
         'class' => '\kartik\grid\DataColumn',
         'attribute' => 'count',
+        'width' => '100px',
+        'vAlign' => 'middle',
+        'hAlign' => 'center',
     ],
     [
         'attribute' => 'show_on_home',
         'class' => 'kartik\grid\BooleanColumn',
+        'width' => '100px',
         'trueLabel' => 'Да',
         'falseLabel' => 'Нет',
         'filterType' => '\kartik\widgets\Select2',
@@ -224,116 +345,23 @@ return [
             'hideSearch' => true,
         ],
     ],
-    [
-        'class' => '\kartik\grid\DataColumn',
-        'attribute' => 'files',
-    ],
+//    [
+//        'class' => '\kartik\grid\DataColumn',
+//        'attribute' => 'files',
+//    ],
     [
         'class' => '\kartik\grid\DataColumn',
         'attribute' => 'delivery_time',
-    ],
-    [
-        'class' => '\kartik\grid\DataColumn',
-        'attribute' => 'created_at',
-    ],
-    [
-        'class' => '\kartik\grid\DataColumn',
-        'attribute' => 'modified_at',
-    ],
-    [
-        'class' => '\kartik\grid\DataColumn',
-        'attribute' => 'creator_id',
-    ],
-    [
-        'class' => '\kartik\grid\DataColumn',
-        'attribute' => 'modifier_id',
-    ],
-    [
-        'class' => '\kartik\grid\DataColumn',
-        'attribute' => 'product_type_id',
-    ],
-    [
-        'class' => '\kartik\grid\DataColumn',
-        'attribute' => 'brandName',
-        'value' => function ($model) {
-            return "{$model->brandName} [{$model->brand_id}]";
-        },
-        'filterType' => '\kartik\widgets\Select2',
-        'filterWidgetOptions' => [
-            'data' => ArrayHelper::merge(
-                ['' => 'Любой'],
-                ArrayHelper::map(
-                    ProductBrand::find()->select(['name', 'id'])->orderBy('name')->asArray()->indexBy('id')->all(),
-                    'name', 'name'
-                )
-            ),
-        ],
-    ],
-    [
-        'class' => '\kartik\grid\DataColumn',
-        'attribute' => 'rubricName',
-        'value' => function($model) {
-            return "{$model->rubricName} [{$model->main_rubric_id}]";
-        },
-        'filterType' => '\kartik\widgets\Select2',
-        'filterWidgetOptions' => [
-            'data' => ArrayHelper::merge(
-                ['' => 'Любая'],
-                ArrayHelper::map(
-                    ProductRubric::find()->select(['name', 'id'])->orderBy('name')->asArray()->indexBy('id')->all(),
-                    'name', 'name'
-                )
-            ),
-        ],
-    ],
-    [
-        'class' => '\kartik\grid\DataColumn',
-        'attribute' => 'main_rubric_id',
-        'value' => function($model) {
-            return "{$model->rubricName} [{$model->main_rubric_id}]";
-        },
-        'filterType' => '\kartik\tree\TreeViewInput',
-        'filterWidgetOptions' => [
-            'query' => ProductRubric::find()->addOrderBy('tree, left_key'),
-            'headingOptions' => ['label' => 'Каталог'],
-            'rootOptions' => ['label'=>'<i class="fa fa-tree text-success"></i>'],
-            'fontAwesome' => true,
-            'asDropdown' => true,
-            'multiple' => false,
-            'id' => 'main_rubric_tree_filter',
-            'showToolbar' => true,
-            'options' => [
-                'disabled' => false,
-            ],
-        ],
-    ],
-    [
-        'class' => '\kartik\grid\DataColumn',
-        'attribute' => 'old_id',
-    ],
-    [
-        'class' => '\kartik\grid\DataColumn',
-        'attribute' => 'old_rubric_id',
-    ],
-    [
-        'class' => '\kartik\grid\DataColumn',
-        'attribute' => 'model',
-    ],
-    [
-        'class' => '\kartik\grid\DataColumn',
-        'attribute' => 'vendor_code',
-    ],
-    [
-        'class' => '\kartik\grid\DataColumn',
-        'attribute' => 'barcode',
-    ],
-    [
-        'class' => '\kartik\grid\DataColumn',
-        'attribute' => 'warranty',
+        'width' => '80px',
+        'vAlign' => 'middle',
+        'hAlign' => 'center',
     ],
     [
         'class' => '\kartik\grid\DataColumn',
         'attribute' => 'delivery_days',
+        'width' => '113px',
+        'vAlign' => 'middle',
+        'hAlign' => 'center',
         'filterType' => '\kartik\widgets\Select2',
         'filterWidgetOptions' => [
             'data' => ArrayHelper::merge(
@@ -349,22 +377,50 @@ return [
             ),
         ],
     ],
+//    [
+//        'class' => '\kartik\grid\DataColumn',
+//        'attribute' => 'created_at',
+//    ],
+//    [
+//        'class' => '\kartik\grid\DataColumn',
+//        'attribute' => 'modified_at',
+//    ],
+//    [
+//        'class' => '\kartik\grid\DataColumn',
+//        'attribute' => 'creator_id',
+//    ],
+//    [
+//        'class' => '\kartik\grid\DataColumn',
+//        'attribute' => 'modifier_id',
+//    ],
+//    [
+//        'class' => '\kartik\grid\DataColumn',
+//        'attribute' => 'product_type_id',
+//    ],
     [
-        'class' => 'kartik\grid\ActionColumn',
-        'dropdown' => false,
+        'class' => '\kartik\grid\DataColumn',
+        'attribute' => 'old_id',
+        'width' => '83px',
         'vAlign' => 'middle',
-        'urlCreator' => function($action, $model, $key, $index) {
-            return Url::to([$action, 'id' => $key]);
-        },
-        'viewOptions' => ['role' => 'modal-remote', 'title' => 'View', 'data-toggle' => 'tooltip'],
-        'updateOptions' => ['role' => 'modal-remote', 'title' => 'Update', 'data-toggle' => 'tooltip'],
-        'deleteOptions' => [
-            'role' => 'modal-remote', 'title' => 'Delete',
-            'data-confirm' => FALSE, 'data-method' => FALSE,// for overide yii data api
-            'data-request-method' => 'post',
-            'data-toggle' => 'tooltip',
-            'data-confirm-title' => 'Are you sure?',
-            'data-confirm-message' => 'Are you sure want to delete this item'
-        ],
+        'hAlign' => 'center',
     ],
+    [
+        'class' => '\kartik\grid\DataColumn',
+        'width' => '83px',
+        'vAlign' => 'middle',
+        'hAlign' => 'center',
+        'attribute' => 'old_rubric_id',
+    ],
+//    [
+//        'class' => '\kartik\grid\DataColumn',
+//        'attribute' => 'vendor_code',
+//    ],
+//    [
+//        'class' => '\kartik\grid\DataColumn',
+//        'attribute' => 'barcode',
+//    ],
+//    [
+//        'class' => '\kartik\grid\DataColumn',
+//        'attribute' => 'warranty',
+//    ],
 ];

@@ -26,13 +26,23 @@ abstract class BaseDefaultQuery extends ActiveQuery
      * Эта функция должна задавать настройки для запроса по умолчанию
      */
     abstract protected function _prepareQuery();
+    
+    /**
+     * @param $models
+     *
+     * @return mixed
+     */
+    protected function _prepareModels($models) {
+        return $models;
+    }
+    
     /**
      * @inheritdoc
      */
     public function all($db = null)
     {
         $this->_prepareQuery();
-        return parent::all($db);
+        return $this->_prepareModels(parent::all($db));
     }
 
     /**
@@ -41,7 +51,7 @@ abstract class BaseDefaultQuery extends ActiveQuery
     public function one($db = null)
     {
         $this->_prepareQuery();
-        return parent::one($db);
+        return $this->_prepareModels(parent::one($db));
     }
 
     public function forFrontEnd() {

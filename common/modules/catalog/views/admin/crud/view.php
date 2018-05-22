@@ -13,7 +13,7 @@ use yii\widgets\DetailView;
             'id',
             'name',
             'title',
-            'desc:ntext',
+            'desc:raw',
             'status',
             'count',
             'show_on_home',

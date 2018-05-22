@@ -144,6 +144,17 @@ class ProductSearch extends Product
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
         ]);
+        
+        $sort = $dataProvider->getSort()->attributes;
+        $sort['main_rubric_id'] = [
+            'asc' => ['mr.name' => SORT_ASC],
+            'desc' => ['mr.name' => SORT_DESC],
+        ];
+        $dataProvider->setSort([
+            'attributes' => $sort,
+        ]);
+        
+        
         return $dataProvider;
     }
     

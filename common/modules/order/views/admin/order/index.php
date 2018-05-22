@@ -321,7 +321,7 @@ $order = yii::$app->order;
                                 <label>&nbsp;</label>
                                 <div>
                                     <input class="btn btn-success" type="submit" value="<?=Yii::t('order', 'Search');?>"  />
-                                    <a href="<?=Url::toRoute(['/order/order/index', 'tab' => $tab]);?>" class="btn btn-default"><i class="glyphicon glyphicon-remove-sign"></i></a>
+                                    <a href="<?=Url::toRoute(['/order/order/index', 'tab' => $tabs]);?>" class="btn btn-default"><i class="glyphicon glyphicon-remove-sign"></i></a>
                                 </div>
                              </div>
                         </form>
@@ -334,8 +334,8 @@ $order = yii::$app->order;
                 <div class="tabs row">
                     <div class="col-md-6">
                         <ul class="nav nav-tabs" role="tablist">
-                            <li <?php if($tab == 'orders') { ?>class="active"<?php } ?>><a href="<?=Url::toRoute(['/order/order/index', 'tab' => 'orders']);?>"><?=yii::t('order', 'Orders');?></a></li>
-                                <li <?php if($tab == 'assigments') { ?>class="active"<?php } ?>><a href="<?=Url::toRoute(['/order/order/index', 'tab' => 'assigments']);?>"><?=yii::t('order', 'Assigments');?></a></li>
+                            <li <?php if($tabs == 'orders') { ?>class="active"<?php } ?>><a href="<?=Url::toRoute(['/order/order/index', 'tab' => 'orders']);?>"><?=yii::t('order', 'Orders');?></a></li>
+                                <li <?php if($tabs == 'assigments') { ?>class="active"<?php } ?>><a href="<?=Url::toRoute(['/order/order/index', 'tab' => 'assigments']);?>"><?=yii::t('order', 'Assigments');?></a></li>
                                 </ul>
                             </div>
                         </div>

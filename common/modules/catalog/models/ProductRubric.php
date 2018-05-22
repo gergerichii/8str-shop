@@ -2,12 +2,20 @@
 
 namespace common\modules\catalog\models;
 
+use common\base\CacheTags;
 use common\base\models\nestedSets\NSActiveRecord;
-//use common\modules\treeManager\models\TreeTrait;
-use kartik\tree\models\TreeTrait;
+use common\modules\catalog\models\queries\ProductRubricQuery;
 use corpsepk\yml\behaviors\YmlCategoryBehavior;
+use kartik\tree\models\TreeTrait;
 use yii\behaviors\TimestampBehavior;
+use yii\caching\ChainedDependency;
+use yii\caching\DbDependency;
+use yii\caching\DbQueryDependency;
+use yii\caching\TagDependency;
 use yii\db\Expression;
+use yii\helpers\ArrayHelper;
+
+//use common\modules\treeManager\models\TreeTrait;
 
 /**
  * This is the model class for table "product_rubric".
@@ -158,13 +166,13 @@ class ProductRubric extends NSActiveRecord
 
         return $behaviors;
     }
-
+    
     /**
-     * @inheritdoc
+     * @return \common\base\models\nestedSets\NSActiveQuery|\common\modules\catalog\models\queries\ProductRubricQuery
      */
     public static function find()
     {
-        return parent::find();
+        return new ProductRubricQuery(get_called_class());
     }
 
     /**
@@ -210,6 +218,58 @@ class ProductRubric extends NSActiveRecord
     public function getProducts()
     {
         return $this->hasMany(Product::class, ['id' => 'product_id'])->viaTable('product2product_rubric', ['rubric_id' => 'id']);
+    }
+    
+    /**
+     * @return array
+     * @throws \Throwable
+     */
+    public static function getProductsCounts() {
+        static $ret;
+        
+        if (empty($ret)) {
+            $dependency = new ChainedDependency([
+                'dependencies' => [
+                    new DbDependency([
+                        'sql' => \Yii::$app->db->createCommand(
+                            "SELECT `UPDATE_TIME` FROM `INFORMATION_SCHEMA`.`PARTITIONS` WHERE `TABLE_SCHEMA` = 'tima_shop' AND `TABLE_NAME` = 'product'"
+                        )->sql
+                    ]),
+                    new DbDependency([
+                        'sql' => \Yii::$app->db->createCommand(
+                            "SELECT `UPDATE_TIME` FROM `INFORMATION_SCHEMA`.`PARTITIONS` WHERE `TABLE_SCHEMA` = 'tima_shop' AND `TABLE_NAME` = 'product_rubric'"
+                        )->sql
+                    ]),
+                    new DbDependency([
+                        'sql' => \Yii::$app->db->createCommand(
+                            "SELECT `UPDATE_TIME` FROM `INFORMATION_SCHEMA`.`PARTITIONS` WHERE `TABLE_SCHEMA` = 'tima_shop' AND `TABLE_NAME` = 'product2product_rubric'"
+                        )->sql
+                    ]),
+                    new TagDependency(['tags' => [
+                        CacheTags::CATALOG, CacheTags::PRODUCTS, CacheTags::RUBRICS,
+                    ]]),
+                ]
+            ]);
+            
+            /** @TODO: отрефакторить под активрекорд или PDO */
+            $ret = \Yii::$app->db->cache(function($db){
+                /** @var \yii\db\Connection $db */
+                return $db->createCommand("
+                    SELECT `pr`.`id`,
+                        (
+                            SELECT DISTINCT count(`prpz`.`id`) FROM `product_rubric` `prpz`
+                                LEFT JOIN `product2product_rubric` `p2pr` ON `prpz`.`id` = `p2pr`.`rubric_id`
+                                LEFT JOIN `product` `p` ON `prpz`.`id` = `p`.`main_rubric_id`
+                            WHERE `prpz`.`left_key` >= `pr`.`left_key` AND `prpz`.`right_key` <= `pr`.`right_key` AND `p`.`id` IS NOT NULL AND `p`.`status` = 1
+                    
+                        ) AS `count`
+                    FROM `product_rubric` `pr`
+                ")->queryAll();
+            }, 0, $dependency);
+            $ret = ArrayHelper::map($ret, 'id', 'count');
+        }
+        
+        return $ret;
     }
 
     /**

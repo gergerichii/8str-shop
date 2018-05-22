@@ -2,15 +2,18 @@
 
 namespace common\modules\catalog\models\queries;
 
-use common\base\models\BaseDefaultQuery;
+use common\base\models\BaseDefaultQueryTrait;
+use yii\db\ActiveQuery;
 
 /**
  * This is the ActiveQuery class for [[ProductType]].
  *
  * @see ProductType
  */
-class ProductTypeQuery extends BaseDefaultQuery
+class ProductTypeQuery extends ActiveQuery
 {
+    use BaseDefaultQueryTrait;
+    
     /*public function active()
     {
         return $this->andWhere('[[status]]=1');

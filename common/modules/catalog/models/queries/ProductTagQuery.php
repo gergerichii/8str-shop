@@ -2,16 +2,19 @@
 
 namespace common\modules\catalog\models\queries;
 
-use common\base\models\BaseDefaultQuery;
+use common\base\models\BaseDefaultQueryTrait;
 use common\modules\catalog\models\ProductTag;
+use yii\db\ActiveQuery;
 
 /**
  * This is the ActiveQuery class for [[ProductTag]].
  *
  * @see ProductTag
  */
-class ProductTagQuery extends BaseDefaultQuery
+class ProductTagQuery extends ActiveQuery
 {
+    use BaseDefaultQueryTrait;
+ 
     /**
      * @return $this
      */

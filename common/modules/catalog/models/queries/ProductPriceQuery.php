@@ -2,7 +2,8 @@
 
 namespace common\modules\catalog\models\queries;
 
-use common\base\models\BaseDefaultQuery;
+use common\base\models\BaseDefaultQueryTrait;
+use yii\db\ActiveQuery;
 use yii\db\Expression;
 
 /**
@@ -10,8 +11,10 @@ use yii\db\Expression;
  *
  * @see ProductPrice
  */
-class ProductPriceQuery extends BaseDefaultQuery
+class ProductPriceQuery extends ActiveQuery
 {
+    use BaseDefaultQueryTrait;
+    
     public $isRelated = false;
 
     /**

@@ -1,14 +1,18 @@
 <?php
 
 namespace common\models\entities;
+use common\base\models\BaseDefaultQueryTrait;
+use yii\db\ActiveQuery;
 
 /**
  * This is the ActiveQuery class for [[UserAddresses]].
  *
  * @see UserAddresses
  */
-class UserAddressesQuery extends \common\base\models\BaseDefaultQuery
+class UserAddressesQuery extends ActiveQuery
 {
+    use BaseDefaultQueryTrait;
+    
     /*public function active()
     {
         return $this->andWhere('[[status]]=1');

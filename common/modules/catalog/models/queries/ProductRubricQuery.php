@@ -2,7 +2,8 @@
 
 namespace common\modules\catalog\models\queries;
 
-use common\base\models\BaseDefaultQuery;
+use common\base\models\BaseDefaultQueryTrait;
+use common\base\models\nestedSets\NSActiveQuery;
 use common\modules\catalog\models\Product;
 use common\modules\catalog\models\ProductRubric;
 
@@ -12,8 +13,10 @@ use common\modules\catalog\models\ProductRubric;
  * @see Product
  *
  */
-class ProductRubricQuery extends BaseDefaultQuery
+class ProductRubricQuery extends NSActiveQuery
 {
+    use BaseDefaultQueryTrait;
+    
     public $withProductsCountsInName = false;
     
     public function active() {

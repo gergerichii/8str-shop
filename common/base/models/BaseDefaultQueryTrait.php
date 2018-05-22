@@ -2,23 +2,12 @@
 /**
  * Created by PhpStorm.
  * User: USER
- * Date: 16.01.2018
- * Time: 16:24
+ * Date: 22.05.2018
+ * Time: 19:53
  */
 
 namespace common\base\models;
-
-use yii\db\ActiveQuery;
-
-/**
- * Class BaseDefaultQuery
- *
- * @package common\models\entities
- *
- *
- */
-abstract class BaseDefaultQuery extends ActiveQuery
-{
+trait BaseDefaultQueryTrait {
     /** @var bool Показывает, показывается ли модель на фронт энде */
     public $forFrontEnd = false;
 

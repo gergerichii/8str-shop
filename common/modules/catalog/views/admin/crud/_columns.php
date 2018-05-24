@@ -1,5 +1,7 @@
 <?php
 
+use common\dependencies\DependencyFactory;
+use common\dependencies\RubricsDependency;
 use common\modules\catalog\models\Product;
 use common\modules\catalog\models\ProductBrand;
 use common\modules\catalog\models\ProductRubric;
@@ -102,6 +104,11 @@ use yii\helpers\Url;
 <?php \common\helpers\ViewHelper::endRegisterScript(); ?>
 
 <?php
+
+$rubricsQuery = ProductRubric::find()
+    ->addOrderBy('tree, left_key')
+    ->setCacheDependency(DependencyFactory::getDependency('rubrics'))
+    ->withProductsCountsInName();
 return [
     [
         'class' => 'kartik\grid\ActionColumn',
@@ -238,6 +245,7 @@ return [
     ],
     [
         'class' => '\kartik\grid\DataColumn',
+//        'class' => '\kartik\grid\EditableColumn',
         'attribute' => 'main_rubric_id',
         'width' => '200px',
         'vAlign' => 'middle',
@@ -247,9 +255,33 @@ return [
             $count = isset($productCounts[$model->mainRubric->id]) ? $productCounts[$model->mainRubric->id] : '-';
             return "[{$model->main_rubric_id}] {$model->rubricName} ({$count})";
         },
+
+//        'editableOptions' => function ($model, $key, $index) use ($rubricsQuery) {
+//            return [
+//                'header' => 'Основная рубрика',
+//                'size' => 'md',
+//                'formOptions'=>['action' => ['edit-grid-product']],
+//                'inputType' => 'widget',
+//                'widgetClass' => '\kartik\tree\TreeViewInput',
+//                'options' => [
+//                    'query' => $rubricsQuery,
+//                    'multiple' => false,
+//                    'dropdownConfig' => [
+//                        'dropdown' => [
+//                            'style' => [
+//                                'width' => '430px',
+//                            ],
+//                        ],
+//                    ],
+//                ]
+//            ];
+//        },
+//
+//        'refreshGrid' => true,
+        
         'filterType' => '\kartik\tree\TreeViewInput',
         'filterWidgetOptions' => [
-            'query' => ProductRubric::find()->addOrderBy('tree, left_key')->withProductsCountsInName(),
+            'query' => $rubricsQuery,
             'headingOptions' => ['label' => 'Каталог'],
             'rootOptions' => ['label'=>'<i class="fa fa-tree text-success"></i>'],
             'fontAwesome' => true,

@@ -2,7 +2,7 @@
 
 namespace common\modules\catalog\models;
 
-use common\base\CacheTags;
+use common\dependencies\CacheTags;
 use common\base\models\nestedSets\NSActiveRecord;
 use common\modules\catalog\models\queries\ProductRubricQuery;
 use corpsepk\yml\behaviors\YmlCategoryBehavior;
@@ -10,7 +10,6 @@ use kartik\tree\models\TreeTrait;
 use yii\behaviors\TimestampBehavior;
 use yii\caching\ChainedDependency;
 use yii\caching\DbDependency;
-use yii\caching\DbQueryDependency;
 use yii\caching\TagDependency;
 use yii\db\Expression;
 use yii\helpers\ArrayHelper;
@@ -169,6 +168,7 @@ class ProductRubric extends NSActiveRecord
     
     /**
      * @return \common\base\models\nestedSets\NSActiveQuery|\common\modules\catalog\models\queries\ProductRubricQuery
+     * @throws \yii\base\ErrorException
      */
     public static function find()
     {

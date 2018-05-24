@@ -6,7 +6,7 @@
  * Time: 13:51
  */
 
-namespace common\base;
+namespace common\dependencies;
 class CacheTags {
     const CATALOG = 'catalog';
     const PRODUCTS = 'products';

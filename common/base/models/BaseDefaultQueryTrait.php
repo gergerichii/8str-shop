@@ -10,6 +10,8 @@ namespace common\base\models;
 trait BaseDefaultQueryTrait {
     /** @var bool Показывает, показывается ли модель на фронт энде */
     public $forFrontEnd = false;
+    
+    public $queryCacheDependency = null;
 
     /**
      * Эта функция должна задавать настройки для запроса по умолчанию
@@ -45,6 +47,11 @@ trait BaseDefaultQueryTrait {
 
     public function forFrontEnd() {
         $this->forFrontEnd = true;
+        return $this;
+    }
+    
+    public function setCacheDependency($dependency) {
+        $this->queryCacheDependency = $dependency;
         return $this;
     }
 }

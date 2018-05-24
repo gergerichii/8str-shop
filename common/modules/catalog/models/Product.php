@@ -2,6 +2,7 @@
 
 namespace common\modules\catalog\models;
 
+use common\behaviors\JsonBehaviour;
 use common\helpers\ProductHelper;
 use common\models\entities\User;
 use common\modules\cart\interfaces\CartElement;
@@ -90,6 +91,7 @@ use yii\helpers\ArrayHelper;
  * @property string                   $barcode     [varchar(150)]
  * @property string                   $warranty    [varchar(30)]
  * @property int                      $delivery_days [varchar(5)]
+ * @property string                   $short_desc    [varchar(500)]
  *
  * TODO: Добавить основную рубрику
  *
@@ -157,6 +159,9 @@ class Product extends BaseActiveRecord implements CartElement
 
     public function behaviors() {
         return [
+            'json' => [
+                'class' => JsonBehaviour::class,
+            ],
             'blameable' => [
                 'class' => BlameableBehavior::class,
                 'createdByAttribute' => 'creator_id',
@@ -252,7 +257,7 @@ class Product extends BaseActiveRecord implements CartElement
     public function scenarios() {
         return array(
             'default' => [
-                '!id', 'name', 'title', 'desc', 'status', 'count',
+                '!id', 'name', 'title', 'desc', 'short_desc', 'status', 'count',
                 'show_on_home', 'on_list_top', 'market_upload', '!files',
                 'delivery_time', 'delivery_days', 'created_at', 'modified_at', 'creator_id',
                 'main_rubric_id', 'model', 'vendor_code', 'barcode', 'warranty',
@@ -264,7 +269,7 @@ class Product extends BaseActiveRecord implements CartElement
                 'old_id', 'old_rubric_id'  //TODO: Удалить, когда запустится сайт
             ],
             'oldbase' => [
-                '!id', 'name', 'title', 'desc', 'status', 'count',
+                '!id', 'name', 'title', 'desc', 'short_desc', 'status', 'count',
                 'show_on_home', 'on_list_top', 'market_upload', '!files',
                 'delivery_time', 'delivery_days', 'created_at', 'modified_at', 'creator_id',
                 'main_rubric_id', 'warranty',
@@ -305,6 +310,7 @@ class Product extends BaseActiveRecord implements CartElement
 
             [['name', 'ext_attributes', 'files', '1c_data', 'creator_id', 'modifier_id', 'model'], 'required', 'except' => 'search'],
             [['desc', 'model', 'vendor_code', 'barcode', 'warranty'], 'string'],
+            [['short_desc'], 'string', 'max' => 500],
             [['status', 'count', 'delivery_time', 'show_on_home', 'on_list_top', 'market_upload',
                 'creator_id', 'modifier_id', 'product_type_id', 'brand_id', 'main_rubric_id'], 'integer'],
             [['created_at', 'modified_at'], 'safe'],
@@ -355,6 +361,8 @@ class Product extends BaseActiveRecord implements CartElement
             'name' => 'Название',
             'title' => 'Title',
             'desc' => 'Описание',
+            'short_desc' => 'Краткое описание',
+            'model' => 'Модель',
             'status' => 'Статус',
             'count' => 'Количество',
             'show_on_home' => 'Показывать на главной',
@@ -375,7 +383,10 @@ class Product extends BaseActiveRecord implements CartElement
             'fieldForFuturePrice' => 'Field for future price',
             'brandName' => 'Имя брэнда',
             'priceValue' => 'Цена',
-            ''
+            'vendor_code' => 'Код производителя',
+            'barcode' => 'Штрихкод',
+            'warranty' => 'Гарантия',
+            'old_id' => 'id на старом сайте',
         ];
     }
 

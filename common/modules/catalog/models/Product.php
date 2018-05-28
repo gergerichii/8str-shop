@@ -92,8 +92,7 @@ use yii\helpers\ArrayHelper;
  * @property string                   $warranty    [varchar(30)]
  * @property int                      $delivery_days [varchar(5)]
  * @property string                   $short_desc    [varchar(500)]
- *
- * TODO: Добавить основную рубрику
+ * @property string                   $tech_desc
  *
  * TODO: Добавить сеттер для прайса и скидки с автоматической генерацией соответствующих записей в базе
  *
@@ -257,7 +256,7 @@ class Product extends BaseActiveRecord implements CartElement
     public function scenarios() {
         return array(
             'default' => [
-                '!id', 'name', 'title', 'desc', 'short_desc', 'status', 'count',
+                '!id', 'name', 'title', 'desc', 'short_desc', 'tech_desc', 'status', 'count',
                 'show_on_home', 'on_list_top', 'market_upload', '!files',
                 'delivery_time', 'delivery_days', 'created_at', 'modified_at', 'creator_id',
                 'main_rubric_id', 'model', 'vendor_code', 'barcode', 'warranty',
@@ -269,7 +268,7 @@ class Product extends BaseActiveRecord implements CartElement
                 'old_id', 'old_rubric_id'  //TODO: Удалить, когда запустится сайт
             ],
             'oldbase' => [
-                '!id', 'name', 'title', 'desc', 'short_desc', 'status', 'count',
+                '!id', 'name', 'title', 'desc', 'short_desc', 'tech_desc', 'status', 'count',
                 'show_on_home', 'on_list_top', 'market_upload', '!files',
                 'delivery_time', 'delivery_days', 'created_at', 'modified_at', 'creator_id',
                 'main_rubric_id', 'warranty',
@@ -281,7 +280,7 @@ class Product extends BaseActiveRecord implements CartElement
                 'old_id', 'old_rubric_id'  //TODO: Удалить, когда запустится сайт
             ],
             'search' => [
-                'id', 'name', 'title', 'desc', 'status', 'count',
+                'id', 'name', 'title', 'desc', 'tech_desc', 'status', 'count',
                 'show_on_home', 'on_list_top', 'market_upload', 'files',
                 'delivery_time', 'delivery_days', 'created_at', 'modified_at', 'creator_id',
                 'main_rubric_id', 'warranty',
@@ -309,7 +308,7 @@ class Product extends BaseActiveRecord implements CartElement
             [['name'], 'trim'],
 
             [['name', 'ext_attributes', 'files', '1c_data', 'creator_id', 'modifier_id', 'model'], 'required', 'except' => 'search'],
-            [['desc', 'model', 'vendor_code', 'barcode', 'warranty'], 'string'],
+            [['desc', 'tech_desc', 'model', 'vendor_code', 'barcode', 'warranty'], 'string'],
             [['short_desc'], 'string', 'max' => 500],
             [['status', 'count', 'delivery_time', 'show_on_home', 'on_list_top', 'market_upload',
                 'creator_id', 'modifier_id', 'product_type_id', 'brand_id', 'main_rubric_id'], 'integer'],
@@ -361,6 +360,7 @@ class Product extends BaseActiveRecord implements CartElement
             'name' => 'Название',
             'title' => 'Title',
             'desc' => 'Описание',
+            'tech_desc' => 'Технические характеристики',
             'short_desc' => 'Краткое описание',
             'model' => 'Модель',
             'status' => 'Статус',

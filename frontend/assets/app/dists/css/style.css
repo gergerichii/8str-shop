@@ -1763,7 +1763,7 @@ select.input-lg {
 
 .tab-container.left .nav-tabs > li > a,
 .tab-container.right .nav-tabs > li > a {
-    min-width: 280px;
+    min-width: 333px;
 }
 
 .tab-container .nav-tabs > li > a:hover {
@@ -1821,7 +1821,7 @@ select.input-lg {
 }
 
 .tab-container.left .tab-content {
-    padding: 0 50px 0 330px;
+    padding: 0 30px 0 333px;
     border: none;
 }
 
@@ -1832,6 +1832,7 @@ select.input-lg {
 
 .tab-container .tab-content .tab-pane {
     padding: 20px 0;
+    margin-left: 30px;
 }
 
 /* Home page tab styles*/

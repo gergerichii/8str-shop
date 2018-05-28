@@ -113,6 +113,27 @@ use kartik\tabs\TabsX;
 
         ]
     ]);?>
+    <?=$form->field($model, 'tech_desc')->widget(\dosamigos\ckeditor\CKEditor::class, [
+        'preset' => 'custom',
+        'clientOptions' => [
+            'toolbarGroups' => [
+                ['name' => 'document', 'groups' => ['mode', 'document', 'doctools']],
+                ['name' => 'clipboard', 'groups' => ['clipboard', 'undo']],
+                ['name' => 'editing', 'groups' => [ 'find', 'selection']],
+//                ['name' => 'forms'],
+                ['name' => 'basicstyles', 'groups' => ['basicstyles', 'colors','cleanup','justify']],
+                ['name' => 'paragraph', 'groups' => [ 'list', 'indent', 'blocks', 'align', 'bidi' ]],
+                ['name' => 'links'],
+                ['name' => 'insert'],
+                ['name' => 'styles'],
+                ['name' => 'blocks'],
+                ['name' => 'colors'],
+                ['name' => 'tools'],
+                ['name' => 'others'],
+            ],
+            'extraPlugins' => 'tableresize,justify,copyformatting',
+        ]
+    ]);?>
     <div class="row">
         <div class="col-md-7">
             <?= $form->field($model, 'tagCollection')->widget(Select2::class, [

@@ -303,6 +303,7 @@ class OldbaseController extends BaseController
             '`n`.`title` as `name`',
             '`bod`.`body_value` as `desc`',
             '`bod`.`body_summary` as `short_desc`',
+            '`td`.`field_tech_desc_value` as `tech_desc`',
             '`prod`.`sell_price` as `8str_price`',
             '`vsp`.`field__price_vigsec_value` as `vigsec_price`',
             '`n`.`promote` as `show_on_home`',
@@ -324,6 +325,7 @@ class OldbaseController extends BaseController
             ->leftJoin('{{%file_managed}} as `f`', '`im`.`uc_product_image_fid` = `f`.`fid`')
             ->leftJoin('{{%uc_products}} as `prod`', '`prod`.`nid` = `n`.`nid`')
             ->leftJoin('{{%field_data_field_market}} as `m`', '`m`.`entity_id` = `n`.`nid`')
+            ->leftJoin('{{%pdxfield_data_field_tech_desc}} as `td`', '`td`.`entity_id` = `n`.`nid`')
             ->leftJoin('{{%field_data_field_hit}} as `hit`', '`hit`.`entity_id` = `n`.`nid`')
             ->leftJoin('{{%field_data_field_action}} as `a`', '`a`.`entity_id` = `n`.`nid`')
             ->leftJoin('{{%field_data_field_new}} as `ne`', '`ne`.`entity_id` = `n`.`nid`')

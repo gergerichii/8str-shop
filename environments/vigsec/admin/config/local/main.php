@@ -2,7 +2,7 @@
 return [
     'components' => [
         'urlManager' => [
-            'hostInfo' => 'https://admin.vigsec.ru'
+            'hostInfo' => 'http://admin.vigsec.ru'
         ],
         'user' => [
             'identityCookie' => ['name' => '_identitysputnikvideo', 'httpOnly' => true, 'domain' => '.vigsec.ru'],

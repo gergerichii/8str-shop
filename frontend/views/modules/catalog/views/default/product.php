@@ -64,7 +64,9 @@
                     <ul class="product-list">
                         <li><span>Наличие:</span>
                             <?=($productModel->count) ? 'В наличии' : "В наличии на складе. Доставка до {$productModel->delivery_time}"?>
-                            <?=Yii::$app->i18n->format('{n, plural, =0{дней} =1{день} one{дня} other{дней}}.', ['n' => $productModel->delivery_time], 'ru_RU')?>
+                            <?php if (!$productModel->count): ?>
+                                <?=Yii::$app->i18n->format('{n, plural, =0{дней} =1{день} one{дня} other{дней}}.', ['n' => $productModel->delivery_time], 'ru_RU')?>
+                            <?php endif; ?>
                         </li>
                         <li><span>Торговая марка:</span><?=$productModel->brand?></li>
                     </ul>

@@ -23,7 +23,7 @@ class SearchWidget extends Widget {
      * @return array
      */
     public function getRubricsOptions() {
-        /** @var \common\modules\catalog\Module $catalog */
+        /** @var \common\modules\catalog\CatalogModule $catalog */
         /** @var \common\modules\catalog\models\ProductRubric $root */
         $root = ProductRubric::find()->roots()->one();
         if (!$root) {

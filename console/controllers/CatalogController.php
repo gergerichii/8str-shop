@@ -3,8 +3,8 @@
 namespace console\controllers;
 
 use common\modules\catalog\models\Product;
+use common\modules\files\FilesModule as FilesManager;
 use common\modules\files\models\Image;
-use common\modules\files\Module as FilesManager;
 use yii\helpers\ArrayHelper;
 use yii\helpers\FileHelper;
 use yii\image\drivers\Image as DriverImage;
@@ -81,7 +81,7 @@ class CatalogController extends BaseController
                         if (false === $image->pickFrom($fileInfo['dirname'])) {
                             $this->error('Product #' . $product->id . ' error: ' . $image->getFirstError('') . '.');
                         } else {
-                            $image->adaptSize(DriverImage::CROP);
+                            $image->adoptSize(DriverImage::CROP);
                         }
                     }
     

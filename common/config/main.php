@@ -1,10 +1,15 @@
 <?php
 
 $config = [
+    'id' => 'admin',
     'timeZone' => 'Europe/Moscow',
     'language' => 'ru-RU',
     'bootstrap' => [
-        'common\config\setUp'
+        'common\config\setUp',
+        'common\modules\files\FilesBootstrap',
+        'common\modules\cart\CartBootstrap',
+        'common\modules\order\OrderBootstrap',
+        'common\modules\catalog\CatalogBootstrap',
     ],
     'aliases' => [
         '@bower' => '@vendor/bower-asset',
@@ -56,8 +61,17 @@ $config = [
         ],
     ],
     'modules' => [
+        'catalog' => [
+            'class' => 'common\modules\catalog\CatalogModule',
+        ],
+        'cart' => [
+            'class' => 'common\modules\cart\CartModule',
+        ],
+        'order' => [
+            'class' => 'common\modules\order\Module',
+        ],
         'files' => [
-            'class' => 'common\modules\files\Module',
+            'class' => 'common\modules\files\FilesModule',
             'entities' => require 'filesMap.php',
             'publicPath' => '@common/webFiles',
             'protectedPath' => '@common/webFilesProtected',

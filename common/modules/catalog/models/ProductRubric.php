@@ -2,8 +2,8 @@
 
 namespace common\modules\catalog\models;
 
-use common\dependencies\CacheTags;
 use common\base\models\nestedSets\NSActiveRecord;
+use common\cacheDependencies\CacheTags;
 use common\modules\catalog\models\queries\ProductRubricQuery;
 use corpsepk\yml\behaviors\YmlCategoryBehavior;
 use kartik\tree\models\TreeTrait;

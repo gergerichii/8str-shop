@@ -8,7 +8,7 @@
 
 use yii\base\ErrorException;
 
-/** @var \common\modules\catalog\Module $catalog */
+/** @var \common\modules\catalog\CatalogModule $catalog */
 $catalog = \Yii::$app->getModule('catalog');
 
 /** @var \common\modules\catalog\models\Product $model */

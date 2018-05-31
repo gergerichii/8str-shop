@@ -25,14 +25,6 @@ class CatalogBootstrap extends BaseModuleBootstrap implements BootstrapInterface
      * @throws \yii\base\InvalidConfigException
      */
     public function bootstrap($app) {
-        $app->setModule('catalog', ['class' => Module::class]);
-        $app->setModule('dynagrid', [
-            'class' => \kartik\dynagrid\Module::class,
-            'dbSettings' => ['tableName' => 'dynagrid'],
-            'dbSettingsDtl' => ['tableName' => 'dynagrid_dtl'],
-        ]);
-        $app->setModule('gridview', ['class' => \kartik\grid\Module::class]);
-
         $feRules = [
             [
                 'pattern' => 'catalog/<catalogPath:[\w\-\.,/_]*?/[^\d]*$|[\w\-\.,_]+>',
@@ -64,8 +56,7 @@ class CatalogBootstrap extends BaseModuleBootstrap implements BootstrapInterface
             // kartik\grid for export in rbac
             '/gridview/export/download' => '/gridview/export/download',
         ];
-        
-        self::addUrlRules(self::URL_RULES_TYPE_FRONTEND, $feRules);
-        self::addUrlRules(self::URL_RULES_TYPE_BACKEND, $beRules);
+        static::addUrlRules(static::URL_RULES_TYPE_FRONTEND, $feRules);
+        static::addUrlRules(static::URL_RULES_TYPE_BACKEND, $beRules);
     }
 }

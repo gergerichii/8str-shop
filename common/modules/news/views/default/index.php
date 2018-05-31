@@ -1,8 +1,8 @@
 <?php
 /**
- * @var \yii\data\ActiveDataProvider $provider
- * @var \common\modules\news\Module $newsModule
- * @var \common\modules\files\Module $filesModule
+ * @var \yii\data\ActiveDataProvider      $provider
+ * @var \common\modules\news\Module       $newsModule
+ * @var \common\modules\files\FilesModule $filesModule
  */
 
 use yii\helpers\Html;

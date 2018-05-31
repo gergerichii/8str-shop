@@ -13,7 +13,6 @@ use yii\base\BootstrapInterface;
 use yii\mail\MailerInterface;
 use yii\web\Application as WebApplication;
 use yii\web\Controller;
-use yii\web\Response;
 use yii\web\View;
 
 class setUp implements BootstrapInterface
@@ -52,13 +51,6 @@ class setUp implements BootstrapInterface
                     \Yii::$app->view->registerJs($script);
                 }
             });
-//            $app->response->on(Response::EVENT_BEFORE_SEND, function ($event) use($app, $script) {
-//                if (!$app->request->isAjax && !$this->notifyIsAdded) {
-//                    Yii2modAlert::widget();
-//                    $app->response->content .= $script;
-//                }
-//            });
-
         }
     }
 }

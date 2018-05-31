@@ -7,7 +7,7 @@ return [
     'products/images' => [
         'class' => \common\modules\files\models\Image::class,
         'thumbsOptions' => [
-            'little' => 'products/images/little',
+            'thumb' => 'products/images/little',
             'medium' => 'products/images/medium',
             'large' => 'products/images/large',
         ],

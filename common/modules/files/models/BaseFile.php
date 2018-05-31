@@ -2,7 +2,6 @@
 
 namespace common\modules\files\models;
 
-use common\modules\files\Module as FilesModule;
 use GuzzleHttp\Client;
 use yii\base\InvalidConfigException;
 use yii\base\Model;
@@ -35,7 +34,7 @@ abstract class BaseFile extends Model
      */
     public $defaultFile = 'default.jpg';
     /**
-     * @var \common\modules\files\Module
+     * @var \common\modules\files\FilesModule
      */
     public $filesManager;
     

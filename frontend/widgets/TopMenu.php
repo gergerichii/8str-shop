@@ -2,9 +2,6 @@
 
 namespace frontend\widgets;
 
-use yii\helpers\ArrayHelper;
-use yii\helpers\Html;
-use yii\helpers\Url;
 use yii\widgets\Menu;
 
 /**
@@ -17,7 +14,7 @@ class TopMenu extends Menu
      */
     public function run()
     {
-        /** @var \common\modules\catalog\Module $catalog */
+        /** @var \common\modules\catalog\CatalogModule $catalog */
         $catalog = \Yii::$app->getModule('catalog');
         $items = $catalog->getMenuStructure(2);
         if (!$items) {

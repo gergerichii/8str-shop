@@ -2,7 +2,7 @@
 
 namespace common\modules\news\widgets;
 
-use common\modules\files\Module as FilesModule;
+use common\modules\files\FilesModule as FilesModule;
 use common\modules\news\models\Article;
 use common\modules\news\Module as NewsModule;
 use yii\base\Widget;

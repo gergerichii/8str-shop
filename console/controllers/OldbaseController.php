@@ -7,8 +7,8 @@ use common\modules\catalog\models\ProductBrand;
 use common\modules\catalog\models\ProductPrice;
 use common\modules\catalog\models\ProductRubric;
 use common\modules\catalog\models\ProductTag;
+use common\modules\files\FilesModule;
 use common\modules\files\models\Image;
-use common\modules\files\Module;
 use common\modules\news\models\Article;
 use Yii;
 use yii\db\Connection;
@@ -16,11 +16,11 @@ use yii\db\Exception;
 use yii\db\Expression;
 use yii\db\Query;
 use yii\db\StaleObjectException;
+use yii\helpers\ArrayHelper as ArrayHelper;
 use yii\helpers\Console;
 use yii\helpers\StringHelper;
-use yii\image\drivers\Image as ImgDriver;
-use yii\helpers\ArrayHelper as ArrayHelper;
 use yii\image\drivers\Image as DriverImage;
+use yii\image\drivers\Image as ImgDriver;
 
 /**
  * Действия с базой на сайте 8str.ru
@@ -273,7 +273,7 @@ class OldbaseController extends BaseController
      * @throws \yii\base\InvalidConfigException
      */
     protected function exportProducts($remoteDb) {
-        /** @var \common\modules\catalog\Module $catalog */
+        /** @var \common\modules\catalog\CatalogModule $catalog */
         $catalog = Yii::$app->getModule('catalog');
 
         $this->trace('Экспорт Продутов');
@@ -325,7 +325,7 @@ class OldbaseController extends BaseController
             ->leftJoin('{{%file_managed}} as `f`', '`im`.`uc_product_image_fid` = `f`.`fid`')
             ->leftJoin('{{%uc_products}} as `prod`', '`prod`.`nid` = `n`.`nid`')
             ->leftJoin('{{%field_data_field_market}} as `m`', '`m`.`entity_id` = `n`.`nid`')
-            ->leftJoin('{{%pdxfield_data_field_tech_desc}} as `td`', '`td`.`entity_id` = `n`.`nid`')
+            ->leftJoin('{{%field_data_field_tech_desc}} as `td`', '`td`.`entity_id` = `n`.`nid`')
             ->leftJoin('{{%field_data_field_hit}} as `hit`', '`hit`.`entity_id` = `n`.`nid`')
             ->leftJoin('{{%field_data_field_action}} as `a`', '`a`.`entity_id` = `n`.`nid`')
             ->leftJoin('{{%field_data_field_new}} as `ne`', '`ne`.`entity_id` = `n`.`nid`')
@@ -356,8 +356,7 @@ class OldbaseController extends BaseController
 
         $localBrands = ProductBrand::find()
             ->indexBy('old_id')->all();
-
-        /** @var Module $filesManager */
+        /** @var FilesModule $filesManager */
         $filesManager = Yii::$app->getModule('files');
         
         /** @var Image $image */
@@ -545,7 +544,7 @@ class OldbaseController extends BaseController
                     $product->addFile($fileInfo['basename']);
     
                     $image->fileName = $fileInfo['basename'];
-                    $image->pickFrom($fileInfo['dirname']) and $image->adaptSize(DriverImage::CROP);
+                    $image->pickFrom($fileInfo['dirname']) and $image->adoptSize(DriverImage::CROP);
                     if ($image->exists()) {
                         $image->createThumbs();
                     }
@@ -568,7 +567,7 @@ class OldbaseController extends BaseController
                         if ($image->pickFrom(dirname($filePath))) {
                             $newName = preg_replace('#\.\w{3,4}$#', '.png', basename($filePath));
                             /** @var Image $image */
-                            $image->adaptSize(ImgDriver::ADAPT, $newName);
+                            $image->adoptSize(ImgDriver::ADAPT, $newName);
                             $image->createThumbs();
                             $product->addFile($image->getBasename());
                         }
@@ -648,11 +647,14 @@ class OldbaseController extends BaseController
         52 => NULL, 12 => NULL, 107 => 12, 118 => 12, 108 => 12, 15 => NULL, 79 => NULL, 168 => 79, 170 => 79,
         206 => 79, 169 => 79, 25 => NULL, 57 => 25, 56 => 25, 18 => NULL,
     ];
-
+    
     /**
      * Export rubrics
+     *
      * @param Connection $remoteDb
+     *
      * @return int
+     * @throws \yii\base\ErrorException
      */
     protected function exportRubrics($remoteDb) {
         $this->trace('Экспорт рубрикатора');
@@ -918,7 +920,7 @@ class OldbaseController extends BaseController
         $this->success('Found ' . count($newsRows) . ' articles of news.' . PHP_EOL);
 
         if ($newsRows) {
-            /** @var Module $filesManager */
+            /** @var FilesModule $filesManager */
             $filesManager = Yii::$app->getModule('files');
             /** @var Image $image */
             $mainImage = $filesManager->getEntityInstance('news/images');

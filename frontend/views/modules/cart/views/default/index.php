@@ -1,20 +1,19 @@
 <?php
 
+use common\modules\cart\widgets\CartInformer;
+use common\modules\cart\widgets\ChangeCount;
+use common\modules\cart\widgets\ChangeOptions;
 use common\modules\cart\widgets\DeleteButton;
 use common\modules\cart\widgets\ElementCost;
 use common\modules\cart\widgets\ElementPrice;
-use common\modules\cart\widgets\ChangeCount;
-use common\modules\cart\widgets\CartInformer;
-use common\modules\cart\widgets\ChangeOptions;
 use yii\helpers\Url;
 
 /** @var \common\modules\cart\models\CartElement[] $elements */
 /** @var \yii\web\View $this */
 $this->title = yii::t('cart', 'Cart');
-/** @var \common\modules\catalog\Module $catalog */
+/** @var \common\modules\catalog\CatalogModule $catalog */
 $catalog = \Yii::$app->getModule('catalog');
-
-/** @var \common\modules\files\Module $filesManager */
+/** @var \common\modules\files\FilesModule $filesManager */
 $filesManager = Yii::$app->getModule('files');
 
 $this->registerCss('

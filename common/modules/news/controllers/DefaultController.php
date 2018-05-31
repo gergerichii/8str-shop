@@ -23,8 +23,7 @@ class DefaultController extends Controller
         if (0 >= $provider->getTotalCount()) {
             throw new NotFoundHttpException();
         }
-
-        /** @var \common\modules\files\Module $filesModule */
+        /** @var \common\modules\files\FilesModule $filesModule */
         $filesModule = \Yii::$app->getModule('files');
 
         return $this->render('index', ['provider' => $provider, 'newsModule' => $newsModule, 'filesModule' => $filesModule]);

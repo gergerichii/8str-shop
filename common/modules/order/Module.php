@@ -1,13 +1,10 @@
 <?php
 namespace common\modules\order;
 
-use common\models\entities\User;
 use common\models\entities\UserAddresses;
-use common\modules\files\models\File;
 use common\modules\order\behaviors\ShippingCost;
 use common\modules\order\forms\frontend\OrderForm;
 use common\modules\order\models\TemporaryOrder;
-use Mpdf\Gif\ImageHeader;
 use yii;
 
 class Module extends \yii\base\Module
@@ -286,8 +283,7 @@ class Module extends \yii\base\Module
                 $dataItem['price'] = $productPrice;
                 $dataItem['count'] = $productCount;
                 $dataItem['cost'] = $productCost;
-        
-                /** @var \common\modules\files\Module $fileManager */
+                /** @var \common\modules\files\FilesModule $fileManager */
                 $fileManager = Yii::$app->getModule('files');
                 if (count($product->images)) {
                     $image = $product->images[0];

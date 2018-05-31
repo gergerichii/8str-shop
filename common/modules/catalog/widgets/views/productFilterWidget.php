@@ -1,13 +1,13 @@
 <?php
 /**
- * @var \common\modules\catalog\models\ProductRubric[] $rubrics
- * @var \common\modules\catalog\models\ProductBrand[] $brands
- * @var \common\modules\catalog\Module $catalogModule
+ * @var \common\modules\catalog\models\ProductRubric[]         $rubrics
+ * @var \common\modules\catalog\models\ProductBrand[]          $brands
+ * @var \common\modules\catalog\CatalogModule                  $catalogModule
  * @var \common\modules\catalog\models\forms\ProductFilterForm $filterForm
- * @var float $priceRangeMin
- * @var float $priceRangeMax
- * @var float $priceStartMin
- * @var float $priceStartMax
+ * @var float                                                  $priceRangeMin
+ * @var float                                                  $priceRangeMax
+ * @var float                                                  $priceStartMin
+ * @var float                                                  $priceStartMax
  */
 
 use yii\helpers\Html;

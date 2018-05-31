@@ -6,8 +6,8 @@ use common\modules\catalog\models\forms\ProductImagesForm;
 use common\modules\catalog\models\forms\ProductPricesForm;
 use common\modules\catalog\models\Product;
 use common\modules\catalog\models\ProductSearch;
+use common\modules\files\FilesModule;
 use common\modules\files\models\Image;
-use common\modules\files\Module;
 use Yii;
 use yii\filters\AccessControl;
 use yii\filters\VerbFilter;
@@ -458,8 +458,7 @@ class DefaultController extends Controller
                 'error' => 'Product not found!'
             ]);
         }
-
-        /** @var Module $filesManager */
+        /** @var FilesModule $filesManager */
         $filesManager = Yii::$app->getModule('files');
 
         $uploadedFiles = UploadedFile::getInstancesByName('ProductImagesForm[images]');
@@ -476,8 +475,7 @@ class DefaultController extends Controller
             }
 
             $uploadedFile->saveAs($image->getFilePath());
-
-            $image->adaptSize(DriverImage::CROP);
+            $image->adoptSize(DriverImage::CROP);
             $image->createThumbs();
             $product->addFile($image->fileName);
 
@@ -526,8 +524,7 @@ class DefaultController extends Controller
         //$pictureId = $request->post('key');
         $productId = $request->post('id');
         $imageName = $request->post('imageName');
-
-        /** @var Module $filesManager */
+        /** @var FilesModule $filesManager */
         $filesManager = Yii::$app->getModule('files');
         /** @var Image $image */
         $image = $filesManager->createEntity('products/images', $imageName);

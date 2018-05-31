@@ -7,28 +7,28 @@
  */
 
 namespace common\modules\counters;
-use yii\base\Application;
-use yii\base\BootstrapInterface;
 
-class CountersBootstrap implements BootstrapInterface
+use common\modules\baseModule\BaseModuleBootstrap;
+use yii\base\Application;
+
+class CountersBootstrap extends BaseModuleBootstrap
 {
     /**
      * Bootstrap method to be called during application bootstrap stage.
      *
      * @param Application $app the application currently running
      *
+     * @throws \yii\base\InvalidConfigException
      */
     public function bootstrap($app) {
         if(!$app->has('counters')) {
             $app->setModule('counters', ['class' => 'common\modules\counters\CountersModule']);
         }
-
         $urlManagers = [];
         foreach (array_keys($app->components) as $componentName) {
             if (strPos($componentName, 'UrlManager') > 0)
                 $urlManagers[] = $componentName;
         }
-
         $feRules = [
         ];
         $beRules = [

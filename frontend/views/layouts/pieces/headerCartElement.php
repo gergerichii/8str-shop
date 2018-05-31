@@ -1,21 +1,21 @@
 <?php
-use yii\helpers\Html;
+
 use common\modules\cart\widgets\ChangeCount;
 use common\modules\cart\widgets\DeleteButton;
 use common\modules\cart\widgets\ElementPrice;
+use yii\helpers\Html;
 
 /**
- * @var \common\modules\files\Module $filesManager
+ * @var \common\modules\files\FilesModule      $filesManager
  * @var \common\modules\catalog\models\Product $product
- * @var array $controllerActions
- * @var bool $showCountArrows
- * @var string $name
+ * @var array                                  $controllerActions
+ * @var bool                                   $showCountArrows
+ * @var string                                 $name
  */
 $filesManager = Yii::$app->getModule('files');
 $image = isset($product->images[0]) ? $product->images[0] : 'default.jpg';
 $image = $filesManager->getFileUri('products/images', $image);
-
-/** @var \common\modules\catalog\Module $catalog */
+/** @var \common\modules\catalog\CatalogModule $catalog */
 $catalog = \Yii::$app->getModule('catalog');
 
 try{

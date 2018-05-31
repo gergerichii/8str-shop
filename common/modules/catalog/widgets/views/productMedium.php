@@ -10,8 +10,8 @@ use yii\base\ErrorException;
 
 /**
  * @var \common\modules\catalog\models\Product $model
- * @var \common\modules\catalog\Module $catalog
- * @var \common\modules\files\Module $filesManager
+ * @var \common\modules\catalog\CatalogModule  $catalog
+ * @var \common\modules\files\FilesModule      $filesManager
  */
 
 $catalog = \Yii::$app->getModule('catalog');

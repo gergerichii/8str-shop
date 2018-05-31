@@ -2,16 +2,16 @@
 
 namespace common\modules\catalog\models\forms;
 
+use common\modules\catalog\CatalogModule;
 use common\modules\catalog\models\Product;
 use common\modules\catalog\models\Product2ProductRubric;
 use common\modules\catalog\models\ProductBrand;
-use common\modules\catalog\models\queries\ProductBrandQuery;
 use common\modules\catalog\models\ProductPrice;
-use common\modules\catalog\models\queries\ProductPriceDiscountQuery;
 use common\modules\catalog\models\ProductRubric;
 use common\modules\catalog\models\ProductSphinxIndex;
+use common\modules\catalog\models\queries\ProductBrandQuery;
+use common\modules\catalog\models\queries\ProductPriceDiscountQuery;
 use common\modules\catalog\models\queries\ProductTagQuery;
-use common\modules\catalog\Module;
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
 use yii\db\Expression;
@@ -29,59 +29,51 @@ class ProductFilterForm extends Model
      * @var string|null $nameQuery
      */
     public $nameQuery;
-    
     /**
      * Catalog path
      *
      * @var string|null $catalogPath
      */
     public $catalogPath;
-
     /**
      * Brand alias
      *
      * @var string|null $brand
      */
     public $brand;
-
     /**
      * Lower limit for filtering products at prices
      *
      * @var int|null $from
      */
     public $from;
-
     /**
      * Higher limit for filtering products at prices
      *
      * @var int|null $to
      */
     public $to;
-    
     public $order_param;
     public $sort;
-
     /**
      * Rubrics
      *
      * @var ProductRubric[]|array|null
      */
     private $rubrics;
-
     /**
      * Brands
      *
      * @var ProductBrand[]|array|null
      */
     private $brands;
-
     /**
      * Price range
      *
      * @var array|null
      */
     private $priceRange;
-
+    
     /**
      * @inheritdoc
      */
@@ -93,6 +85,7 @@ class ProductFilterForm extends Model
                 if ($m->hasErrors('order_param')) {
                     $m->order_param = '';
                 }
+                
                 return true;
             }, 'skipOnError' => false],
             ['sort', 'in', 'range' => ['asc', 'desc'], 'skipOnEmpty' => true],
@@ -100,12 +93,13 @@ class ProductFilterForm extends Model
                 if ($m->hasErrors('sort')) {
                     $m->sort = '';
                 }
+                
                 return true;
             }, 'skipOnError' => false],
             [['from', 'to'], 'double']
         ];
     }
-
+    
     /**
      * Make product provider
      *
@@ -113,9 +107,8 @@ class ProductFilterForm extends Model
      * @throws NotFoundHttpException
      */
     public function makeProductsProvider() {
-        /** @var Module $catalog */
+        /** @var CatalogModule $catalog */
         $catalog = \Yii::$app->getModule('catalog');
-        
         // Search for rubrics
         /** @var ProductRubric $root */
         $root = null;
@@ -129,10 +122,8 @@ class ProductFilterForm extends Model
             /** @var ProductRubric $root */
             $root = ProductRubric::find()->roots()->one();
         }
-        
         // Creates the query of products
         $productQuery = Product::find();
-    
         if (!empty($sk = \Yii::$app->request->get('sk'))) {
             $allChildRubrics = $root->children()->select('id')->asArray()->column();
             $allChildRubrics = array_map(function ($v) {return intval($v);}, $allChildRubrics);
@@ -143,11 +134,9 @@ class ProductFilterForm extends Model
             $sk = Yii::$app->sphinx->quoteValue(trim($sk));
             $sk = str_replace('/', '\/', $sk);
             $productIndexQuery->match(new Expression(':match', ['match' => "{$sk}"]));
-    
             $productsIds = $productIndexQuery->limit(20000)->column();
             $productQuery->where(['[[product]].[[id]]' => $productsIds]);
         }
-
         // Specifies the relations
         $productQuery->with([
             'tags' => function (ProductTagQuery $q) {
@@ -158,10 +147,8 @@ class ProductFilterForm extends Model
                 ]);
             }, 'prices', 'brand', 'mainRubric', 'oldPrice', 'rubrics', 'price'
         ]);
-
         // Only active products
         $productQuery->active();
-
         // Filters by the rubric
         if ($this->catalogPath) {
             // Defines the rubric
@@ -169,40 +156,33 @@ class ProductFilterForm extends Model
             if (!$rubric) {
                 throw new NotFoundHttpException('Путь не найден');
             }
-
             // Collects rubric identifiers
             $rubricsIds = $rubric->children()->select('id')->indexBy('id')->asArray()->column();
-
             // Appends the rubric
             array_unshift($rubricsIds, $rubric->id);
-
             // Selects all products
             $productQuery->select('product.*')
                 ->joinWith('rubrics r', false)
                 ->joinWith('mainRubric mr', false)
                 ->andWhere(['or',
-                    ['in', 'r.id', $rubricsIds],
-                    ['in', 'mr.id', $rubricsIds],
+                            ['in', 'r.id', $rubricsIds],
+                            ['in', 'mr.id', $rubricsIds],
                 ])
                 ->groupBy('product.id');
         } else {
             $rubric = ProductRubric::find()->roots()->one();
         }
-        
         if ($this->brand && $brand = ProductBrand::findOne(['name' => $this->brand])) {
             $this->brand = $brand->alias;
         }
-
         // Filters products by alias of the brand
         if (isset($this->brand)) {
             $productQuery->joinWith(['brand' => function ($q) {
                 /** @var ProductBrandQuery $q */
                 $q->alias('brand');
             }]);
-
             $productQuery->andWhere(['brand.alias' => $this->brand]);
         }
-
         // Selects the range
         $this->priceRange = ProductPrice::find()->alias('price')
             // Only active
@@ -214,7 +194,6 @@ class ProductFilterForm extends Model
             ->andWhere(['in', 'price.product_id', (clone $productQuery)->select('product.id')])
             ->asArray()
             ->one();
-
         // Filter by price
         $productQuery->leftJoin(
             ['price' => ProductPrice::tableName()],
@@ -227,7 +206,6 @@ class ProductFilterForm extends Model
             ]
         );
         $productQuery->andFilterWhere(['between', 'price.value', $this->from, $this->to]);
-
         // Find all children of the rubric
         $this->rubrics = $root->find()
             ->from([
@@ -258,7 +236,6 @@ class ProductFilterForm extends Model
             ])
             ->groupBy('parentRubric.id')
             ->all();
-
         // Sort rubrics
         uasort($this->rubrics, function ($a, $b) {
             /**
@@ -267,7 +244,6 @@ class ProductFilterForm extends Model
              */
             return $a->left_key <=> $b->left_key;
         });
-
         // Select brands of the rubric
         $brandQuery = clone $productQuery;
         $brandIds = $brandQuery->select('product.brand_id as id')->distinct()->column();
@@ -278,7 +254,6 @@ class ProductFilterForm extends Model
             ->groupBy('brand.id')
             ->where(['in', 'brand.id', $brandIds])
             ->all();
-
         // Ordering
         $sort = ($this->sort === 'desc') ? SORT_DESC : SORT_ASC;
         switch($this->order_param) {
@@ -291,12 +266,12 @@ class ProductFilterForm extends Model
             default:
                 $productQuery->orderBy(['[[product]].[[on_list_top]]' => SORT_ASC, '[[product]].[[main_rubric_id]]' => SORT_ASC]);
         }
-
+        
         return new ActiveDataProvider([
             'query' => $productQuery,
         ]);
     }
-
+    
     /**
      * Get rubrics
      *
@@ -305,7 +280,7 @@ class ProductFilterForm extends Model
     public function getRubrics() {
         return $this->rubrics;
     }
-
+    
     /**
      * Get brands
      *
@@ -314,7 +289,7 @@ class ProductFilterForm extends Model
     public function getBrands() {
         return $this->brands;
     }
-
+    
     /**
      * Get the range of the price
      *
@@ -329,12 +304,11 @@ class ProductFilterForm extends Model
         if (empty($startMin)) {
             $startMin = $this->priceRange['min'];
         }
-
         $startMax = $this->to;
         if (empty($startMax)) {
             $startMax = $this->priceRange['max'];
         }
-
+        
         return [
             'start' => [
                 'min' => $startMin,
@@ -343,7 +317,7 @@ class ProductFilterForm extends Model
             'range' => $this->priceRange
         ];
     }
-
+    
     /**
      * Make the brand uri
      *
@@ -355,9 +329,10 @@ class ProductFilterForm extends Model
         $params['brand'] = $brand->alias;
         $params['catalogPath'] = $this->catalogPath;
         array_unshift($params, '/catalog/default/index');
+        
         return Url::toRoute($params);
     }
-
+    
     /**
      * Make the rubric uri
      *
@@ -369,6 +344,7 @@ class ProductFilterForm extends Model
         $params['brand'] = $this->brand;
         $params['catalogPath'] = $rubric->material_path;
         array_unshift($params, '/catalog/default/index');
+        
         return Url::toRoute($params);
     }
 }

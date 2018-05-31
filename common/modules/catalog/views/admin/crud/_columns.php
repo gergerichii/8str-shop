@@ -1,13 +1,13 @@
 <?php
 
-use common\dependencies\DependencyFactory;
-use common\dependencies\RubricsDependency;
+use common\cacheDependencies\DependencyFactory;
 use common\modules\catalog\models\Product;
 use common\modules\catalog\models\ProductBrand;
 use common\modules\catalog\models\ProductRubric;
 use kartik\grid\GridView;
 use yii\helpers\ArrayHelper;
 use yii\helpers\Url;
+
 ?>
 
 <?php \common\helpers\ViewHelper::startRegisterCss($this) ?>

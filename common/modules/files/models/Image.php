@@ -2,7 +2,7 @@
 
 namespace common\modules\files\models;
 
-use common\modules\files\Module;
+use common\modules\files\FilesModule;
 use yii\helpers\FileHelper;
 use yii\image\drivers\Image_GD;
 use yii\image\ImageDriver;
@@ -75,7 +75,7 @@ class Image extends BaseFile
      */
     public function createThumbs($save = true, $master = null, $force = false) {
         $this->_thumbs = [];
-        /** @var Module $filesManagers */
+        /** @var FilesModule $filesManagers */
         $filesManagers = \Yii::$app->getModule('files');
         foreach ($this->thumbsOptions as $thumbName => $entityType) {
             $thumb = $filesManagers->createEntity($entityType, $this->fileName);
@@ -93,10 +93,11 @@ class Image extends BaseFile
      * Save thumb
      *
      * @param Thumb $thumb
-     * @param int  $master
+     * @param int   $master
      *
      * @return bool
      * @throws \yii\base\ErrorException
+     * @throws \yii\base\InvalidConfigException
      */
     public function saveThumb(Thumb $thumb, $master = null) {
         $thumb->createDirectory();
@@ -110,7 +111,7 @@ class Image extends BaseFile
     }
     
     /**
-     * Adapt size
+     * Adopt size
      *
      * @param             $master
      * ```
@@ -125,10 +126,13 @@ class Image extends BaseFile
      *
      * @return bool
      * @throws \yii\base\ErrorException
-     *
+     * @throws \yii\base\InvalidConfigException
      * @see \yii\image\drivers\Image
      */
-    public function adaptSize($master, $saveAs = null, $force = false) {
+    public
+    function adoptSize(
+        $master, $saveAs = NULL, $force = FALSE
+    ) {
         $this->clearErrors();
         /** @var ImageDriver $imageComponent */
         $imageComponent = \Yii::$app->get('image');

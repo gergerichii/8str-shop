@@ -2,13 +2,9 @@
 
 $config = [
     'bootstrap' => [
-        'common\modules\counters\CountersBootstrap',
         'log',
-        'common\modules\catalog\CatalogBootstrap',
-        'cart',
-        'common\modules\order\Bootstrap',
-        'files',
         'common\modules\search\SearchBootstrap',
+        'common\modules\counters\CountersBootstrap',
     ],
     'controllerMap' => [
     ],
@@ -102,17 +98,6 @@ $config = [
         ],
         'counters' => [
             'class' => 'common\modules\counters\CountersModule',
-        ],
-        'catalog' => [
-            'class' => 'common\modules\catalog\Module',
-        ],
-        'files' => [
-        ],
-        'cart' => [
-            'class' => 'common\modules\cart\Module',
-        ],
-        'order' => [
-            'class' => 'common\modules\order\Module',
         ],
         'rbac' => [
             'class' => 'common\modules\rbac\Module',

@@ -4,8 +4,8 @@ use yii\helpers\Html;
 
 /**
  * @var \common\modules\news\models\Article[] $articles
- * @var \common\modules\news\Module $newsModule
- * @var \common\modules\files\Module $filesModule
+ * @var \common\modules\news\Module           $newsModule
+ * @var \common\modules\files\FilesModule     $filesModule
  */
 
 $formatter = Yii::$app->getFormatter();

@@ -25,7 +25,7 @@ return [
             'class' => common\modules\order\Module::class,
         ],
         'cart' => [
-            'class' => common\modules\cart\Module::class,
+            'class' => common\modules\cart\CartModule::class,
         ],
     ],
     'components' => [

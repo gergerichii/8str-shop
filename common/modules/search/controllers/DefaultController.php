@@ -33,10 +33,9 @@ class DefaultController extends Controller
         $search->rubric = $r;
         $search->top();
         $search->prepare();
-
-        /** @var \common\modules\catalog\Module $catalog */
+        /** @var \common\modules\catalog\CatalogModule $catalog */
         $catalog = \Yii::$app->getModule('catalog');
-        /** @var \common\modules\files\Module $filesManager */
+        /** @var \common\modules\files\FilesModule $filesManager */
         $filesManager = \Yii::$app->getModule('files');
 
         $rubricsItems = array_map(function ($rubric) use ($catalog) {
@@ -98,7 +97,7 @@ class DefaultController extends Controller
         $sk = trim($sk);
         $productQuery = Product::find()->where(['[[product]].[[name]]' => $sk]);
         $catalogPath = '';
-        /** @var \common\modules\catalog\Module $catalog */
+        /** @var \common\modules\catalog\CatalogModule $catalog */
         $catalog = \Yii::$app->getModule('catalog');
         if ($sc && $rubric = ProductRubric::findOne($sc)) {
             $rubrics = $rubric->children()->select('id')->asArray()->column();

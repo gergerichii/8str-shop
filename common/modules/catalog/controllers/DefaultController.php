@@ -3,9 +3,9 @@
 namespace common\modules\catalog\controllers;
 
 use common\base\BaseFrontendController;
+use common\modules\catalog\CatalogModule;
 use common\modules\catalog\models\forms\ProductFilterForm;
 use common\modules\catalog\models\Product;
-use common\modules\catalog\Module;
 use common\modules\catalog\providers\FrontendSearchProvider;
 use yii\web\NotFoundHttpException;
 
@@ -23,8 +23,7 @@ class DefaultController extends BaseFrontendController
      */
     public function actionIndex($catalogPath = '') {
         $request = \Yii::$app->getRequest();
-
-        /** @var Module $catalog */
+        /** @var CatalogModule $catalog */
         $catalog = $this->module;
 
         $filterForm = new ProductFilterForm();
@@ -48,7 +47,7 @@ class DefaultController extends BaseFrontendController
      */
     public function actionProduct($catalogPath = '', $productId = null) {
         $product = Product::find()->forFrontEnd()->where(['id' => $productId])->one();
-        /** @var Module $catalog */
+        /** @var CatalogModule $catalog */
         $catalog = $this->module;
 
         if (!$product || !$catalog->productHasRubric($product, $catalogPath)) {

@@ -2,9 +2,9 @@
 
 namespace common\modules\catalog\widgets;
 
+use common\modules\catalog\CatalogModule;
 use common\modules\catalog\models\ProductBrand;
-use common\modules\catalog\Module;
-use common\modules\files\Module as FilesModule;
+use common\modules\files\FilesModule as FilesModule;
 use yii\base\Widget;
 
 /**
@@ -18,7 +18,7 @@ class ProductBrandsWidget extends Widget
      * @var string
      */
     public $viewName = 'productBrandsWidget';
-
+    
     /**
      * @inheritdoc
      */
@@ -27,12 +27,11 @@ class ProductBrandsWidget extends Widget
         if (!$brands) {
             return '';
         }
-
-        /** @var Module $catalogModule */
+        /** @var CatalogModule $catalogModule */
         $catalogModule = \Yii::$app->getModule('catalog');
         /** @var FilesModule $filesModule */
         $filesModule = \Yii::$app->getModule('files');
-
+        
         return $this->render($this->viewName, [
             'brands' => $brands,
             'catalogModule' => $catalogModule,

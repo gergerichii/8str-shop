@@ -1,10 +1,11 @@
 <?php
+
+use common\modules\catalog\models\ProductRubric;
+use common\modules\catalog\models\ProductTag;
+use kartik\tabs\TabsX;
+use kartik\widgets\Select2;
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
-use common\modules\catalog\models\ProductTag;
-use kartik\widgets\Select2;
-use common\modules\catalog\models\ProductRubric;
-use kartik\tabs\TabsX;
 
 /* @var $this yii\web\View */
 /* @var $model common\modules\catalog\models\Product */
@@ -41,7 +42,7 @@ use kartik\tabs\TabsX;
                 'query' => ProductRubric::find()
                     ->indexBy('id')
                     ->addOrderBy('tree, left_key')
-                    ->setCacheDependency(\common\dependencies\DependencyFactory::getDependency('rubrics'))
+                    ->setCacheDependency(\common\cacheDependencies\DependencyFactory::getDependency('rubrics'))
                     ->withProductsCountsInName(),
                 'headingOptions' => ['label' => 'Каталог'],
                 'rootOptions' => ['label'=>'<i class="fa fa-tree text-success"></i>'],

@@ -6,7 +6,10 @@ return [
     'controllerNamespace' => 'admin\controllers',
     'bootstrap' => [
         '\common\modules\rbac\RbacPlusBootstrap',
-        '\common\modules\order\Bootstrap',
+        '\common\modules\order\OrderBootstrap',
+        '\common\modules\cart\CartBootstrap',
+        '\common\modules\files\FilesBootstrap',
+        '\common\modules\catalog\CatalogBootstrap',
         '\common\modules\treeManager\TreeManagerBootstrap',
     ],
     'modules' => [

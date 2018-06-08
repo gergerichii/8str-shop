@@ -611,12 +611,31 @@ blockquote.blockquote-reverse:before {
 }
 
 /* for small devices show/hide classes */
-.show-for-lg {
-    display: inline;
+@media (min-width: 992px) {
+    .show-for-lg {
+        display: inline;
+    }
+    .hide-for-lg {
+        display: none;
+    }
 }
 
-.hide-for-lg {
-    display: none;
+@media (max-width: 991px) {
+    .show-less-lg {
+        display: inline;
+    }
+    .hide-less-lg {
+        display: none;
+    }
+}
+
+@media (min-width: 768px) {
+    .show-for-md {
+        display: inline;
+    }
+    .hide-for-md {
+        display: none;
+    }
 }
 
 /* =============================================
@@ -1833,6 +1852,7 @@ select.input-lg {
 .tab-container .tab-content .tab-pane {
     padding: 20px 0;
     margin-left: 30px;
+    margin-right: 30px;
 }
 
 /* Home page tab styles*/
@@ -1922,10 +1942,6 @@ select.input-lg {
 
 .tab-style-2 li.active a {
     cursor: default;
-}
-
-#products-tabs-content {
-    margin-bottom: 25px;
 }
 
 /* =============================================

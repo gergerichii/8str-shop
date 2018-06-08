@@ -46,11 +46,12 @@
 
 <div class="container">
     <div class="row">
-        <div class="col-md-12">
+        <div class="main-content col-sm-12 col-md-12">
 
-            <div class="row">
-
-                <?= $this->render('product/imagesPreview', ['product' => $productModel]) ?>
+            <div class="content row" role="main">
+                <div class="col-md-6 col-sm-12 col-xs-12 product-thumbs">
+                    <?= $this->render('product/imagePreviewNew', ['product' => $productModel]) ?>
+                </div>
 
                 <div class="col-md-6 col-sm-12 col-xs-12 product">
                     <div class="lg-margin visible-sm visible-xs"></div><!-- Space -->
@@ -89,55 +90,15 @@
                         <div class="md-margin visible-xs"></div>
                     </div>
                 </div><!-- End .col-md-6 -->
-                <!-- TODO: Сопутствующие товары ставим сюда и не по колонкам а по строкам -->
+            </div>
 
-
-            </div><!-- End .row -->
-
-            <div class="lg-margin2x"></div><!-- End .space -->
+            <div class="hide-less-lg lg-margin2x"></div><!-- End .space -->
 
             <div class="row">
                 <div class="col-md-12 col-sm-12 col-xs-12">
-                    <?php $tabs = [
-                        [
-                            'label' => 'Описание',
-                            'content' => $productModel->desc,
-                            'active' => true,
-                        ]
-                    ] ?>
-                   <?php $tabs[] = [
-                        'label' => 'Технические характеристики',
-                        'content' => ($productModel->tech_desc) ? $productModel->tech_desc : '',
-                        'linkOptions' => [
-                            'disabled' => ((bool) $productModel->tech_desc) ? '' : 'disabled',
-                            'aria-disabled' => ((bool)$productModel->tech_desc) ? 'false' : 'true',
-                            'class' => ((bool) $productModel->tech_desc) ? '' : 'disabled',
-                            'style' => ((bool) $productModel->tech_desc) ? '' : 'pointer-events: none; color: #dcdcdc !important',
-                        ],
-                    ]; ?>
-                    <?=\kartik\tabs\TabsX::widget([
-                        'items' => $tabs,
-                        'position'=>null,
-                        'align'=>null,
-                        'encodeLabels'=>true,
-                        'bordered' => false,
-                        'pluginOptions' => [
-                            'addCss' => ''
-                        ],
-                        'containerOptions' => [
-                            'class' => ['tab-container', 'left', 'product-detail-tab', 'clearfix'],
-                        ],
-                        'options' => [
-                            'style' => 'height: 378px'
-                        ]
+                    <?= \common\modules\catalog\widgets\ProductDescriptionWidget::widget([
+                        'model' => $productModel,
                     ]) ?>
-                    
-<!--                    TODO: Тут будет цикл по разным параметрам чтобы генерить разные табы-->
-<!--                    <div class="tab-container left product-detail-tab clearfix">-->
-<!--                        --><?//=$productModel->desc?>
-<!---->
-<!--                    </div><!-- End .tab-container -->
-                    <div class="lg-margin visible-xs"></div>
                 </div><!-- End .col-md-9 -->
             </div><!-- End .row -->
 

@@ -1,0 +1,16 @@
+.adaptive-tabs .panel-heading {
+    display: none;
+}
+
+.adaptive-tabs .collapse {
+    display: unset !important;
+}
+
+.adaptive-tabs .panel {
+    margin-bottom: inherit;
+    background-color: inherit;
+    border: unset;
+    border-radius: inherit;
+    -webkit-box-shadow: inherit;
+    box-shadow: inherit;
+}

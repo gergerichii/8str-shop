@@ -310,116 +310,116 @@
             });
 
         },
-        searchInput: function () {
-            /* Search bar input animation for Better Responsive
-            ----- if not empty send form  */
-            var formInputOpen = true,
-                searchInput = $('#quick-search-form-query');
-
-            $('#quick-search').on('click', function (e) {
-                var parentForm = $('#quick-search-form'),
-                    searchInputVal = $.trim(searchInput.val());
-
-                if (searchInputVal === '') {
-                    var hiddenGroup = parentForm.find(':hidden.form-group'),
-                        formGroup = parentForm.find('.form-group ');
-
-                    if (formInputOpen) {
-                        hiddenGroup.animate({width: 'show'}, 400, function () {
-                            formInputOpen = false;
-                        });
-                    } else {
-                        formGroup.animate({width: 'hide'}, 400, function () {
-                            formInputOpen = true;
-                        });
-                    }
-
-                    e.preventDefault();
-                }
-
-            });
-            searchInput.typeahead({
-                dynamic: true,
-                display: ["name"],
-                minLength: 2,
-                maxItem: 10,
-                source: {
-                    search: {
-                        ajax: {
-                            url: "/data/search.json",
-                            data: {
-                                q: "{{query}}",
-                                rubric: function () {
-                                    return $('#quick-search-form-rubric').val();
-                                }
-                            }
-                        }
-                    }
-                },
-                template: function (query, data) {
-                    var template = '';
-                    switch (data.type) {
-                        case 'template':
-                            template = data.template;
-                            break;
-                        case 'brand':
-                            template = '<img class="logo" src="{{picture}}"><span class="name">{{name}}</span>';
-                            break;
-                        case 'rubric':
-                            template = '<span class="name">{{name}}<span class="filter-icon filter-icon-{{icon}}"></span></span>';
-                            break;
-                        case 'anchor':
-                            break;
-                        default:
-                            console.log('unknown type', query, data);
-                            template = 'unknown type';
-                            break;
-                    }
-
-                    return template;
-                },
-                //resultContainer: '#quick-search-form-query-result',
-                //href: "https://en.wikipedia.org/?title={{display}}",
-                //template: "{{display}} <small style='color:#999;'>{{group}}</small>",
-                callback: {
-                    onPopulateSource: function (node, data, group, path) {
-                        console.log(node, data, group, path);
-                        return data;
-                    },
-                    onClick: function (node, a, item, event) {
-                        event.preventDefault();
-
-                        if (!$(event.target).is('.item-add-btn') && item.url) {
-                            location.href = item.url;
-                        }
-
-                        return false;
-                    },
-                    onLayoutBuiltBefore: function (node, query, result, resultHtmlList) {
-                        var $anchor = $('<a/>', {
-                            text: 'All results',
-                        });
-
-                        $anchor.on('click', function () {
-                            location.href = '/catalog/search?q=' + $('#quick-search-form-query').val() + '&rubric=' + $('#quick-search-form-rubric').val();
-                        });
-
-                        if (resultHtmlList) {
-                            return resultHtmlList.append(
-                                $('<li/>', {
-                                    html: $anchor,
-                                    class: "typeahead__item anchor-to-all-results"
-                                })
-                            );
-                        }
-                    }
-                }
-            });
-
-            $('#quick-search-form-rubric').on('change', function () {
-                $('#quick-search-form-query').trigger('input.typeahead');
-            });
-        },
+        // searchInput: function () {
+        //     /* Search bar input animation for Better Responsive
+        //     ----- if not empty send form  */
+        //     var formInputOpen = true,
+        //         searchInput = $('#quick-search-form-query');
+        //
+        //     $('#quick-search').on('click', function (e) {
+        //         var parentForm = $('#quick-search-form'),
+        //             searchInputVal = $.trim(searchInput.val());
+        //
+        //         if (searchInputVal === '') {
+        //             var hiddenGroup = parentForm.find(':hidden.form-group'),
+        //                 formGroup = parentForm.find('.form-group ');
+        //
+        //             if (formInputOpen) {
+        //                 hiddenGroup.animate({width: 'show'}, 400, function () {
+        //                     formInputOpen = false;
+        //                 });
+        //             } else {
+        //                 formGroup.animate({width: 'hide'}, 400, function () {
+        //                     formInputOpen = true;
+        //                 });
+        //             }
+        //
+        //             e.preventDefault();
+        //         }
+        //
+        //     });
+        //     searchInput.typeahead({
+        //         dynamic: true,
+        //         display: ["name"],
+        //         minLength: 2,
+        //         maxItem: 10,
+        //         source: {
+        //             search: {
+        //                 ajax: {
+        //                     url: "/data/search.json",
+        //                     data: {
+        //                         q: "{{query}}",
+        //                         rubric: function () {
+        //                             return $('#quick-search-form-rubric').val();
+        //                         }
+        //                     }
+        //                 }
+        //             }
+        //         },
+        //         template: function (query, data) {
+        //             var template = '';
+        //             switch (data.type) {
+        //                 case 'template':
+        //                     template = data.template;
+        //                     break;
+        //                 case 'brand':
+        //                     template = '<img class="logo" src="{{picture}}"><span class="name">{{name}}</span>';
+        //                     break;
+        //                 case 'rubric':
+        //                     template = '<span class="name">{{name}}<span class="filter-icon filter-icon-{{icon}}"></span></span>';
+        //                     break;
+        //                 case 'anchor':
+        //                     break;
+        //                 default:
+        //                     console.log('unknown type', query, data);
+        //                     template = 'unknown type';
+        //                     break;
+        //             }
+        //
+        //             return template;
+        //         },
+        //         //resultContainer: '#quick-search-form-query-result',
+        //         //href: "https://en.wikipedia.org/?title={{display}}",
+        //         //template: "{{display}} <small style='color:#999;'>{{group}}</small>",
+        //         callback: {
+        //             onPopulateSource: function (node, data, group, path) {
+        //                 console.log(node, data, group, path);
+        //                 return data;
+        //             },
+        //             onClick: function (node, a, item, event) {
+        //                 event.preventDefault();
+        //
+        //                 if (!$(event.target).is('.item-add-btn') && item.url) {
+        //                     location.href = item.url;
+        //                 }
+        //
+        //                 return false;
+        //             },
+        //             onLayoutBuiltBefore: function (node, query, result, resultHtmlList) {
+        //                 var $anchor = $('<a/>', {
+        //                     text: 'All results',
+        //                 });
+        //
+        //                 $anchor.on('click', function () {
+        //                     location.href = '/catalog/search?q=' + $('#quick-search-form-query').val() + '&rubric=' + $('#quick-search-form-rubric').val();
+        //                 });
+        //
+        //                 if (resultHtmlList) {
+        //                     return resultHtmlList.append(
+        //                         $('<li/>', {
+        //                             html: $anchor,
+        //                             class: "typeahead__item anchor-to-all-results"
+        //                         })
+        //                     );
+        //                 }
+        //             }
+        //         }
+        //     });
+        //
+        //     $('#quick-search-form-rubric').on('change', function () {
+        //         $('#quick-search-form-query').trigger('input.typeahead');
+        //     });
+        // },
         filterColorBg: function () {
             /* Category-item filter color box background */
             $('.filter-color-box').each(function () {
@@ -471,40 +471,40 @@
             }
         },
         productZoomImage: function () {
-            var self = this,
-                carouselContainer = $('#product-carousel'),
-                productImg = $('#product-image');
-
-            if ($.fn.elastislide) {
-                carouselContainer.elastislide({
-                    orientation: 'vertical',
-                    minItems: 4
-                });
-            }
-
-            // Product page zoom plugin settings
-            if ($.fn.elevateZoom) {
-                productImg.elevateZoom({
-                    responsive: true, // simple solution for zoom plugin down here // it can cause bugs at resize
-                    zoomType: (self.mobile || $(window).width() < 768) ? 'inner' : 'lens', // you can use 'inner' or 'window' // change inner and go to product.html page and see zoom plugin differances
-                    borderColour: '#d0d0d0',
-                    cursor: "crosshair",
-                    borderSize: 2,
-                    lensSize: 180,
-                    lensOpacity: 1,
-                    lensColour: 'rgba(255, 255, 255, 0.25)'
-                });
-
-                carouselContainer.find('a').on('mouseover', function (e) {
-                    var ez = $('#product-image').data('elevateZoom'),
-                        smallImg = $(this).data('image'),
-                        bigImg = $(this).data('zoom-image');
-
-                    ez.swaptheimage(smallImg, bigImg);
-                    e.stopPropagation();
-                    e.preventDefault();
-                });
-            }
+            // var self = this,
+            //     carouselContainer = $('#product-carousel'),
+            //     productImg = $('#product-image');
+            //
+            // if ($.fn.elastislide) {
+            //     carouselContainer.elastislide({
+            //         orientation: 'vertical',
+            //         minItems: 4
+            //     });
+            // }
+            //
+            // // Product page zoom plugin settings
+            // if ($.fn.elevateZoom) {
+            //     productImg.elevateZoom({
+            //         responsive: true, // simple solution for zoom plugin down here // it can cause bugs at resize
+            //         zoomType: (self.mobile || $(window).width() < 768) ? 'inner' : 'lens', // you can use 'inner' or 'window' // change inner and go to product.html page and see zoom plugin differances
+            //         borderColour: '#d0d0d0',
+            //         cursor: "crosshair",
+            //         borderSize: 2,
+            //         lensSize: 180,
+            //         lensOpacity: 1,
+            //         lensColour: 'rgba(255, 255, 255, 0.25)'
+            //     });
+            //
+            //     carouselContainer.find('a').on('mouseover', function (e) {
+            //         var ez = $('#product-image').data('elevateZoom'),
+            //             smallImg = $(this).data('image'),
+            //             bigImg = $(this).data('zoom-image');
+            //
+            //         ez.swaptheimage(smallImg, bigImg);
+            //         e.stopPropagation();
+            //         e.preventDefault();
+            //     });
+            // }
         },
         responsiveVideo: function () {
             /* Check for fitVids plugin

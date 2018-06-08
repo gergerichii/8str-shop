@@ -21,4 +21,8 @@ class TestController extends \yii\web\Controller
         return $this->render('grid');
     }
 
+    
+    public function actionTabsTest() {
+        return $this->render('tabsTest');
+    }
 }

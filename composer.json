@@ -40,8 +40,8 @@
         "kartik-v/yii2-grid": "@dev",
         "corpsepk/yii2-yandex-market-yml": "~0.3",
         "kartik-v/yii2-tabs-x": "*",
-        "amilna/yii2-elevatezoom": "*",
-        "2amigos/yii2-gallery-widget": "~1.0"
+        "2amigos/yii2-gallery-widget": "~1.0",
+        "bower-asset/blueimp-gallery": "^2"
     },
     "require-dev": {
         "yiisoft/yii2-debug": "~2.0.0",
@@ -58,5 +58,14 @@
             "type": "composer",
             "url": "https://asset-packagist.org"
         }
-    ]
+    ],
+    "extra": {
+        "asset-installer-paths": {
+            "npm-asset-library": "vendor/npm",
+            "bower-asset-library": "vendor/bower"
+        },
+        "branch-alias": {
+            "dev-master": "1.0-dev"
+        }
+    }
 }

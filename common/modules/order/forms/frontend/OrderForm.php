@@ -88,11 +88,12 @@ class OrderForm extends CompositeForm {
     /** @var \common\modules\order\models\TemporaryOrder */
     public $orderModel;
     
-    
     /**
      * OrderForm constructor.
      *
      * @param array $config
+     *
+     * @throws \yii\base\InvalidConfigException
      */
     public function __construct(array $config = []) {
         

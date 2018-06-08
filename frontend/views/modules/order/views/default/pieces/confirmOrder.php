@@ -20,6 +20,10 @@ use common\modules\order\forms\frontend\OrderForm;
 $this->title = yii::t('cart', 'Cart');
 /** @var \common\modules\catalog\Module $catalog */
 $catalog = \Yii::$app->getModule('catalog');
+/** @var \common\modules\cart\CartService $cartService */
+$cartService = yii::$app->get('cartService');
+$cost = $cartService->getCost(false);
+$deliveryCost = OrderForm::DELIVERY_METHODS_PRICES[$orderForm->deliveryMethod];
 /** @var \common\modules\files\Module $filesManager */
 $filesManager = Yii::$app->getModule('files');
 $elements = $orderForm->cartElements;
@@ -104,15 +108,17 @@ $this->registerCss(
                         <td class="checkout-table-title" colspan="4">И того по товару:</td>
                         <td class="checkout-table-price"><?=CartInformer::widget(['htmlTag' => 'span', 'text' => '{p}']);?></td>
                     </tr>
+                    <?php if ($deliveryCost): ?>
                     <tr>
                         <td class="checkout-table-title" colspan="4">Доставка:</td>
-                        <td class="checkout-table-price">$399.44</td>
+                        <td class="checkout-table-price"><span class="shop-order-delivery" data-price="<?=$deliveryCost?>"><?=yii::$app->formatter->asCurrency($deliveryCost);?></span></td>
                     </tr>
+                    <?php endif; ?>
                     </tbody>
                     <tfoot>
                     <tr>
                         <td class="checkout-total-title" colspan="4"><strong>Всего по заказу:</strong></td>
-                        <td class="checkout-total-price cart-total"><strong><?=CartInformer::widget(['htmlTag' => 'span', 'text' => '{p}']);?></strong></td>
+                        <td class="checkout-total-price cart-total"><strong class="shop-order-total"><?=yii::$app->formatter->asCurrency($cost + $deliveryCost);?></strong></td>
                     </tr>
                     </tfoot>
                 </table>

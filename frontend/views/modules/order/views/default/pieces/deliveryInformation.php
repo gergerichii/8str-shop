@@ -36,10 +36,10 @@ use common\modules\order\forms\frontend\OrderForm;
             <div class="large-selectbox clearfix">
                 <select id="delivery-method-select" name="OrderForm[deliveryMethod]" class="selectbox">
                     <!-- TODO: переделать в цикл -->
-                    <option value="mkad" <?=$orderForm->deliveryMethod !== 'mkad' ?: 'selected';?>>Доставка в пределах МКАД (350р)</option>
-                    <option value="over_mkad" <?=$orderForm->deliveryMethod !== 'over_mkad' ?: 'selected';?>>Доставказа пределы МКАД (600р)</option>
-                    <option value="tk" <?=$orderForm->deliveryMethod !== 'tk' ?: 'selected';?>>Доставка до терменала транспортной компании (350р)</option>
-                    <option value="self" <?=$orderForm->deliveryMethod !== 'self' ?: 'selected';?>>Самовывоз из Шоурума на Комсомольской площади</option>
+                    <option data-price="350" value="mkad" <?=$orderForm->deliveryMethod !== 'mkad' ?: 'selected';?>>Доставка в пределах МКАД (350р)</option>
+                    <option data-price="600" value="over_mkad" <?=$orderForm->deliveryMethod !== 'over_mkad' ?: 'selected';?>>Доставказа пределы МКАД (600р)</option>
+                    <option data-price="350" value="tk" <?=$orderForm->deliveryMethod !== 'tk' ?: 'selected';?>>Доставка до терменала транспортной компании (350р)</option>
+                    <option data-price="0" value="self" <?=$orderForm->deliveryMethod !== 'self' ?: 'selected';?>>Самовывоз из Шоурума на Комсомольской площади</option>
                 </select>
             </div><!-- End .large-selectbox-->
         </div><!-- End .input-group -->
@@ -119,6 +119,11 @@ use common\modules\order\forms\frontend\OrderForm;
         
         toggleDeliveryAddresses = function() {
             var val = $('#delivery-method-select').val();
+            
+            var price = $('#delivery-method-select').children('[value='+val+']').data('price');
+            $('.shop-order-delivery').text(price);
+            $('.shop-order-delivery').data('price', price);
+            
             var addressContainer = $('.address-container');
             var selfAddressContainer = $('.self-address-container');
             switch(val) {

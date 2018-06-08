@@ -2,7 +2,7 @@
 namespace common\modules\order\behaviors;
 
 use yii\base\Behavior;
-use common\modules\cart\Cart;
+use common\modules\cart\CartService as Cart;
 use common\modules\order\models\ShippingType;
 use yii;
 

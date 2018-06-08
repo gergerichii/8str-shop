@@ -223,12 +223,14 @@ shop.cart = {
         jQuery('.shop-cart-block').css({'opacity': '0.3'});
         jQuery('.shop-cart-count').css({'opacity': '0.3'});
         jQuery('.shop-cart-price').css({'opacity': '0.3'});
+        jQuery('.shop-order-total').css({'opacity': '0.3'});
 
         jQuery.post(link, data,
             function (json) {
                 jQuery('.shop-cart-block').css({'opacity': '1'});
                 jQuery('.shop-cart-count').css({'opacity': '1'});
                 jQuery('.shop-cart-price').css({'opacity': '1'});
+                jQuery('.shop-order-total').css({'opacity': '1'});
 
                 if (json.result == 'fail') {
                     console.log(json.error);
@@ -254,6 +256,12 @@ shop.cart = {
         jQuery('.shop-cart-block').replaceWith(json.elementsHTML);
         jQuery('.shop-cart-count').html(json.count);
         jQuery('.shop-cart-price').html(json.price);
+        
+        var deliveryPrice = json.clear_price + $('.shop-order-delivery').data('price');
+        deliveryPrice += '';
+        deliveryPrice = deliveryPrice.replace(/(\d{0,3}(?=\d{6}))?(\d{0,3}(?=\d{3}))?(\d{1,3})$/, '$1 $2 $3 ₽');
+        jQuery('.shop-order-total').text(deliveryPrice);
+        
         jQuery('.shop-cart-checkout-btn').toggle(!!json.count);
         
         if (json.action && json.elementName) {

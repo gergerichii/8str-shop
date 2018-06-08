@@ -15,6 +15,7 @@ class CartInformer extends Widget
     public $cssClass = null;
     public $htmlTag = null;
     public $showOldPrice = true;
+    public $withTriggers = false;
     
     /**
      * @param array $config
@@ -65,14 +66,20 @@ class CartInformer extends Widget
         /** @var \common\modules\cart\CartService $cartService */
         $cartService = yii::$app->get('cartService');
 
-        if($this->showOldPrice == false | $cartService->cost == $cartService->getCost(false)) {
-            $this->text = str_replace(['{c}', '{p}'],
-                ['<span class="shop-cart-count">'.$cartService->getCount().'</span>', '<strong class="shop-cart-price">'.$cartService->getCostFormatted().'</strong>'],
+        if($this->showOldPrice === false | $cartService->cost === $cartService->getCost($this->withTriggers)) {
+            $this->text = str_replace(['{c}', '{p}', '{s}', '{t}'],
+                [
+                    '<span class="shop-cart-count">'.$cartService->getCount().'</span>',
+                    '<strong class="shop-cart-price">'.$cartService->getCostFormatted().'</strong>'
+                ],
                 $this->text
             );
         } else {
-            $this->text = str_replace(['{c}', '{p}'],
-                ['<span class="shop-cart-count">'.$cartService->getCount().'</span>', '<strong class="shop-cart-price"><s>'.round($cartService->getCost(false)).'</s>'.$cartService->getCostFormatted().'</strong>'],
+            $this->text = str_replace(['{c}', '{p}', '{s}', '{t}'],
+                [
+                    '<span class="shop-cart-count">'.$cartService->getCount().'</span>',
+                    '<strong class="shop-cart-price"><s>'.round($cartService->getCost($this->withTriggers)).'</s>'.$cartService->getCostFormatted().'</strong>'
+                ],
                 $this->text
             );
         }

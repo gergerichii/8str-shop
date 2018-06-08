@@ -199,13 +199,13 @@ class CartService extends Component
         return $this->cost;
     }
 
-    public function getCostFormatted()
+    public function getCostFormatted($withTriggers = true)
     {
         try {
-            $price = yii::$app->formatter->asCurrency($this->getCost());
+            $price = yii::$app->formatter->asCurrency($this->getCost($withTriggers));
         } catch(yii\base\InvalidConfigException $e) {
             yii::error($e->getMessage());
-            $price = $this->getCost();
+            $price = $this->getCost($withTriggers = true);
         }
         return $price;
     }

@@ -50,7 +50,7 @@
 
             <div class="content row" role="main">
                 <div class="col-md-6 col-sm-12 col-xs-12 product-thumbs">
-                    <?= $this->render('product/imagePreviewNew', ['product' => $productModel]) ?>
+                    <?= $this->render('./product/ImagePreviewNew', ['product' => $productModel]) ?>
                 </div>
 
                 <div class="col-md-6 col-sm-12 col-xs-12 product">

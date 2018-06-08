@@ -11,6 +11,7 @@
  * @var \common\modules\catalog\models\Product $product
  * @var \common\modules\catalog\Module $catalog
  */
+
 $catalog = \Yii::$app->getModule('catalog');
 
 /** @var \common\modules\files\Module $filesManager */

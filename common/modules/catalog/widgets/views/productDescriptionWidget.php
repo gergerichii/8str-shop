@@ -78,6 +78,12 @@ $tabs = [
 $tabs[] = [
     'label' => 'Технические характеристики',
     'content' => ($model->tech_desc) ? $model->tech_desc : '',
+    'linkOptions' => [
+        'class' => ($model->tech_desc) ? '' : 'disabled',
+    ],
+    'headerOptions' => [
+        'class' => ($model->tech_desc) ? '' : 'disabled',
+    ],
 ];
 
 $config = [

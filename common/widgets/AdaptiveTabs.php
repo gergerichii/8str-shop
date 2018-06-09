@@ -128,11 +128,12 @@ class AdaptiveTabs extends TabsX {
                 }
                 if ($this->renderTabContent) {
                     Html::addCssClass($options, 'panel');
-                    $collapceLinkOptions = [
-                        'class' => "collapse-toggle",
+                    $collapseLinkOptions = $linkOptions;
+                    Html::addCssClass($collapseLinkOptions, "collapse-toggle");
+                    $collapseLinkOptions = ArrayHelper::merge($collapseLinkOptions, [
                         'data-toggle' => "collapse",
                         'data-parent' => "#{$this->containerOptions['id']} .tab-content",
-                    ];
+                    ]);
                     
                     $panes[] =
                             Html::tag(
@@ -144,7 +145,7 @@ class AdaptiveTabs extends TabsX {
                                         Html::a(
                                             $label,
                                             "#{$options['id']}-collapse",
-                                            $collapceLinkOptions
+                                            $collapseLinkOptions
                                         ),
                                     ['class' => 'panel-tittle']
                                 ),

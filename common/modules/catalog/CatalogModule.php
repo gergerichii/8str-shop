@@ -7,6 +7,7 @@ use common\modules\catalog\models\ProductBrand;
 use common\modules\catalog\models\ProductPrice;
 use common\modules\catalog\models\ProductRubric;
 use common\modules\catalog\models\ProductRubricMenuItems;
+use common\modules\files\components\FilesManager;
 use common\modules\files\models\Image;
 use Yii;
 use yii\base\ErrorException;
@@ -20,7 +21,7 @@ use yii\helpers\Url;
  *
  * @property mixed $brandMenuStructure
  */
-class Module extends \yii\base\Module
+class CatalogModule extends \yii\base\Module
 {
     protected $productActionId = 'product';
 
@@ -447,8 +448,8 @@ class Module extends \yii\base\Module
      */
     public function getProductThumbnailUri(string $imageName, string $thumbName) {
         // TODO Need speedup
-        /** @var \common\modules\files\Module $filesManager */
-        $filesManager = Yii::$app->getModule('files');
+        /** @var FilesManager $filesManager */
+        $filesManager = Yii::$app->getModule('files')->manager;
         /** @var Image $entity */
         $entity = $filesManager->getEntityInstance('products/images' . '/' . $thumbName);
         $entity->fileName = $imageName;
@@ -468,8 +469,8 @@ class Module extends \yii\base\Module
      * @throws \yii\base\InvalidConfigException
      */
     public function getProductImageUri($imageName, $allowDefault = true) {
-        /** @var \common\modules\files\Module $filesManager */
-        $filesManager = Yii::$app->getModule('files');
+        /** @var FilesManager $filesManager */
+        $filesManager = Yii::$app->getModule('files')->manager;
         /** @var Image $entity */
         $entity = $filesManager->getEntityInstance('products/images');
         $entity->fileName = $imageName;
@@ -495,8 +496,8 @@ class Module extends \yii\base\Module
      */
     public function getProductThumbnailPath(string $imageName, string $thumbName) {
         // TODO Need speedup
-        /** @var \common\modules\files\Module $filesManager */
-        $filesManager = Yii::$app->getModule('files');
+        /** @var FilesManager $filesManager */
+        $filesManager = Yii::$app->getModule('files')->manager;
         /** @var Image $entity */
         $entity = $filesManager->getEntityInstance('products/images' . '/' . $thumbName);
         $entity->fileName = $imageName;
@@ -630,8 +631,8 @@ class Module extends \yii\base\Module
      */
     public function getBrandThumbnailPath($imageName, string $thumbName = 'little') {
         // TODO Need speedup
-        /** @var \common\modules\files\Module $filesManager */
-        $filesManager = Yii::$app->getModule('files');
+        /** @var FilesManager $filesManager */
+        $filesManager = Yii::$app->getModule('files')->manager;
         /** @var Image $entity */
         $entity = $filesManager->getEntityInstance('brands/images' . '/' . $thumbName);
         $entity->fileName = (string)$imageName;
@@ -679,8 +680,8 @@ class Module extends \yii\base\Module
      */
     public function getBrandThumbnailUri($imageName, string $thumbName = 'little') {
         // TODO Need speedup
-        /** @var \common\modules\files\Module $filesManager */
-        $filesManager = Yii::$app->getModule('files');
+        /** @var FilesManager $filesManager */
+        $filesManager = Yii::$app->getModule('files')->manager;
         /** @var Image $entity */
         $entity = $filesManager->getEntityInstance('brands/images' . '/' . $thumbName);
         $entity->fileName = (string)$imageName;

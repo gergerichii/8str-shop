@@ -3,7 +3,7 @@
 namespace common\modules\catalog\widgets;
 
 use common\modules\catalog\models\forms\ProductFilterForm;
-use common\modules\catalog\Module;
+use common\modules\catalog\CatalogModule;
 use yii\base\Widget;
 
 /**
@@ -22,7 +22,7 @@ class ProductFilterWidget extends Widget
     public function run() {
         $rubrics = $this->filterForm->getRubrics();
         $brands = $this->filterForm->getBrands();
-        /** @var Module $catalog */
+        /** @var CatalogModule $catalog */
         $catalogModule = \Yii::$app->getModule('catalog');
 
         $prices = $this->filterForm->getPriceRange();

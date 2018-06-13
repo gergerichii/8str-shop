@@ -7,7 +7,7 @@ use common\helpers\ProductHelper;
 use common\models\entities\User;
 use common\modules\cart\interfaces\CartElement;
 use common\modules\catalog\models\queries\ProductQuery;
-use common\modules\catalog\Module;
+use common\modules\catalog\CatalogModule;
 use corpsepk\yml\behaviors\YmlOfferBehavior;
 use common\modules\catalog\models\YmlOffer as Offer;
 use Yii;
@@ -191,7 +191,7 @@ class Product extends BaseActiveRecord implements CartElement
                         ->where(['market_upload' => 1])->limit(10000);
                 },
                 'dataClosure' => function ($model) {
-                    /** @var \common\modules\catalog\Module $catalog */
+                    /** @var \common\modules\catalog\CatalogModule $catalog */
                     static $catalog;
                     if (!$catalog) {
                         $catalog = Yii::$app->getModule('catalog');
@@ -664,7 +664,7 @@ class Product extends BaseActiveRecord implements CartElement
      * @return int|string
      */
     public function getCartPrice() {
-        /** @var \common\modules\catalog\Module $catalog */
+        /** @var \common\modules\catalog\CatalogModule $catalog */
         $catalog = yii::$app->getModule('catalog');
         return $catalog->priceOf($this, false);
     }
@@ -713,7 +713,7 @@ class Product extends BaseActiveRecord implements CartElement
         parent::afterSave($insert, $changedAttributes);
 
         // TODO Replace at business logic or form model
-        /** @var Module $catalog */
+        /** @var CatalogModule $catalog */
         $catalog = Yii::$app->getModule('catalog');
         if (isset($this->listOfRubrics)) {
             $rubricIds = array_filter(explode(',', $this->listOfRubrics));
@@ -921,7 +921,7 @@ class Product extends BaseActiveRecord implements CartElement
      */
     public function updateFieldForFuturePrice($fieldForFuturePrice) {
         if (array_key_exists('future', $fieldForFuturePrice) && !empty(intval($fieldForFuturePrice['future']['value']))) {
-            /** @var Module $catalog */
+            /** @var CatalogModule $catalog */
             $catalog = Yii::$app->getModule('catalog');
             $catalog->updateFuturePrice($this, $this->fieldForFuturePrice['future']['value'], $fieldForFuturePrice['future']['active_from']);
         }

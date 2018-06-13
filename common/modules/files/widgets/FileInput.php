@@ -3,7 +3,7 @@
 namespace common\modules\files\widgets;
 
 
-use common\modules\files\Module;
+use common\modules\files\FilesModule;
 use yii\helpers\ArrayHelper;
 use yii\helpers\Url;
 
@@ -56,8 +56,8 @@ class FileInput extends \kartik\widgets\FileInput
             $files = $this->model->{$this->attribute};
         }
 
-        /** @var Module $fileManager */
-        $fileManager = \Yii::$app->getModule('files');
+        /** @var FilesModule $fileManager */
+        $fileManager = \Yii::$app->getModule('files')->namanger;
 
         $initialPreview = [];
         $initialPreviewConfig = [];

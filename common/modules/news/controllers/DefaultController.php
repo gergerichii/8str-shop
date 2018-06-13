@@ -2,6 +2,7 @@
 
 namespace common\modules\news\controllers;
 
+use common\modules\files\components\FilesManager;
 use common\modules\news\Module;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
@@ -24,9 +25,9 @@ class DefaultController extends Controller
             throw new NotFoundHttpException();
         }
 
-        /** @var \common\modules\files\Module $filesModule */
-        $filesModule = \Yii::$app->getModule('files');
+        /** @var FilesManager $filesManager */
+        $filesManager = \Yii::$app->getModule('files')->manager;
 
-        return $this->render('index', ['provider' => $provider, 'newsModule' => $newsModule, 'filesModule' => $filesModule]);
+        return $this->render('index', ['provider' => $provider, 'newsModule' => $newsModule, 'filesManager' => $filesManager]);
     }
 }

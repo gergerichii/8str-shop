@@ -7,14 +7,14 @@
  */
 
 /**
- * @var \yii\web\View $this
+ * @var \yii\web\View                          $this
  * @var \common\modules\catalog\models\Product $product
- * @var \common\modules\catalog\Module $catalog
+ * @var \common\modules\catalog\CatalogModule  $catalog
  */
 $catalog = \Yii::$app->getModule('catalog');
 
-/** @var \common\modules\files\Module $filesManager */
-$filesManager = \Yii::$app->getModule('files');
+/** @var \common\modules\files\FilesModule $filesManager */
+$filesManager = \Yii::$app->getModule('files')->manager;
 ?>
 
 <div class="col-md-6 col-sm-12 col-xs-12 product-viewer clearfix">

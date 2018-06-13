@@ -7,7 +7,7 @@ $config = [
         'common\modules\catalog\CatalogBootstrap',
         'cart',
         'common\modules\order\Bootstrap',
-        'files',
+        'common\modules\files\FilesBootstrap',
         'common\modules\search\SearchBootstrap',
     ],
     'controllerMap' => [
@@ -104,7 +104,7 @@ $config = [
             'class' => 'common\modules\counters\CountersModule',
         ],
         'catalog' => [
-            'class' => 'common\modules\catalog\Module',
+            'class' => 'common\modules\catalog\CatalogModule',
         ],
         'files' => [
         ],

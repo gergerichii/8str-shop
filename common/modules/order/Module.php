@@ -287,8 +287,8 @@ class Module extends \yii\base\Module
                 $dataItem['count'] = $productCount;
                 $dataItem['cost'] = $productCost;
         
-                /** @var \common\modules\files\Module $fileManager */
-                $fileManager = Yii::$app->getModule('files');
+                /** @var \common\modules\files\FilesModule $fileManager */
+                $fileManager = Yii::$app->getModule('files')->manager;
                 if (count($product->images)) {
                     $image = $product->images[0];
                     $filePath = $fileManager->getFilePath('products/images/little', $image, null, true, true);

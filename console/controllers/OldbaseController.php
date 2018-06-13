@@ -7,8 +7,8 @@ use common\modules\catalog\models\ProductBrand;
 use common\modules\catalog\models\ProductPrice;
 use common\modules\catalog\models\ProductRubric;
 use common\modules\catalog\models\ProductTag;
+use common\modules\files\components\FilesManager;
 use common\modules\files\models\Image;
-use common\modules\files\Module;
 use common\modules\news\models\Article;
 use Yii;
 use yii\db\Connection;
@@ -273,7 +273,7 @@ class OldbaseController extends BaseController
      * @throws \yii\base\InvalidConfigException
      */
     protected function exportProducts($remoteDb) {
-        /** @var \common\modules\catalog\Module $catalog */
+        /** @var \common\modules\catalog\CatalogModule $catalog */
         $catalog = Yii::$app->getModule('catalog');
 
         $this->trace('Экспорт Продутов');
@@ -357,8 +357,8 @@ class OldbaseController extends BaseController
         $localBrands = ProductBrand::find()
             ->indexBy('old_id')->all();
 
-        /** @var Module $filesManager */
-        $filesManager = Yii::$app->getModule('files');
+        /** @var FilesManager $filesManager */
+        $filesManager = Yii::$app->getModule('files')->manager;
         
         /** @var Image $image */
         $image = $filesManager->getEntityInstance('products/images');
@@ -918,8 +918,8 @@ class OldbaseController extends BaseController
         $this->success('Found ' . count($newsRows) . ' articles of news.' . PHP_EOL);
 
         if ($newsRows) {
-            /** @var Module $filesManager */
-            $filesManager = Yii::$app->getModule('files');
+            /** @var FilesManager $filesManager */
+            $filesManager = Yii::$app->getModule('files')->manager;
             /** @var Image $image */
             $mainImage = $filesManager->getEntityInstance('news/images');
             foreach ($newsRows as $newsRow) {

@@ -1,26 +1,17 @@
 <?php
-
-namespace common\modules\files;
-
-use common\modules\files\components\FileUrlRule;
-use common\modules\files\models\BaseFile;
-use yii\base\Application;
-use yii\base\BootstrapInterface;
-use yii\base\InvalidConfigException;
-use yii\web\UrlManager;
-
 /**
- * Class Module for the Files
- *
- * @property mixed $defaultUri
+ * Created by PhpStorm.
+ * User: USER
+ * Date: 09.06.2018
+ * Time: 12:35
  */
-class Module extends \yii\base\Module implements BootstrapInterface
-{
-    /**
-     * @inheritdoc
-     */
-    public $controllerNamespace = 'common\modules\files\controllers';
 
+namespace common\modules\files\components;
+use common\modules\files\models\BaseFile;
+use yii\base\Component;
+use yii\base\InvalidConfigException;
+
+class FilesManager extends Component {
     /**
      * Entities
      * @var array
@@ -36,6 +27,10 @@ class Module extends \yii\base\Module implements BootstrapInterface
      * @var string
      */
     public $protectedPath;
+    /**
+     * @var \common\modules\files\FilesModule
+     */
+    public $filesModule;
 
     /**
      * Entities instances
@@ -43,61 +38,13 @@ class Module extends \yii\base\Module implements BootstrapInterface
      */
     private $_entityInstances = [];
     
-    protected $_defaultUri;
-
     /**
-     * @inheritdoc
+     * @throws \yii\base\InvalidConfigException
      */
     public function init() {
         parent::init();
-        
-        // custom initialization code goes here
-        $this->_defaultUri = "{$this->id}/{$this->defaultRoute}";
-    }
-    
-    /**
-     * Returns the default uri for this module
-     * @return mixed
-     */
-    public function getDefaultUri() {
-        return $this->_defaultUri;
-    }
-
-    /**
-     * Bootstrap method to be called during application bootstrap stage.
-     * @param Application $app the application currently running
-     */
-    public function bootstrap($app) {
-        $urlManagers = [];
-        foreach (array_keys($app->components) as $componentName) {
-            if (strPos($componentName, 'UrlManager') > 0)
-                $urlManagers[] = $componentName;
-        }
-
-        $rules = [
-            [
-                'class' => FileUrlRule::class,
-                'filesManagerModuleId' => $this->id,
-            ],
-            /*[
-                'name' => 'fileRule',
-                'pattern' => 'files/<_a:download|upload|.{0}>/<filePath:[\w\-\.,/_-]*>',
-                'route' => 'files/default/<_a>',
-                'defaults' => [
-                    'filePath' => '',
-                    '_a' => 'download',
-                ]
-            ]*/
-        ];
-
-        if (count($urlManagers)) {
-            foreach ($urlManagers as $urlManager) {
-                /** @var UrlManager $urlManager */
-                $urlManager = $app->get($urlManager);
-                $urlManager->addRules($rules);
-            }
-        } else {
-            $app->urlManager->addRules($rules);
+        if (empty($this->filesModule)) {
+            throw new InvalidConfigException('Files module is not set!');
         }
     }
     
@@ -193,4 +140,5 @@ class Module extends \yii\base\Module implements BootstrapInterface
 
         return $this->createEntity($entityType, '');
     }
+
 }

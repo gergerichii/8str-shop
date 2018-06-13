@@ -46,7 +46,7 @@ return [
     ],
     'modules' => [
         'catalog' => [
-            'class' => 'common\modules\catalog\Module',
+            'class' => 'common\modules\catalog\CatalogModule',
         ],
     ],
     'params' => [],

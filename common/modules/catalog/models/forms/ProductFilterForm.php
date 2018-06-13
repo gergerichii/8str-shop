@@ -11,7 +11,7 @@ use common\modules\catalog\models\queries\ProductPriceDiscountQuery;
 use common\modules\catalog\models\ProductRubric;
 use common\modules\catalog\models\ProductSphinxIndex;
 use common\modules\catalog\models\queries\ProductTagQuery;
-use common\modules\catalog\Module;
+use common\modules\catalog\CatalogModule;
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
 use yii\db\Expression;
@@ -105,15 +105,16 @@ class ProductFilterForm extends Model
             [['from', 'to'], 'double']
         ];
     }
-
+    
     /**
      * Make product provider
      *
      * @return ActiveDataProvider
-     * @throws NotFoundHttpException
+     * @throws \yii\base\ErrorException
+     * @throws \yii\web\NotFoundHttpException
      */
     public function makeProductsProvider() {
-        /** @var Module $catalog */
+        /** @var CatalogModule $catalog */
         $catalog = \Yii::$app->getModule('catalog');
         
         // Search for rubrics
@@ -140,7 +141,7 @@ class ProductFilterForm extends Model
             $productIndexQuery = ProductSphinxIndex::find()
                 ->select('id')
                 ->where(['rubric_id' => $allChildRubrics]);
-            $sk = Yii::$app->sphinx->quoteValue(trim($sk));
+            $sk = \Yii::$app->sphinx->quoteValue(trim($sk));
             $sk = str_replace('/', '\/', $sk);
             $productIndexQuery->match(new Expression(':match', ['match' => "{$sk}"]));
     

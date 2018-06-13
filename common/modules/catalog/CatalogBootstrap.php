@@ -16,7 +16,7 @@ use yii\base\BootstrapInterface;
  *
  * @package common\modules\catalog
  */
-class CatalogBootstrap extends BaseModuleBootstrap implements BootstrapInterface {
+class CatalogBootstrap extends BaseModuleBootstrap {
     /**
      * Bootstrap method to be called during application bootstrap stage.
      *
@@ -25,13 +25,19 @@ class CatalogBootstrap extends BaseModuleBootstrap implements BootstrapInterface
      * @throws \yii\base\InvalidConfigException
      */
     public function bootstrap($app) {
-        $app->setModule('catalog', ['class' => Module::class]);
-        $app->setModule('dynagrid', [
-            'class' => \kartik\dynagrid\Module::class,
-            'dbSettings' => ['tableName' => 'dynagrid'],
-            'dbSettingsDtl' => ['tableName' => 'dynagrid_dtl'],
-        ]);
-        $app->setModule('gridview', ['class' => \kartik\grid\Module::class]);
+        if(!$app->hasModule('catalog')) {
+            $app->setModule('catalog', ['class' => CatalogModule::class]);
+        }
+        if(!$app->hasModule('dynagrid')) {
+            $app->setModule('dynagrid', [
+                'class' => \kartik\dynagrid\Module::class,
+                'dbSettings' => ['tableName' => 'dynagrid'],
+                'dbSettingsDtl' => ['tableName' => 'dynagrid_dtl'],
+            ]);
+        }
+        if(!$app->hasModule('gridview')) {
+            $app->setModule('gridview', ['class' => \kartik\grid\Module::class]);
+        }
 
         $feRules = [
             [

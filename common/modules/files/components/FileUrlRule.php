@@ -27,7 +27,7 @@ class FileUrlRule extends BaseObject implements UrlRuleInterface
      */
     public function parseRequest($manager, $request) {
         $pathInfo = $request->getPathInfo();
-        /** @var \common\modules\files\Module $filesUrlManager */
+        /** @var \common\modules\files\FilesModule $filesUrlManager */
         $filesUrlManager = \Yii::$app->getModule($this->filesManagerModuleId);
         $pattern = "%^{$filesUrlManager->id}/(?:(?P<_a>download|upload|.{0})/)?(?:(?P<protected>protected|.{0})/)?(?P<filePath>[\w\-\.,/_-]*)%iu";
         if (preg_match($pattern, $pathInfo, $matches)) {
@@ -62,7 +62,7 @@ class FileUrlRule extends BaseObject implements UrlRuleInterface
      * @return string|bool the created URL, or false if this rule cannot be used for creating this URL.
      */
     public function createUrl($manager, $route, $params) {
-        /** @var \common\modules\files\Module $filesUrlManager */
+        /** @var \common\modules\files\FilesModule $filesUrlManager */
         $filesUrlManager = \Yii::$app->getModule($this->filesManagerModuleId);
         
         if (0 === strpos($route, $filesUrlManager->defaultUri) && !empty($params['fileName'])) {

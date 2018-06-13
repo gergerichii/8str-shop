@@ -4,7 +4,7 @@ namespace console\controllers;
 
 use common\modules\catalog\models\Product;
 use common\modules\files\models\Image;
-use common\modules\files\Module as FilesManager;
+use common\modules\files\components\FilesManager;
 use yii\helpers\ArrayHelper;
 use yii\helpers\FileHelper;
 use yii\image\drivers\Image as DriverImage;
@@ -20,17 +20,16 @@ class CatalogController extends BaseController
      * @param string $path Path to file. May be the alias.
      *
      * @return int
-     * @throws \Exception
+     * @throws \GuzzleHttp\Exception\GuzzleException
      * @throws \Throwable
      * @throws \yii\base\ErrorException
-     * @throws \yii\base\Exception
      * @throws \yii\base\InvalidConfigException
      * @throws \yii\db\StaleObjectException
      */
     public function actionImportImages($path) {
 
         /** @var FilesManager $filesManager */
-        $filesManager = \Yii::$app->getModule('files');
+        $filesManager = \Yii::$app->getModule('files')->manager;
         /** @var Image $image */
         $image = $filesManager->getEntityInstance('products/images');
 

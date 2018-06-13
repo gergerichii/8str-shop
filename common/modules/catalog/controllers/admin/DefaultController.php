@@ -6,8 +6,8 @@ use common\modules\catalog\models\forms\ProductImagesForm;
 use common\modules\catalog\models\forms\ProductPricesForm;
 use common\modules\catalog\models\Product;
 use common\modules\catalog\models\ProductSearch;
+use common\modules\files\components\FilesManager;
 use common\modules\files\models\Image;
-use common\modules\files\Module;
 use Yii;
 use yii\filters\AccessControl;
 use yii\filters\VerbFilter;
@@ -459,8 +459,8 @@ class DefaultController extends Controller
             ]);
         }
 
-        /** @var Module $filesManager */
-        $filesManager = Yii::$app->getModule('files');
+        /** @var \common\modules\files\components\FilesManager $filesManager */
+        $filesManager = Yii::$app->getModule('files')->manager;
 
         $uploadedFiles = UploadedFile::getInstancesByName('ProductImagesForm[images]');
         $initialPreview = [];
@@ -518,7 +518,6 @@ class DefaultController extends Controller
      * @throws NotFoundHttpException
      * @throws \Exception
      * @throws \Throwable
-     * @throws \yii\base\InvalidConfigException
      * @throws \yii\db\StaleObjectException
      */
     public function actionDeleteImage() {
@@ -527,8 +526,8 @@ class DefaultController extends Controller
         $productId = $request->post('id');
         $imageName = $request->post('imageName');
 
-        /** @var Module $filesManager */
-        $filesManager = Yii::$app->getModule('files');
+        /** @var FilesManager $filesManager */
+        $filesManager = Yii::$app->getModule('files')->namanger;
         /** @var Image $image */
         $image = $filesManager->createEntity('products/images', $imageName);
         $image->delete();

@@ -2,7 +2,6 @@
 
 namespace common\modules\files\models;
 
-use common\modules\files\Module as FilesModule;
 use GuzzleHttp\Client;
 use yii\base\InvalidConfigException;
 use yii\base\Model;
@@ -35,7 +34,7 @@ abstract class BaseFile extends Model
      */
     public $defaultFile = 'default.jpg';
     /**
-     * @var \common\modules\files\Module
+     * @var \common\modules\files\components\FilesManager
      */
     public $filesManager;
     
@@ -46,9 +45,7 @@ abstract class BaseFile extends Model
         parent::init();
         
         if (empty($this->filesManager)) {
-            if (!$this->filesManager = \Yii::$app->getModule('files')) {
-                throw new InvalidConfigException('Files manager needed!');
-            }
+            throw new InvalidConfigException('Files manager needed!');
         }
     }
     
@@ -69,7 +66,7 @@ abstract class BaseFile extends Model
     public function getUri($scheme = false, $allowDefault = false) {
         $ret = \Yii::$app->urlManager->createAbsoluteUrl(
             [
-                "/{$this->filesManager->defaultUri}/download",
+                "/{$this->filesManager->filesModule->defaultUri}/download",
                 'entityType' => $this->entityType,
                 'fileName' => $this->getBasename($allowDefault),
                 'isProtected' => $this->isProtected
@@ -165,6 +162,7 @@ abstract class BaseFile extends Model
      * @param bool   $returnExistsError
      *
      * @return bool
+     * @throws \GuzzleHttp\Exception\GuzzleException
      */
     public function pickFrom($path, $returnExistsError = true) {
         if(strpos($path, 'http') === 0) {
@@ -200,9 +198,10 @@ abstract class BaseFile extends Model
      * Pick the image from remote url
      *
      * @param string $url
-     * @param        $returnExistsError
+     * @param bool   $returnExistsError
      *
      * @return bool
+     * @throws \GuzzleHttp\Exception\GuzzleException
      */
     public function pickFromRemote($url, $returnExistsError = true) {
         if ($this->exists()) {

@@ -1,8 +1,8 @@
 <?php
 /**
  * @var \common\modules\catalog\models\ProductBrand[] $brands
- * @var \common\modules\catalog\Module $catalogModule
- * @var \common\modules\files\Module $filesModule
+ * @var \common\modules\catalog\CatalogModule         $catalogModule
+ * @var \common\modules\files\components\FilesManager $filesManager
  */
 ?>
 

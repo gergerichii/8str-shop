@@ -6,6 +6,7 @@ use common\modules\catalog\models\Product;
 use common\modules\catalog\models\ProductBrand;
 use common\modules\catalog\models\ProductRubric;
 use common\modules\catalog\providers\FrontendSearchProvider;
+use common\modules\files\components\FilesManager;
 use yii\helpers\ArrayHelper;
 use yii\helpers\Url;
 use yii\web\Controller;
@@ -34,10 +35,10 @@ class DefaultController extends Controller
         $search->top();
         $search->prepare();
 
-        /** @var \common\modules\catalog\Module $catalog */
+        /** @var \common\modules\catalog\CatalogModule $catalog */
         $catalog = \Yii::$app->getModule('catalog');
-        /** @var \common\modules\files\Module $filesManager */
-        $filesManager = \Yii::$app->getModule('files');
+        /** @var FilesManager $filesManager */
+        $filesManager = \Yii::$app->getModule('files')->manager;
 
         $rubricsItems = array_map(function ($rubric) use ($catalog) {
             /** @var \common\modules\catalog\models\ProductRubric $rubric */
@@ -98,7 +99,7 @@ class DefaultController extends Controller
         $sk = trim($sk);
         $productQuery = Product::find()->where(['[[product]].[[name]]' => $sk]);
         $catalogPath = '';
-        /** @var \common\modules\catalog\Module $catalog */
+        /** @var \common\modules\catalog\CatalogModule $catalog */
         $catalog = \Yii::$app->getModule('catalog');
         if ($sc && $rubric = ProductRubric::findOne($sc)) {
             $rubrics = $rubric->children()->select('id')->asArray()->column();

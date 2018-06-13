@@ -56,11 +56,15 @@ $config = [
         ],
     ],
     'modules' => [
-        'files' => [
-            'class' => 'common\modules\files\Module',
-            'entities' => require 'filesMap.php',
-            'publicPath' => '@common/webFiles',
-            'protectedPath' => '@common/webFilesProtected',
+        \common\modules\files\FilesModule::DEFAULT_ID => [
+            'class' => 'common\modules\files\FilesModule',
+            'components' => [
+                \common\modules\files\FilesModule::MANAGER_ID => [
+                    'entities' => require 'filesMap.php',
+                    'publicPath' => '@common/webFiles',
+                    'protectedPath' => '@common/webFilesProtected',
+                ]
+            ]
         ],
     ],
     'container' => [

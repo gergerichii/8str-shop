@@ -1,7 +1,7 @@
 <?php
 /**
  * @var \common\modules\catalog\models\Product[] $products
- * @var \common\modules\catalog\Module $catalog
+ * @var \common\modules\catalog\CatalogModule    $catalog
  */
 
 use yii\helpers\Html;

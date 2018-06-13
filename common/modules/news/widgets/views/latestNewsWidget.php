@@ -4,12 +4,12 @@ use yii\helpers\Html;
 
 /**
  * @var \common\modules\news\models\Article[] $articles
- * @var \common\modules\news\Module $newsModule
- * @var \common\modules\files\Module $filesModule
+ * @var \common\modules\news\Module           $newsModule
+ * @var \common\modules\files\components\FilesManager     $filesManager
  */
 
 $formatter = Yii::$app->getFormatter();
-$image = $filesModule->getEntityInstance('news/images');
+$image = $filesManager->getEntityInstance('news/images');
 ?>
 
 <div id="latestnews-slider-container" class="carousel-wrapper">
@@ -35,7 +35,7 @@ $image = $filesModule->getEntityInstance('news/images');
                 <li>
                     <a href="<?= $url; ?>">
                         <figure class="latestnews-media-container">
-                            <img src="<?= $filesModule->getFileUri('news/images/preview', $article->image); ?>" alt="lats post" class="img-responsive">
+                            <img src="<?= $filesManager->getFileUri('news/images/preview', $article->image); ?>" alt="lats post" class="img-responsive">
                         </figure>
                     </a>
 

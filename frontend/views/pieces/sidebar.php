@@ -10,7 +10,7 @@ use common\modules\catalog\widgets\ProductTagWidget;
 use frontend\widgets\LeftMenu;
 use yii\widgets\Menu;
 
-/** @var \common\modules\catalog\Module $catalog */
+/** @var \common\modules\catalog\CatalogModule $catalog */
 $catalog = \Yii::$app->getModule('catalog');
 
 ?>

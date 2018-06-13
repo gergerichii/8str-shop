@@ -11,11 +11,11 @@ use yii\helpers\Url;
 /** @var \common\modules\cart\models\CartElement[] $elements */
 /** @var \yii\web\View $this */
 $this->title = yii::t('cart', 'Cart');
-/** @var \common\modules\catalog\Module $catalog */
+/** @var \common\modules\catalog\CatalogModule $catalog */
 $catalog = \Yii::$app->getModule('catalog');
 
-/** @var \common\modules\files\Module $filesManager */
-$filesManager = Yii::$app->getModule('files');
+/** @var \common\modules\files\FilesModule $filesManager */
+$filesManager = Yii::$app->getModule('files')->manager;
 
 $this->registerCss('
 .custom-quantity-input input[type=number]::-webkit-inner-spin-button,

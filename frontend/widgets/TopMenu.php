@@ -17,7 +17,7 @@ class TopMenu extends Menu
      */
     public function run()
     {
-        /** @var \common\modules\catalog\Module $catalog */
+        /** @var \common\modules\catalog\CatalogModule $catalog */
         $catalog = \Yii::$app->getModule('catalog');
         $items = $catalog->getMenuStructure(2);
         if (!$items) {

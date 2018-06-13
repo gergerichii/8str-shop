@@ -2,7 +2,7 @@
 
 namespace common\modules\news\widgets;
 
-use common\modules\files\Module as FilesModule;
+use common\modules\files\components\FilesManager;
 use common\modules\news\models\Article;
 use common\modules\news\Module as NewsModule;
 use yii\base\Widget;
@@ -38,13 +38,13 @@ class LatestNewsWidgets extends Widget
 
         /** @var NewsModule $news */
         $newsModule = \Yii::$app->getModule('news');
-        /** @var FilesModule $filesModule */
-        $filesModule = \Yii::$app->getModule('files');
+        /** @var FilesManager $filesManager */
+        $filesManager = \Yii::$app->getModule('files')->manager;
 
         return $this->render($this->viewName, [
             'articles' => $articles,
             'newsModule' => $newsModule,
-            'filesModule' => $filesModule
+            'filesManager' => $filesManager
         ]);
     }
 }

@@ -6,7 +6,7 @@ use Yii;
 use yii\base\InvalidConfigException;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
-use common\modules\files\Module as FileModule;
+use common\modules\files\FilesModule as FileModule;
 
 /**
  * Default controller for the `file` module

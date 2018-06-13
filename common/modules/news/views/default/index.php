@@ -1,8 +1,8 @@
 <?php
 /**
- * @var \yii\data\ActiveDataProvider $provider
- * @var \common\modules\news\Module $newsModule
- * @var \common\modules\files\Module $filesModule
+ * @var \yii\data\ActiveDataProvider      $provider
+ * @var \common\modules\news\Module       $newsModule
+ * @var \common\modules\files\components\FilesManager $filesManager
  */
 
 use yii\helpers\Html;
@@ -33,7 +33,7 @@ $articles = $provider->getModels();
                             </div><!-- End .article-meta-date -->
 
                             <figure class="article-media-container">
-                                <img src="<?= $filesModule->getFileUri('news/images/detail', $article->image); ?>" alt="<?= $title; ?>">
+                                <img src="<?= $filesManager->getFileUri('news/images/detail', $article->image); ?>" alt="<?= $title; ?>">
                             </figure>
 
                             <h2>

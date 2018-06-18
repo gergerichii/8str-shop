@@ -84,10 +84,14 @@ foreach ($shop->offers as $offer) {
         if (empty($offer->$attribute)) {
             continue;
         }
-
+        
         if (is_array($offer->$attribute)) {
+            
+            /** FIXME Костыль */
+            $attributeName = ($attribute === 'deliveryOptions') ? 'delivery-options' : $attribute;
+            
             if (is_array(reset($offer->$attribute))) {
-                $writer->startElement($attribute);
+                $writer->startElement($attributeName);
                 $startElement = true;
             }
             foreach ($offer->$attribute as $value) {
@@ -99,7 +103,7 @@ foreach ($shop->offers as $offer) {
                     }
                     $writer->endElement();
                 } else {
-                    $writer->writeElement($attribute, Html::encode($value));
+                    $writer->writeElement($attributeName, Html::encode($value));
                 }
             }
             if (!empty($startElement)) {

@@ -218,7 +218,7 @@ class Product extends BaseActiveRecord implements CartElement
                         }),
                         'name' => $model->name,
                         'vendor' => !empty($model->brand) ? $model->brand->name : null,
-                        'description' => mb_substr(strip_tags($model->desc), 0, 500) . '...',
+                        'description' => (!empty($model->short_desc)) ? strip_tags($model->short_desc) : mb_substr(strip_tags($model->desc), 0, 500) . '...',
                         'vendorCode' => !empty($model->vendor_code) ? $model->vendor_code : null,
                         'barcode' => !empty($model->barcode) ? $model->barcode : null,
                         'model' => !empty($model->model) ? $model->model : null,

@@ -4,9 +4,9 @@ return [
     'domain' => 'vigsec',
     'logo' => 'logo_vigsec@2x.png',
     'contacts' => [
-        'Адрес' => 'г. Ярославль,Тутаевское шоссе, дом 64а, офис 511',
-        'Телефоны' => ['+7 (903) 712-70-00', null],
+        'Адрес' => 'г. Ярославль, Тутаевское шоссе, дом 64а, офис 511',
+        'Телефоны' => new \yii\helpers\ReplaceArrayValue(['+7 (903) 712-70-00']),
         'email' => 'vig-sec@yandex.ru',
-        'skype' => null,
+        'skype' => new \yii\helpers\UnsetArrayValue(),
     ],
 ];

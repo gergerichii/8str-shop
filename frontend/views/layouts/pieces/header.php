@@ -122,16 +122,30 @@ $count = $cartService->getCount();
         
                                 <div class="header-box contact-infos pull-right">
                                     <ul>
-                                        <li><span class="header-box-icon header-box-icon-skype"></span>8th_strazh</li>
-                                        <li><span class="header-box-icon header-box-icon-email"></span><a href="mailto:712700@bk.ru">712700@bk.ru</a></li>
+                                        <?php if(isset(\Yii::$app->params['contacts']['skype'])): ?>
+                                            <li>
+                                                <span class="header-box-icon header-box-icon-skype"></span>
+                                                <?=\Yii::$app->params['contacts']['skype']?>
+                                            </li>
+                                        <?php endif; ?>
+                                        <?php if(isset(\Yii::$app->params['contacts']['email'])): ?>
+                                            <li>
+                                                <span class="header-box-icon header-box-icon-email"></span>
+                                                <a href="mailto:<?=\Yii::$app->params['contacts']['email']?>">
+                                                    <?=\Yii::$app->params['contacts']['email']?>
+                                                </a>
+                                            </li>
+                                        <?php endif; ?>
                                     </ul>
                                 </div><!-- End .contact-infos -->
         
                                 <div class="header-box contact-phones pull-right clearfix">
                                     <span class="header-box-icon header-box-icon-earphones"></span>
                                     <ul class="pull-left">
-                                        <li>+7 (495) 604-59-59</li>
-                                        <li>+7 (903) 712-70-00</li>
+                                        <li><?=\Yii::$app->params['contacts']['Телефоны'][0]?></li>
+                                        <?php if(isset(\Yii::$app->params['contacts']['Телефоны'][1])): ?>
+                                            <li><?=\Yii::$app->params['contacts']['Телефоны'][1]?></li>
+                                        <?php endif; ?>
                                     </ul>
                                 </div><!-- End .contact-phones -->
         

@@ -122,13 +122,13 @@ $count = $cartService->getCount();
         
                                 <div class="header-box contact-infos pull-right">
                                     <ul>
-                                        <?php if(isset(\Yii::$app->params['contacts']['skype'])): ?>
+                                        <?php if(!empty(\Yii::$app->params['contacts']['skype'])): ?>
                                             <li>
                                                 <span class="header-box-icon header-box-icon-skype"></span>
                                                 <?=\Yii::$app->params['contacts']['skype']?>
                                             </li>
                                         <?php endif; ?>
-                                        <?php if(isset(\Yii::$app->params['contacts']['email'])): ?>
+                                        <?php if(!empty(\Yii::$app->params['contacts']['email'])): ?>
                                             <li>
                                                 <span class="header-box-icon header-box-icon-email"></span>
                                                 <a href="mailto:<?=\Yii::$app->params['contacts']['email']?>">
@@ -143,7 +143,7 @@ $count = $cartService->getCount();
                                     <span class="header-box-icon header-box-icon-earphones"></span>
                                     <ul class="pull-left">
                                         <li><?=\Yii::$app->params['contacts']['Телефоны'][0]?></li>
-                                        <?php if(isset(\Yii::$app->params['contacts']['Телефоны'][1])): ?>
+                                        <?php if(!empty(\Yii::$app->params['contacts']['Телефоны'][1])): ?>
                                             <li><?=\Yii::$app->params['contacts']['Телефоны'][1]?></li>
                                         <?php endif; ?>
                                     </ul>
